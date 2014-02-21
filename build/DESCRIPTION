@@ -1,0 +1,14 @@
+Package: validate
+Maintainer: Mark van der Loo <mark.vanderloo@gmail.com>
+License: GPL-3
+Title: data quality indicators
+LazyData: no
+Type: Package
+LazyLoad: yes
+Author: Mark van der Loo, Edwin de Jonge
+Description: data quality indicators
+Version: 0.0.1
+Depends: 
+URL: https://github.com/edwindj/validate
+Date: 2013-04-28
+Suggests: testthat
