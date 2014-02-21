@@ -11,14 +11,10 @@
 #' 
 #'
 #' @exportClass restrictionset
-restrictionset <- setRefClass(
-  "restrictionset"
-  , fields= list(
-      restrictions="list" 
-      , origin = "character")
+restrictionset <- setRefClass("restrictionset"
+  , contains = 'validator'
   , methods = list(
     initialize = function(...,files=NULL)  .restrictionset(.self,...,files=files)    
-    , show = function() .showrestrictions(.self)
     )
 )
 
@@ -38,25 +34,11 @@ parse_restrictions <- function(x){
   if ( !all(i) ){
     warning(paste(
       "The following rules are not validation rules and will be ignored:\n",
-      paste(1:sum(!i), ':', sapply(L[!i],deparse), 'from', ifile[!i], collapse="\n ")))
+      paste(1:sum(!i), ':', sapply(.self$calls[!i],deparse), 'from', .self$origin[!i], collapse="\n ")))
   }
   .self$calls <- parse_restrictions(.self$calls[i])
-  .self$origin <- self$origin[i]
+  .self$origin <- .self$origin[i]
   .self
-}
-
-
-.showrestrictions <- function(.self){
-  nr <- length(.self$restrictions)
-  cat(sprintf(
-    "Reference object of class 'restrictionset' with %s restrictions\n", nr
-  ))
-  if (nr == 0) return(invisible(NULL))
-  lab <- names(.self$restrictions)
-  n <- max(nchar(lab))
-  lab <- paste0(format(lab,width=n),": ",sapply(.self$restrictions,deparse))
-  cat(noquote(paste(lab,collapse="\n")))
-  cat("\n\n")
 }
 
 
