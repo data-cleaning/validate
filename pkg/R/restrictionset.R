@@ -31,31 +31,17 @@ parse_restrictions <- function(x){
   
 ## ----------------------------------------------------------------------------
 ## internal methods: constructor and show
-.restrictionset <- function(.self, ..., files=NULL){
-  L <- as.list(substitute(list(...))[-1])
-
-  if ( !is.null(file) && is.character(file) ){
-    L <- list()
-    ifile <- character(0)
-    for ( f in file ){ 
-      L <- c(L,read_resfile(f))
-      ifile <- c(ifile,rep(f,length(L)))
-    }
-  } else if (length(L)==0){
-    return(.self)
-  } else {
-    names(L) <- extract_names(L)
-    ifile <- rep("commandline",length(L))
-  }
-  names(ifile) <- names(L)
-  i <- sapply(L,is.validating)
+.restrictionset <- function(.self, ..., files){
+  .validator(.self,...,files=files)
+  
+  i <- sapply(.self$calls, is.validating)
   if ( !all(i) ){
     warning(paste(
       "The following rules are not validation rules and will be ignored:\n",
       paste(1:sum(!i), ':', sapply(L[!i],deparse), 'from', ifile[!i], collapse="\n ")))
   }
-  .self$restrictions <- parse_restrictions(L[i])
-  .self$origin <- ifile[i]
+  .self$calls <- parse_restrictions(.self$calls[i])
+  .self$origin <- self$origin[i]
   .self
 }
 

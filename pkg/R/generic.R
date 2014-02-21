@@ -33,8 +33,10 @@ setGeneric("confront",
     names(L) <- extract_names(L)
     ifile <- rep("commandline",length(L))
   }
+  names(ifile) <- names(L)
   .self$calls <- L
   .self$origin <- ifile
+  .self
 }
 
 # get names from a list, replacing empty names values with numbers
