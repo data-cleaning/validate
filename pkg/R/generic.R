@@ -1,6 +1,6 @@
 
-#  Superclass for storing validation rules.
-setRefClass("validator"
+#  Superclass for storing verification rules.
+setRefClass("verification"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
     initialize = function(...,files=NULL) .validator(.self,...,files=files)
@@ -11,7 +11,7 @@ setRefClass("validator"
 
 # confront data with a subclass of 'validator'
 setGeneric("confront",
-  def = function(x, ...) standardGeneric("confront")
+  def = function(x, y, ...) standardGeneric("confront")
 )
 
 setGeneric("variables", function(x,...) standardGeneric("variables"))
@@ -22,7 +22,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-.validator <- function(.self, ..., files){
+.verification <- function(.self, ..., files){
   L <- as.list(substitute(list(...))[-1])
 
   if ( !is.null(file) && is.character(file) ){
@@ -73,7 +73,7 @@ call2text <- function(x){
   gsub("[[:blank:]]+"," ",paste(deparse(x),collapse=" "))
 }
 
-setMethod("variables", signature(x="validator"),
+setMethod("variables", signature(x="verification"),
   function(x,...){ 
     unique(unlist(lapply(x$calls,var_from_call)))
   }
@@ -91,9 +91,9 @@ var_from_call <- function(x,vars=character(0)){
 }
 
 
-setMethod("origin", signature(x="validator"), function(x,...) x$origin)
+setMethod("origin", signature(x="verification"), function(x,...) x$origin)
 
-setMethod("as.character","validator", function(x,...) sapply(x$calls,deparse))
+setMethod("as.character","verification", function(x,...) sapply(x$calls,deparse))
 
-setMethod("names","validator", function(x) names(x$calls))
+setMethod("names","verification", function(x) names(x$calls))
 

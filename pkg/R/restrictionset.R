@@ -1,26 +1,41 @@
-#' Create or manipulate a set of restrictions
-#' 
-#' @usage restrictionset(...,files=NULL)
-#' @param ... A (named) comma-separated list of expressions.
-#' @param files A Character vector
-#'
-#' @return For \code{restrictionset}, a reference object of class 'restrictionset'.
-#'
-#'
-#' @seealso \code{\link{vars}}, \code{\link{validate}}
-#' 
-#'
-#' @exportClass restrictionset
-restrictionset <- setRefClass("restrictionset"
-  , contains = 'validator'
+##-------------------------------------------------------------------------
+# default symbols allowed to define rules or restrictions
+.onLoad <- function(libname,pkgname){
+  options(validationSymbols = c(
+    '<','<=','==','>','>=', '!=', '%in%', ":"
+    , 'identical', 'all','any' 
+    , '!', '|', '||', '&', '&&', 'xor'
+  ))
+}
+
+.onUnload <- function(libpath){
+  options(validationSymbols=NULL) 
+}
+
+
+
+read_resfile <- function(file){
+  L <- tryCatch(parse(file=file)
+                , error = function(e){
+                  cat('Parsing failure at', file,"\n")
+                  e
+                })
+  names(L) <- extract_names(L)
+  lapply(L,as.call)
+}
+
+
+# set of restrictions
+restriction <- setRefClass("restriction"
+  , contains = 'verification'
   , methods = list(
-    initialize = function(...,files=NULL)  .restrictionset(.self,...,files=files)    
+    initialize = function(...,files=NULL)  .restriction(.self,...,files=files)    
     )
 )
 
 
-.restrictionset <- function(.self, ..., files){
-  .validator(.self,...,files=files)
+.restriction <- function(.self, ..., files){
+  .verification(.self,...,files=files)
   
   i <- sapply(.self$calls, is.validating)
   if ( !all(i) ){
@@ -38,6 +53,44 @@ parse_restrictions <- function(x){
   lapply(x,vectorize)
 }
 
+is.validating <- function(x, allowed=getOption('validationSymbols'),...){
+  sym <- deparse(x[[1]])
+  sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && is.validating(x[[2]]) && is.validating(x[[3]]) ) 
+}
+
+
+# Syntactic sugar: translate colon notation 'x : <classname>' to inherits(x,"<classname>")
+extract_datamodel <- function(x){
+  if ( x[[1]] == ":" ){
+    parse(text=paste0("inherits(",deparse(x[[2]]),", '",deparse(x[[3]]),"')"))[[1]]
+  } else {
+    x
+  }
+}
+
+
+# vectorization functions
+not <- function(x) parse(text=paste0("!(",deparse(x),")"))[[1]]
+
+`%or%` <- function(x,y){
+  parse(text=paste(deparse(x),'|',deparse(y)))[[1]]
+} 
+
+vectorize <- function(x){
+  if ( x[[1]] == 'if' ){
+    not(x[[2]]) %or% x[[3]]
+  } else {
+    x
+  }
+}
+
+
+
+
 # example
 .onLoad()
-r <- restrictionset( z+y>=3)
+r <- restriction( z+y>=3)
+
+
+
+
