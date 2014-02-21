@@ -54,16 +54,9 @@ read_resfile <- function(file){
 # }
 
 
-##-----------------------------------------------------------------------------
-#' Check wether a call object shall result in a logical when executed.
-#'
-#' @param x A \code{call} object
-#' @param allowed The allowed symbols at the root of the AST represented by \code{x}
-#' @param ... Extra options (currently unimplemented).
-#' @keywords internal
 is.validating <- function(x, allowed=getOption('validationSymbols'),...){
   sym <- deparse(x[[1]])
-  sym %in% allowed || grepl("^is\\.",sym)
+  sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && is.validating(x[[2]]) && is.validating(x[[3]]) ) 
 }
 
 

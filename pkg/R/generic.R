@@ -14,6 +14,11 @@ setGeneric("confront",
   def = function(x, ...) standardGeneric("confront")
 )
 
+setGeneric("variables", function(x,...) standardGeneric("variables"))
+
+setGeneric("origin",def=function(x,...) standardGeneric("origin"))
+
+
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
@@ -68,7 +73,27 @@ call2text <- function(x){
   gsub("[[:blank:]]+"," ",paste(deparse(x),collapse=" "))
 }
 
+setMethod("variables", signature(x="validator"),
+  function(x,...){ 
+    unique(unlist(lapply(x$calls,var_from_call)))
+  }
+)
+
+# Extract variable names from a call object
+var_from_call <- function(x,vars=character(0)){
+  
+  if ( length(x)==1 && is.symbol(x) ) return(deparse(x) )
+  
+  if (length(x) > 1){
+    for ( i in 2:length(x) ) vars <- c(vars,var_from_call(x[[i]]))
+  }
+  unique(vars)
+}
 
 
+setMethod("origin", signature(x="validator"), function(x,...) x$origin)
 
+setMethod("as.character","validator", function(x,...) sapply(x$calls,deparse))
+
+setMethod("names","validator", function(x) names(x$calls))
 
