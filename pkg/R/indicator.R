@@ -51,23 +51,23 @@ expand <- function(x,vars=NULL){
 
 
 # Example
- data(women)
-# specify variables
-ind <- indicator(gem=mean({weight; height}, na.rm=TRUE),sd(weight))
-
-confront(ind,w1=women)
-confront(ind,w1=women, w2=2*women)
-ind
-ind$expand()
-ind
-
-
-
-# all variables
-ind2 <- indicator(gem=mean({},na.rm=TRUE))
-confront(ind,w=women,w0=2*women)
-ind2
-ind2$expand(names(women))
-ind2
+#  data(women)
+# # specify variables
+# ind <- indicator(gem=mean({weight; height}, na.rm=TRUE),sd(weight))
+# 
+# confront(ind,w1=women)
+# confront(ind,w1=women, w2=2*women)
+# ind
+# ind$expand()
+# ind
+# 
+# 
+# 
+# # all variables
+# ind2 <- indicator(gem=mean({},na.rm=TRUE))
+# confront(ind,w=women,w0=2*women)
+# ind2
+# ind2$expand(names(women))
+# ind2
 
 
