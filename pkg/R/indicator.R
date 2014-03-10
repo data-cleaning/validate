@@ -1,7 +1,7 @@
 # The 'indicator' class holds indicator definitions
 # An indicator maps a data.frame to a single number.
 indicator <- setRefClass("indicator"
-  , contains='validator'
+  , contains='verification'
   , methods= list(
      expand = function(vars=NULL) .expand(.self, vars)
     )

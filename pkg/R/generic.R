@@ -3,7 +3,7 @@
 setRefClass("verification"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
-    initialize = function(...,files=NULL) .validator(.self,...,files=files)
+    initialize = function(...,files=NULL) .verification(.self,...,files=files)
     ,show = function() .show_validator(.self) 
     
     )
