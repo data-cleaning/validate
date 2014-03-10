@@ -26,15 +26,15 @@ read_resfile <- function(file){
 
 
 # set of restrictions
-restriction <- setRefClass("restriction"
-  , contains = 'verification'
+validator <- setRefClass("validator"
+  , contains = 'verifier'
   , methods = list(
-    initialize = function(...,files=NULL)  .restriction(.self,...,files=files)    
+    initialize = function(...,files=NULL)  .validator(.self,...,files=files)    
     )
 )
 
 
-.restriction <- function(.self, ..., files){
+.validator <- function(.self, ..., files){
   .verification(.self,...,files=files)
   
   i <- sapply(.self$calls, is.validating)
@@ -89,7 +89,7 @@ vectorize <- function(x){
 
 # example
 .onLoad()
-r <- restriction( z+y>=3)
+r <- validator( z+y>=3)
 
 
 

@@ -1,10 +1,4 @@
 
-setMethod("confront",signature("restriction","data.frame"),
-  function(x, y){    
-    L <- lapply(x$calls, factory(eval), y)
-    structure(L,class=c("validation","list"))
-  }
-)
 
 
 ###############################################################################

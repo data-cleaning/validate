@@ -1,6 +1,6 @@
 
 #  Superclass for storing verification rules.
-setRefClass("verification"
+setRefClass("verifier"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
     initialize = function(...,files=NULL) .verification(.self,...,files=files)
@@ -9,11 +9,8 @@ setRefClass("verification"
     )
 )
 
-# confront data with a subclass of 'validator'
-setGeneric("confront",
-  def = function(x, y, ...) standardGeneric("confront")
-)
 
+# get basic information from verification objects
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
@@ -46,7 +43,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 # get names from a list, replacing empty names values with numbers
 extract_names <- function(L){
-  generic <- sprintf("%04d",1:length(L))
+  generic <- sprintf("V%04d",1:length(L))
   given <- names(L)
   if (is.null(given)) return(generic)
   igen <- given == ""
@@ -73,7 +70,7 @@ call2text <- function(x){
   gsub("[[:blank:]]+"," ",paste(deparse(x),collapse=" "))
 }
 
-setMethod("variables", signature(x="verification"),
+setMethod("variables", signature(x="verifier"),
   function(x,...){ 
     unique(unlist(lapply(x$calls,var_from_call)))
   }
@@ -91,9 +88,9 @@ var_from_call <- function(x,vars=character(0)){
 }
 
 
-setMethod("origin", signature(x="verification"), function(x,...) x$origin)
+setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
 
-setMethod("as.character","verification", function(x,...) sapply(x$calls,deparse))
+setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
 
-setMethod("names","verification", function(x) names(x$calls))
+setMethod("names","verifier", function(x) names(x$calls))
 

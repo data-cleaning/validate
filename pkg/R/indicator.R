@@ -1,16 +1,16 @@
 # The 'indicator' class holds indicator definitions
 # An indicator maps a data.frame to a single number.
 indicator <- setRefClass("indicator"
-  , contains='verification'
+  , contains='verifier'
   , methods= list(
      expand = function(vars=NULL) .expand(.self, vars)
     )
 )
 
 
-setMethod('confront',signature=c(x='indicator'),
-  function(x,...) .compute_indicators(x,...)
-)
+#setMethod('confront',signature=c(x='indicator'),
+#  function(x,...) .compute_indicators(x,...)
+#)
 
 
 # IMPLEMENTATIONS -------------------------------------------------------------
