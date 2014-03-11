@@ -3,9 +3,8 @@
 setRefClass("verifier"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
-    initialize = function(...,files=NULL) .verification(.self,...,files=files)
-    ,show = function() .show_validator(.self) 
-    
+    initialize = function(...,files=NULL) .verifier(.self,...,files=files)
+    , show = function() .show_validator(.self) 
     )
 )
 
@@ -19,7 +18,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-.verification <- function(.self, ..., files){
+.verifier <- function(.self, ..., files){
   L <- as.list(substitute(list(...))[-1])
 
   if ( !is.null(file) && is.character(file) ){
