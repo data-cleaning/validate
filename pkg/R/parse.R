@@ -27,21 +27,53 @@ right <- function(x) if ( is.call(x) ) x[[3]] else NULL
 is_linear <- function(x){
   if ( is.null(node(x)) ) return(TRUE) 
   n <- deparse(node(x))
-  if ( !n %in% c("+","-","*" ) ) return(FALSE)
+  if ( !n %in% c("+","-","*","<","<=","==",">=",">" ) ) return(FALSE)
   if ( n == "*" && !( is.numeric(left(x)) || is.numeric(right(x)) )  ) return(FALSE)
   is_linear(left(x)) & is_linear(right(x))
 }
 
- e <- list(
-   e1 = expression(2*x+3*y)[[1]]
-   , e2 = expression(2*x-y*3)[[1]]
-   , e3 = expression(2*x + 3*y - b)[[1]]
-   , e4 = expression(3*x - 2)[[1]]
-   , e5 = expression(3L * x)[[1]]
-   , e6 = expression(mean(x)+mean(y))[[1]]
- )
-# # 5 TRUE, 1 FALSE
- sapply(e,is_linear)
+#  e <- list(
+#    e1 = expression(2*x+3*y)[[1]]
+#    , e2 = expression(2*x-y*3)[[1]]
+#    , e3 = expression(2*x + 3*y - b)[[1]]
+#    , e4 = expression(3*x - 2)[[1]]
+#    , e5 = expression(3L * x>2)[[1]]
+#    , e6 = expression(mean(x)+mean(y))[[1]]
+#  )
+# # # 5 TRUE, 1 FALSE
+#  sapply(e,is_linear)
+
+# coefficients for normalized linear expressions (constant after the comparison operator)
+coefficients <- function(x, coef=new.env()){
+  if ( is.null(node(x)) ) return()
+  n <- deparse(node(x))
+  if ( n == '*' ){
+    val <- if ( is.numeric(left(x)) ) left(x) else right(x)
+    var <- if ( is.numeric(left(x)) ) right(x) else left(x)
+    assign(deparse(var), val,envir=coef)
+  } else {
+    coefficients(left(x),coef)
+    coefficients(right(x),coef)
+  }
+  unlist(as.list(coef))
+}
+
+# lapply(e[1:5],coefficients)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
