@@ -19,9 +19,10 @@ vectorize <- function(x) if ( x[[1]] == 'if' ) not(x[[2]]) %or% x[[3]] else  x
 
 
 # determine wether a call object represents a linear operation.
+# the 'length' conditions ensure that for unary operators, the postfix argument is treated as 'right'
 node  <- function(x) if ( is.call(x) ) x[[1]] else NULL
-left  <- function(x) if ( is.call(x) ) x[[2]] else NULL
-right <- function(x) if ( is.call(x) ) x[[3]] else NULL
+left  <- function(x) if ( is.call(x) && length(x)>2) x[[2]] else NULL
+right <- function(x) if ( is.call(x) ) x[[min(length(x),3)]] else NULL
 
 # NOTE: x MUST be a call to avoid false positives.
 is_linear <- function(x){
@@ -38,95 +39,35 @@ is_linear <- function(x){
 #    , e3 = expression(2*x + 3*y - b)[[1]]
 #    , e4 = expression(3*x - 2)[[1]]
 #    , e5 = expression(3L * x>2)[[1]]
-#    , e6 = expression(mean(x)+mean(y))[[1]]
+#    , e6 = expression(3*x + y)[[1]]
+#    , e7 = expression(-x)[[1]]
+#    , e8 = expression(mean(x)+mean(y))[[1]]
 #  )
-# # # 5 TRUE, 1 FALSE
+# # # 7 TRUE, 1 FALSE
 #  sapply(e,is_linear)
 
 # coefficients for normalized linear expressions (constant after the comparison operator)
-coefficients <- function(x, coef=new.env()){
+nodesign <- c('+' = 1, '-' = -1)
+  
+coefficients <- function(x, sign=nodesign(deparse(node(x))), coef=new.env()){
+  # variable w/o coefficient
+  if ( is.name(x) ) { assign(deparse(x),sign,envir=coef); return()}
+    
   if ( is.null(node(x)) ) return()
+
   n <- deparse(node(x))
+  
+  if (n %in% c("+","-") ) sign <- ifelse(n=='+',1,-1)
+  
   if ( n == '*' ){
     val <- if ( is.numeric(left(x)) ) left(x) else right(x)
     var <- if ( is.numeric(left(x)) ) right(x) else left(x)
-    assign(deparse(var), val,envir=coef)
+    assign(deparse(var), sign*val, envir=coef)
   } else {
-    coefficients(left(x),coef)
-    coefficients(right(x),coef)
+    coefficients(left(x),1,coef)
+    coefficients(right(x),sign,coef)
   }
   unlist(as.list(coef))
 }
 
-# lapply(e[1:5],coefficients)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Extract user-defined names from an object returned by 'parse'
-#  extract_names <- function(L,labeltext='label'){
-#   labeltext <- paste0('@',labeltext)
-#   
-#   i <- getSrcLocation(L)
-#   d <- getParseData(L)
-#   
-#   names <- paste0(rep("000",length(L)),seq_along(L))
-#   names <- paste0("R",substring(names,nchar(names)-2))
-#   if ( !is.null(names(L)) ){
-#     iname <- names(L) != ""
-#     names[iname] <- names(L)[iname]
-#   }
-#   # select comments
-#   d <- d[d$token == "COMMENT",c('line1','text')]
-#   # select name definitions
-#   d <- d[grep(labeltext,d$text), ]
-#   srcloc <- d$line1 + 1
-#   
-#   srclab <- gsub(paste0("^.+",labeltext," "),"",d$text)
-#   srclab <- gsub("\\s+.+$","",srclab)
-#   
-#   # merge names and definitions
-#   j <- match(i,srcloc,nomatch=0)
-#   names[which(i %in% srcloc)] <- srclab[j]
-#   names  
-# }
-
-
-
-
-
+#lapply(e[1:7],coefficients)
