@@ -1,9 +1,5 @@
 ## Helper functions, invisible to users.
 
-parse_restrictions <- function(x){
-  #  x <- lapply(x,extract_datamodel)
-  lapply(x,vectorize)
-}
 
 is_validating <- function(x, allowed=getOption('validationSymbols'),...){
   sym <- deparse(x[[1]])
@@ -19,13 +15,7 @@ not <- function(x) parse(text=paste0("!(",deparse(x),")"))[[1]]
 } 
 
 # x: a validation call
-vectorize <- function(x){
-  if ( x[[1]] == 'if' ){
-    not(x[[2]]) %or% x[[3]]
-  } else {
-    x
-  }
-}
+vectorize <- function(x) if ( x[[1]] == 'if' ) not(x[[2]]) %or% x[[3]] else  x
 
 
 # determine wether a call object represents a linear operation.
@@ -38,20 +28,20 @@ is_linear <- function(x){
   if ( is.null(node(x)) ) return(TRUE) 
   n <- deparse(node(x))
   if ( !n %in% c("+","-","*" ) ) return(FALSE)
-  if ( n == "*" && !( inherits(left(x), 'numeric') || inherits(right(x),"numeric") )  ) return(FALSE)
+  if ( n == "*" && !( is.numeric(left(x)) || is.numeric(right(x)) )  ) return(FALSE)
   is_linear(left(x)) & is_linear(right(x))
 }
 
-# e <- list(
-#   e1 = expression(2*x+3*y)[[1]]
-#   , e2 = expression(2*x-y*3)[[1]]
-#   , e3 = expression(2*x + 3*y - b)[[1]]
-#   , e4 = expression(3*x - 2)[[1]]
-#   , e5 = expression(3*x)[[1]]
-#   , e6 = expression(mean(x)+mean(y))[[1]]
-# )
+ e <- list(
+   e1 = expression(2*x+3*y)[[1]]
+   , e2 = expression(2*x-y*3)[[1]]
+   , e3 = expression(2*x + 3*y - b)[[1]]
+   , e4 = expression(3*x - 2)[[1]]
+   , e5 = expression(3L * x)[[1]]
+   , e6 = expression(mean(x)+mean(y))[[1]]
+ )
 # # 5 TRUE, 1 FALSE
-# sapply(e,is_linear)
+ sapply(e,is_linear)
 
 
 
