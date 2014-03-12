@@ -1,22 +1,9 @@
 ## Helper functions, invisible to users.
 
-setGeneric("coefficients",def=function(x,...) standardGeneric("coefficients"))
-
-# TODO
-setMethod("coefficients",signature("indicator"), function(x,...){
-  NULL    
-  ## 
-})
-
-setMethod("coefficients",signature("validator"),function(x,...){
-  NULL
-  ##
-})
-
 
 is_validating <- function(x, allowed=getOption('validationSymbols'),...){
   sym <- deparse(x[[1]])
-  sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && is.validating(x[[2]]) && is.validating(x[[3]]) ) 
+  sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && is_validating(x[[2]]) && is_validating(x[[3]]) ) 
 }
 
 
@@ -54,28 +41,28 @@ linear <- function(x){
   linear(left(x)) & linear(right(x))
 }
 
- e <- list(
-   e1 = expression(2*x+3*y)[[1]]
-   , e2 = expression(2*x-y*3)[[1]]
-   , e3 = expression(2*x + 3*y - b)[[1]]
-   , e4 = expression(3*x - 2)[[1]]
-   , e5 = expression(3L * x)[[1]]
-   , e6 = expression(3*x + y)[[1]]
-   , e7 = expression(-x)[[1]]
-   , e8 = expression(-y + 2 - 4)[[1]]
-   , e9 = expression(mean(x)+mean(y))[[1]]
- )
+#  e <- list(
+#    e1 = expression(2*x+3*y)[[1]]
+#    , e2 = expression(2*x-y*3)[[1]]
+#    , e3 = expression(2*x + 3*y - b)[[1]]
+#    , e4 = expression(3*x - 2)[[1]]
+#    , e5 = expression(3L * x)[[1]]
+#    , e6 = expression(3*x + y)[[1]]
+#    , e7 = expression(-x)[[1]]
+#    , e8 = expression(-y + 2 - 4)[[1]]
+#    , e9 = expression(mean(x)+mean(y))[[1]]
+#  )
 # # # 7 TRUE, 1 FALSE
 #  sapply(e,is_linear)
 
 
 setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
-setMethod("linear_coefficients", signature("validator"),function(x,normalize=TRUE,...){
+setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
 
   calls <- x$calls[is_linear(x)]
-  cols <- variables(v)
-  rows <- names(v)
+  cols <- sapply(calls, var_from_call)
+  rows <- names(calls)
   
   bA <- matrix(0
    , nrow = length(rows)
@@ -109,7 +96,6 @@ setMethod("linear_coefficients", signature("validator"),function(x,normalize=TRU
 nodesign <- c('+' = 1, '-' = -1)
 operatorsign <- c('<'= 1, '<=' = 1, '==' = 1, '>=' = -1, '>' = -1)
 normed_operators <- c('<' = '<', '<=' = '<=', '==' = '==', '>=' = '<=', '>' = '<')
-
 
 addcoef <- function(x,value,env) assign(x,mget(x,envir=env,ifnotfound=0)[[1]]+value,env)
 
@@ -148,13 +134,6 @@ coefficients <- function(x, sign=1, coef=new.env()){
 
 # get top operator from validating call
 validation_operator <- function(x) x[[1]]
-
-
-
-
-
-
-
 
 
 
