@@ -92,5 +92,11 @@ setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
 
 setMethod("names","verifier", function(x) names(x$calls))
 
+setMethod("[",signature("verifier"), function(x,i,...){
+  out <- do.call(class(x), x$calls[i])
+  out$origin <- x$origin[i]
+  out
+})
+
 
 

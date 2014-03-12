@@ -1,4 +1,15 @@
 
+# get boolean results from validationResult
+boolean <- function(x,...){
+  x$  
+  
+  
+}
+
+
+
+
+
 
 
 ###############################################################################

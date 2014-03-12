@@ -1,37 +1,33 @@
 ## Helper functions, invisible to users.
 
-
 is_validating <- function(x, allowed=getOption('validationSymbols'),...){
   sym <- deparse(x[[1]])
   sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && is_validating(x[[2]]) && is_validating(x[[3]]) ) 
 }
 
 
-# functions to vectorize validation calls
+# functions to vectorize validation calls ----
 not <- function(x) parse(text=paste0("!(",deparse(x),")"))[[1]]
 
 `%or%` <- function(x,y){
   parse(text=paste(deparse(x),'|',deparse(y)))[[1]]
-} 
+}
 
 # x: a validation call
 vectorize <- function(x) if ( x[[1]] == 'if' ) not(x[[2]]) %or% x[[3]] else  x
 
 
-# determine wether a call object represents a linear operation.
+# Determine wether a call object represents a linear operation. ----
 # the 'length' conditions ensure that for unary operators, the postfix argument is treated as 'right'
 node  <- function(x) if ( is.call(x) ) x[[1]] else NULL
 left  <- function(x) if ( is.call(x) && length(x)>2) x[[2]] else NULL
 right <- function(x) if ( is.call(x) ) x[[min(length(x),3)]] else NULL
 
-# NOTE: x MUST be a call to avoid false positives.
 setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
-
 
 setMethod("is_linear",signature("validator"), function(x,...){
   sapply(x$calls, linear)
 })
-
 
 linear <- function(x){
   if ( is.null(node(x)) ) return(TRUE) 
@@ -41,21 +37,7 @@ linear <- function(x){
   linear(left(x)) & linear(right(x))
 }
 
-#  e <- list(
-#    e1 = expression(2*x+3*y)[[1]]
-#    , e2 = expression(2*x-y*3)[[1]]
-#    , e3 = expression(2*x + 3*y - b)[[1]]
-#    , e4 = expression(3*x - 2)[[1]]
-#    , e5 = expression(3L * x)[[1]]
-#    , e6 = expression(3*x + y)[[1]]
-#    , e7 = expression(-x)[[1]]
-#    , e8 = expression(-y + 2 - 4)[[1]]
-#    , e9 = expression(mean(x)+mean(y))[[1]]
-#  )
-# # # 7 TRUE, 1 FALSE
-#  sapply(e,is_linear)
-
-
+# Obtain coefficients of linear rules ----
 setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
 setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
@@ -132,12 +114,20 @@ coefficients <- function(x, sign=1, coef=new.env()){
   return(unlist(as.list(coef)))
 }
 
-# get top operator from validating call
-validation_operator <- function(x) x[[1]]
-
-
-
 
 
 
 #lapply(e[1:7],coefficients)
+#  e <- list(
+#    e1 = expression(2*x+3*y)[[1]]
+#    , e2 = expression(2*x-y*3)[[1]]
+#    , e3 = expression(2*x + 3*y - b)[[1]]
+#    , e4 = expression(3*x - 2)[[1]]
+#    , e5 = expression(3L * x)[[1]]
+#    , e6 = expression(3*x + y)[[1]]
+#    , e7 = expression(-x)[[1]]
+#    , e8 = expression(-y + 2 - 4)[[1]]
+#    , e9 = expression(mean(x)+mean(y))[[1]]
+#  )
+# # # 8 TRUE, 1 FALSE
+#  sapply(e,is_linear)

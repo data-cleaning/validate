@@ -83,6 +83,3 @@ setMethod("confront", signature("validator","data"),
 
 
 
-
-
-
