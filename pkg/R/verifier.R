@@ -15,7 +15,6 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 
-
 # IMPLEMENTATIONS -------------------------------------------------------------
 
 .verifier <- function(.self, ..., files){
@@ -76,7 +75,7 @@ setMethod("variables", signature(x="verifier"),
 )
 
 # Extract variable names from a call object
-var_from_call <- function(x,vars=character(0)){
+var_from_call <- function( x, vars=character(0) ){
   
   if ( length(x)==1 && is.symbol(x) ) return(deparse(x) )
   
@@ -92,4 +91,6 @@ setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
 setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
 
 setMethod("names","verifier", function(x) names(x$calls))
+
+
 

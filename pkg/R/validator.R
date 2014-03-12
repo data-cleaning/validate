@@ -42,7 +42,7 @@ validator <- setRefClass("validator"
       "The following rules are not validation rules and will be ignored:\n",
       paste(1:sum(!i), ':', sapply(.self$calls[!i],deparse), 'from', .self$origin[!i], collapse="\n ")))
   }
-  .self$calls <- lapply(.self$calls[i],vectorize)
+  .self$calls  <- .self$calls[i]
   .self$origin <- .self$origin[i]
   .self
 }

@@ -56,24 +56,24 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
 })
 
 # indicators serve a different purpose than validations.
-setRefClass("validatorValue", contains = "confrontation"
+setRefClass("validatorValue", contains = "confrontation",
   fields = list(
-      , impact     = "list" # impact of mismatch on data
+        impact     = "list" # impact of mismatch on data
       , severity   = "list" # amount of mismatch between actual and desired score
     )
 )
 
-setMethod("confront",signature("validator","data"),
+setMethod("confront", signature("validator","data"),
   function(x, y
     , impact=c("none","Lp","rspa","FH")
     , severity=c("none","Lp","gower")
     , p=c(impact=2,severity=1), ...)
   {
-    
-    L <- lapply(x$calls,factory(eval), y)
+    calls <- lapply(x$calls,vectorize)  
+    L <- lapply(calls,factory(eval), y)
     new('validatorValue',
         call = match.call()
-        , calls = x$calls
+        , calls = calls
         , value = lapply(L,"[[",1)
         , warn =  lapply(L,"[[",2)
         , error = lapply(L,"[[",3)     
