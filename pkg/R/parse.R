@@ -43,7 +43,7 @@ setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coe
 setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
 
   calls <- x$calls[is_linear(x)]
-  cols <- sapply(calls, var_from_call)
+  cols <- unique(unlist(lapply(calls, var_from_call)))
   rows <- names(calls)
   
   bA <- matrix(0
@@ -61,7 +61,7 @@ setMethod("linear_coefficients", signature("validator"),function(x, normalize=TR
     cls <- names(rcoef[[i]])
     bA[i,cls] <- bA[i,cls] - rcoef[[i]]
   }
-  
+
   operators <- sapply(sapply(calls,`[[`,1),deparse)
   
   if (normalize){
@@ -83,24 +83,28 @@ addcoef <- function(x,value,env) assign(x,mget(x,envir=env,ifnotfound=0)[[1]]+va
 
 # coefficients of an expression of the form sum_i a_i*x_i (so no comparison operators)
 coefficients <- function(x, sign=1, coef=new.env()){
-  # variable w/o coefficient
-  if ( is.numeric(x) ) addcoef('CONSTANT',x,coef)
-  if ( is.name(x) ) addcoef(deparse(x),sign,coef) 
 
+  # added constant 
+  if ( is.numeric(x) ) addcoef('CONSTANT',sign*x,coef)
+  # end node without explicit coefficient.
+  if ( is.name(x) ) addcoef(deparse(x),sign,coef)
+  
+  # wer're at 
   if ( is.null(node(x)) ){ 
     addcoef('CONSTANT',0,coef)
     return(unlist(as.list(coef)))
   }
   
+  
   n <- deparse(node(x))
   if (n %in% c("+","-") ){ 
     sign <- nodesign[n][[1]] # the extra [[1]] gets rid of the 'name' attribute.
-    if (is.numeric(left(x))){
-      coef$CONSTANT <- ifelse(is.numeric(coef$CONSTANT),coef$CONSTANT + sign*left(x),left(x))
-    }
-    if (is.numeric(right(x))){
-      coef$CONSTANT <- ifelse(is.numeric(coef$CONSTANT),coef$CONSTANT + sign*right(x),sign*right(x))      
-    }
+#     if (is.numeric(left(x))){
+#       coef$CONSTANT <- ifelse(is.numeric(coef$CONSTANT),coef$CONSTANT + sign*left(x),left(x))
+#     }
+#     if (is.numeric(right(x))){
+#       coef$CONSTANT <- ifelse(is.numeric(coef$CONSTANT),coef$CONSTANT + sign*right(x),sign*right(x))      
+#     }
   }
   if ( n == '*' ){
     val <- if ( is.numeric(left(x)) ) left(x) else right(x)
