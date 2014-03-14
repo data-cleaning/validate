@@ -63,6 +63,7 @@ setRefClass("validatorValue", contains = "confrontation",
     )
 )
 
+## TODO: parse x$y --> x[,'y'] so R reports error when 'y' doesn't exist. 
 setMethod("confront", signature("validator","data"),
   function(x, y
     , impact=c("none","Lp","rspa","FH")
@@ -80,6 +81,42 @@ setMethod("confront", signature("validator","data"),
     )
   }
 )
+
+has_error <- function(x) sapply(x$error,is.null)
+has_waring <- function(x) sapply(x$warn, is.null)
+has_value <- function(x) sapply(x$value, function(a) !is.null(a))
+
+passes <- function(x){
+  sapply(x$value, function(a){
+    ifelse( is.null(a), 0, sum(a,na.rm=TRUE)) 
+  })
+}
+
+fails <- function(x){
+  sapply(x$value, function(a){
+    ifelse(is.null(a),0,sum(!a,na.rm=TRUE))
+  })
+}
+
+nas <- function(x){
+  sapply(x$value, function(a){
+    ifelse(is.null(a),0,sum(is.na(a)))
+  })
+}
+
+# TODO make
+setMethod('summary',signature('validatorValue'),function(object,...){
+  data.frame(
+    validator = names(object$value)
+    , confrontations = sapply(object$value,length)
+    , passes = passes(cf)
+    , fails  = fails(cf)
+    , nNA = nas(cf)
+    , error = !sapply(object$error, is.null)
+    , warning = !sapply(object$warn, is.null)
+    , call = sapply(object$calls,call2text)
+  )  
+})
 
 
 

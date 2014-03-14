@@ -100,7 +100,7 @@ coefficients <- function(x, sign=1, coef=new.env()){
   # end node without explicit coefficient.
   if ( is.name(x) ) addcoef(deparse(x),sign,coef)
   
-  # wer're at 
+  # wer're at a leaf
   if ( is.null(node(x)) ){ 
     addcoef('CONSTANT',0,coef)
     return(unlist(as.list(coef)))

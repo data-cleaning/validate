@@ -46,7 +46,7 @@ has_group <- function(x, group, has=FALSE){
 expand_group <- function(calls, group, variables){
   e <- new.env()
   L <- lapply(calls,function(call){
-    if ( !has_group(call,group) ) return(call)
+    if ( !has_group(call,group) ) return(list(call))
     lapply(variables, function(x) {
       assign(group, as.symbol(x), envir=e)
       do.call(substitute,list(call, e))
