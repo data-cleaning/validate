@@ -69,10 +69,10 @@ setMethod("confront", signature("validator","data"),
     , severity=c("none","Lp","gower")
     , p=c(impact=2,severity=1), ...)
   {
-    calls <- lapply(x$calls,vectorize)  
+    calls <- calls(x)
     L <- lapply(calls,factory(eval), y)
     new('validatorValue',
-        call = match.call()
+        call = match.call(call=sys.call(1))
         , calls = calls
         , value = lapply(L,"[[",1)
         , warn =  lapply(L,"[[",2)

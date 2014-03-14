@@ -4,9 +4,20 @@ setRefClass("verifier"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
     initialize = function(...,files=NULL) .verifier(.self,...,files=files)
-    , show = function() .show_validator(.self) 
+    , show = function() .show_validator(.self)
     )
 )
+
+# retrieve (expanded, vectorized) calls from verifier object
+setGeneric('calls',function(x,...) standardGeneric('calls'))
+
+setMethod('calls',signature('verifier'),
+  function(x, expand=TRUE, vectorize=TRUE ){
+    calls <- x$calls
+    if ( expand ) calls <- expand_calls(calls)
+    if (vectorize) calls <- lapply(calls, vectorize)  
+    calls
+})
 
 
 # get basic information from verification objects

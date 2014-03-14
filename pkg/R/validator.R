@@ -28,7 +28,7 @@ read_resfile <- function(file){
 validator <- setRefClass("validator"
   , contains = 'verifier'
   , methods = list(
-    initialize = function(...,files=NULL)  .validator(.self,...,files=files)    
+    initialize = function(...,files=NULL)  .validator(.self,...,files=files)
     )
 )
 
@@ -36,10 +36,10 @@ validator <- setRefClass("validator"
 .validator <- function(.self, ..., files){
   .verifier(.self,...,files=files)
 
-  i <- sapply(.self$calls, is_validating)
+  i <- sapply(.self$calls, function(x) validating(x) || vargroup(x))
   if ( !all(i) ){
     warning(paste(
-      "The following rules are not validation rules and will be ignored:\n",
+      "The following rules contain invalid syntax and will be ignored:\n",
       paste(1:sum(!i), ':', sapply(.self$calls[!i],deparse), 'from', .self$origin[!i], collapse="\n ")))
   }
   .self$calls  <- .self$calls[i]

@@ -1,9 +1,20 @@
 ## Helper functions, invisible to users.
 
-is_validating <- function(x, allowed=getOption('validationSymbols'),...){
+validating <- function(x, allowed=getOption('validationSymbols'),...){
   sym <- deparse(x[[1]])
-  sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && is_validating(x[[2]]) && is_validating(x[[3]]) ) 
+  sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
 }
+
+# test if a call defines a variable group
+vargroup <- function(x){
+  length(x) == 3 && x[[1]] == ':' && is.name(x[[2]]) && x[[3]][[1]] == '{'
+}
+
+setGeneric("is_vargroup",function(x,...) standardGeneric("is_vargroup"))
+
+setMethod("is_vargroup",signature("verifier"),function(x,...){
+  sapply(x$calls, vargroup)  
+})
 
 
 # functions to vectorize validation calls ----
@@ -94,17 +105,10 @@ coefficients <- function(x, sign=1, coef=new.env()){
     addcoef('CONSTANT',0,coef)
     return(unlist(as.list(coef)))
   }
-  
-  
+    
   n <- deparse(node(x))
   if (n %in% c("+","-") ){ 
     sign <- nodesign[n][[1]] # the extra [[1]] gets rid of the 'name' attribute.
-#     if (is.numeric(left(x))){
-#       coef$CONSTANT <- ifelse(is.numeric(coef$CONSTANT),coef$CONSTANT + sign*left(x),left(x))
-#     }
-#     if (is.numeric(right(x))){
-#       coef$CONSTANT <- ifelse(is.numeric(coef$CONSTANT),coef$CONSTANT + sign*right(x),sign*right(x))      
-#     }
   }
   if ( n == '*' ){
     val <- if ( is.numeric(left(x)) ) left(x) else right(x)
@@ -120,18 +124,3 @@ coefficients <- function(x, sign=1, coef=new.env()){
 
 
 
-
-#lapply(e[1:7],coefficients)
-#  e <- list(
-#    e1 = expression(2*x+3*y)[[1]]
-#    , e2 = expression(2*x-y*3)[[1]]
-#    , e3 = expression(2*x + 3*y - b)[[1]]
-#    , e4 = expression(3*x - 2)[[1]]
-#    , e5 = expression(3L * x)[[1]]
-#    , e6 = expression(3*x + y)[[1]]
-#    , e7 = expression(-x)[[1]]
-#    , e8 = expression(-y + 2 - 4)[[1]]
-#    , e9 = expression(mean(x)+mean(y))[[1]]
-#  )
-# # # 8 TRUE, 1 FALSE
-#  sapply(e,is_linear)
