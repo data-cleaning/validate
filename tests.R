@@ -25,3 +25,45 @@ cf$calls
 
 # simple analyses
 
+w <- validator(
+  x + y > z
+  ,x > 0
+  ,y > 0
+  ,z >= 0
+  )
+
+L <- lapply(w$calls,var_from_call)
+gr <- stack(L)
+names(gr) <- c("source","target")
+for ( n in names(gr)) gr[,n] <- as.character(gr[,n])
+
+
+N <- c(variables(w),names(w))
+translate <- seq_along(N)-1
+names(translate) <- N
+
+edges <- data.frame(
+  source = translate[gr$source]
+  ,target = translate[gr$target]
+  , value=2
+)
+
+vlabel <- sapply(calls(w),call2text)
+vlabel[variables(w)] <- variables(w)
+
+nodes = data.frame(
+  name= vlabel[names(translate)]
+  , group = c(1,1,1,2,2,2,2)
+)
+
+
+
+library(d3Network)
+d3SimpleNetwork(gr,width=500,height=50,file='graph.html')
+browseURL("graph.html")
+
+d3ForceNetwork(Links=edges , Nodes=nodes, Source="source", Target="target",Value="value",NodeID="name",Group="group"
+               ,width=500,height=500
+               , opacity=0.9,zoom=TRUE
+,file="graph2.html")
+browseURL("graph2.html")

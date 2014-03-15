@@ -12,10 +12,11 @@ setRefClass("verifier"
 setGeneric('calls',function(x,...) standardGeneric('calls'))
 
 setMethod('calls',signature('verifier'),
-  function(x, expand=TRUE, vectorize=TRUE ){
+  function(x, expand=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
     calls <- x$calls
     if ( expand ) calls <- expand_calls(calls)
-    if (vectorize) calls <- lapply(calls, vectorize)  
+    if (vectorize) calls <- lapply(calls, vectorize)
+    if (replace_dollar) calls <- lapply(calls, replace_dollar)
     calls
 })
 
@@ -108,6 +109,9 @@ setMethod("[",signature("verifier"), function(x,i,...){
   out$origin <- x$origin[i]
   out
 })
+
+
+
 
 
 

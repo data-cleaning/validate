@@ -1,5 +1,35 @@
 ## Helper functions, invisible to users.
 
+which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
+  if (x == what){
+    e[[paste0('x',e$n)]] <- I
+    e$n <- e$n + 1
+  }
+  if ( is.call(x) ){    
+    for (i in seq_along(x))  which.call(x[[i]],what,c(I,i),e)
+  }
+  L <- lapply(as.list(e),function(x) if ( length(x) == 1 ) x else x[-1])
+  L$n <- NULL
+  L
+}
+
+
+# replace occurences of x$y --> x[,'y']
+# for data.frames, this causes an error when selecting a non-existent column.
+replace_dollar <- function(x){
+  L <- which.call(x,'$')
+  for ( I in L ){
+    if (length(I)==1){
+      x <- parse(text=paste0(left(x),'[,',deparse(right(x)),']'))[[1]]
+    } else {
+      I <- I[-length(I)]
+      p <- paste0(left(x[[I]]),'[, "',deparse(right(x[[I]])),'" ]')
+      x[[I]] <- parse(text=p)[[1]]
+    }
+  }
+  x
+}
+
 validating <- function(x, allowed=getOption('validationSymbols'),...){
   sym <- deparse(x[[1]])
   sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
