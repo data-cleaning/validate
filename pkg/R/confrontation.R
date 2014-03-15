@@ -28,24 +28,12 @@ setGeneric("confront",
 
 setClassUnion('data',c("data.frame","list","environment"))
 
-# confront a verifier with a (set of) data set(s)
-setMethod("confront",signature("verifier","data"), function(x,y,...){
-  L <- lapply(x$calls,factory(eval), y)
-  new('confrontation',
-      call = match.call()
-      , calls = x$calls
-      , value = lapply(L,"[[",1)
-      , warn  = lapply(L,"[[",2)
-      , error = lapply(L,"[[",3)     
-  )
-})
-
 
 # indicators serve a different purpose than validations.
 setRefClass("indicatorValue", contains = "confrontation")
 
 setMethod("confront",signature("indicator","data"),function(x,y,...){
-  L <- lapply(x$calls,factory(eval), y)
+  L <- lapply(x$calls,factory(eval), envir=y, enclos=NULL)
   new('indicatorValue',
       call = match.call()
       , calls = x$calls
@@ -71,7 +59,7 @@ setMethod("confront", signature("validator","data"),
     , p=c(impact=2,severity=1), ...)
   {
     calls <- calls(x)
-    L <- lapply(calls,factory(eval), y)
+    L <- lapply(calls,factory(eval), envir=y,enclos=NULL)
     new('validatorValue',
         call = match.call(call=sys.call(1))
         , calls = calls
