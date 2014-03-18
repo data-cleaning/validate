@@ -20,6 +20,15 @@ women[1,2] <- NA
 cf <- confront(w,list(w1=women, w2=women/2))
 summary(cf)
 
+w <- validator(
+  g : {height; weight}
+  , g > 0
+  , height/weight > 7
+  )
+
+
+
+
 cf$value
 cf$calls
 
@@ -59,7 +68,7 @@ nodes = data.frame(
 
 
 library(d3Network)
-d3SimpleNetwork(gr,width=500,height=50,file='graph.html')
+d3SimpleNetwork(gr,width=500,height=500,file='graph.html')
 browseURL("graph.html")
 
 d3ForceNetwork(Links=edges , Nodes=nodes, Source="source", Target="target",Value="value",NodeID="name",Group="group"

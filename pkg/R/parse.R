@@ -1,5 +1,6 @@
 ## Helper functions, invisible to users.
 
+# find a symbol in a call. Returns a list of multi-indices.
 which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
   if (x == what){
     e[[paste0('x',e$n)]] <- I
@@ -14,8 +15,7 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 }
 
 
-# replace occurences of x$y --> x[,'y']
-# for data.frames, this causes an error when selecting a non-existent column.
+# replace occurences x$y --> x[,'y']
 replace_dollar <- function(x){
   L <- which.call(x,'$')
   for ( I in L ){

@@ -51,7 +51,6 @@ setRefClass("validatorValue", contains = "confrontation",
     )
 )
 
-## TODO: parse x$y --> x[,'y'] so R reports error when 'y' doesn't exist. 
 setMethod("confront", signature("validator","data"),
   function(x, y
     , impact=c("none","Lp","rspa","FH")
@@ -70,8 +69,8 @@ setMethod("confront", signature("validator","data"),
   }
 )
 
-has_error <- function(x) sapply(x$error,is.null)
-has_waring <- function(x) sapply(x$warn, is.null)
+has_error <- function(x) !sapply(x$error,is.null)
+has_warning <- function(x) !sapply(x$warn, is.null)
 has_value <- function(x) sapply(x$value, function(a) !is.null(a))
 
 passes <- function(x){
@@ -92,7 +91,6 @@ nas <- function(x){
   })
 }
 
-# TODO make
 setMethod('summary',signature('validatorValue'),function(object,...){
   data.frame(
     validator = names(object$value)
@@ -100,10 +98,39 @@ setMethod('summary',signature('validatorValue'),function(object,...){
     , passes = passes(cf)
     , fails  = fails(cf)
     , nNA = nas(cf)
-    , error = !sapply(object$error, is.null)
-    , warning = !sapply(object$warn, is.null)
+    , error = has_error(x)
+    , warning = has_warning(x)
     , call = sapply(object$calls,call2text)
   )  
+})
+
+
+setGeneric('value',def=function(x,...) standardGeneric('value'))
+
+setMethod('value',signature('confrontation'),function(x,...){
+  x$value
+})
+
+setMethod('value',signature('validatorValue'),function(x,simplify=TRUE,...){
+  if (!simplify ){
+    return( getMethod(value,signature='confrontation')(x,...) )
+  }
+  values <- x$value[!has_error(x)]
+  len <- sapply(values,length)
+  lapply(unique(len), function(l) sapply(values[len==l],Id))
+})
+
+setMethod('calls',signature('confrontation'),function(x,...){
+  x$calls
+})
+
+setMethod('calls',signature('validatorValue'), function(x,simplify=TRUE,...){
+  if (!simplify){
+    return( getMethod(calls, signature='confrontation')(x,...) )
+  }
+  calls <- x$calls[!has_error(x)]
+  len <- sapply(x$value[!has_error(x)],length)
+  lapply(unique(len),function(l) sapply(calls[len==l],Id))
 })
 
 
