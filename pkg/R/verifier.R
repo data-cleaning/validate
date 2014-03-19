@@ -57,6 +57,28 @@ setMethod("variables", signature(x="verifier"), function(x,...){
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
+.verifier <- function(.self, ..., files){
+  L <- as.list(substitute(list(...))[-1])
+  
+  if ( !is.null(file) && is.character(file) ){
+    L <- list()
+    ifile <- character(0)
+    for ( f in file ){ 
+      L <- c(L,read_resfile(f))
+      ifile <- c(ifile,rep(f,length(L)))
+    }
+  } else if (length(L)==0){
+    return(.self)
+  } else {
+    names(L) <- extract_names(L)
+    ifile <- rep("commandline",length(L))
+  }
+  names(ifile) <- names(L)
+  .self$calls <- L
+  .self$origin <- ifile
+  .self
+}
+
 
 # get names from a list, replacing empty names values with numbers
 extract_names <- function(L,prefix="V"){
@@ -68,7 +90,7 @@ extract_names <- function(L,prefix="V"){
   given
 }
 
-
+  
 .show_verifier <- function(.self){
   nr <- length(.self$calls)
   cat(sprintf(
@@ -98,10 +120,4 @@ var_from_call <- function( x, vars=character(0) ){
   }
   unique(vars)
 }
-
-
-
-
-
-
 
