@@ -2,9 +2,9 @@ library(roxygen2)
 options(error=traceback)
 unlink( 'pkg/man', TRUE)
 
-setwd('pkg')
+#setwd('pkg')
 #update_collate('.')
-roxygenize( '.'
+roxygenize( 'pkg'
   , roxygen.dir='.'
   , copy.package=FALSE
   , unlink.target=TRUE

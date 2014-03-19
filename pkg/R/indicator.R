@@ -1,12 +1,12 @@
 #' @include verifier.R
 NULL
 
+cat("I AM INDICATOR\n")
+
 
 # The 'indicator' class holds indicator definitions
 # An indicator maps a data.frame to a single number.
 
-#'
-#' @exportClass
 indicator <- setRefClass("indicator", contains='verifier',
   methods = list(
     initialize = function(..., files=NULL) .indicator(.self,...,files=files)

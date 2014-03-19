@@ -1,3 +1,4 @@
+#cat("I AM VERIFIER\")
 
 #  Superclass for storing verification rules.
 setRefClass("verifier"

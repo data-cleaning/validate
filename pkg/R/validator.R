@@ -2,16 +2,18 @@
 NULL
 
 
+
+
 validator <- setRefClass("validator"
   , contains = 'verifier'
   , methods = list(
     initialize = function(...,files=NULL)  .validator(.self,...,files=files)
-    )
+  )
 )
 
 
 .validator <- function(.self, ..., files){
-  .verifier(.self,...,files=files)
+  xverifier(.self,...,files=files)
 
   i <- sapply(.self$calls, function(x) validating(x) || vargroup(x))
   if ( !all(i) ){
