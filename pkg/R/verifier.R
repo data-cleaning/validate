@@ -4,7 +4,7 @@ setRefClass("verifier"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
     initialize = function(...,files=NULL) .verifier(.self,...,files=files)
-    , show = function() .show_validator(.self)
+    , show = function() .show_verifier(.self)
     )
 )
 
@@ -52,8 +52,8 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 }
 
 # get names from a list, replacing empty names values with numbers
-extract_names <- function(L){
-  generic <- sprintf("V%04d",1:length(L))
+extract_names <- function(L,prefix="V"){
+  generic <- sprintf("%s%04d",prefix,1:length(L))
   given <- names(L)
   if (is.null(given)) return(generic)
   igen <- given == ""
@@ -62,7 +62,7 @@ extract_names <- function(L){
 }
 
 
-.show_validator <- function(.self){
+.show_verifier <- function(.self){
   nr <- length(.self$calls)
   cat(sprintf(
     "Reference object of class '%s' with %s elements\n",class(.self)[1], nr
