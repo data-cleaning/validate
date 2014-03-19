@@ -1,5 +1,34 @@
 ## Helper functions, invisible to users.
 
+# reference class for storing syntax options
+
+syntax <- setRefClass('syntax',
+  fields = list(
+    validationsymbols = 'character'
+  )
+)
+
+SYNTAX <- syntax(
+  validationsymbols = c(
+    '<','<=','==','>','>=', '!=', '%in%', ":"
+    , 'identical', 'all','any' 
+    , '!', '|', '||', '&', '&&', 'xor'
+  )
+)
+
+
+read_resfile <- function(file){
+  L <- tryCatch(parse(file=file)
+      , error = function(e){
+        cat('Parsing failure at', file,"\n")
+        e
+  })
+  names(L) <- extract_names(L)
+  lapply(L,as.call)
+}
+
+
+
 # find a symbol in a call. Returns a list of multi-indices.
 which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
   if (x == what){
@@ -16,6 +45,12 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 
 
 # replace occurences x$y --> x[,'y']
+
+#' replace dollar
+#'
+#' @param x a call
+#'
+#' @export
 replace_dollar <- function(x){
   L <- which.call(x,'$')
   for ( I in L ){
@@ -30,9 +65,11 @@ replace_dollar <- function(x){
   x
 }
 
-validating <- function(x, allowed=getOption('validationSymbols'),...){
+validating <- function(x,...){
   sym <- deparse(x[[1]])
-  sym %in% allowed || grepl("^is\\.",sym) || ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
+  sym %in% SYNTAX$validationsymbols || 
+    grepl("^is\\.",sym) || 
+    ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
 }
 
 # test if a call defines a variable group
@@ -40,11 +77,6 @@ vargroup <- function(x){
   length(x) == 3 && x[[1]] == ':' && is.name(x[[2]]) && x[[3]][[1]] == '{'
 }
 
-setGeneric("is_vargroup",function(x,...) standardGeneric("is_vargroup"))
-
-setMethod("is_vargroup",signature("verifier"),function(x,...){
-  sapply(x$calls, vargroup)  
-})
 
 
 # functions to vectorize validation calls ----
@@ -64,11 +96,6 @@ node  <- function(x) if ( is.call(x) ) x[[1]] else NULL
 left  <- function(x) if ( is.call(x) && length(x)>2) x[[2]] else NULL
 right <- function(x) if ( is.call(x) ) x[[min(length(x),3)]] else NULL
 
-setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
-
-setMethod("is_linear",signature("validator"), function(x,...){
-  sapply(x$calls, linear)
-})
 
 linear <- function(x){
   if ( is.null(node(x)) ) return(TRUE) 
@@ -78,41 +105,6 @@ linear <- function(x){
   linear(left(x)) & linear(right(x))
 }
 
-# Obtain coefficients of linear rules ----
-setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
-
-setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
-
-  calls <- x$calls[is_linear(x)]
-  cols <- unique(unlist(lapply(calls, var_from_call)))
-  rows <- names(calls)
-  
-  bA <- matrix(0
-   , nrow = length(rows)
-   , ncol = length(cols) + 1
-   , dimnames = list(validator=rows, variable=c('CONSTANT',cols) )
-  )
-  
-  lcoef <- lapply(calls, function(x) coefficients(left(x)))
-  rcoef <- lapply(calls, function(x) coefficients(right(x)))
-  
-  for ( i in seq_along(lcoef) ){
-    cls <- names(lcoef[[i]])
-    bA[i,cls] <- lcoef[[i]]
-    cls <- names(rcoef[[i]])
-    bA[i,cls] <- bA[i,cls] - rcoef[[i]]
-  }
-
-  operators <- sapply(sapply(calls,`[[`,1),deparse)
-  
-  if (normalize){
-    bA <- bA * operatorsign[operators]
-    operators <- normed_operators[operators]
-  }
-  
-  list(A=bA[,-1,drop=FALSE],b = -1*bA[,1,drop=FALSE],operators=operators)
-  
-})
 
 
 # coefficients for normalized linear expressions (constant after the comparison operator)

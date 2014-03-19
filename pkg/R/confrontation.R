@@ -1,3 +1,6 @@
+#' @include indicator.R
+#' @include validator.R
+NULL
 
 # superclass for storing results of a verification activity
 setRefClass("confrontation"

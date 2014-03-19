@@ -3,9 +3,9 @@
 setRefClass("verifier"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
-    initialize = function(...,files=NULL) .verifier(.self,...,files=files)
-    , show = function() .show_verifier(.self)
-    )
+      show = function() .show_verifier(.self)
+    , initialize = function(...,files=NULL) .verifier(.self,...,files=files)
+  )
 )
 
 # retrieve (expanded, vectorized) calls from verifier object
@@ -26,30 +26,37 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
+setGeneric("is_vargroup",function(x,...) standardGeneric("is_vargroup"))
+
+setMethod("is_vargroup",signature("verifier"),function(x,...){
+  sapply(x$calls, vargroup)  
+})
+
+setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
+
+setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
+
+setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
+
+setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
+
+setMethod("names","verifier", function(x) names(x$calls))
+
+setMethod("[",signature("verifier"), function(x,i,...){
+  out <- do.call(class(x), x$calls[i])
+  out$origin <- x$origin[i]
+  out
+})
+
+setMethod("variables", signature(x="verifier"), function(x,...){ 
+    unique(unlist(lapply(x$calls,var_from_call)))
+  }
+)
+
+
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-.verifier <- function(.self, ..., files){
-  L <- as.list(substitute(list(...))[-1])
-
-  if ( !is.null(file) && is.character(file) ){
-    L <- list()
-    ifile <- character(0)
-    for ( f in file ){ 
-      L <- c(L,read_resfile(f))
-      ifile <- c(ifile,rep(f,length(L)))
-    }
-  } else if (length(L)==0){
-    return(.self)
-  } else {
-    names(L) <- extract_names(L)
-    ifile <- rep("commandline",length(L))
-  }
-  names(ifile) <- names(L)
-  .self$calls <- L
-  .self$origin <- ifile
-  .self
-}
 
 # get names from a list, replacing empty names values with numbers
 extract_names <- function(L,prefix="V"){
@@ -80,11 +87,6 @@ call2text <- function(x){
   gsub("[[:blank:]]+"," ",paste(deparse(x),collapse=" "))
 }
 
-setMethod("variables", signature(x="verifier"),
-  function(x,...){ 
-    unique(unlist(lapply(x$calls,var_from_call)))
-  }
-)
 
 # Extract variable names from a call object
 var_from_call <- function( x, vars=character(0) ){
@@ -97,18 +99,6 @@ var_from_call <- function( x, vars=character(0) ){
   unique(vars)
 }
 
-
-setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
-
-setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
-
-setMethod("names","verifier", function(x) names(x$calls))
-
-setMethod("[",signature("verifier"), function(x,i,...){
-  out <- do.call(class(x), x$calls[i])
-  out$origin <- x$origin[i]
-  out
-})
 
 
 

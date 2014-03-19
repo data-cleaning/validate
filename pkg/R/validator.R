@@ -1,30 +1,7 @@
-##-------------------------------------------------------------------------
-# default symbols allowed to define rules or restrictions
-.onLoad <- function(libname,pkgname){
-  options(validationSymbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', ":"
-    , 'identical', 'all','any' 
-    , '!', '|', '||', '&', '&&', 'xor'
-  ))
-}
-
-.onUnload <- function(libpath){
-  options(validationSymbols=NULL) 
-}
+#' @include verifier.R
+NULL
 
 
-read_resfile <- function(file){
-  L <- tryCatch(parse(file=file)
-    , error = function(e){
-        cat('Parsing failure at', file,"\n")
-        e
-  })
-  names(L) <- extract_names(L)
-  lapply(L,as.call)
-}
-
-
-# set of restrictions
 validator <- setRefClass("validator"
   , contains = 'verifier'
   , methods = list(
@@ -46,4 +23,43 @@ validator <- setRefClass("validator"
   .self$origin <- .self$origin[i]
   .self
 }
+
+
+setMethod("is_linear",signature("validator"), function(x,...){
+  sapply(x$calls, linear)
+})
+
+setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
+  
+  calls <- x$calls[is_linear(x)]
+  cols <- unique(unlist(lapply(calls, var_from_call)))
+  rows <- names(calls)
+  
+  bA <- matrix(0
+               , nrow = length(rows)
+               , ncol = length(cols) + 1
+               , dimnames = list(validator=rows, variable=c('CONSTANT',cols) )
+  )
+  
+  lcoef <- lapply(calls, function(x) coefficients(left(x)))
+  rcoef <- lapply(calls, function(x) coefficients(right(x)))
+  
+  for ( i in seq_along(lcoef) ){
+    cls <- names(lcoef[[i]])
+    bA[i,cls] <- lcoef[[i]]
+    cls <- names(rcoef[[i]])
+    bA[i,cls] <- bA[i,cls] - rcoef[[i]]
+  }
+  
+  operators <- sapply(sapply(calls,`[[`,1),deparse)
+  
+  if (normalize){
+    bA <- bA * operatorsign[operators]
+    operators <- normed_operators[operators]
+  }
+  
+  list(A=bA[,-1,drop=FALSE],b = -1*bA[,1,drop=FALSE],operators=operators)
+  
+})
+
 
