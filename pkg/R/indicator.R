@@ -1,9 +1,6 @@
 #' @include verifier.R
 NULL
 
-cat("I AM INDICATOR\n")
-
-
 # The 'indicator' class holds indicator definitions
 # An indicator maps a data.frame to a single number.
 

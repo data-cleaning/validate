@@ -2,8 +2,6 @@
 NULL
 
 
-
-
 validator <- setRefClass("validator"
   , contains = 'verifier'
   , methods = list(
@@ -13,14 +11,15 @@ validator <- setRefClass("validator"
 
 
 .validator <- function(.self, ..., files){
-  xverifier(.self,...,files=files)
+  .verifier(.self,...,files=files)
+  if (length(.self$calls)==0) return(.self)
 
   i <- sapply(.self$calls, function(x) validating(x) || vargroup(x))
   if ( !all(i) ){
     warning(paste(
       "The following rules contain invalid syntax and will be ignored:\n",
       paste(1:sum(!i), ':', sapply(.self$calls[!i],deparse), 'from', .self$origin[!i], collapse="\n ")))
-  }
+  } 
   .self$calls  <- .self$calls[i]
   .self$origin <- .self$origin[i]
   .self
