@@ -46,11 +46,6 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 
 # replace occurences x$y --> x[,'y']
 
-#' replace dollar
-#'
-#' @param x a call
-#'
-#' @export
 replace_dollar <- function(x){
   L <- which.call(x,'$')
   for ( I in L ){

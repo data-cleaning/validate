@@ -21,7 +21,7 @@ cp build/DESCRIPTION pkg
 cp build/NAMESPACE pkg
 
 echo "######## Generate documentation..."
-$R -q -f roxygen.R
+$R -q -f document.R
 
 echo "######## Building package in output..."
 mkdir output

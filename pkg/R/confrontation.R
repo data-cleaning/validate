@@ -26,6 +26,13 @@ setRefClass("confrontation"
 
 
 # confront data with a subclass of 'validator'
+
+#' Confront data with a (set of) verifier(s)
+#'
+#' @param x An R object carrying verifications
+#' @param y An R object carrying data
+#' @param ... Arguments to be passed to other methods
+#'
 setGeneric("confront",
   def = function(x, y, ...) standardGeneric("confront")
 )
@@ -36,6 +43,8 @@ setClassUnion('data',c("data.frame","list","environment"))
 # indicators serve a different purpose than validations.
 setRefClass("indicatorValue", contains = "confrontation")
 
+#' @method confront data
+#' @rdname confront
 setMethod("confront",signature("indicator","data"),function(x,y,...){
   L <- lapply(x$calls,factory(eval), envir=y, enclos=NULL)
   new('indicatorValue',
@@ -47,7 +56,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
   )  
 })
 
-# indicators serve a different purpose than validations.
+# # indicators serve a different purpose than validations.
 setRefClass("validatorValue", contains = "confrontation",
   fields = list(
         impact     = "list" # impact of mismatch on data
@@ -72,7 +81,7 @@ setMethod("confront", signature("validator","data"),
     )
   }
 )
-
+ 
 has_error <- function(x) !sapply(x$error,is.null)
 has_warning <- function(x) !sapply(x$warn, is.null)
 has_value <- function(x) sapply(x$value, function(a) !is.null(a))
@@ -99,23 +108,23 @@ setMethod('summary',signature('validatorValue'),function(object,...){
   data.frame(
     validator = names(object$value)
     , confrontations = sapply(object$value,length)
-    , passes = passes(cf)
-    , fails  = fails(cf)
-    , nNA = nas(cf)
-    , error = has_error(x)
-    , warning = has_warning(x)
+    , passes = passes(object)
+    , fails  = fails(object)
+    , nNA = nas(object)
+    , error = has_error(object)
+    , warning = has_warning(object)
     , call = sapply(object$calls,call2text)
   )  
 })
 
 
-setGeneric('value',def=function(x,...) standardGeneric('value'))
+setGeneric('values',def=function(x,...) standardGeneric('value'))
 
-setMethod('value',signature('confrontation'),function(x,...){
+setMethod('values',signature('confrontation'),function(x,...){
   x$value
 })
-
-setMethod('value',signature('validatorValue'),function(x,simplify=TRUE,...){
+ 
+setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
   if (!simplify ){
     return( getMethod(value,signature='confrontation')(x,...) )
   }

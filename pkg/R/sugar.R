@@ -30,9 +30,9 @@ expand_vargroup <- function(x){
 }
 
 # determine which groups a call refers to.
-groups_from_call <- function(x, grp, e=new.env()){
-  if ( is.name(x) && deparse(x) %in% grp ) assign(as.character(x),1,envir=e)
-  for (i in seq_along(x)[-1]) groups(x[[i]],grp,e)
+groups_from_call <- function(x, groups, e=new.env()){
+  if ( is.name(x) && deparse(x) %in% groups ) assign(as.character(x),1,envir=e)
+  for (i in seq_along(x)[-1]) groups_from_call(x[[i]],groups,e)
   return(ls(e))
 }
 
@@ -105,11 +105,11 @@ expand_calls <- function(calls, groups){
   
 
 ## this stuff is experimental syntactic sugar.
-.expand <- function(.self,vars){
-  L <- lapply(.self$calls,expand,vars)
-  .self$origin <- unlist(lapply(seq_along(L), function(i) rep(.self$origin[i],length(L[[i]]))))
-  .self$calls <- unlist(L)
-}
+# .expand <- function(.self,vars){
+#   L <- lapply(.self$calls,expand,vars)
+#   .self$origin <- unlist(lapply(seq_along(L), function(i) rep(.self$origin[i],length(L[[i]]))))
+#   .self$calls <- unlist(L)
+# }
 
 
 

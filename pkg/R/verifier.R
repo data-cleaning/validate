@@ -1,4 +1,6 @@
-#cat("I AM VERIFIER\")
+#' @include validate.R
+NULL
+
 
 #  Superclass for storing verification rules.
 setRefClass("verifier"
@@ -23,36 +25,93 @@ setMethod('calls',signature('verifier'),
 
 
 # get basic information from verification objects
+
+#' Extract variable names
+#'
+#' @param x An R object
+#' @param ... Methods to be passed to other methods.
+#' 
+#' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
+#' Find out where expressions were defined
+#'
+#' @param x and R object
+#' @param ... Arguments to be passed to other methods
+#' @return A \code{character} vector.
+#' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
+
+
+#' Check for linear expressions
+#' @param x An R object 
+#' @param ... Arguments to be passed to other methods.
+#' @return A \code{logical} vector
+#' @export
+setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
+
+
+#' Extract linear coeffiecients from linear expressions
+#'
+#' @section Details: Linear expressions are expressions of the form \eqn{\boldsymbol{Ay}} or
+#' \eqn{\boldsymbol{Ay}\odot\boldsymbol{b}}, where \eqn{\odot\in\{<,\leq,=,\geq,>\}}.
+#' This function uses \code{\link{is_linear}} to find linear expressions in \code{x} and returns
+#' the corresponding coefficients and possibly the operators. 
+#'
+#' @param x An R object
+#' @param ... Arguments to be passed to other methods
+#'
+#' @return A list, containing matrix \eqn{\boldsymbol{A}}, and where possible matrix \eqn{\boldsymbol{b}} 
+#'  and a vector with comparison operators.
+#'
+#' @export 
+setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
+
+#' @method origin verifier
+#' @rdname origin
+setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
+
+#setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
+
+
+#' Extract names
+#' 
+#' @param x An R object
+#'
+#' @export
+setMethod("names","verifier", function(x) names(x$calls))
+
+#' Select
+#' 
+#' @param x An R object
+#' @param i an index (numeric, boolean, character)
+#' @param j not implemented
+#' @param drop not implemented
+#' @param ... Arguments to be passed to other methods
+#' 
+#' @return An new object, of the same class as \code{x} subsetted according to \code{i}.
+#' 
+#' @export
+setMethod("[",signature("verifier"), function(x,i,j,...,drop=TRUE){
+  out <- do.call(class(x), x$calls[i])
+  out$origin <- x$origin[i]
+  out
+})
+
+#' @method variables verifier
+#' @rdname variables
+setMethod("variables", signature(x="verifier"), function(x,...){ 
+    unique(unlist(lapply(x$calls,var_from_call)))
+  }
+)
+
+# Internal methods ----
 
 setGeneric("is_vargroup",function(x,...) standardGeneric("is_vargroup"))
 
 setMethod("is_vargroup",signature("verifier"),function(x,...){
   sapply(x$calls, vargroup)  
 })
-
-setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
-
-setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
-
-setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
-
-setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
-
-setMethod("names","verifier", function(x) names(x$calls))
-
-setMethod("[",signature("verifier"), function(x,i,...){
-  out <- do.call(class(x), x$calls[i])
-  out$origin <- x$origin[i]
-  out
-})
-
-setMethod("variables", signature(x="verifier"), function(x,...){ 
-    unique(unlist(lapply(x$calls,var_from_call)))
-  }
-)
 
 
 

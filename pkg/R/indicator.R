@@ -4,7 +4,15 @@ NULL
 # The 'indicator' class holds indicator definitions
 # An indicator maps a data.frame to a single number.
 
-indicator <- setRefClass("indicator", contains='verifier',
+#' Define indicators
+#' 
+#' @param ... A comma-separated list of indicators
+#' @param files A character vector of file locations
+#'
+#' @export
+indicator <- function(...,files=NULL) new('indicator',...,files=files)
+
+setRefClass("indicator", contains='verifier',
   methods = list(
     initialize = function(..., files=NULL) .indicator(.self,...,files=files)
   )                       

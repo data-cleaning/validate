@@ -1,8 +1,16 @@
 #' @include verifier.R
 NULL
 
+#' Define validation rules
+#'
+#' @param ... A comma-separated list of validation expressions
+#' @param files A character vector of file locations
+#'
+#' @export
+validator <- function(...,files=NULL) new('validator',...,files=files)
 
-validator <- setRefClass("validator"
+
+setRefClass("validator"
   , contains = 'verifier'
   , methods = list(
     initialize = function(...,files=NULL)  .validator(.self,...,files=files)
@@ -25,11 +33,16 @@ validator <- setRefClass("validator"
   .self
 }
 
-
+#' @method is_linear validator
+#' @rdname is_linear
 setMethod("is_linear",signature("validator"), function(x,...){
   sapply(x$calls, linear)
 })
 
+#' @method linear_coefficients validator
+#' @param normalize Bring all equations in the \eqn{<} or \eqn{\leq} form. 
+#' @rdname linear_coefficients
+#' @export
 setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
   
   calls <- x$calls[is_linear(x)]
