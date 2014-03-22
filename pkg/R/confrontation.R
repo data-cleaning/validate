@@ -64,6 +64,9 @@ setRefClass("validatorValue", contains = "confrontation",
     )
 )
 
+
+#' @method confront data
+#' @rdname confront
 setMethod("confront", signature("validator","data"),
   function(x, y
     , impact=c("none","Lp","rspa","FH")
@@ -104,6 +107,7 @@ nas <- function(x){
   })
 }
 
+#' @method summary validatorValue
 setMethod('summary',signature('validatorValue'),function(object,...){
   data.frame(
     validator = names(object$value)
