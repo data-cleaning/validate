@@ -117,7 +117,7 @@ setMethod("is_vargroup",signature("verifier"),function(x,...){
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-.verifier <- function(.self, ..., files){
+.verifier <- function(.self, ..., files,prefix="V"){
   L <- as.list(substitute(list(...))[-1])
   
   if ( !is.null(file) && is.character(file) ){
@@ -130,7 +130,7 @@ setMethod("is_vargroup",signature("verifier"),function(x,...){
   } else if (length(L)==0){
     return(.self)
   } else {
-    names(L) <- extract_names(L)
+    names(L) <- extract_names(L,prefix=prefix)
     ifile <- rep("commandline",length(L))
   }
   names(ifile) <- names(L)

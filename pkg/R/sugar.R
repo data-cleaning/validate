@@ -72,15 +72,6 @@ expand_calls <- function(calls, groups){
 
 
 
-
-
-
-
-
-
-
-
-
 # which_groups <- function(x, groups, I=1, e=new.env()){
 #   if ( is.name(x) && deparse(x) %in% groups ){
 #     g <- deparse(x)

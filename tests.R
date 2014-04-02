@@ -1,13 +1,23 @@
 
 
-
-library(roxygen2)
-roxygenize(package.dir="pkg/",roxygen.dir="pkg/",copy.package=FALSE,unlink.target=TRUE)
-
 fn <- c('verifier.R','indicator.R','validator.R',
         'confrontation.R','parse.R','factory.R'
         ,'sugar.R')
 dmp <- lapply(file.path('pkg/R',fn),source)
+
+
+x <- indicator(
+  mean(height)
+  ,height/weight
+  , ifelse(height < 65,'short','tall')
+  , ifelse ( mean(height) > 70,'b','a')
+)
+
+cf <- confront(x,women)
+summary(cf)
+
+
+
 
 
 w <- validator(

@@ -122,7 +122,7 @@ setMethod('summary',signature('validatorValue'),function(object,...){
 })
 
 
-setGeneric('values',def=function(x,...) standardGeneric('value'))
+setGeneric('values',def=function(x,...) standardGeneric('values'))
 
 setMethod('values',signature('confrontation'),function(x,...){
   x$value
@@ -134,7 +134,12 @@ setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
   }
   values <- x$value[!has_error(x)]
   len <- sapply(values,length)
-  lapply(unique(len), function(l) sapply(values[len==l],Id))
+  lapply(unique(len), function(l){ 
+    m <- sapply(values[len==l], Id)
+    if ( l == 1 ) # edge case in sapply 
+      m <- matrix(m,nrow=1,dimnames=list(NULL,names(m)))
+    m
+  })
 })
 
 setMethod('calls',signature('confrontation'),function(x,...){
@@ -149,4 +154,7 @@ setMethod('calls',signature('validatorValue'), function(x,simplify=TRUE,...){
   len <- sapply(x$value[!has_error(x)],length)
   lapply(unique(len),function(l) sapply(calls[len==l],Id))
 })
+
+
+
 
