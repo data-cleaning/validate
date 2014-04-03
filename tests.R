@@ -2,7 +2,7 @@
 
 fn <- c('verifier.R','indicator.R','validator.R',
         'confrontation.R','parse.R','factory.R'
-        ,'sugar.R')
+        ,'sugar.R','functions.R')
 dmp <- lapply(file.path('pkg/R',fn),source)
 
 
@@ -16,7 +16,7 @@ x <- indicator(
 cf <- confront(x,women)
 summary(cf)
 
-
+I <- indicator(number_missing())
 
 
 
