@@ -18,7 +18,7 @@ setMethod('compare',signature=signature('validator'),
 # y : object to compare against x
 setGeneric('compare2',def=function(x,y,...) standardGeneric('compare2'))
 
-setMethod('compare2',signature('validatorValue','validatorValue').
+setMethod('compare2',signature('validatorValue','validatorValue'),
   function(x,y,...){
     vx <- values(x)
     vy <- values(y)
@@ -36,7 +36,7 @@ errcheck <- function(x,y){
   hey <- has_error(y)
   if (!all(hex == hey)){
     xnoty <- paste(names(hex & !hey),collapse=", ")
-    ynotx <- paste(names(!hex & hey),collapse(", ")
+    ynotx <- paste(names(!hex & hey),collapse=", ")
     warning(
       sprintf(
         'Not every call could be evaluated in both datasets:\n x not y :%s\n y not x%s\n'
