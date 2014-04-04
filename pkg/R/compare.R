@@ -1,35 +1,146 @@
 
+# Mark an array as comparison so we can overload the 'show' and plot' function.
+setClass('comparison', contains='array'
+  , representation=list(
+    call = 'call'    
+))
 
-setGeneric('compare', def = function(x,...) standardGeneric('compare'))
+setClass('validatorComparison',contains='comparison')
 
+setMethod('show',signature('comparison'),function(object){
+  cat(sprintf('Object of class %s:\n',class(object)))
+  cat(sprintf('\n   %s\n\n',call2text(object@call)))
+  print(object[,])
+})
+
+
+#' Compare similar data sets
+#'
+#' The purpose of this function is to compare different versions of the same dataset with respect
+#' to predifined indicators. It is expected that the number and order of columns and rows are the 
+#' identical for each dataset. 
+#'
+#' @param using An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
+#' @param ... (named) data sets (\emph{e.g.} data.frames)
+#' @param how Compare data sets to the first set in \code{...} (\code{'base'}) 
+#'    or compare datasets sequentially?
+#' @param .list Optional list of data sets, will be concatenated with \code{...}.
+#'
+#' @export 
+setGeneric('compare', def = function(using,...) standardGeneric('compare'))
+
+#' rdname compare
 setMethod('compare',signature=signature('validator'), 
-  function(x, reference=c('base','sequential'), ..., .list=NULL){
+  function(using, ..., how=c('to_first','sequential'), .list=NULL){
     L <- c( list(...), .list)
-    reference <- match.arg(reference)
-    
-  
+    if ( length(L) < 2 ) error('you need at least two datasets')
+    how <- match.arg(how)
+
+    out <- if (how == 'to_first'){
+        ref <- confront(using,L[[1]])
+        vapply(L, function(x) compare2(confront(using, x), ref)
+               ,FUN.VALUE=numeric(11))
+      } else {
+        ref <- NULL
+        vapply(seq_along(L), 
+        function(i){
+            j <- ifelse(i==1,1,i-1)
+            compare2( confront(using,L[[i]]),confront(using,L[[j]]) )
+          }
+          , FUN.VALUE = numeric(11)
+          )
+    }
+    names(dimnames(out)) <- c('Status','Version')
+    new('validatorComparison',
+        provideDimnames(out,base=sprintf("D%04d",1:ncol(g)))
+        ,call=sys.call(1L)
+    )
 })
 
 
 
-## helper-outers
+## INTERNAL helper-outers
 
-# x : reference object to compare against
 # y : object to compare against x
-setGeneric('compare2',def=function(x,y,...) standardGeneric('compare2'))
+# x : reference object to compare against (note the order!)
+setGeneric('compare2',def=function(y,x,...) standardGeneric('compare2'))
 
 setMethod('compare2',signature('validatorValue','validatorValue'),
-  function(x,y,...){
+  function(y,x,...){
     vx <- values(x)
     vy <- values(y)
     rules <- errcheck(x,y)
     vx <- lapply(vx, function(x) x[,rules,drop=FALSE])
-    vy <- lapply(vy, function(x) x[,rules,drop=FALSE])
-  #TODO pairwise comparing of elements in vx and vy    
+    vy <- lapply(vy, function(x) x[,rules,drop=FALSE])    
+    
+    validations      = rep( sum(sapply(vx, length)), 2)
+    unverifiable     = c(unverifiable(vx), unverifiable(vy))
+    verifiable       = validations-unverifiable
+    still_verifiable = c(verifiable[1],still_verifiable(vx,vy))
+    new_verifiable   = verifiable - still_verifiable
+    satisfied        = c(satisfied(vx),satisfied(vy))
+    still_satisfied  = c(satisfied[1], still_satisfied(vx,vy))
+    new_satisfied    = satisfied - still_satisfied
+    violated         = verifiable - satisfied
+    still_violated   = c(violated[1],still_violated(vx,vy))
+    new_violated     = violated - still_violated
+
+    array(c(
+       validations           
+      , verifiable         
+      , unverifiable       
+      , still_verifiable   
+      , new_verifiable     
+      , satisfied          
+      , still_satisfied    
+      , new_satisfied      
+      , violated           
+      , still_violated     
+      , new_violated       
+    ) , dim=c(2,11)
+      , dimnames=list(
+          NULL
+        , status = c(
+        'validations'           
+      , 'verifiable'         
+      , 'unverifiable'       
+      , 'still_verifiable'   
+      , 'new_verifiable'     
+      , 'satisfied'          
+      , 'still_satisfied'    
+      , 'new_satisfied'      
+      , 'violated'           
+      , 'still_violated'     
+      , 'new_violated'       
+      ))
+    )[2,]
 })
 
+# v : values('validatorValue')
+unverifiable <- function(x){
+  sum(sapply(x,function(y) sum(is.na(y))))
+}
 
+# y wrt x
+still_verifiable <- function(x,y){
+  sum(sapply(seq_along(x), function(i) sum(!is.na(x[[i]]) & !is.na(y[[i]]))))
+}
 
+new_verifiable <- function(x,y){
+   sum(sapply(seq_along(x),function(i) sum(is.na(x[[i]]& !is.na(y[[i]])))))
+}
+
+satisfied <- function(x){
+  sum(sapply(x,sum,na.rm=TRUE))
+}
+
+still_satisfied <- function(x,y){
+  sum(sapply(seq_along(x), function(i) sum(x[[i]] & y[[i]],na.rm=TRUE)))
+}
+
+still_violated <- function(x,y){
+  sapply(seq_along(x), function(i) sum(!x[[i]] & !y[[i]],na.rm=TRUE))
+}
 
 errcheck <- function(x,y){
   hex <- has_error(x)

@@ -17,7 +17,7 @@ number_missing <- function(...){
   sum(sapply(
     eapply(
       env=parent.frame()
-      , FUN = function(x) sum(is.na(x)) #tryCatch(sum(is.na(x)), warning=function(e) 0)
+      , FUN = function(x) sum(is.na(x)) 
     )[vars]
   ,Id))
 }
@@ -29,13 +29,11 @@ fraction_missing <- function(...){
   v <- sapply(
     eapply(
       env=parent.frame()
-      , FUN = function(x) c(sum(is.na(x)),length(x)) #tryCatch(sum(is.na(x)), warning=function(e) 0)
+      , FUN = function(x) c(sum(is.na(x)),length(x))
     )[vars]
     ,Id)
   sum(v[1,])/sum(v[2,])
 }
-
-
 
 
 
@@ -46,4 +44,5 @@ fraction_missing <- function(...){
 #   , z = letters[1:4]
 #   )
 # I <- indicator(fraction_missing(x),number_missing(),fraction_missing(x,z))
+# 
 # values(confront(I,d))

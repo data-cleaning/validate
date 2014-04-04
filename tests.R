@@ -19,6 +19,57 @@ summary(cf)
 I <- indicator(number_missing())
 
 
+V <- validator(height<weight)
+w1 <- w2 <- women
+w1[1,1] <- NA
+w1[2,c(1,2)] <- w1[2,c(2,1)]
+
+compare(V,ruw=w1, gaaf=w2)
+
+V <- validator(
+  weight < 159
+  , height/weight > 0.48
+  ,height > 0
+  )
+cf <- confront(V,w1)
+plot(cf,order=FALSE)
+
+V <- validator(
+  height > 0
+  , weight > 0
+  )
+plot(confront(V,women))
+
+
+vx <- values(cf)
+n <- lapply(vx,colSums)
+g <- sapply(calls(cf),as.character)
+p <- barplot(n[[1]],horiz=TRUE,las=1)
+text(rep(0.1,3),p[,1],g[[1]],pos=4)
+
+
+p <- barplot(1:3,horiz=TRUE,border=NA,ylim=c(0,3),xlim=c(0,3))
+
+abline(h=p,col='red')
+
+w <- 0.4
+drawbarat <- function(y,height,width){
+  w <- width/2
+  polygon(
+      c(0,height,height,0)
+    , c(y-w/2,y-w/2,y+w/2,y+w/2)
+    ,col='black'
+    ,border=NA
+  )
+}
+
+barplot(3:1,horiz=TRUE,width=0.4,space=1.,add=TRUE,col='black',ylim=c(0,3),xlim=c(0,3))
+
+
+cf1 <- confront(V,w1)
+cf2 <- confront(V,w2)
+
+compare2(cf1,cf2)
 
 w <- validator(
   g : {height; weight}
