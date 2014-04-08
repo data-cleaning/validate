@@ -11,14 +11,15 @@ d <- data.frame(y = 1:3)
 
 lapply(v$calls, factory(eval), envir=d,enclos=parent.frame())
 #
+e <- new.env()
+e$y <- 3
+f <- function(x,env) factory(eval)(x,envir=env,enclos=parent.frame())
+f(v$calls[[1]],e)
+ls(e)
 
-factory(eval)(v$calls[[1]])
+f(v$calls[[2]],e)
 
-
-
-
-
-
+lapply(v$calls,f,e)
 
 
 

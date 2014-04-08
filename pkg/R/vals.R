@@ -27,7 +27,7 @@ setRefClass('vals', contains= 'verifier'
 
 # Somehow, the := operator is recognized by R's parser although `:=` is not exposed to the public.
 # We define it here for our package.
-`:=` <- function(x,y) assign(x=as.character(quote(x)),value=y,envir=sys.frame(-1))
+`:=` <- function(x,y) assign(x=deparse(substitute(x)),value=y,envir=sys.frame(-1))
 
 #' VALS validate function
 #' 
@@ -47,11 +47,19 @@ validate <- function(bde
   , severity=NULL
   , outputType=c('is_valid','is_invalid')
   , level=c('record-level','dataset-level')){
-  call <- substitute(bde)[-1] 
+  call <- substitute(bde)
   eval(expr=call,envir=parent.frame())
   
 }
 
+is_vals_assignment <- function(x) x[[1]] == ":="
+
+setMethod('confront', signature('vals','data'), 
+  function(x,y,...){
+    e <- list2env(y,parent=parent.frame())
+    i <- !sapply(x$calls,is_vals_assignment)
+    lapply(x$calls, factory(eval),envir=e)[i]
+})
 
 
 

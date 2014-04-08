@@ -35,7 +35,7 @@ setGeneric("confront",
   def = function(x, y, ...) standardGeneric("confront")
 )
 
-setClassUnion('data',c("data.frame","list","environment"))
+setClassUnion('data',c("data.frame","list"))
 
 
 # indicators serve a different purpose than validations.
