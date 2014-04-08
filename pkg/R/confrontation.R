@@ -25,8 +25,6 @@ setRefClass("confrontation"
 }
 
 
-# confront data with a subclass of 'validator'
-
 #' Confront data with a (set of) verifier(s)
 #'
 #' @param x An R object carrying verifications
@@ -55,6 +53,17 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
       , error = lapply(L,"[[",3)     
   )  
 })
+
+
+setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
+  new('confrontation',
+      , call = x$call[i]
+      , value = x$value[i]
+      , warn = x$warn[i]
+      , error  = x$error[i]
+  )
+})
+
 
 # # indicators serve a different purpose than validations.
 setRefClass("validatorValue", contains = "confrontation",
@@ -121,13 +130,20 @@ setMethod('summary',signature('validatorValue'),function(object,...){
   )  
 })
 
-
+#' Get values from object
+#' 
+#' @param x an R object
+#' @param ... Arguments to pass to or from other methods
+#'
+#' @export
 setGeneric('values',def=function(x,...) standardGeneric('values'))
 
+#' @rdname values
 setMethod('values',signature('confrontation'),function(x,...){
   x$value
 })
- 
+
+#' @rdname values
 setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
   if (!simplify ){
     return( getMethod(value,signature='confrontation')(x,...) )
@@ -142,10 +158,12 @@ setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
   })
 })
 
+#' @rdname calls
 setMethod('calls',signature('confrontation'),function(x,...){
   x$calls
 })
 
+#' @rdname calls
 setMethod('calls',signature('validatorValue'), function(x,simplify=TRUE,...){
   if (!simplify){
     return( getMethod(calls, signature='confrontation')(x,...) )
@@ -154,6 +172,10 @@ setMethod('calls',signature('validatorValue'), function(x,simplify=TRUE,...){
   len <- sapply(x$value[!has_error(x)],length)
   lapply(unique(len),function(l) sapply(calls[len==l],Id))
 })
+
+
+
+## TODO: decide whether we move all visualisations & reporting to a different package.
 
 #' Create a visualisation
 #' 
@@ -172,7 +194,7 @@ setMethod('calls',signature('validatorValue'), function(x,simplify=TRUE,...){
 #' @export 
 setMethod('plot',signature('validatorValue'), 
   function(x, ..., order=TRUE, topn=Inf, add_legend=TRUE, add_calls=TRUE
-           , colors=adjustcolor(c("#A6CEE3", "#1F78B4"), alpha.f=0.8) ){
+           , colors=c("#A6CEE3CC", "#1F78B4CC") ){
     
     stopifnot(topn>0,is.logical(order),is.logical(add_legend),is.logical(add_calls))
     calls <- lapply(calls(x),sapply,call2text)

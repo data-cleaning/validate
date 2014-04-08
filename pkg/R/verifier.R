@@ -11,9 +11,19 @@ setRefClass("verifier"
   )
 )
 
-# retrieve (expanded, vectorized) calls from verifier object
+#' Retrieve calls from object
+#'  
+#' This function is exported mostly as a utility for other packages depending on \code{validate}. 
+#'  
+#' @param x An R object
+#' @param ... arguments to be passed to other methods
+#' @return A \code{list} of calls
 setGeneric('calls',function(x,...) standardGeneric('calls'))
 
+#' @rdname calls
+#' @param expand Expand groups?
+#' @param vectorize Vectorize if-statements?
+#' @param replace_dollar Replace dollar with bracket index?
 setMethod('calls',signature('verifier'),
   function(x, expand=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
     calls <- x$calls
