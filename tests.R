@@ -1,9 +1,29 @@
 
 
-fn <- c('verifier.R','indicator.R','validator.R',
+fn <- c('verifier.R','indicator.R','validator.R', 'vals.R',
         'confrontation.R','parse.R','factory.R'
         ,'sugar.R','functions.R')
 dmp <- lapply(file.path('pkg/R',fn),source)
+
+v <- vals(G := 2*y, validate( G > 1))
+
+d <- data.frame(y = 1:3)
+
+lapply(v$calls, factory(eval), envir=d,enclos=parent.frame())
+#
+
+factory(eval)(v$calls[[1]])
+
+
+
+
+
+
+
+
+
+
+
 
 
 x <- indicator(
