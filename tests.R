@@ -6,6 +6,9 @@ fn <- c('verifier.R','indicator.R','validator.R',
 dmp <- lapply(file.path('pkg/R',fn),source)
 
 
+
+
+
 x <- indicator(
   mean(height)
   ,height/weight

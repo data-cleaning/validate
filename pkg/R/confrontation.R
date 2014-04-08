@@ -44,7 +44,7 @@ setRefClass("indicatorValue", contains = "confrontation")
 #' @method confront data
 #' @rdname confront
 setMethod("confront",signature("indicator","data"),function(x,y,...){
-  L <- lapply(x$calls,factory(eval), envir=y)
+  L <- lapply(x$calls,factory(eval), envir=y,enclos=parent.frame())
   new('indicatorValue',
       call = match.call()
       , calls = x$calls
@@ -75,7 +75,7 @@ setMethod("confront", signature("validator","data"),
   function(x, y,  ...)
   {
     calls <- calls(x)
-    L <- lapply(calls,factory(eval), envir=y,enclos=NULL)
+    L <- lapply(calls,factory(eval), envir=y,enclos=parent.frame())
     new('validatorValue',
         call = match.call(call=sys.call(1))
         , calls = calls
