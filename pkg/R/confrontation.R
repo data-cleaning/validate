@@ -77,10 +77,7 @@ setRefClass("validatorValue", contains = "confrontation",
 #' @method confront data
 #' @rdname confront
 setMethod("confront", signature("validator","data"),
-  function(x, y
-    , impact=c("none","Lp","rspa","FH")
-    , severity=c("none","Lp","gower")
-    , p=c(impact=2,severity=1), ...)
+  function(x, y,  ...)
   {
     calls <- calls(x)
     L <- lapply(calls,factory(eval), envir=y,enclos=NULL)
