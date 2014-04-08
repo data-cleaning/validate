@@ -66,12 +66,7 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 
 
 # # indicators serve a different purpose than validations.
-setRefClass("validatorValue", contains = "confrontation",
-  fields = list(
-        impact     = "list" # impact of mismatch on data
-      , severity   = "list" # amount of mismatch between actual and desired score
-    )
-)
+setRefClass("validatorValue", contains = "confrontation")
 
 
 #' @method confront data
