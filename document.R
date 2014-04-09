@@ -3,7 +3,6 @@ library(roxygen2)
 options(error=traceback)
 unlink( 'pkg/man', TRUE)
 
-#setwd('pkg')
 update_collate('pkg')
 document( 'pkg',clean=TRUE)
 

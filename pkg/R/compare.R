@@ -1,9 +1,16 @@
+#' @include verifier.R 
+#' @include confrontation.R
+NULL
+
+setClassUnion('callOrNull',list('call','NULL'))
 
 # Mark an array as comparison so we can overload the 'show' and plot' function.
-setClass('comparison', contains='array'
-  , representation=list(
-    call = 'call'    
-))
+setClass('comparison', contains='array' 
+  , slots=list(call = 'callOrNull')
+  , prototype = prototype(array(0,dim=c(0,0)), call=NULL)
+)
+
+
 
 setClass('validatorComparison',contains='comparison')
 
@@ -14,24 +21,29 @@ setMethod('show',signature('comparison'),function(object){
 })
 
 
+
+
 #' Compare similar data sets
 #'
 #' The purpose of this function is to compare different versions of the same dataset with respect
 #' to predifined indicators. It is expected that the number and order of columns and rows are the 
 #' identical for each dataset. 
 #'
-#' @param using An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
+#' @param x An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
 #' @param ... (named) data sets (\emph{e.g.} data.frames)
-#' @param how Compare data sets to the first set in \code{...} (\code{'base'}) 
-#'    or compare datasets sequentially?
-#' @param .list Optional list of data sets, will be concatenated with \code{...}.
-#'
-#' @export 
-setGeneric('compare', def = function(using,...) standardGeneric('compare'))
+#' 
+#' @export
+setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
-#' rdname compare
-setMethod('compare',signature=signature('validator'), 
-  function(using, ..., how=c('to_first','sequential'), .list=NULL){
+
+# @method compare validator
+# @param how how to compare
+# @param .list Optional list of data sets, will be concatenated with \code{...}.
+# @rdname compare
+# @export 
+
+setMethod('compare', signature('validator'), 
+  function(x, ..., how=c('to_first','sequential'), .list=NULL){
     L <- c( list(...), .list)
     if ( length(L) < 2 ) error('you need at least two datasets')
     how <- match.arg(how)
@@ -42,13 +54,11 @@ setMethod('compare',signature=signature('validator'),
                ,FUN.VALUE=numeric(11))
       } else {
         ref <- NULL
-        vapply(seq_along(L), 
-        function(i){
-            j <- ifelse(i==1,1,i-1)
-            compare2( confront(using,L[[i]]),confront(using,L[[j]]) )
-          }
-          , FUN.VALUE = numeric(11)
-          )
+        vapply(seq_along(L), function(i){
+          j <- ifelse(i==1,1,i-1)
+          compare2( confront(using,L[[i]]),confront(using,L[[j]]) )
+        }
+        , FUN.VALUE = numeric(11) )
     }
     names(dimnames(out)) <- c('Status','Version')
     new('validatorComparison',

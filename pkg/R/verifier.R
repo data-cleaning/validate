@@ -1,6 +1,3 @@
-#' @include validate.R
-NULL
-
 
 #  Superclass for storing verification rules.
 setRefClass("verifier"
@@ -14,18 +11,18 @@ setRefClass("verifier"
 #' Retrieve calls from object
 #'  
 #' This function is exported mostly as a utility for other packages depending on \code{validate}. 
-#'  
+#' 
 #' @param x An R object
 #' @param ... arguments to be passed to other methods
 #' @return A \code{list} of calls
 setGeneric('calls',function(x,...) standardGeneric('calls'))
 
-#' @rdname calls
-#' @param expand Expand groups?
-#' @param vectorize Vectorize if-statements?
-#' @param replace_dollar Replace dollar with bracket index?
+# @param expand Expand groups?
+# @param vectorize Vectorize if-statements?
+# @param replace_dollar Replace dollar with bracket index?
+# @rdname calls
 setMethod('calls',signature('verifier'),
-  function(x, expand=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+  function(x, ..., expand=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
     calls <- x$calls
     if ( expand ) calls <- expand_calls(calls)
     if (vectorize) calls <- lapply(calls, vectorize)
@@ -77,8 +74,8 @@ setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
 #' @export 
 setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
-#' @method origin verifier
-#' @rdname origin
+# @method origin verifier
+# @rdname origin
 setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
 
 #setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
@@ -102,14 +99,15 @@ setMethod("names","verifier", function(x) names(x$calls))
 #' @return An new object, of the same class as \code{x} subsetted according to \code{i}.
 #' 
 #' @export
+#' @rdname select
 setMethod("[",signature("verifier"), function(x,i,j,...,drop=TRUE){
   out <- do.call(class(x), x$calls[i])
   out$origin <- x$origin[i]
   out
 })
 
-#' @method variables verifier
-#' @rdname variables
+# @method variables verifier
+# @rdname variables
 setMethod("variables", signature(x="verifier"), function(x,...){ 
     unique(unlist(lapply(x$calls,var_from_call)))
   }

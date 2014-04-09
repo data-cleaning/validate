@@ -33,16 +33,17 @@ setRefClass("validator"
   .self
 }
 
-#' @method is_linear validator
-#' @rdname is_linear
+# @method is_linear validator
+# @rdname is_linear
+# @exportMethod
 setMethod("is_linear",signature("validator"), function(x,...){
   sapply(x$calls, linear)
 })
 
-#' @method linear_coefficients validator
-#' @param normalize Bring all equations in the \eqn{<} or \eqn{\leq} form. 
-#' @rdname linear_coefficients
-#' @export
+# @method linear_coefficients validator
+# @param normalize Bring all equations in the \eqn{<} or \eqn{\leq} form. 
+# @rdname linear_coefficients
+# @export
 setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
   
   calls <- x$calls[is_linear(x)]

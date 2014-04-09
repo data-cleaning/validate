@@ -44,22 +44,4 @@ get_stat <- function(x,what,...){
   )
   out
 }
-#' @method summary validatorValue
-setMethod('summary',signature('indicatorValue'),function(object,...){
-  data.frame(
-    indicator = names(object$value)
-    , confrontations = sapply(object$value,length)
-    , class = get_stat(object,class)
-    , min = get_stat(object,min,na.rm=TRUE)
-    , mean  = get_stat(object,mean,na.rm=TRUE)
-    , max = get_stat(object,max,na.rm=TRUE)
-    , nNA = nas(object)
-    , error = has_error(object)
-    , warning = has_warning(object)
-    , call = sapply(object$calls,call2text)
-    ,row.names=NULL
-    ,stringsAsFactors=FALSE
-  )  
-})
-
 
