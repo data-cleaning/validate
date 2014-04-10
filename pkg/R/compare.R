@@ -1,4 +1,5 @@
-#' @include verifier.R 
+#' @include validator.R
+#' @include indicator.R 
 #' @include confrontation.R
 NULL
 
@@ -19,6 +20,8 @@ setMethod('show',signature('comparison'),function(object){
   cat(sprintf('\n   %s\n\n',call2text(object@call)))
   print(object[,])
 })
+
+
 
 
 

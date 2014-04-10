@@ -2,6 +2,9 @@
 #' @include validator.R
 NULL
 
+
+
+
 # superclass for storing results of a verification activity
 setRefClass("confrontation"
   ,fields = list(
@@ -41,8 +44,8 @@ setClassUnion('data',c("data.frame","list","environment"))
 # indicators serve a different purpose than validations.
 setRefClass("indicatorValue", contains = "confrontation")
 
-# @method confront data
-# @rdname confront
+#' @method confront data
+#' @rdname confront
 setMethod("confront",signature("indicator","data"),function(x,y,...){
   L <- lapply(x$calls,factory(eval), envir=y,enclos=parent.frame())
   new('indicatorValue',
@@ -54,8 +57,8 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
   )  
 })
 
-#' @method summary indicatorValue
-#' @rdname confront
+
+# @rdname confront
 setMethod('summary',signature('indicatorValue'),function(object,...){
   data.frame(
     indicator = names(object$value)
@@ -128,8 +131,8 @@ nas <- function(x){
   })
 }
 
-#' @method summary validatorValue
-#' @rdname confront
+# @method summary validatorValue
+# @rdname confront
 setMethod('summary',signature('validatorValue'),function(object,...){
   data.frame(
     validator = names(object$value)
