@@ -9,7 +9,6 @@ NULL
 #' @export
 validator <- function(...,files=NULL) new('validator',...,files=files)
 
-
 setRefClass("validator"
   , contains = 'verifier'
   , methods = list(

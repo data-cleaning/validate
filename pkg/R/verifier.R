@@ -1,5 +1,5 @@
 
-#  Superclass for storing verification rules.
+# Superclass for storing verification rules.
 setRefClass("verifier"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
@@ -128,10 +128,10 @@ setMethod("is_vargroup",signature("verifier"),function(x,...){
 .verifier <- function(.self, ..., files,prefix="V"){
   L <- as.list(substitute(list(...))[-1])
   
-  if ( !is.null(file) && is.character(file) ){
+  if ( !is.null(files) && is.character(files) ){
     L <- list()
     ifile <- character(0)
-    for ( f in file ){ 
+    for ( f in files ){ 
       L <- c(L,read_resfile(f))
       ifile <- c(ifile,rep(f,length(L)))
     }

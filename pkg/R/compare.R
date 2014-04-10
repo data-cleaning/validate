@@ -30,39 +30,36 @@ setMethod('show',signature('comparison'),function(object){
 #' identical for each dataset. 
 #'
 #' @param x An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
-#' @param ... (named) data sets (\emph{e.g.} data.frames)
-#' 
+#' @param ... (named) data sets (\emph{e.g.} data.frames) 
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
 
-# @method compare validator
-# @param how how to compare
-# @param .list Optional list of data sets, will be concatenated with \code{...}.
-# @rdname compare
-# @export 
-
-setMethod('compare', signature('validator'), 
-  function(x, ..., how=c('to_first','sequential'), .list=NULL){
+#' @param how how to compare
+#' @param .list Optional list of data sets, will be concatenated with \code{...}.
+#' @rdname compare
+#' @export 
+setMethod('compare', 'validator', 
+  function(x, how=c('to_first','sequential'), .list=NULL,...){
     L <- c( list(...), .list)
-    if ( length(L) < 2 ) error('you need at least two datasets')
+    if ( length(L) < 2 ) stop('you need at least two datasets')
     how <- match.arg(how)
 
     out <- if (how == 'to_first'){
-        ref <- confront(using,L[[1]])
-        vapply(L, function(x) compare2(confront(using, x), ref)
+        ref <- confront(x,L[[1]])
+        vapply(L, function(y) compare2(confront(x, y), ref)
                ,FUN.VALUE=numeric(11))
       } else {
         ref <- NULL
         vapply(seq_along(L), function(i){
           j <- ifelse(i==1,1,i-1)
-          compare2( confront(using,L[[i]]),confront(using,L[[j]]) )
+          compare2( confront(x,L[[i]]),confront(x,L[[j]]) )
         }
         , FUN.VALUE = numeric(11) )
     }
     names(dimnames(out)) <- c('Status','Version')
     new('validatorComparison',
-        provideDimnames(out,base=sprintf("D%04d",1:ncol(g)))
+        provideDimnames(out,base=sprintf("D%04d",1:ncol(out)))
         ,call=sys.call(1L)
     )
 })
