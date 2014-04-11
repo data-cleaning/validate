@@ -10,7 +10,7 @@ syntax <- setRefClass('syntax',
 
 SYNTAX <- syntax(
   validationsymbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', ":"
+    '<','<=','==','>','>=', '!=', '%in%', ":",'V'
     , 'identical', 'all','any' 
     , '!', '|', '||', '&', '&&', 'xor'
   )

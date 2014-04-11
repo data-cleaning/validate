@@ -28,4 +28,6 @@ cleanv <- function(x) sapply(x[isClean(x)], "[[", 1)
 types <- function(x) sapply(x,function(x) class(x[[1]]))
 sizes <- function(x) sapply(x,function(x) length(x[[1]]))
 Id <- function(x) x
+num_result <- function(x) if (is.list(x)) length(x$result) else length(x)
+get_result <- function(x) if (is.list(x)) x$result else x
 

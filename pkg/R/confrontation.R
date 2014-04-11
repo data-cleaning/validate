@@ -44,7 +44,6 @@ setClassUnion('data',c("data.frame","list","environment"))
 # indicators serve a different purpose than validations.
 setRefClass("indicatorValue", contains = "confrontation")
 
-#' @method confront data
 #' @rdname confront
 setMethod("confront",signature("indicator","data"),function(x,y,...){
   L <- lapply(x$calls,factory(eval), envir=y,enclos=parent.frame())
@@ -92,8 +91,7 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 setRefClass("validatorValue", contains = "confrontation")
 
 
-# @method confront data
-# @rdname confront
+#' @rdname confront
 setMethod("confront", signature("validator","data"),
   function(x, y,  ...)
   {
@@ -148,42 +146,74 @@ setMethod('summary',signature('validatorValue'),function(object,...){
 
 #' Get values from object
 #' 
+#' @aliases severity, impact
+#' 
 #' @param x an R object
 #' @param ... Arguments to pass to or from other methods
 #'
 #' @export
 setGeneric('values',def=function(x,...) standardGeneric('values'))
 
-# @rdname values
+#' @rdname values
 setMethod('values',signature('confrontation'),function(x,...){
   x$value
 })
 
-# @rdname values
+#' @rdname values
 setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
   if (!simplify ){
-    return( getMethod(value,signature='confrontation')(x,...) )
+    return( getMethod(values,signature='confrontation')(x,...) )
   }
   values <- x$value[!has_error(x)]
-  len <- sapply(values,length)
-  lapply(unique(len), function(l){ 
-    m <- sapply(values[len==l], Id)
-    if ( l == 1 ) # edge case in sapply 
+  simplify_list(values)
+})
+
+#' Get severity values
+#' @rdname values
+#' @export
+setGeneric('severity',def=function(x,...) standardGeneric('severity'))
+
+#' @rdname values
+setMethod('severity', signature('validatorValue'),function(x,...){
+  values <- x$value[!has_error(x)]
+  lists <- sapply(values,is.list)
+  L <- lapply(values[lists],function(x) x$severity) 
+  simplify_list(L)
+})
+
+#' Get impact values
+#' @rdname values
+#' @export
+setGeneric('impact',def=function(x,...) standardGeneric('impact'))
+
+#' @rdname values
+setMethod('impact', signature('validatorValue'),function(x,...){
+  values <- x$value[!has_error(x)]
+  lists <- sapply(values,is.list)
+  L <- lapply(values[lists],function(x) x$impact) 
+  simplify_list(L)
+})
+
+
+
+simplify_list <- function(L){
+  len <- sapply(L,num_result)
+  lapply(unique(len), function(l){
+    m <- sapply(L[len==l], get_result)
+    if (l == 1)
       m <- matrix(m,nrow=1,dimnames=list(NULL,names(m)))
     m
   })
-})
+}
 
-# @rdname calls
-setMethod('calls',signature('confrontation'),function(x,...){
+
+#' @rdname calls
+setMethod('calls',signature('confrontation'),function(x, ...){
   x$calls
 })
 
-# @rdname calls
-setMethod('calls',signature('validatorValue'), function(x,simplify=TRUE,...){
-  if (!simplify){
-    return( getMethod(calls, signature='confrontation')(x,...) )
-  }
+#' @rdname calls
+setMethod('calls',signature('validatorValue'), function(x, ...){
   calls <- x$calls[!has_error(x)]
   len <- sapply(x$value[!has_error(x)],length)
   lapply(unique(len),function(l) sapply(calls[len==l],Id))

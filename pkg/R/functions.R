@@ -1,3 +1,15 @@
+
+#' Syntax to define validation rules
+#'
+#' The functions mentioned in this help file should only be used in the
+#' context of defining a \code{\link{validator}} or \code{\link{indicator}} object.
+#'
+#' @name syntax
+#'  
+#'
+NULL
+
+
 # functions, added to the syntax of validator and indicator objects
 
 #' Count (fraction of) missing values
@@ -8,8 +20,8 @@
 #' @param ... comma-separated list of variable names (not character). If no
 #'  variables are specified, the number of missings over all data is counted.
 #'  
-#' @return The total number of missings over all specified variables.
-#'  
+#' @return For \code{number_missing}, the total number of missings over all specified variables.
+#' @rdname syntax 
 #' @export
 number_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
@@ -22,7 +34,8 @@ number_missing <- function(...){
   ,Id))
 }
 
-#' @rdname number_missing
+#' @rdname syntax
+#' @return For \code{fraction_missing}, the fraction of missings over all specified variables
 fraction_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- if( length(L) == 0 ) TRUE else sapply(L,as.character)
@@ -36,6 +49,21 @@ fraction_missing <- function(...){
 }
 
 
+#' @param rule R expression: a validation rule. Must result in a (vector of) logical(s).
+#' @param impact R expression: an expression. Must result in a numeric.
+#' @param severity R expression: an expression. Must result in a numeric.
+#' @rdname syntax
+#' @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
+V <- function(rule, impact=NULL, severity=NULL){
+  r <- substitute(rule)
+  i <- substitute(impact)
+  s <- substitute(severity)
+  list(
+    result   = eval(r,envir=sys.parent())
+    , impact   = eval(i,envir=sys.parent())
+    , severity = eval(s,envir=sys.parent())
+  )
+}
 
 
 # d <- data.frame(

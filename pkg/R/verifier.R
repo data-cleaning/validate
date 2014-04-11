@@ -15,12 +15,13 @@ setRefClass("verifier"
 #' @param x An R object
 #' @param ... arguments to be passed to other methods
 #' @return A \code{list} of calls
+#' @export 
 setGeneric('calls',function(x,...) standardGeneric('calls'))
 
-# @param expand Expand groups?
-# @param vectorize Vectorize if-statements?
-# @param replace_dollar Replace dollar with bracket index?
-# @rdname calls
+#' @param expand Expand groups?
+#' @param vectorize Vectorize if-statements?
+#' @param replace_dollar Replace dollar with bracket index?
+#' @rdname calls
 setMethod('calls',signature('verifier'),
   function(x, ..., expand=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
     calls <- x$calls
@@ -74,8 +75,7 @@ setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
 #' @export 
 setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
-# @method origin verifier
-# @rdname origin
+#' @rdname origin
 setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
 
 #setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
@@ -106,8 +106,7 @@ setMethod("[",signature("verifier"), function(x,i,j,...,drop=TRUE){
   out
 })
 
-# @method variables verifier
-# @rdname variables
+#' @rdname variables
 setMethod("variables", signature(x="verifier"), function(x,...){ 
     unique(unlist(lapply(x$calls,var_from_call)))
   }
