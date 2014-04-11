@@ -46,9 +46,9 @@ setMethod("linear_coefficients", signature("validator"),function(x, normalize=TR
   rows <- names(calls)
   
   bA <- matrix(0
-               , nrow = length(rows)
-               , ncol = length(cols) + 1
-               , dimnames = list(validator=rows, variable=c('CONSTANT',cols) )
+     , nrow = length(rows)
+     , ncol = length(cols) + 1
+     , dimnames = list(validator=rows, variable=c('CONSTANT',cols) )
   )
   
   lcoef <- lapply(calls, function(x) coefficients(left(x)))
@@ -71,5 +71,7 @@ setMethod("linear_coefficients", signature("validator"),function(x, normalize=TR
   list(A=bA[,-1,drop=FALSE],b = -1*bA[,1,drop=FALSE],operators=operators)
   
 })
+
+
 
 

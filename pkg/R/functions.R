@@ -12,11 +12,7 @@ NULL
 
 # functions, added to the syntax of validator and indicator objects
 
-#' Count (fraction of) missing values
-#' 
-#' This function should not be called directly, but only be used as syntax when
-#' defining an \code{\link{indicator}}.
-#' 
+
 #' @param ... comma-separated list of variable names (not character). If no
 #'  variables are specified, the number of missings over all data is counted.
 #'  
@@ -65,6 +61,32 @@ V <- function(rule, impact=NULL, severity=NULL){
   )
 }
 
+# severity and impact for Linear validators
+
+#' @rdname syntax
+#' @param linrule A \emph{linear} validating expression
+#' @param p Lp-norm to use (default is the Euclidean norm)
+#' @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
+#' @export 
+L <- function(linrule, p=2){
+  e <- substitute(linrule)
+  q <- p/(p-1)
+  a <- const_norm(e,p/(p-1))
+  result <- eval(e,envir=sys.parent())
+  severity <- abs(eval(left(e),envir=sys.parent()) - eval(right(e),envir=sys.parent()))  
+  impact <- severity/a
+  list(result=result,severity=severity,impact=impact)
+}
+
+const_norm <- function(expr,q){
+  l <- coefficients(left(expr))
+  r <- coefficients(right(expr))
+  vars <- unique(names(c(l,r)))
+  a <- setNames(numeric(length(vars)),vars)
+  a[names(l)] <- l
+  a[names(r)] <- a[names(r)] - r
+  a = sum(abs(a[!names(a)=='CONSTANT'])^q)^(1/q)
+}
 
 # d <- data.frame(
 #   x = c(1,NA,3,5)
