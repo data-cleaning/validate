@@ -16,14 +16,32 @@
 #' @export
 vals <- function(...,files=NULL) new('vals',...,files=files)
 
-# vals object. VALS syntax consists of a (possible) number of assignmetns, followed 
+# vals object. VALS syntax consists of a (possible) number of assignments, followed 
 # by one or more calls to 'validate' 
 setRefClass('vals', contains= 'verifier'
   , methods = list(
     initialize = function(...,files=NULL) 
-      .verifier(.self,...,files=files,prefix='VALS')
+      .verifier(.self,...,files=files)
     )
 )
+
+.vals <- function(.self,...,files=file){
+  .verifier(.self,...,files=files,prefix="VALS")
+  i <- sapply(.self$calls, is_vals)
+  if (any(!i)){
+    warning(
+      sprintf('The following statements are not VALS syntax and will be ignored %s'
+        paste(sapply(.self$calls[!i],call2text),collapse="\n  ")
+    ))
+    .self
+  }
+}
+
+is_vals_assignment <- function(x) x[[1]] == ":="
+is_vals_validate <- function(x) x[[1]] == 'validate'
+is_vals <- function(x) is_vals_assignment(x) || is_vals_validate(x)
+
+
 
 # Somehow, the := operator is recognized by R's parser although `:=` is not exposed to the public.
 # We define it here for our package.
@@ -52,7 +70,6 @@ validate <- function(bde
   
 }
 
-is_vals_assignment <- function(x) x[[1]] == ":="
 
 setMethod('confront', signature('vals','data'), 
   function(x,y,...){
