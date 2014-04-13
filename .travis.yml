@@ -8,11 +8,10 @@ install:
   - ./document.bash
   - cd pkg
   - ../travis-tool.sh install_deps
-  - cd ..
-script: ./build.sh
+script: ../travis-tool.sh run_tests
 
 after_failure:
-  - ./travis-tool.sh dump_logs
+  - ../travis-tool.sh dump_logs
 
 notifications:
   email:

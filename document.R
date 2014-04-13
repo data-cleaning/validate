@@ -11,7 +11,7 @@ update_collate('pkg')
 document( 'pkg',clean=TRUE)
 #roxygenize('pkg')
 
-if (length(list.files('inst/doc')) == 0){
-   unlink( 'inst/doc', TRUE)   
+if (length(list.files('pkg/inst/doc')) == 0){
+   unlink( 'pkg/inst/doc', TRUE)   
 }
 
