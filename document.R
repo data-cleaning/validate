@@ -1,5 +1,5 @@
-if (!require(roxygen2)){
-	install.packages("roxygen2", repos="http://cran.rstudio.com")
+if (!require(roxygen2) || !require(devtools)){
+	install.packages(c("roxygen2","devtools"), repos="http://cran.rstudio.com")
 }
 
 library(devtools)
