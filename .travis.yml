@@ -10,7 +10,7 @@ install:
   - ../travis-tool.sh install_deps
 script: 
   - cd ..
-  - document.bash
+  - ./document.bash
   - cd ./pkg
   - ../travis-tool.sh run_tests
 
