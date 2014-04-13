@@ -1,3 +1,7 @@
+if (!require(roxygen2)){
+	install.packages("roxygen2", repos="http://cran.rstudio.com")
+}
+
 library(devtools)
 library(roxygen2)
 options(error=traceback)

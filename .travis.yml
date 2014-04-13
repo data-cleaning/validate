@@ -5,7 +5,7 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
 install:
-  - ./build.sh
+  - ./document.bash
   - cd pkg
   - ../travis-tool.sh install_deps
   - cd ..
