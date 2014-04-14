@@ -9,7 +9,8 @@ install:
   - cd ./pkg
   - ../travis-tool.sh install_deps
 script: 
-  - ../build.sh
+  - cd ..
+  - ./build.sh
   - ../travis-tool.sh run_tests
 
 after_failure:
