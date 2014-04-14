@@ -11,6 +11,7 @@ install:
 script: 
   - cd ..
   - ./build.sh
+  - cd ./pkg
   - ../travis-tool.sh run_tests
 
 after_failure:
