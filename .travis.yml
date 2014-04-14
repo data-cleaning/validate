@@ -8,10 +8,9 @@ install:
   - cp ./build/DESCRIPTION ./pkg
   - cd ./pkg
   - ../travis-tool.sh install_deps
+  - ../travis-tool.sh install_r roxygen2
+  - Rscript -e "devtools::document()"
 script: 
-  - cd ..
-  - ./build.sh
-  - cd ./pkg
   - ../travis-tool.sh run_tests
 
 after_failure:
