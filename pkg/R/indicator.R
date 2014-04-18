@@ -21,6 +21,7 @@ setRefClass("indicator", contains='verifier',
 
 .indicator <- function(.self,...,files){
   .verifier(.self,...,files=files,prefix="I")
+  if (length(.self$calls)==0) return(.self)
   
   i <- sapply(.self$calls, function(x) !validating(x) || vargroup(x))
   if ( !all(i) ){

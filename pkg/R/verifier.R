@@ -1,3 +1,5 @@
+#' @import methods
+NULL
 
 # Superclass for storing verification rules.
 setRefClass("verifier"

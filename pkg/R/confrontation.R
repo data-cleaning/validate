@@ -160,6 +160,7 @@ setMethod('values',signature('confrontation'),function(x,...){
 })
 
 #' @rdname values
+#' @param simplify Combine results with similar dimension structure into arrays?
 setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
   if (!simplify ){
     return( getMethod(values,signature='confrontation')(x,...) )

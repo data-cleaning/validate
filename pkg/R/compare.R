@@ -11,8 +11,6 @@ setClass('comparison', contains='array'
   , prototype = prototype(array(0,dim=c(0,0)), call=NULL)
 )
 
-
-
 setClass('validatorComparison',contains='comparison')
 
 setMethod('show',signature('comparison'),function(object){
@@ -22,18 +20,14 @@ setMethod('show',signature('comparison'),function(object){
 })
 
 
-
-
-
-
 #' Compare similar data sets
 #'
 #' The purpose of this function is to compare different versions of the same dataset with respect
-#' to predifined indicators. It is expected that the number and order of columns and rows are the 
-#' identical for each dataset. 
+#' to predifined indicators. Results are simplified in a sensible way. 
 #'
 #' @param x An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
 #' @param ... (named) data sets (\emph{e.g.} data.frames) 
+#' @seealse \code{cells}
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
@@ -41,13 +35,31 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' @param how how to compare
 #' @param .list Optional list of data sets, will be concatenated with \code{...}.
 #' @rdname compare
+#' 
+#' @return For \code{validator}: An array where each column represents one dataset. The rows count the following
+#' attributes:
+#' \itemize{
+#' \item{Number of validations performed}
+#' \item{Number of validations that evaluate to \code{NA} (unverifiable)}
+#' \item{Number of validations that evaluate to a logical (verifiable)}
+#' \item{Number of validations that evaluate to \code{TRUE}}
+#' \item{Number of validations that evaluate to \code{FALSE}}
+#' \item{Number of extra validations that evaluate to \code{NA} (new, unverifiable)}
+#' \item{Number of validations that still evaluate to \code{NA}}
+#' \item{Number of validations that still evaluate to \code{TRUE}}
+#' \item{Number of extra validations that evaluate to \code{TRUE} }
+#' \item{Number of validations that still evaluate to \code{FALSE}}
+#' \item{Number of extra validations that evaluate to \code{FALSE}}
+#' }
+#' 
 #' @export 
 setMethod('compare', 'validator', 
-  function(x, how=c('to_first','sequential'), .list=NULL,...){
+  function(x, ..., .list=NULL, how=c('to_first','sequential') ){
     L <- c( list(...), .list)
     if ( length(L) < 2 ) stop('you need at least two datasets')
     how <- match.arg(how)
-
+    names(L) <- make_listnames(L)
+    
     out <- if (how == 'to_first'){
         ref <- confront(x,L[[1]])
         vapply(L, function(y) compare2(confront(x, y), ref)
@@ -167,5 +179,168 @@ errcheck <- function(x,y){
   which(!hex & !hey)
 }
 
+# See table 4 in Van den Broek, Van der Loo and Pannekoek
+setMethod('compare2',signature('data.frame','data.frame'),function(y,x,...){
+  stopifnot(dim(x)==dim(y))
+  n <- rep(prod(dim(x)),2)
+  available       <- c(sum(!is.na(x)),sum(!is.na(y)))
+  still_available <- c(available[1], sum(!is.na(x)&!is.na(y)) )
+  unadapted       <- c(still_available[1], sum(x == y,na.rm=TRUE))
+  adapted         <- still_available - unadapted
+  imputed         <- c(0,sum(is.na(x)&!is.na(y)))
+  missing         <- n - available
+  new_missing     <- c(0,sum(!is.na(x) & is.na(y)))
+  still_missing   <- c(missing,missing - new_missing)
 
+  array(c(
+      n
+    , available
+    , missing
+    , still_available
+    , unadapted,adapted
+    , imputed
+    , new_missing
+    , still_missing
+  )
+  , dim = c(2,10)
+  , dimnames=list(NULL,
+   status = c(
+     'cells'
+     ,'available'
+     ,'missing'
+     ,'still_available'
+     ,'unadapted'
+     ,'adapted'
+     ,'imputed'
+     ,'missing'
+     ,'new_missing'
+     ,'still_missing'
+     ))
+  )[2,]
+})
+
+make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
+  nm <- names(L)
+  if (is.null(nm)) return(base)
+  nm[nm==""] <- base[nm==""]
+  nm
+}
+
+
+setClass('indicatorComparison',contains='comparison')
+#'
+#' @return For \code{indicator}: A list with the following components:
+#' \itemize{
+#' \item{\code{numeric}: An array collecting results of scalar indicator (e.g. \code{mean(x)}).}
+#' \item{\code{nonnumeric}: An array collecting results of nonnumeric scalar indicators (e.g. names(which.max(table(x))))}
+#' \item{\code{array}: A list of arrays, collecting results of vector-indicators (e.g. x/mean(x))}
+#' }
+#' 
+#' @rdname compare
+setMethod('compare','indicator',
+  function(x, ...,.list=NULL){
+    L <- c( list(...), .list)
+    if ( length(L) < 2 ) stop('you need at least two datasets')
+    names(L) <- make_listnames(L)
+    for ( d in L ) 
+      if ( !matches(L[[1]],d) ) 
+        stop('dataset ',names(L)[i],'does not match with dataset',names(L)[1])
+    n <- names(I)
+    v <- setNames( lapply(n, function(i) sapply(L, function(y) values(confront(I[i],y))[[1]] )), n)
+    # simplify where possible
+    is_array <- sapply(v,is.array)
+    is_numeric <- sapply(v,is.numeric)
+    w <- if (any(is_array) ){
+      lapply(v[is_array],function(x)new('indicatorComparison',x,call=sys.call(2)))
+    } else {
+      NULL
+    }
+    u <- if(any(is_numeric & !is_array)){
+      new('indicatorComparison',sapply(v[ is_numeric & !is_array],Id),call=sys.call(2))
+    } else {
+      NULL
+    }
+    v <- if (any(!is_numeric &!is_array)){
+      new('indicatorComparison',sapply(v[!is_numeric & !is_array],Id),call=sys.call(2))
+    } else {
+      NULL
+    }
+    out <- list(numeric=u,nonnumeric=v,array=w)
+    out[!sapply(out,is.null)]
+})
+
+matches <- function(x,y,id=NULL){
+  all(dim(x)==dim(y)) && 
+    all(names(x) == names(y)) &&
+    ifelse(is.null(id),TRUE, all(x[,id]==y[,id]))
+}
+
+
+
+
+
+setClass('cellComparison',contains='comparison')
+
+#' Cell counts and differences for a series of datasets
+#'
+#' @section Details:
+#' This function assumes that the datasets have the same dimensions and that both
+#' rows and columns are ordered similarly.
+#' 
+#' 
+#' @param ... A (named) sequence of R objects carrying data (\emph{e.g.} \code{data.frame}s)
+#' @param .list A list of R objects carrying data; will be concatenated with objects in \code{...}
+#' @param compare How to compare the datasets.
+#' 
+#' 
+#' @return An array, labeling the total number of cells, the number of missings,
+#' the number of altered values and changes therein as compared to the reference
+#' defined in \code{how}.
+#'
+#' @seealso \code{\link{compare}}, \code{\link{match_data}}
+#'
+#' @export 
+cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
+  L <- c( list(...), .list)
+  if ( length(L) < 2 ) stop('you need at least two datasets')
+  how <- match.arg(how)
+  names(L) <- make_listnames(L)
+    
+  new('cellComparison',
+      if ( how == 'to_first'){
+        vapply(L,FUN=compare2,FUN.VALUE=numeric(10),x=L[[1]],)
+      } else { 
+        vapply(seq_along(L)
+           , FUN = function(i){
+             j = ifelse(i==1,1,i-1)     
+             compare2(L[[j]],L[[i]])
+           }, FUN.VALUE=numeric(10)
+        )
+      }
+    , call=sys.call()
+  )
+}
+
+#' Create matching subsets of a sequence of data
+#'
+#' @param ... A sequence of \code{data.frame}s
+#' @param .list A list of \code{data.frame}s; will be concatenated with \code{...}.
+#' @param id Names or indices of columns to use as index.
+#'
+#' @return A list of \code{data.frames}, subsetted and sorted so that all cells correspond.
+#' @export
+match_data <- function(...,.list=NULL,id=NULL){
+  L <- c(list(...),.list)
+  
+  # match columns
+  nm <- Reduce(intersect,lapply(L,names))
+  L <- lapply(L,`[`,nm)
+  
+  if (!is.null(id)){ # match rows
+    ID <- lapply(L, function(d) do.call(paste0,as.list(d[id])))
+    ids <- Reduce(intersect, ID)
+    L <- lapply(seq_along(L), function(i) L[[i]][match(ids, ID[[i]],nomatch=0),]) 
+  }
+  L
+}
 

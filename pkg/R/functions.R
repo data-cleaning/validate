@@ -13,6 +13,7 @@ NULL
 # functions, added to the syntax of validator and indicator objects
 
 
+
 #' @param ... comma-separated list of variable names (not character). If no
 #'  variables are specified, the number of missings over all data is counted.
 #'  
