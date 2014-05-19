@@ -8,6 +8,11 @@ dmp <- lapply(file.path('pkg/R',fn),source)
 
 
 
+L <- lapply(dir("~/projects/tmp/nuttig/stappen/",full.names=TRUE),read.csv2)
+L <- match_data(.list=L)
+
+cl <- cells(.list=(L))
+plot(cl)
 
 
 
