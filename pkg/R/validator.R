@@ -3,8 +3,12 @@ NULL
 
 #' Define validation rules
 #'
-#' @param ... A comma-separated list of validation expressions
+#' @param ... A comma-separated list of validating expressions
 #' @param files A character vector of file locations
+#'
+#' @section Details:
+#' A \emph{validating expression} is an expression whose evaluation results in \code{TRUE}, \code{FALSE}
+#' or \code{NA}. 
 #'
 #' @export
 validator <- function(...,files=NULL) new('validator',...,files=files)

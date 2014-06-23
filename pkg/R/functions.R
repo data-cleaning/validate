@@ -14,7 +14,7 @@ NULL
 
 
 
-#' @param ... comma-separated list of variable names (not character). If no
+#' @param ... comma-separated list of variable names (not character) or a quoted regular expression. If no
 #'  variables are specified, the number of missings over all data is counted.
 #'  
 #' @return For \code{number_missing}, the total number of missings over all specified variables.
@@ -22,7 +22,15 @@ NULL
 #' @export
 number_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- if( length(L) == 0 ) TRUE else sapply(L,as.character)
+  vars <- if( length(L) == 0 ){
+    TRUE 
+  } else { 
+    if (is.character(L[[1]])) {
+      grep(pattern = L[[1]], x = ls(parent.frame()), value = TRUE)  
+    } else { 
+      sapply(L,as.character)
+    }
+  }
   sum(sapply(
     eapply(
       env=parent.frame()
@@ -35,7 +43,15 @@ number_missing <- function(...){
 #' @return For \code{fraction_missing}, the fraction of missings over all specified variables
 fraction_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- if( length(L) == 0 ) TRUE else sapply(L,as.character)
+  vars <- if( length(L) == 0 ){
+    TRUE 
+  } else { 
+    if (is.character(L[[1]])) {
+      grep(pattern = L[[1]], x = ls(parent.frame()), value = TRUE)  
+    } else { 
+      sapply(L,as.character)
+    }
+  }
   v <- sapply(
     eapply(
       env=parent.frame()
@@ -46,11 +62,12 @@ fraction_missing <- function(...){
 }
 
 
-#' @param rule R expression: a validation rule. Must result in a (vector of) logical(s).
+#' @param rule R expression: a validation rule. Must result in a logical.
 #' @param impact R expression: an expression. Must result in a numeric.
 #' @param severity R expression: an expression. Must result in a numeric.
 #' @rdname syntax
 #' @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
+#' @export 
 V <- function(rule, impact=NULL, severity=NULL){
   r <- substitute(rule)
   i <- substitute(impact)

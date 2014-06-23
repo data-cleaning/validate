@@ -27,7 +27,7 @@ setMethod('show',signature('comparison'),function(object){
 #'
 #' @param x An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
 #' @param ... (named) data sets (\emph{e.g.} data.frames) 
-#' @seealse \code{cells}
+#' @seealso \code{cells}
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
@@ -197,12 +197,13 @@ setMethod('compare2',signature('data.frame','data.frame'),function(y,x,...){
     , available
     , missing
     , still_available
-    , unadapted,adapted
+    , unadapted
+    , adapted
     , imputed
     , new_missing
     , still_missing
   )
-  , dim = c(2,10)
+  , dim = c(2,9)
   , dimnames=list(NULL,
    status = c(
      'cells'
@@ -212,7 +213,6 @@ setMethod('compare2',signature('data.frame','data.frame'),function(y,x,...){
      ,'unadapted'
      ,'adapted'
      ,'imputed'
-     ,'missing'
      ,'new_missing'
      ,'still_missing'
      ))
@@ -303,12 +303,12 @@ setClass('cellComparison',contains='comparison')
 cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
   L <- c( list(...), .list)
   if ( length(L) < 2 ) stop('you need at least two datasets')
-  how <- match.arg(how)
+  how <- match.arg(compare)
   names(L) <- make_listnames(L)
     
   new('cellComparison',
       if ( how == 'to_first'){
-        vapply(L,FUN=compare2,FUN.VALUE=numeric(10),x=L[[1]],)
+        vapply(L,FUN=compare2,FUN.VALUE=numeric(9),x=L[[1]],)
       } else { 
         vapply(seq_along(L)
            , FUN = function(i){

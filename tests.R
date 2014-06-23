@@ -7,6 +7,13 @@ dmp <- lapply(file.path('pkg/R',fn),source)
 
 
 
+data <- women
+data$aap <- data$height/data$weight
+data$aap[1] <- NA
+v <- validator(number_missing("a.+") == 0)
+
+summary(confront(v,data))
+
 
 L <- lapply(dir("~/projects/tmp/nuttig/stappen/",full.names=TRUE),read.csv2)
 L <- match_data(.list=L)
