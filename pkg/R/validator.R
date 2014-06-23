@@ -10,6 +10,8 @@ NULL
 #' A \emph{validating expression} is an expression whose evaluation results in \code{TRUE}, \code{FALSE}
 #' or \code{NA}. 
 #'
+#' @seealso \code{\link{syntax}}
+#'
 #' @export
 validator <- function(...,files=NULL) new('validator',...,files=files)
 

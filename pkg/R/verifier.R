@@ -39,7 +39,7 @@ setMethod('calls',signature('verifier'),
 #' Extract variable names
 #'
 #' @param x An R object
-#' @param ... Methods to be passed to other methods.
+#' @param ... Arguments to be passed to other methods.
 #' 
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))

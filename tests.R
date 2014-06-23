@@ -7,13 +7,24 @@ dmp <- lapply(file.path('pkg/R',fn),source)
 
 
 
+
+cls <- calls(v)
+w <- new.env()
+lapply(cls[is.assignment(calls)],eval,envir=w)
+ls(w)
+lapply(cls[!is.assignment(calls)],eval,envir=women,enclos=w)
+
+
+v <- validator(height>0)
+confront(v,women)
+
 data <- women
 data$aap <- data$height/data$weight
 data$aap[1] <- NA
-v <- validator(number_missing("a.+") == 0)
+v <- validator(number_missing("a.p") == 0)
 
-summary(confront(v,data))
-
+confront(v,data)
+#
 
 L <- lapply(dir("~/projects/tmp/nuttig/stappen/",full.names=TRUE),read.csv2)
 L <- match_data(.list=L)

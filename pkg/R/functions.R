@@ -1,5 +1,4 @@
-
-#' Syntax to define validation rules
+#' Syntax to define validation or indicator rules
 #'
 #' The functions mentioned in this help file should only be used in the
 #' context of defining a \code{\link{validator}} or \code{\link{indicator}} object.
@@ -9,9 +8,25 @@
 #'
 NULL
 
+# NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
 
-# functions, added to the syntax of validator and indicator objects
+# Somehow, the := operator is recognized by R's parser although `:=` is not exposed to the public.
+# We use it here for local assignment.
 
+#' @param x Variable name
+#' @param y Value
+#'
+#' @section Local assignment:
+#' The assignment operator `\code{:=}' can be used to locally define variables which are to be reused in
+#' validation statements. The result of such assignments is not part of the output of a 
+#' \code{\link{confront}}ation.
+#' 
+#' @rdname syntax
+`:=` <- function(x,y){ 
+  assign(x=deparse(substitute(x)),value=y,envir = parent.frame(1))
+}
+
+is.assignment <- function(x) sapply(x,function(y) y[[1]] == ":=")
 
 
 #' @param ... comma-separated list of variable names (not character) or a quoted regular expression. If no
@@ -22,7 +37,7 @@ NULL
 #' @export
 number_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- matchvars(L,parent.env())
+  vars <- matchvars(L,parent.frame())
   sum(sapply(
     eapply(
       env=parent.frame()
@@ -36,7 +51,8 @@ number_missing <- function(...){
 #' @return For \code{fraction_missing}, the fraction of missings over all specified variables
 fraction_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- matchvars(L,parent.env())
+  vars <- matchvars(L,parent.frame())
+  print(vars)
   v <- sapply(
     eapply(
       env=parent.frame()
@@ -50,7 +66,7 @@ fraction_missing <- function(...){
 #' @return For \code{row_missing} a vector with the number of missings per (sub)record defined by \code{...}.
 row_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- matchvars(L,parent.env())
+  vars <- matchvars(L,parent.frame())
   rowSums(sapply(eapply(
     env=parent.frame()
     , FUN = is.na
@@ -62,7 +78,7 @@ row_missing <- function(...){
 #' @return For \code{col_missing} a vector with the number of missings per column defined by \code{...}.
 col_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- matchvars(L,parent.env())
+  vars <- matchvars(L,parent.frame())
   colSums(sapply(eapply(
     env=parent.frame()
     , FUN = is.na

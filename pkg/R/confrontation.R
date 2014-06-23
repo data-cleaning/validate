@@ -46,10 +46,12 @@ setRefClass("indicatorValue", contains = "confrontation")
 
 #' @rdname confront
 setMethod("confront",signature("indicator","data"),function(x,y,...){
-  L <- lapply(x$calls,factory(eval), envir=y,enclos=parent.frame())
+  calls <- calls(x)
+  i <- !is.assignment(calls)
+  L <- execute(calls,y)[i]
   new('indicatorValue',
       call = match.call()
-      , calls = x$calls
+      , calls = calls[i]
       , value = lapply(L,"[[",1)
       , warn =  lapply(L,"[[",2)
       , error = lapply(L,"[[",3)     
@@ -92,21 +94,33 @@ setRefClass("validatorValue", contains = "confrontation")
 
 
 #' @rdname confront
-setMethod("confront", signature("validator","data"),
-  function(x, y,  ...)
-  {
-    calls <- calls(x)
-    L <- lapply(calls,factory(eval), envir=y,enclos=parent.frame())
-    new('validatorValue',
-        call = match.call(call=sys.call(1))
-        , calls = calls
-        , value = lapply(L,"[[",1)
-        , warn =  lapply(L,"[[",2)
-        , error = lapply(L,"[[",3)     
-    )
-  }
-)
- 
+setMethod("confront", signature("validator","data"), function(x, y,  ...){
+  calls <- calls(x)
+  i <- !is.assignment(calls)
+  L <- execute(calls,y)[i]
+  new('validatorValue',
+      call = match.call(call=sys.call(1))
+      , calls = calls[i]
+      , value = lapply(L,"[[",1)
+      , warn =  lapply(L,"[[",2)
+      , error = lapply(L,"[[",3)     
+  )
+})
+
+# execute calls. 
+# - Assignments are stored in a separate environment and forgotten.
+# - Failed assignments yield a warning.
+execute <- function(calls,env){
+  w = new.env()
+  lapply(calls, function(g) 
+    if (g[[1]] == ":=") 
+      tryCatch(eval(g,w),error = warning) 
+    else 
+      factory(eval)(g,env,w)
+  )
+}
+
+
 has_error <- function(x) !sapply(x$error,is.null)
 has_warning <- function(x) !sapply(x$warn, is.null)
 has_value <- function(x) sapply(x$value, function(a) !is.null(a))

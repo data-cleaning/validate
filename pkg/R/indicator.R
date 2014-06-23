@@ -8,7 +8,9 @@ NULL
 #' 
 #' @param ... A comma-separated list of indicators
 #' @param files A character vector of file locations
-#'
+#' 
+#' @seealso \code{\link{syntax}}
+#' 
 #' @export
 indicator <- function(...,files=NULL) new('indicator',...,files=files)
 
