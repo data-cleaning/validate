@@ -22,15 +22,7 @@ NULL
 #' @export
 number_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- if( length(L) == 0 ){
-    TRUE 
-  } else { 
-    if (is.character(L[[1]])) {
-      grep(pattern = L[[1]], x = ls(parent.frame()), value = TRUE)  
-    } else { 
-      sapply(L,as.character)
-    }
-  }
+  vars <- matchvars(L,parent.env())
   sum(sapply(
     eapply(
       env=parent.frame()
@@ -39,19 +31,12 @@ number_missing <- function(...){
   ,Id))
 }
 
+
 #' @rdname syntax
 #' @return For \code{fraction_missing}, the fraction of missings over all specified variables
 fraction_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
-  vars <- if( length(L) == 0 ){
-    TRUE 
-  } else { 
-    if (is.character(L[[1]])) {
-      grep(pattern = L[[1]], x = ls(parent.frame()), value = TRUE)  
-    } else { 
-      sapply(L,as.character)
-    }
-  }
+  vars <- matchvars(L,parent.env())
   v <- sapply(
     eapply(
       env=parent.frame()
@@ -61,6 +46,45 @@ fraction_missing <- function(...){
   sum(v[1,])/sum(v[2,])
 }
 
+#' @rdname syntax
+#' @return For \code{row_missing} a vector with the number of missings per (sub)record defined by \code{...}.
+row_missing <- function(...){
+  L <- as.list(substitute(list(...))[-1])
+  vars <- matchvars(L,parent.env())
+  rowSums(sapply(eapply(
+    env=parent.frame()
+    , FUN = is.na
+    )[vars]
+    ,Id))
+}
+
+#' @rdname syntax
+#' @return For \code{col_missing} a vector with the number of missings per column defined by \code{...}.
+col_missing <- function(...){
+  L <- as.list(substitute(list(...))[-1])
+  vars <- matchvars(L,parent.env())
+  colSums(sapply(eapply(
+    env=parent.frame()
+    , FUN = is.na
+  )[vars]
+  ,Id))
+  
+}
+
+
+
+# returns a character vector of variables specified in L, matched in env.
+matchvars <- function(L,env){
+  if( length(L) == 0 ){
+    TRUE 
+  } else { 
+    if (is.character(L[[1]])) {
+      grep(pattern = L[[1]], x = ls(env), value = TRUE)  
+    } else { 
+      sapply(L,as.character)
+    }
+  }
+}
 
 #' @param rule R expression: a validation rule. Must result in a logical.
 #' @param impact R expression: an expression. Must result in a numeric.
