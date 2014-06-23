@@ -13,18 +13,19 @@ NULL
 # Somehow, the := operator is recognized by R's parser although `:=` is not exposed to the public.
 # We use it here for local assignment.
 
-#' @param x Variable name
-#' @param y Value
-#'
-#' @section Local assignment:
-#' The assignment operator `\code{:=}' can be used to locally define variables which are to be reused in
-#' validation statements. The result of such assignments is not part of the output of a 
-#' \code{\link{confront}}ation.
-#' 
-#' @rdname syntax
-`:=` <- function(x,y){ 
-  assign(x=deparse(substitute(x)),value=y,envir = parent.frame(1))
-}
+## Obsolete, now implemented in function 'execute'
+# # @param x Variable name
+# # @param y Value
+# #
+# # @section Local assignment:
+# # The assignment operator `\code{:=}' can be used to locally define variables which are to be reused in
+# # validation statements. The result of such assignments is not part of the output of a 
+# # \code{\link{confront}}ation.
+# # 
+# # @rdname syntax
+# `:=` <- function(x,y){ 
+#   assign(x=deparse(substitute(x)),value=y,envir = parent.frame(1))
+# }
 
 is.assignment <- function(x) sapply(x,function(y) y[[1]] == ":=")
 

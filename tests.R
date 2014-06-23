@@ -8,6 +8,21 @@ dmp <- lapply(file.path('pkg/R',fn),source)
 
 
 
+v <- validator(
+  fiets := 2*height
+  , fiets > 126
+)
+cf <- confront(v,women)
+summary(cf)
+
+e <- new.env()
+
+
+
+
+
+
+
 cls <- calls(v)
 w <- new.env()
 lapply(cls[is.assignment(calls)],eval,envir=w)

@@ -58,7 +58,7 @@ expand_group <- function(calls, group, variables){
   L
 }
 
-expand_calls <- function(calls, groups){
+expand_groups <- function(calls, groups){
   igroup <- sapply(calls, vargroup)
   
   groups <- expand_vargroup(calls[igroup])
@@ -68,6 +68,37 @@ expand_calls <- function(calls, groups){
     calls <- expand_group(calls,group,groups[[group]])
   }
   calls  
+}
+
+
+## Substitute assignments in subsequent calls
+expand_assignments <- function(calls){
+  e <- new.env()
+  lapply(calls, function(x) 
+    if(x[[1]] == ':=') 
+      add_assignment(x,e) 
+    else 
+      substitute_assignments(x,e)
+    )[!is.assignment(calls)]
+}
+
+substitute_assignments <- function(call,assignments){
+  for ( lhs in ls(assignments) ){
+    i <- which.call(call,lhs)
+    for ( j in i){ 
+      call[[j]] <- assignments[[lhs]]
+    }
+  }
+  call
+}
+
+# add named assignment to environment
+# - rhs is 'embraced' for substitution
+add_assignment <- function(assignment, e){
+  rhs <- expression((.))[[1]]
+  rhs[[2]] <- right(assignment)
+  e[[as.character(left(assignment))]] <- rhs
+  assignment
 }
 
 

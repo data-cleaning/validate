@@ -20,16 +20,18 @@ setRefClass("verifier"
 #' @export 
 setGeneric('calls',function(x,...) standardGeneric('calls'))
 
-#' @param expand Expand groups?
+#' @param expand_assignments Substitute assignments?
+#' @param expand_groups Expand groups?
 #' @param vectorize Vectorize if-statements?
 #' @param replace_dollar Replace dollar with bracket index?
 #' @rdname calls
 setMethod('calls',signature('verifier'),
-  function(x, ..., expand=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+  function(x, ..., expand_assignments=FALSE, expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
     calls <- x$calls
-    if ( expand ) calls <- expand_calls(calls)
-    if (vectorize) calls <- lapply(calls, vectorize)
-    if (replace_dollar) calls <- lapply(calls, replace_dollar)
+    if ( expand_assignments )  calls <- expand_assignments(calls)
+    if ( expand_groups ) calls <- expand_groups(calls)
+    if ( vectorize ) calls <- lapply(calls, vectorize)
+    if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
     calls
 })
 
