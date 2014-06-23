@@ -4,30 +4,19 @@
 #' context of defining a \code{\link{validator}} or \code{\link{indicator}} object.
 #'
 #' @name syntax
-#'  
+#' 
+#'
+#' @section Local assignment:
+#' The operator `\code{:=}' can be used to set up local variables (during, for example, validation) to save
+#' time (the rhs of an assignment is computed only once) or to make your validation code more maintainable. 
+#' Assignments work more or less like common R assignments: they are only valid for statements coming after 
+#' the assignment and they may be overwritten. The result of computing the rhs is not part of a 
+#' \code{\link{confront}}ation with data.
+#'   
 #'
 NULL
 
 # NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
-
-# Somehow, the := operator is recognized by R's parser although `:=` is not exposed to the public.
-# We use it here for local assignment.
-
-## Obsolete, now implemented in function 'execute'
-# # @param x Variable name
-# # @param y Value
-# #
-# # @section Local assignment:
-# # The assignment operator `\code{:=}' can be used to locally define variables which are to be reused in
-# # validation statements. The result of such assignments is not part of the output of a 
-# # \code{\link{confront}}ation.
-# # 
-# # @rdname syntax
-# `:=` <- function(x,y){ 
-#   assign(x=deparse(substitute(x)),value=y,envir = parent.frame(1))
-# }
-
-is.assignment <- function(x) sapply(x,function(y) y[[1]] == ":=")
 
 
 #' @param ... comma-separated list of variable names (not character) or a quoted regular expression. If no

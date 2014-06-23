@@ -101,7 +101,8 @@ add_assignment <- function(assignment, e){
   assignment
 }
 
-
+# check wether a call is an assignment
+is.assignment <- function(x) sapply(x,function(y) y[[1]] == ":=")
 
 
 
