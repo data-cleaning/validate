@@ -111,8 +111,9 @@ setMethod("[",signature("verifier"), function(x,i,j,...,drop=TRUE){
 })
 
 #' @rdname variables
-setMethod("variables", signature(x="verifier"), function(x,...){ 
-    unique(unlist(lapply(x$calls,var_from_call)))
+#' @param dummy Also retrieve transient variables set with the \code{:=} operator?
+setMethod("variables", signature(x="verifier"), function(x, dummy=FALSE, ...){ 
+    unique(unlist(lapply(calls(x,expand_assignments=!dummy),var_from_call)))
   }
 )
 
