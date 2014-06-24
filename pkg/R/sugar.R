@@ -3,7 +3,8 @@
 #
 # This function expands a variable group and store as character array in an environment.
 # input MUST be valid vargroup definition call
-expand_vargroup <- function(x){
+expand_vargroup <- function(x){  
+  e <- new.env()
   
   addgroup <- function(xi){
     group <- as.character(left(xi))
@@ -23,10 +24,9 @@ expand_vargroup <- function(x){
       stop(sprintf("Group '%s' also occurs as variable\n",ls(e)[fail]))  
     }
   }
-  e <- new.env()
+  
   lapply(x,addgroup)
   as.list(e)
-  
 }
 
 # determine which groups a call refers to.

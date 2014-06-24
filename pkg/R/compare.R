@@ -22,7 +22,8 @@ setMethod('show',signature('comparison'),function(object){
 
 #' Compare similar data sets
 #'
-#' The purpose of this function is to compare different versions of the same dataset with respect
+#' The purpose of this function is to compare different versions of the same 
+#' dataset with respect
 #' to predifined indicators. Results are simplified in a sensible way. 
 #'
 #' @param x An R object (usually a \code{\link{validator}} or \code{\link{indicator}}

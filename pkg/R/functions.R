@@ -12,8 +12,31 @@
 #' Assignments work more or less like common R assignments: they are only valid for statements coming after 
 #' the assignment and they may be overwritten. The result of computing the rhs is not part of a 
 #' \code{\link{confront}}ation with data.
+#' 
+#' @section Predefined indicators:
+#' 
+#' \itemize{
+#'    \item \code{number_missing}
+#'    \item \code{fraction_missing}
+#' }
 #'   
-#'
+#' @section Groups:
+#' Often the same constraints/rules are valid for groups of variables. 
+#' \code{validate} allows for compact notation. First define a group and than use
+#' that group in a validator statement. 
+#' \code{
+#'   validator( g:{a;b}
+#'            , g > 0
+#'            )
+#' }
+#' 
+#' Using two groups results in the cartesian product of checks.
+#' \code{
+#'   validator( f:{e;d}
+#'            , g:{a;b}
+#'            , g > f    # equals {a>e, a>d, b>e, b>d}
+#'            )
+#' }
 NULL
 
 # NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
