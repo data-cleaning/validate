@@ -46,7 +46,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
   L <- execute(calls,y)
   new('indicatorValue',
       call = match.call()
-      , calls = calls(x,expand_assignments=TRUE)
+      , calls = calls[!is.assignment(calls)]
       , value = lapply(L,"[[",1)
       , warn =  lapply(L,"[[",2)
       , error = lapply(L,"[[",3)     
@@ -91,7 +91,7 @@ setMethod("confront", signature("validator","data"), function(x, y,  ...){
   L <- execute(calls,y)
   new('validatorValue',
       call = match.call()
-      , calls = calls(x,expand_assignments=TRUE)
+      , calls = calls[!is.assignment(calls)]
       , value = lapply(L,"[[",1)
       , warn =  lapply(L,"[[",2)
       , error = lapply(L,"[[",3)     
