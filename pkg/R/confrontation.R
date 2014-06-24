@@ -82,10 +82,8 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
   )
 })
 
-
 # # indicators serve a different purpose than validations.
 setRefClass("validatorValue", contains = "confrontation")
-
 
 #' @rdname confront
 setMethod("confront", signature("validator","data"), function(x, y,  ...){
@@ -112,7 +110,6 @@ execute <- function(calls,env){
       factory(eval)(g,env,w)
   )[!is.assignment(calls)]
 }
-
 
 has_error <- function(x) !sapply(x$error,is.null)
 has_warning <- function(x) !sapply(x$warn, is.null)
@@ -147,7 +144,7 @@ setMethod('summary',signature('validatorValue'),function(object,...){
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$calls,call2text)
+    , call = sapply(object$calls,  call2text)
   )  
 })
 
@@ -202,8 +199,6 @@ setMethod('impact', signature('validatorValue'),function(x,...){
   simplify_list(L)
 })
 
-
-
 simplify_list <- function(L){
   len <- sapply(L,num_result)
   lapply(unique(len), function(l){
@@ -213,7 +208,6 @@ simplify_list <- function(L){
     m
   })
 }
-
 
 #' @rdname calls
 setMethod('calls',signature('confrontation'),function(x, ...){

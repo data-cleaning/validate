@@ -24,7 +24,6 @@ NULL
 #'  
 #' @return For \code{number_missing}, the total number of missings over all specified variables.
 #' @rdname syntax 
-#' @export
 number_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
@@ -73,8 +72,7 @@ col_missing <- function(...){
     env=parent.frame()
     , FUN = is.na
   )[vars]
-  ,Id))
-  
+  ,Id))  
 }
 
 
@@ -97,7 +95,6 @@ matchvars <- function(L,env){
 #' @param severity R expression: an expression. Must result in a numeric.
 #' @rdname syntax
 #' @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
-#' @export 
 V <- function(rule, impact=NULL, severity=NULL){
   r <- substitute(rule)
   i <- substitute(impact)
@@ -115,7 +112,6 @@ V <- function(rule, impact=NULL, severity=NULL){
 #' @param linrule A \emph{linear} validating expression
 #' @param p $L^p$-norm to use (default is the Euclidean norm)
 #' @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
-#' @export 
 L <- function(linrule, p=2){
   e <- substitute(linrule)
   q <- p/(p-1)

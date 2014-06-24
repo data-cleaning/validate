@@ -4,14 +4,16 @@ NULL
 # The 'indicator' class holds indicator definitions
 # An indicator maps a data.frame to a single number.
 
-#' Define indicators
+#' Define indicators for data
 #' 
-#' @param ... A comma-separated list of indicators
+#' \code{\link{indicator}}
+#' @param ... A comma-separated list of indicator definitions
 #' @param files A character vector of file locations
 #' 
 #' @seealso \code{\link{syntax}}
 #' 
 #' @export
+#' @example ../examples/indicator.R
 indicator <- function(...,files=NULL) new('indicator',...,files=files)
 
 setRefClass("indicator", contains='verifier',
@@ -22,7 +24,7 @@ setRefClass("indicator", contains='verifier',
 
 
 .indicator <- function(.self,...,files){
-  .verifier(.self,...,files=files,prefix="I")
+  .verifier(.self,...,files=files, prefix="I")
   if (length(.self$calls)==0) return(.self)
   
   i <- sapply(.self$calls, function(x) !validating(x) || vargroup(x))
