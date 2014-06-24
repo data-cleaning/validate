@@ -6,11 +6,44 @@ author:
 date: "June 24, 2014"
 output: html_document
 ---
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Introduction to validate}
+-->
+
 
 ## Introduction
+The validate package is intended to make checking your data easy, maintainable and reproducible. Here's an example demonstrating the
+typical workflow.
+
+We'll use the built-in ```women``` dataset
+```{r }
+data(women)
+```
+
+1. Define the rules you want your data set or sets to obey by creating
+a ```validator``` object.
+```{r}
+library(validate)
+v <-validator(height > 0, weight > 0,mean(heigt)>66)
+```
+
+2. Confront your data with the rules
+```{r}
+cf <- confront(v, women)
+```
+
+3. Analyse the results
+```{r}
+summary(cf)
+values(cf)
+```
+## A simple example
 
 
-## Working
+
+
+
 
 - define validation rules: `validator` and `indicator`
 - confront with data `confront`, `validatorValue`, `indicatorValue`

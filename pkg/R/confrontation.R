@@ -53,7 +53,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
   )  
 })
 
-# @rdname confront
+#' @rdname confront
 setMethod('summary',signature('indicatorValue'),function(object,...){
   data.frame(
     indicator = names(object$value)
@@ -133,8 +133,10 @@ nas <- function(x){
   })
 }
 
-# @method summary validatorValue
-# @rdname confront
+#' @export 
+setGeneric('summary')
+
+#' @rdname confront
 setMethod('summary',signature('validatorValue'),function(object,...){
   data.frame(
     validator = names(object$value)
