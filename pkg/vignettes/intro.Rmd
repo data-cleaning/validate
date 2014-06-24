@@ -1,0 +1,25 @@
+---
+title: "Introduction to Validate"
+author:
+- Mark van der Loo
+- Edwin de Jonge
+date: "June 24, 2014"
+output: html_document
+---
+
+## Introduction
+
+
+## Working
+
+- define validation rules: `validator` and `indicator`
+- confront with data `confront`, `validatorValue`, `indicatorValue`
+- use result of confrontation `compare`
+
+## Defining validation rules
+
+## Definining indicators
+
+## Confronting with data
+
+## Comparing

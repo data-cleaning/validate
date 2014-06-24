@@ -143,7 +143,7 @@ setMethod("is_vargroup",signature("verifier"),function(x,...){
     return(.self)
   } else {
     names(L) <- extract_names(L,prefix=prefix)
-    ifile <- rep("commandline",length(L))
+    ifile <- rep("command-line",length(L))
   }
   names(ifile) <- names(L)
   .self$calls <- L
@@ -192,4 +192,3 @@ var_from_call <- function( x, vars=character(0) ){
   }
   unique(vars)
 }
-

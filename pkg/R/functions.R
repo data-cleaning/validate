@@ -112,7 +112,7 @@ V <- function(rule, impact=NULL, severity=NULL){
 
 #' @rdname syntax
 #' @param linrule A \emph{linear} validating expression
-#' @param p Lp-norm to use (default is the Euclidean norm)
+#' @param p $L^p$-norm to use (default is the Euclidean norm)
 #' @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
 #' @export 
 L <- function(linrule, p=2){

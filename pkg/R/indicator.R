@@ -47,4 +47,3 @@ get_stat <- function(x,what,...){
   )
   out
 }
-
