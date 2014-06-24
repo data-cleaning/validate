@@ -1,6 +1,8 @@
 ---
 title: "Introduction to Validate"
-author: ["Mark van der Loo", "Edwin de Jonge"]
+author:
+- Mark van der Loo
+- Edwin de Jonge
 date: "June 24, 2014"
 output: html_document
 ---
@@ -17,3 +19,7 @@ output: html_document
 ## Defining validation rules
 
 ## Definining indicators
+
+## Confronting with data
+
+## Comparing

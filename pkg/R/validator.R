@@ -22,6 +22,7 @@ NULL
 #' @return \code{validator} object. Use this object to check/{\code{\link{confront}}}
 #' data for validity.
 #'
+#' @examples ../examples/validator.R
 #' @export
 validator <- function(...,files=NULL) new('validator',...,files=files)
 
