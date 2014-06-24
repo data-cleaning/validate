@@ -1,5 +1,5 @@
 # Martin Morgan's factory; taken from SO.
-# Collects results, warnigns and errors.
+# Collects results, warnings and errors.
 # http://stackoverflow.com/questions/4948361/how-do-i-save-warnings-and-errors-as-output-from-a-function
 factory <- function(fun){
   function(...) {
