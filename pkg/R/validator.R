@@ -1,8 +1,15 @@
 #' @include verifier.R
 NULL
 
-#' Define validation rules
+#' Define validation rules for data
 #'
+#' With \code{validator} a set of validation rules can defined, which can be
+#' used to \code{\link{confront}} data.
+#' 
+#' @section Validating expressions:
+#' Each validating expression should evaluate to a \code{logical}. The syntax of
+#' the expression is described in \code{\link{syntax}}. 
+#' 
 #' @param ... A comma-separated list of validating expressions
 #' @param files A character vector of file locations
 #'
@@ -11,6 +18,9 @@ NULL
 #' or \code{NA}. 
 #'
 #' @seealso \code{\link{syntax}}
+#' 
+#' @return \code{validator} object. Use this object to check/{\code{\link{confront}}}
+#' data for validity.
 #'
 #' @export
 validator <- function(...,files=NULL) new('validator',...,files=files)
