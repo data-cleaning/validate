@@ -4,7 +4,8 @@ NULL
 #' Define validation rules for data
 #'
 #' With \code{validator} a set of validation rules can defined, which can be
-#' used to \code{\link{confront}} data.
+#' used to \code{\link{confront}} data. \code{validator} is a specific case of
+#' \code{verifier}: a set of rules to verify data. 
 #' 
 #' @section Validating expressions:
 #' Each validating expression should evaluate to a \code{logical}. The syntax of
@@ -17,12 +18,12 @@ NULL
 #' A \emph{validating expression} is an expression whose evaluation results in \code{TRUE}, \code{FALSE}
 #' or \code{NA}. 
 #'
-#' @seealso \code{\link{syntax}}
+#' @seealso \code{\link{syntax}}, \code{\link{confront}}
 #' 
 #' @return \code{validator} object. Use this object to check/{\code{\link{confront}}}
 #' data for validity.
 #'
-#' @examples ../examples/validator.R
+#' @example ../examples/validator.R
 #' @export
 validator <- function(...,files=NULL) new('validator',...,files=files)
 
