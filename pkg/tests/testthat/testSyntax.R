@@ -1,9 +1,9 @@
 
 context("Syntax attributes")
 
-test_that("validation syntax is recognized"){
+test_that("validation syntax is recognized",{
   expect_warning(validator(fiets(x)))
-}
+})
 
 
 test_that('Missings are counted correctly',{
