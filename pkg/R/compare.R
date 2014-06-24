@@ -245,8 +245,8 @@ setMethod('compare','indicator',
     for ( d in L ) 
       if ( !matches(L[[1]],d) ) 
         stop('dataset ',names(L)[i],'does not match with dataset',names(L)[1])
-    n <- names(I)
-    v <- setNames( lapply(n, function(i) sapply(L, function(y) values(confront(I[i],y))[[1]] )), n)
+    n <- names(x)
+    v <- setNames( lapply(n, function(i) sapply(L, function(y) values(confront(x[i],y))[[1]] )), n)
     # simplify where possible
     is_array <- sapply(v,is.array)
     is_numeric <- sapply(v,is.numeric)

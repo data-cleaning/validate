@@ -41,7 +41,6 @@ number_missing <- function(...){
 fraction_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
-  print(vars)
   v <- sapply(
     eapply(
       env=parent.frame()

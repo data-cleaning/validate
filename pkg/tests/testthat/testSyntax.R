@@ -1,6 +1,11 @@
 
 context("Syntax attributes")
 
+test_that("validation syntax is recognized",{
+  expect_warning(validator(fiets(x)))
+})
+
+
 test_that('Missings are counted correctly',{
   d1 <- data.frame(x=1:3,y=4:6) 
   d2 <- data.frame(x=c(NA,2,NA),y=c(4,5,NA))
