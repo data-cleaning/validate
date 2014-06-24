@@ -13,46 +13,83 @@ output: html_document
 
 
 ## Introduction
-The validate package is intended to make checking your data easy, maintainable and reproducible. Here's an example demonstrating the
-typical workflow.
+The validate package is intended to make checking your data easy, maintainable and reproducible. The validate package
+allows you to
+- Test your dataset(s) against predefined rules, either in- or cross-dataset
+- Store and re-use user-defined indicators, such as summary statistics
+- Compare multiple versions of your dataset as it gets processed step by step during for example data cleaning.
 
-We'll use the built-in ```women``` dataset
+We've added plenty of summarizing and visualisations so you can get a quick and attractive look at the results.
+
+### A quick example
+Here's an example demonstrating the typical workflow. We'll use the built-in ```women``` dataset.
 ```{r }
 data(women)
+summary(women)
 ```
-
-1. Define the rules you want your data set or sets to obey by creating
-a ```validator``` object.
+Validating data is all about checking whether a dataset meets presumtions or expectiations you have about it, and the validate package makes is super easy for you to define those expectations. Let's define a ```validator``` object
+that checks whether height and weight are positive.
 ```{r}
 library(validate)
-v <-validator(height > 0, weight > 0,mean(heigt)>66)
+v <- validator(height > 0, weight > 0)
+v
 ```
-
-2. Confront your data with the rules
+The validator object has stored the rule and assigned names to them (V0001 and V0002) for future reference. 
+To check this, we confront the dataset with the validation rules we've just defined:
 ```{r}
 cf <- confront(v, women)
+cf
 ```
-
-3. Analyse the results
+The object ```cf``` contains the result of checking the data in ```women``` against the expectations in ```v```. The 
+fact that there are no warnings or errors means that indeed each rule could be evaluated sucessfully (an error would occur for example, if we'd missspell height). Now let's take a look at the acual results.
 ```{r}
 summary(cf)
-values(cf)
 ```
-## A simple example
+Here, we see that of the 15 records in the ```women``` dataset, 15 pass the test. Consequently, there are no records
+that fail the test or yield ```NA```. Now, suppose that we expect that the BMI (weight divided by height squared) of each
+person to be below 23. We need to express the weight in kg and the height in meters, so the equation for BMI becomes
+$$
+BMI = \frac{weight\times0.45359}{(height\times0.0254)^2}
+$$
+Moreover, we demand that the average BMI is between 22 and 22.5.
+Let's create another validator object that first computes the BMI and next test whether the BMI values meet our expectations.
+```{r}
+v <- validator(
+  BMI := (weight*0.45359)/(height*0.0254)^2
+  , height > 0
+  , weight > 0
+  , BMI < 23
+  , mean(BMI) > 22 & mean(BMI) < 22.5
+)
+v
+```
+Checking is easy as before:
+```{r}
+cf <- confront(v,women)
+summary(cf)
+```
+We see that of 15 records, 10 meet our demands and that the mean BMI is not within the range we expected.
+
+## Validation rules
+
+### What are validation rules?
+
+### Storing and retrieving validation rules
+
+### Properties of the validator object
+
+### Analysing confrontations
+
+## Indicators
+
+### What are indicators?
+
+### Counting missing values
+
+### Properties of the indicator object
+
+### Analysing confrontations
 
 
+## Comparing datasets
 
-
-
-
-- define validation rules: `validator` and `indicator`
-- confront with data `confront`, `validatorValue`, `indicatorValue`
-- use result of confrontation `compare`
-
-## Defining validation rules
-
-## Definining indicators
-
-## Confronting with data
-
-## Comparing

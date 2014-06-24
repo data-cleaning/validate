@@ -90,7 +90,7 @@ setMethod("confront", signature("validator","data"), function(x, y,  ...){
   calls <- calls(x)
   L <- execute(calls,y)
   new('validatorValue',
-      call = match.call(call=sys.call(1))
+      call = match.call()
       , calls = calls(x,expand_assignments=TRUE)
       , value = lapply(L,"[[",1)
       , warn =  lapply(L,"[[",2)
