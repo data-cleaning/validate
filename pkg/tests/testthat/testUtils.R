@@ -1,0 +1,59 @@
+
+context("Utilities")
+
+test_that("match_data",{
+  d1 <- data.frame(id=paste(1:3),x=1:3,y=4:6)
+  d2 <- data.frame(id=paste(4:1),y=4:7,x=1:4)
+  expect_equal(
+    names(match_data(d1,d2,id='id')[[1]])
+    ,names(match_data(d1,d2,id='id')[[2]])    
+  )
+  expect_equal(
+    as.character(match_data(d1,d2,id='id')[[1]][,'id'])
+    , as.character(match_data(d1,d2,id='id')[[2]][,'id'])
+  )  
+})
+
+test_that('verifiers can be named',{
+  expect_equal(names(validator(aap=x>3)),'aap')
+  expect_equal(names(indicator(fiets=mean(x))),'fiets')    
+})
+
+
+
+test_that("Variables can be retrieved",{
+  expect_equal( variables(validator(x > 0)),'x')
+  expect_equal( sort(variables(validator(x > 0, y > 0))) , c('x','y') ) 
+  expect_equal( variables(validator(x>0, x<1 )), 'x')
+  expect_equal( sort(variables(validator(x +y > 0, y < 1))), c('x','y') )
+  expect_equal( variables(validator(x := 2*y, x>1)),'y')
+  expect_equal( sort(variables(validator(x := 2*y, x>1),dummy=TRUE)), c('x','y'))  
+  v <- validator(
+    root = y := sqrt(x)
+   , average = mean(x) > 3
+   , sum = x + y == z
+  )
+  expect_equivalent(
+    variables(v,matrix=TRUE)
+  , array(c(T,T,F,T),dim=c(2,2))
+  )
+  expect_equivalent(
+    variables(v,matrix=TRUE,dummy=TRUE)
+  , array(c(T,F,T,T,T,T,F,F,T),dim=c(3,3))
+  )
+})
+
+
+test_that('compare works',{
+  d1 <- data.frame(x=1:3,y=4:6)
+  d2 <- data.frame(x=c(NA,2,NA),y=c(4,5,NA))  
+  v <- validator(x>0,y<5)
+  a <- array(
+    c(6,6,0,6,0,4,4,0,2,2,0
+      ,6,3,3,3,0,2,2,0,1,1,0 ),dim=c(11,2)
+  )
+  expect_equivalent(unclass(compare(v,d1,d2)),a)  
+})
+
+
+

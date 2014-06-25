@@ -89,6 +89,7 @@ setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
 #' 
 #' @param x An R object
 #'
+#' @return A \code{character} with names of variables occurring in \code{x}
 #' @export
 setMethod("names","verifier", function(x) names(x$calls))
 
@@ -111,9 +112,22 @@ setMethod("[",signature("verifier"), function(x,i,j,...,drop=TRUE){
 })
 
 #' @rdname variables
-#' @param dummy Also retrieve transient variables set with the \code{:=} operator?
-setMethod("variables", signature(x="verifier"), function(x, dummy=FALSE, ...){ 
-    unique(unlist(lapply(calls(x,expand_assignments=!dummy),var_from_call)))
+#' @param matrix Return boolean matrix, one row for each rule, one column for each variable.
+#' @param dummy Also retrieve transient variables set with the \code{:=} operator.
+#'
+#' @return By default, a \code{character} vector listing all (non-dummy) variables occuring in \code{x}. 
+#'
+#' @example ../examples/variables.R
+setMethod("variables", signature(x="verifier"), function(x, matrix=FALSE, dummy=FALSE, ...){ 
+    vars <- lapply(calls(x,expand_assignments=!dummy),var_from_call)
+    u <- unique(unlist(vars))
+    if ( !matrix )
+      u
+    else {
+      a <- array(FALSE,dim=c(length(vars),length(u)),dimnames=list(rule=names(vars),variable=u) )
+      for (i in seq_along(vars)) a[i,vars[[i]]] <- TRUE
+      a
+    }
   }
 )
 
