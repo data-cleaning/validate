@@ -1,8 +1,6 @@
 ---
 title: "Introduction to Validate"
-author:
-- Mark van der Loo
-- Edwin de Jonge
+author: "Mark van der Loo Edwin de Jonge"
 date: "June 24, 2014"
 output: html_document
 ---
@@ -74,7 +72,39 @@ We see that of 15 records, 10 meet our demands and that the mean BMI is not with
 
 ### What are validation rules?
 
+Informally, a validation rule states an expectation or presumption that one wishes a data set to satisfy before reliable statistical analyses can take place. It is common to distinguish between the following types of validation rules.
+
+- **In-variable validation rules.** These concern basic range checks, for example: is the weight variable nonnegative?
+- **Cross-variable, in-record validation.** These rules check inter-variable relations. The test on BMI-values in the quick
+example above is an example of cross-variable validation. 
+- **Cross-record validation.** These rules are characterised by the fact that theire evaluation depends on more than a single record. For example, one might expect that no _salary_ in a column of salaries exceeds ten times
+the median salary of the column. The test on the mean BMI-value in the quick example above is another demonstration of cross-record validation. 
+- **Cross-dataset validation.** Compare (statistics of) multiple datasets. For example, one may expect that this year's revenue is within 10% of last year's.
+
+The validate package offers facilities for all these types of validation rules.
+
+Technically, a validation rule is an expression (or function, the difference between the two is not very big) that takes some data and returns either ```TRUE```, ```FALSE``` or ```NA```. The latter occurs only when the dataset contains too many missing values to compute the result of the expression. In the validate package, a validation rule is the subset of R-expressions whose final result is determined by any of the following operators or functions.
+```{r,echo=FALSE}
+s <- validate:::SYNTAX$validationsymbols
+s[!s%in% c(':=',':')]
+```
+Here, functions ```V``` and ```L``` will be discussed below in the section on [impact and severity](#impactseverity).
+
 ### Storing and retrieving validation rules
+
+#### From the commandline
+
+
+#### From file
+```{r,eval=FALSE}
+validator(files= "myrules.txt")
+```
+
+#### Multiple variables, the same rules
+
+#### Impact and Severity
+<a name='impactseverity'></a>
+
 
 ### Properties of the validator object
 
