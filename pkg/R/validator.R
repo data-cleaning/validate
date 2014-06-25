@@ -30,13 +30,13 @@ validator <- function(...,files=NULL) new('validator',...,files=files)
 setRefClass("validator"
   , contains = 'verifier'
   , methods = list(
-    initialize = function(...,files=NULL)  .validator(.self,...,files=files)
+    initialize = function(...,files=NULL)  ini_validator(.self,...,files=files)
   )
 )
 
 
-.validator <- function(.self, ..., files){
-  .verifier(.self,...,files=files)
+ini_validator <- function(.self, ..., files){
+  ini_verifier(.self,...,files=files)
   if (length(.self$calls)==0) return(.self)
 
   i <- sapply(.self$calls, function(x) validating(x) || vargroup(x))

@@ -5,8 +5,8 @@ NULL
 setRefClass("verifier"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
-      show = function() .show_verifier(.self)
-    , initialize = function(...,files=NULL) .verifier(.self,...,files=files)
+      show = function() show_verifier(.self)
+    , initialize = function(...,files=NULL) ini_verifier(.self,...,files=files)
   )
 )
 
@@ -129,7 +129,7 @@ setMethod("is_vargroup",signature("verifier"),function(x,...){
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-.verifier <- function(.self, ..., files,prefix="V"){
+ini_verifier <- function(.self, ..., files,prefix="V"){
   L <- as.list(substitute(list(...))[-1])
   
   if ( !is.null(files) && is.character(files) ){
@@ -163,7 +163,7 @@ extract_names <- function(L,prefix="V"){
 }
 
   
-.show_verifier <- function(.self){
+show_verifier <- function(.self){
   nr <- length(.self$calls)
   cat(sprintf(
     "Reference object of class '%s' with %s elements\n",class(.self)[1], nr

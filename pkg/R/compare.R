@@ -28,11 +28,12 @@ setMethod('show',signature('comparison'),function(object){
 #'
 #' @param x An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
 #' @param ... (named) data sets (\emph{e.g.} data.frames) 
-#' @seealso \code{cells}
+#' @seealso \code{\link{cells}}
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
-
+#' 
+#'
 #' @param how how to compare
 #' @param .list Optional list of data sets, will be concatenated with \code{...}.
 #' @rdname compare

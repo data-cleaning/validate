@@ -18,13 +18,13 @@ indicator <- function(...,files=NULL) new('indicator',...,files=files)
 
 setRefClass("indicator", contains='verifier',
   methods = list(
-    initialize = function(..., files=NULL) .indicator(.self,...,files=files)
+    initialize = function(..., files=NULL) ini_indicator(.self,...,files=files)
   )                       
 )
 
 
-.indicator <- function(.self,...,files){
-  .verifier(.self,...,files=files, prefix="I")
+ini_indicator <- function(.self,...,files){
+  ini_verifier(.self,...,files=files, prefix="I")
   if (length(.self$calls)==0) return(.self)
   
   i <- sapply(.self$calls, function(x) !validating(x) || vargroup(x))
