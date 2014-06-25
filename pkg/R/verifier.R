@@ -82,7 +82,7 @@ setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coe
 #' @rdname origin
 setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
 
-#setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
+setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
 
 
 #' Extract names

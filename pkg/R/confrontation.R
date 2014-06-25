@@ -175,7 +175,6 @@ setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
   simplify_list(values)
 })
 
-#' Get severity values
 #' @rdname values
 #' @export
 setGeneric('severity',def=function(x,...) standardGeneric('severity'))
@@ -188,7 +187,6 @@ setMethod('severity', signature('validatorValue'),function(x,...){
   simplify_list(L)
 })
 
-#' Get impact values
 #' @rdname values
 #' @export
 setGeneric('impact',def=function(x,...) standardGeneric('impact'))
