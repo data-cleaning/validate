@@ -5,23 +5,25 @@ fn <- c('verifier.R','indicator.R','validator.R',
         ,'sugar.R','functions.R')
 dmp <- lapply(file.path('pkg/R',fn),source)
 
+ff <- unlist(strsplit(read.dcf("pkg/DESCRIPTION")[15],'\n'))
+ff <- grep("\\.R",ff,value=TRUE)
+ff <- gsub("'","",ff)
 
+#for( f in ff) source(file.path("pkg/R",f))
 
+ff[1]
+source(file.path("pkg/R",ff[1]))
+# 
+rm(list=ls())
+ls()
+#
 
-v <- validator(
-  fiets := 2*height
-  , fiets > 126
+setRefClass("fiets2",fields=list(a='character')
+            , methods=list(
+              show=function() print(.self$a)
+              , initialize=function(...) (function(obj,y='a') obj$a=y)(.self,...)
+            ) 
 )
-cf <- confront(v,women)
-summary(cf)
-
-e <- new.env()
-
-
-
-
-
-
 
 cls <- calls(v)
 w <- new.env()
