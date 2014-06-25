@@ -9,7 +9,7 @@ install:
   - cd ./pkg
   - ../travis-tool.sh install_deps
   - ../travis-tool.sh install_r roxygen2
-  - R -e "devtools::document()"
+  - R -e "roxygen2::update_collate('.');devtools::document()"
 script: 
   - ../travis-tool.sh run_tests
 
