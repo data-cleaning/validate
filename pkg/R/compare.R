@@ -89,7 +89,7 @@ setMethod('compare', 'validator',
 # x : reference object to compare against (note the order!)
 setGeneric('compare2',def=function(y,x,...) standardGeneric('compare2'))
 
-setMethod('compare2',signature('validatorValue','validatorValue'),
+setMethod('compare2',signature('validation','validation'),
   function(y,x,...){
     vx <- values(x)
     vy <- values(y)
@@ -140,7 +140,7 @@ setMethod('compare2',signature('validatorValue','validatorValue'),
     )[2,]
 })
 
-# v : values('validatorValue')
+# v : values('validation')
 unverifiable <- function(x){
   sum(sapply(x,function(y) sum(is.na(y))))
 }

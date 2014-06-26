@@ -83,13 +83,13 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 })
 
 # # indicators serve a different purpose than validations.
-setRefClass("validatorValue", contains = "confrontation")
+setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
 setMethod("confront", signature("validator","data"), function(x, y,  ...){
   calls <- calls(x)
   L <- execute(calls,y)
-  new('validatorValue',
+  new('validation',
       call = match.call()
       , calls = calls[!is.assignment(calls)]
       , value = lapply(L,"[[",1)
@@ -137,7 +137,7 @@ nas <- function(x){
 setGeneric('summary')
 
 #' @rdname confront
-setMethod('summary',signature('validatorValue'),function(object,...){
+setMethod('summary',signature('validation'),function(object,...){
   data.frame(
     validator = names(object$value)
     , confrontations = sapply(object$value,length)
@@ -167,7 +167,7 @@ setMethod('values',signature('confrontation'),function(x,...){
 
 #' @rdname values
 #' @param simplify Combine results with similar dimension structure into arrays?
-setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
+setMethod('values',signature('validation'),function(x,simplify=TRUE,...){
   if (!simplify ){
     return( getMethod(values,signature='confrontation')(x,...) )
   }
@@ -180,7 +180,7 @@ setMethod('values',signature('validatorValue'),function(x,simplify=TRUE,...){
 setGeneric('severity',def=function(x,...) standardGeneric('severity'))
 
 #' @rdname values
-setMethod('severity', signature('validatorValue'),function(x,...){
+setMethod('severity', signature('validation'),function(x,...){
   values <- x$value[!has_error(x)]
   lists <- sapply(values,is.list)
   L <- lapply(values[lists],function(x) x$severity) 
@@ -192,7 +192,7 @@ setMethod('severity', signature('validatorValue'),function(x,...){
 setGeneric('impact',def=function(x,...) standardGeneric('impact'))
 
 #' @rdname values
-setMethod('impact', signature('validatorValue'),function(x,...){
+setMethod('impact', signature('validation'),function(x,...){
   values <- x$value[!has_error(x)]
   lists <- sapply(values,is.list)
   L <- lapply(values[lists],function(x) x$impact) 
@@ -215,7 +215,7 @@ setMethod('calls',signature('confrontation'),function(x, ...){
 })
 
 #' @rdname calls
-setMethod('calls',signature('validatorValue'), function(x, ...){
+setMethod('calls',signature('validation'), function(x, ...){
   calls <- x$calls[!has_error(x)]
   len <- sapply(x$value[!has_error(x)],length)
   lapply(unique(len),function(l) sapply(calls[len==l],Id))
