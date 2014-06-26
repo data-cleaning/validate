@@ -88,7 +88,6 @@ Technically, a validation rule is an expression (or function, the difference bet
 s <- validate:::SYNTAX$validationsymbols
 s[!s%in% c(':=',':')]
 ```
-Here, functions ```V``` and ```L``` will be discussed below in the section on [impact and severity](#impactseverity).
 Besides these operators, you can define rules that consist of calls to code ```is.-`` functions. 
 ```{r}
 validator(is.numeric(x),x>0)

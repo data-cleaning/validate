@@ -112,11 +112,11 @@ matchvars <- function(L,env){
   }
 }
 
-#' @param rule R expression: a validation rule. Must result in a logical.
-#' @param impact R expression: an expression. Must result in a numeric.
-#' @param severity R expression: an expression. Must result in a numeric.
-#' @rdname syntax
-#' @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
+# @param rule R expression: a validation rule. Must result in a logical.
+# @param impact R expression: an expression. Must result in a numeric.
+# @param severity R expression: an expression. Must result in a numeric.
+# @rdname syntax
+# @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
 V <- function(rule, impact=NULL, severity=NULL){
   r <- substitute(rule)
   i <- substitute(impact)
@@ -130,10 +130,10 @@ V <- function(rule, impact=NULL, severity=NULL){
 
 # severity and impact for Linear validators
 
-#' @rdname syntax
-#' @param linrule A \emph{linear} validating expression
-#' @param p $L^p$-norm to use (default is the Euclidean norm)
-#' @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
+# @rdname syntax
+# @param linrule A \emph{linear} validating expression
+# @param p $L^p$-norm to use (default is the Euclidean norm)
+# @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
 L <- function(linrule, p=2){
   e <- substitute(linrule)
   q <- p/(p-1)
