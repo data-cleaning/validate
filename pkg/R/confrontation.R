@@ -19,7 +19,7 @@ setRefClass("confrontation"
 .show_confrontation <- function(.self){
   cat(sprintf("Reference object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
-  cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
+  cat(sprintf('Confrontations: %d\n', length(.self$calls)))
   cat(sprintf('Warnings      : %d\n',sum(sapply(.self$warn,function(w)!is.null(w)))))
   cat(sprintf('Errors        : %d\n',sum(sapply(.self$error,function(w)!is.null(w)))))
 }
@@ -65,7 +65,7 @@ setMethod('summary',signature('indication'),function(object,...){
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$._calls,call2text)
+    , call = sapply(object$calls,call2text)
     ,row.names=NULL
     ,stringsAsFactors=FALSE
   )  
@@ -146,7 +146,7 @@ setMethod('summary',signature('validation'),function(object,...){
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$._calls,  call2text)
+    , call = sapply(object$calls,  call2text)
   )  
 })
 

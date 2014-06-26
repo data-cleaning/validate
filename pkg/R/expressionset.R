@@ -99,6 +99,7 @@ setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coe
 #' @rdname origin
 setMethod("origin", signature(x="expressionset"), function(x,...) x$origin)
 
+#' @rdname variables
 setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,deparse))
 
 
@@ -136,7 +137,7 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
 #'
 #' @example ../examples/variables.R
 setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, dummy=FALSE, ...){ 
-    vars <- lapply(x$._calls(expand_assignments=!dummy),var_from_call)
+    vars <- lapply(x$calls(expand_assignments=!dummy),var_from_call)
     u <- unique(unlist(vars))
     if ( !matrix )
       u
