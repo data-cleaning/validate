@@ -163,7 +163,9 @@ ini_expressionset <- function(.self, ..., .files, .prefix="V"){
 
 # get names from a list, replacing empty names values with numbers
 extract_names <- function(L,prefix="V"){
-  generic <- sprintf("%s%04d",prefix,1:length(L))
+  npos <- max(1,ceiling(log10(length(L)+1)))
+  fmt <- paste0("%s%0",npos,"d")
+  generic <- sprintf(fmt,prefix,1:length(L))
   given <- names(L)
   if (is.null(given)) return(generic)
   igen <- given == ""

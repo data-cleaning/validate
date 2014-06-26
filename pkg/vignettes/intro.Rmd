@@ -264,17 +264,41 @@ with a dataset. It contains all information gathered during the validation, for 
 - The way the ```confront``` function was called. 
 
 Just like for ```lm``` objects, for example, there are functions that can be used
-to extract or summarize information stored in ```validation``` objects.
+to extract or summarize information stored in ```validation``` objects. We will use
+the built-in ```iris``` dataset in the next example.
 
 ```{r}
 v <- validator(
-  ratio = if(Species == 'setosa') Sepal.Length/Sepal.Width < 1.7
+  NUM : {Sepal.Width; Sepal.Length; Petal.Length; Petal.Width}
+  , isnum = is.numeric(NUM)
+  , ispos = NUM > 0
+  , ratio = if(Species == 'setosa') Sepal.Length/Sepal.Width < 1.7
   , I := Species == 'setosa'
-  , mean(Sepal.Width[I]) > mean(Sepal.Width[!I])
+  , means = mean(Sepal.Width[I]) > mean(Sepal.Width[!I])
 )
-summary(confront(v,iris))
+cf <- confront(v,iris)
+cf
 ```
+Here, we test whether the length and width variables are stored as numerics and if they are positive or not. Furthermore, we compare the means of two subgroups (_setosa_ and other species) and test weather the sepal length to width ratio for _setosa_ is within our expected range.
 
+The ```summary``` function returns a ```data.frame``` that summarizes the results.
+Here, we'll just print the first five columns.
+```{r}
+summary(cf)[1:5]
+```
+Here, we see that mean test as well as each of the ```is.numeric``` tests yield a single confrontation. That is: these tests return a single ```TRUE```, ```FALSE``` or
+```NA``` for the entire dataset. The positivity checks on the other hand can be tested
+for te each record and therefore yield 150 (the number of records) results each. The same holds for the ratio test and in fact, we see that there is one observation failing the ratio test.
+
+We van get a closer look at the results by extracting the values:
+```{r}
+val <- values(cf)
+class(val)
+```
+Here ```val``` is a list, containing arrays of ```logical```s. The ```values``` function tries to simplify results by combining the results of expressions when they have the same dimension.
+```{r}
+val[[1]]
+```
 
 
 

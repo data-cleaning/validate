@@ -1,8 +1,8 @@
 
 # Variable groups can be defined as <groupname> : {<var1>; <var2>; ... ; <varN> }
 #
-# This function expands a variable group and store as character array in an environment.
-# input MUST be valid vargroup definition call
+# This function expands a variable group and stores it 
+# as character array in an environment. Input MUST be valid vargroup definition call
 expand_vargroup <- function(x){  
   e <- new.env()
   
@@ -54,7 +54,7 @@ expand_group <- function(calls, group, variables){
   })
   origin <- rep(names(L),times=sapply(L,length))
   L <- unlist(L,use.names=FALSE)
-  names(L) <- origin
+  names(L) <- paste(origin,variables,sep=".")
   L
 }
 

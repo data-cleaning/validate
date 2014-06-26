@@ -46,7 +46,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
   L <- execute(calls,y)
   new('indication',
       ._call = match.call()
-      , ._calls = calls[!is.assignment(calls)]
+      , ._calls = x$calls(expand_assignments=TRUE)
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
@@ -92,7 +92,7 @@ setMethod("confront", signature("validator","data"), function(x, y,  ...){
   L <- execute(calls,y)
   new('validation',
       ._call = match.call()
-      , ._calls = calls[!is.assignment(calls)]
+      , ._calls = x$calls(expand_assignments=TRUE)
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
@@ -149,6 +149,7 @@ setMethod('summary',signature('validation'),function(object,...){
     , error = has_error(object)
     , warning = has_warning(object)
     , call = sapply(object$._calls,  call2text)
+    , row.names=NULL
   )  
 })
 
