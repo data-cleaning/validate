@@ -91,8 +91,8 @@ setGeneric('compare2',def=function(y,x,...) standardGeneric('compare2'))
 
 setMethod('compare2',signature('validation','validation'),
   function(y,x,...){
-    vx <- values(x)
-    vy <- values(y)
+    vx <- values(x,drop=FALSE)
+    vy <- values(y,drop=FALSE)
     rules <- errcheck(x,y)
     vx <- lapply(vx, function(x) x[,rules,drop=FALSE])
     vy <- lapply(vy, function(x) x[,rules,drop=FALSE])    

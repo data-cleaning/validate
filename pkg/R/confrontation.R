@@ -169,37 +169,16 @@ setMethod('values',signature('confrontation'),function(x,...){
 
 #' @rdname values
 #' @param simplify Combine results with similar dimension structure into arrays?
-setMethod('values',signature('validation'),function(x,simplify=TRUE,...){
-  if (!simplify ){
-    return( getMethod(values,signature='confrontation')(x,...) )
+#' @param drop if a single vector or array results, drop 'list' attribute?
+setMethod('values',signature('validation'),function(x,simplify=TRUE,drop=TRUE,...){
+  out <- if ( simplify ){
+    simplify_list(x$._value[!has_error(x)])
+  } else {
+    getMethod(values,signature='confrontation')(x,...)
   }
-  values <- x$._value[!has_error(x)]
-  simplify_list(values)
+  if (drop && length(out) == 1) out[[1]] else out
 })
 
-#' @rdname values
-#' @export
-setGeneric('severity',def=function(x,...) standardGeneric('severity'))
-
-#' @rdname values
-setMethod('severity', signature('validation'),function(x,...){
-  values <- x$._value[!has_error(x)]
-  lists <- sapply(values,is.list)
-  L <- lapply(values[lists],function(x) x$severity) 
-  simplify_list(L)
-})
-
-#' @rdname values
-#' @export
-setGeneric('impact',def=function(x,...) standardGeneric('impact'))
-
-#' @rdname values
-setMethod('impact', signature('validation'),function(x,...){
-  values <- x$value[!has_error(x)]
-  lists <- sapply(values,is.list)
-  L <- lapply(values[lists],function(x) x$impact) 
-  simplify_list(L)
-})
 
 simplify_list <- function(L){
   len <- sapply(L,num_result)
@@ -211,3 +190,29 @@ simplify_list <- function(L){
   })
 }
 
+
+### currently obsolete stuff ----
+
+# @rdname values
+# @export
+#setGeneric('severity',def=function(x,...) standardGeneric('severity'))
+
+# @rdname values
+# setMethod('severity', signature('validation'),function(x,...){
+#   values <- x$._value[!has_error(x)]
+#   lists <- sapply(values,is.list)
+#   L <- lapply(values[lists],function(x) x$severity) 
+#   simplify_list(L)
+# })
+
+# @rdname values
+# @export
+#setGeneric('impact',def=function(x,...) standardGeneric('impact'))
+
+# @rdname values
+# setMethod('impact', signature('validation'),function(x,...){
+#   values <- x$value[!has_error(x)]
+#   lists <- sapply(values,is.list)
+#   L <- lapply(values[lists],function(x) x$impact) 
+#   simplify_list(L)
+# })
