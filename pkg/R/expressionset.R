@@ -3,7 +3,7 @@ NULL
 
 # Superclass for storing verification rules.
 setRefClass("expressionset"
-  , fields = list(._calls = 'list',origin= 'character')
+  , fields = list(._calls = 'list', ._origin= 'character')
   , methods= list(
       show = function() show_expressionset(.self)
     , initialize = function(...,files=NULL) ini_expressionset(.self,...,files=files)
@@ -97,7 +97,7 @@ setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
 setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
 #' @rdname origin
-setMethod("origin", signature(x="expressionset"), function(x,...) x$origin)
+setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
 
 #' @rdname variables
 setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,deparse))
@@ -125,7 +125,7 @@ setMethod("names","expressionset", function(x) names(x$._calls))
 #' @rdname select
 setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   out <- do.call(class(x), x$._calls[i])
-  out$origin <- x$origin[i]
+  out$._origin <- x$._origin[i]
   out
 })
 
@@ -179,7 +179,7 @@ ini_expressionset <- function(.self, ..., files,prefix="V"){
   }
   names(ifile) <- names(L)
   .self$._calls <- L
-  .self$origin <- ifile
+  .self$._origin <- ifile
   .self
 }
 

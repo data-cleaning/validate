@@ -31,10 +31,10 @@ ini_indicator <- function(.self,...,files){
   if ( !all(i) ){
     warning(paste(
       "The following rules contain invalid syntax and will be ignored:\n",
-      paste(1:sum(!i), ':', sapply(.self$._calls[!i],deparse), 'from', .self$origin[!i], collapse="\n ")))
+      paste(1:sum(!i), ':', sapply(.self$._calls[!i],deparse), 'from', .self$._origin[!i], collapse="\n ")))
   }
   .self$._calls  <- .self$._calls[i]
-  .self$origin <- .self$origin[i]
+  .self$._origin <- .self$._origin[i]
   .self 
 }
 
