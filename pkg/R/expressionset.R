@@ -3,37 +3,54 @@ NULL
 
 # Superclass for storing verification rules.
 setRefClass("expressionset"
-  , fields = list(calls = 'list',origin= 'character')
+  , fields = list(._calls = 'list',origin= 'character')
   , methods= list(
       show = function() show_expressionset(.self)
     , initialize = function(...,files=NULL) ini_expressionset(.self,...,files=files)
+    , calls = function(...) get_calls(.self,...)
   )
 )
 
-#' Retrieve calls from object
-#'  
-#' This function is exported mostly as a utility for other packages depending on \code{validate}. 
-#' 
-#' @param x An R object
-#' @param ... arguments to be passed to other methods
-#' @return A \code{list} of calls
-#' @export 
-setGeneric('calls',function(x,...) standardGeneric('calls'))
+# Retrieve calls from object
+#  
+# This function is exported mostly as a utility for other packages depending on \code{validate}. 
+# 
+# @param x An R object
+# @param ... arguments to be passed to other methods
+# @return A \code{list} of calls
+# @export 
+#setGeneric('calls',function(x,...) standardGeneric('calls'))
 
-#' @param expand_assignments Substitute assignments?
-#' @param expand_groups Expand groups?
-#' @param vectorize Vectorize if-statements?
-#' @param replace_dollar Replace dollar with bracket index?
-#' @rdname calls
-setMethod('calls',signature('expressionset'),
-  function(x, ..., expand_assignments=FALSE, expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
-    calls <- x$calls
-    if ( expand_assignments )  calls <- expand_assignments(calls)
-    if ( expand_groups ) calls <- expand_groups(calls)
-    if ( vectorize ) calls <- lapply(calls, vectorize)
-    if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
-    calls
-})
+# @param expand_assignments Substitute assignments?
+# @param expand_groups Expand groups?
+# @param vectorize Vectorize if-statements?
+# @param replace_dollar Replace dollar with bracket index?
+# @rdname calls
+#setMethod('calls',signature('expressionset'),
+#  function(x, ..., expand_assignments=FALSE, expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+#    calls <- x$calls
+#    if ( expand_assignments )  calls <- expand_assignments(calls)
+#    if ( expand_groups ) calls <- expand_groups(calls)
+#    if ( vectorize ) calls <- lapply(calls, vectorize)
+#    if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
+#    calls
+#})
+
+# @param expand_assignments Substitute assignments?
+# @param expand_groups Expand groups?
+# @param vectorize Vectorize if-statements?
+# @param replace_dollar Replace dollar with bracket index?
+# @rdname calls
+#
+get_calls <- function(x, ..., expand_assignments=FALSE
+    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+  calls <- x$._calls
+  if ( expand_assignments )  calls <- expand_assignments(calls)
+  if ( expand_groups ) calls <- expand_groups(calls)
+  if ( vectorize ) calls <- lapply(calls, vectorize)
+  if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
+  calls
+}
 
 
 # get basic information from verification objects
@@ -82,7 +99,7 @@ setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coe
 #' @rdname origin
 setMethod("origin", signature(x="expressionset"), function(x,...) x$origin)
 
-setMethod("as.character","expressionset", function(x,...) sapply(x$calls,deparse))
+setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,deparse))
 
 
 #' Extract names
@@ -91,7 +108,7 @@ setMethod("as.character","expressionset", function(x,...) sapply(x$calls,deparse
 #'
 #' @return A \code{character} with names of variables occurring in \code{x}
 #' @export
-setMethod("names","expressionset", function(x) names(x$calls))
+setMethod("names","expressionset", function(x) names(x$._calls))
 
 #' Select
 #' 
@@ -106,7 +123,7 @@ setMethod("names","expressionset", function(x) names(x$calls))
 #' @export
 #' @rdname select
 setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
-  out <- do.call(class(x), x$calls[i])
+  out <- do.call(class(x), x$._calls[i])
   out$origin <- x$origin[i]
   out
 })
@@ -119,7 +136,7 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
 #'
 #' @example ../examples/variables.R
 setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, dummy=FALSE, ...){ 
-    vars <- lapply(calls(x,expand_assignments=!dummy),var_from_call)
+    vars <- lapply(x$._calls(expand_assignments=!dummy),var_from_call)
     u <- unique(unlist(vars))
     if ( !matrix )
       u
@@ -136,7 +153,7 @@ setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, d
 setGeneric("is_vargroup",function(x,...) standardGeneric("is_vargroup"))
 
 setMethod("is_vargroup",signature("expressionset"),function(x,...){
-  sapply(x$calls, vargroup)  
+  sapply(x$._calls, vargroup)  
 })
 
 
@@ -160,7 +177,7 @@ ini_expressionset <- function(.self, ..., files,prefix="V"){
     ifile <- rep("command-line",length(L))
   }
   names(ifile) <- names(L)
-  .self$calls <- L
+  .self$._calls <- L
   .self$origin <- ifile
   .self
 }
@@ -178,14 +195,14 @@ extract_names <- function(L,prefix="V"){
 
   
 show_expressionset <- function(.self){
-  nr <- length(.self$calls)
+  nr <- length(.self$._calls)
   cat(sprintf(
     "Reference object of class '%s' with %s elements\n",class(.self)[1], nr
   ))
   if (nr == 0) return(invisible(NULL))
-  lab <- names(.self$calls)
+  lab <- names(.self$._calls)
   n <- max(nchar(lab))
-  lab <- paste0(format(lab,width=n),": ",sapply(.self$calls, call2text))
+  lab <- paste0(format(lab,width=n),": ",sapply(.self$._calls, call2text))
   cat(noquote(paste(lab,collapse="\n")))
   cat("\n")
 }

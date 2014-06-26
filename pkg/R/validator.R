@@ -37,29 +37,29 @@ setRefClass("validator"
 
 ini_validator <- function(.self, ..., files){
   ini_expressionset(.self,...,files=files)
-  if (length(.self$calls)==0) return(.self)
+  if (length(.self$._calls)==0) return(.self)
 
-  i <- sapply(.self$calls, function(x) validating(x) || vargroup(x))
+  i <- sapply(.self$._calls, function(x) validating(x) || vargroup(x))
   if ( !all(i) ){
     warning(paste(
       "The following rules contain invalid syntax and will be ignored:\n",
-      paste(1:sum(!i), ':', sapply(.self$calls[!i],deparse), 'from', .self$origin[!i], collapse="\n ")))
+      paste(1:sum(!i), ':', sapply(.self$._calls[!i],deparse), 'from', .self$origin[!i], collapse="\n ")))
   } 
-  .self$calls  <- .self$calls[i]
+  .self$._calls  <- .self$._calls[i]
   .self$origin <- .self$origin[i]
   .self
 }
 
 #' @rdname is_linear
 setMethod("is_linear",signature("validator"), function(x,...){
-  sapply(x$calls, linear)
+  sapply(x$._calls, linear)
 })
 
 #' @param normalize Bring all equations in the \eqn{<} or \eqn{\leq} form. 
 #' @rdname linear_coefficients
 setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
   
-  calls <- x$calls[is_linear(x)]
+  calls <- x$._calls[is_linear(x)]
   cols <- unique(unlist(lapply(calls, var_from_call)))
   rows <- names(calls)
   
