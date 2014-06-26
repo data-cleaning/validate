@@ -102,12 +102,12 @@ setMethod("confront", signature("validator","data"), function(x, y,  ...){
 # - Assignments are stored in a separate environment and forgotten afterwards.
 # - Failed assignments yield a warning.
 execute <- function(calls,env){
-  w = new.env()
+  w = new.env(parent = env)
   lapply(calls, function(g) 
-    if (g[[1]] == ":=") 
+    if (g[[1]] %in% c(":=", "<-")) 
       w[[as.character(left(g))]] <- tryCatch( eval(right(g), env), error=warning)
     else 
-      factory(eval)(g,env,w)
+      factory(eval)(g,w)
   )[!is.assignment(calls)]
 }
 
