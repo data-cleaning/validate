@@ -5,11 +5,11 @@ NULL
 # superclass for storing results of a verification activity
 setRefClass("confrontation"
   ,fields = list(
-      call  = "call"  # (user's) call that generated the object
-    , value = "list"  # results of confrontation 
-    , calls = "list"  # calls executed during confrontation
-    , warn  = "list"  # list of 'warning' objects
-    , error = "list"  # list of 'error' objects
+      ._call  = "call"  # (user's) call that generated the object
+    , ._value = "list"  # results of confrontation 
+    , ._calls = "list"  # calls executed during confrontation
+    , ._warn  = "list"  # list of 'warning' objects
+    , ._error = "list"  # list of 'error' objects
   )
   , methods=list(
     show = function() .show_confrontation(.self)
@@ -19,9 +19,9 @@ setRefClass("confrontation"
 .show_confrontation <- function(.self){
   cat(sprintf("Reference object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
-  cat(sprintf('Confrontations: %d\n', length(.self$calls)))
-  cat(sprintf('Warnings      : %d\n',sum(sapply(.self$warn,function(w)!is.null(w)))))
-  cat(sprintf('Errors        : %d\n',sum(sapply(.self$error,function(w)!is.null(w)))))
+  cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
+  cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))
+  cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
 }
 
 
@@ -45,19 +45,19 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
   calls <- x$calls()
   L <- execute(calls,y)
   new('indication',
-      call = match.call()
-      , calls = calls[!is.assignment(calls)]
-      , value = lapply(L,"[[",1)
-      , warn =  lapply(L,"[[",2)
-      , error = lapply(L,"[[",3)     
+      ._call = match.call()
+      , ._calls = calls[!is.assignment(calls)]
+      , ._value = lapply(L,"[[",1)
+      , ._warn =  lapply(L,"[[",2)
+      , ._error = lapply(L,"[[",3)     
   )  
 })
 
 #' @rdname confront
 setMethod('summary',signature('indication'),function(object,...){
   data.frame(
-    indicator = names(object$value)
-    , confrontations = sapply(object$value,length)
+    indicator = names(object$._value)
+    , confrontations = sapply(object$._value,length)
     , class = get_stat(object,class)
     , min = get_stat(object,min,na.rm=TRUE)
     , mean  = get_stat(object,mean,na.rm=TRUE)
@@ -65,9 +65,9 @@ setMethod('summary',signature('indication'),function(object,...){
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$calls,call2text)
-    ,row.names=NULL
-    ,stringsAsFactors=FALSE
+    , call = sapply(object$._calls,call2text)
+    , row.names=NULL
+    , stringsAsFactors=FALSE
   )  
 })
 
@@ -75,10 +75,11 @@ setMethod('summary',signature('indication'),function(object,...){
 #' @export 
 setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
   new('confrontation',
-      , call = x$call[i]
-      , value = x$value[i]
-      , warn = x$warn[i]
-      , error  = x$error[i]
+      , ._call = match.call()
+      , ._calls = x$calls[i]
+      , ._value = x$value[i]
+      , ._warn = x$warn[i]
+      , ._error  = x$error[i]
   )
 })
 
@@ -90,11 +91,11 @@ setMethod("confront", signature("validator","data"), function(x, y,  ...){
   calls <- x$calls()
   L <- execute(calls,y)
   new('validation',
-      call = match.call()
-      , calls = calls[!is.assignment(calls)]
-      , value = lapply(L,"[[",1)
-      , warn =  lapply(L,"[[",2)
-      , error = lapply(L,"[[",3)     
+      ._call = match.call()
+      , ._calls = calls[!is.assignment(calls)]
+      , ._value = lapply(L,"[[",1)
+      , ._warn =  lapply(L,"[[",2)
+      , ._error = lapply(L,"[[",3)     
   )
 })
 
@@ -111,24 +112,25 @@ execute <- function(calls,env){
   )[!is.assignment(calls)]
 }
 
-has_error <- function(x) !sapply(x$error,is.null)
-has_warning <- function(x) !sapply(x$warn, is.null)
-has_value <- function(x) sapply(x$value, function(a) !is.null(a))
+# x inherits from 'confrontation'
+has_error <- function(x) !sapply(x$._error,is.null)
+has_warning <- function(x) !sapply(x$._warn, is.null)
+has_value <- function(x) sapply(x$._value, function(a) !is.null(a))
 
 passes <- function(x){
-  sapply(x$value, function(a){
+  sapply(x$._value, function(a){
     ifelse( is.null(a), 0, sum(a,na.rm=TRUE)) 
   })
 }
 
 fails <- function(x){
-  sapply(x$value, function(a){
+  sapply(x$._value, function(a){
     ifelse(is.null(a),0,sum(!a,na.rm=TRUE))
   })
 }
 
 nas <- function(x){
-  sapply(x$value, function(a){
+  sapply(x$._value, function(a){
     ifelse(is.null(a),0,sum(is.na(a)))
   })
 }
@@ -139,14 +141,14 @@ setGeneric('summary')
 #' @rdname confront
 setMethod('summary',signature('validation'),function(object,...){
   data.frame(
-    validator = names(object$value)
-    , confrontations = sapply(object$value,length)
+    validator = names(object$._value)
+    , confrontations = sapply(object$._value,length)
     , passes = passes(object)
     , fails  = fails(object)
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$calls,  call2text)
+    , call = sapply(object$._calls,  call2text)
   )  
 })
 
@@ -162,7 +164,7 @@ setGeneric('values',def=function(x,...) standardGeneric('values'))
 
 #' @rdname values
 setMethod('values',signature('confrontation'),function(x,...){
-  x$value
+  x$._value
 })
 
 #' @rdname values
@@ -171,7 +173,7 @@ setMethod('values',signature('validation'),function(x,simplify=TRUE,...){
   if (!simplify ){
     return( getMethod(values,signature='confrontation')(x,...) )
   }
-  values <- x$value[!has_error(x)]
+  values <- x$._value[!has_error(x)]
   simplify_list(values)
 })
 
@@ -181,7 +183,7 @@ setGeneric('severity',def=function(x,...) standardGeneric('severity'))
 
 #' @rdname values
 setMethod('severity', signature('validation'),function(x,...){
-  values <- x$value[!has_error(x)]
+  values <- x$._value[!has_error(x)]
   lists <- sapply(values,is.list)
   L <- lapply(values[lists],function(x) x$severity) 
   simplify_list(L)
@@ -209,14 +211,3 @@ simplify_list <- function(L){
   })
 }
 
-#' @rdname calls
-#setMethod('calls',signature('confrontation'),function(x, ...){
-#  x$calls
-#})
-
-#' @rdname calls
-#setMethod('calls',signature('validation'), function(x, ...){
-#  calls <- x$calls[!has_error(x)]
-#  len <- sapply(x$value[!has_error(x)],length)
-#  lapply(unique(len),function(l) sapply(calls[len==l],Id))
-#})

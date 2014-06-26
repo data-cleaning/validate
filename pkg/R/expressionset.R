@@ -6,35 +6,10 @@ setRefClass("expressionset"
   , fields = list(._calls = 'list', ._origin= 'character')
   , methods= list(
       show = function() show_expressionset(.self)
-    , initialize = function(...,files=NULL) ini_expressionset(.self,...,files=files)
+    , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
     , calls = function(...) get_calls(.self,...)
   )
 )
-
-# Retrieve calls from object
-#  
-# This function is exported mostly as a utility for other packages depending on \code{validate}. 
-# 
-# @param x An R object
-# @param ... arguments to be passed to other methods
-# @return A \code{list} of calls
-# @export 
-#setGeneric('calls',function(x,...) standardGeneric('calls'))
-
-# @param expand_assignments Substitute assignments?
-# @param expand_groups Expand groups?
-# @param vectorize Vectorize if-statements?
-# @param replace_dollar Replace dollar with bracket index?
-# @rdname calls
-#setMethod('calls',signature('expressionset'),
-#  function(x, ..., expand_assignments=FALSE, expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
-#    calls <- x$calls
-#    if ( expand_assignments )  calls <- expand_assignments(calls)
-#    if ( expand_groups ) calls <- expand_groups(calls)
-#    if ( vectorize ) calls <- lapply(calls, vectorize)
-#    if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
-#    calls
-#})
 
 # @param expand_assignments Substitute assignments?
 # @param expand_groups Expand groups?
@@ -52,8 +27,7 @@ get_calls <- function(x, ..., expand_assignments=FALSE
   calls
 }
 
-
-# get basic information from verification objects
+# get basic information from expressionset objects
 
 #' Extract variable names
 #'
@@ -68,6 +42,7 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
+#' 
 #' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
@@ -76,6 +51,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 #' @param x An R object 
 #' @param ... Arguments to be passed to other methods.
 #' @return A \code{logical} vector
+#'
 #' @export
 setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
 
@@ -99,7 +75,8 @@ setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coe
 #' @rdname origin
 setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
 
-#' @rdname variables
+#' Convert an expressionset to character
+#' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} or \code{\link{indicator}}.
 setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,deparse))
 
 
@@ -161,20 +138,20 @@ setMethod("is_vargroup",signature("expressionset"),function(x,...){
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-ini_expressionset <- function(.self, ..., files,prefix="V"){
+ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   L <- as.list(substitute(list(...))[-1])
   
-  if ( !is.null(files) && is.character(files) ){
+  if ( !is.null(.files) && is.character(.files) ){
     L <- list()
     ifile <- character(0)
-    for ( f in files ){ 
+    for ( f in .files ){ 
       L <- c(L,read_resfile(f))
       ifile <- c(ifile,rep(f,length(L)))
     }
   } else if (length(L)==0){
     return(.self)
   } else {
-    names(L) <- extract_names(L,prefix=prefix)
+    names(L) <- extract_names(L,prefix=.prefix)
     ifile <- rep("command-line",length(L))
   }
   names(ifile) <- names(L)
