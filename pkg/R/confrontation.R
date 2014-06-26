@@ -74,12 +74,12 @@ setMethod('summary',signature('indication'),function(object,...){
 #' @rdname select
 #' @export 
 setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
-  new('confrontation',
+  new(class(x)
       , ._call = match.call()
-      , ._calls = x$calls[i]
-      , ._value = x$value[i]
-      , ._warn = x$warn[i]
-      , ._error  = x$error[i]
+      , ._calls = x$._calls[i]
+      , ._value = x$._value[i]
+      , ._warn = x$._warn[i]
+      , ._error  = x$._error[i]
   )
 })
 
