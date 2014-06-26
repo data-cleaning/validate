@@ -46,7 +46,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
   L <- execute(calls,y)
   new('indication',
       ._call = match.call()
-      , ._calls = calls[!is.assignment(calls)]
+      , ._calls = x$calls(expand_assignments=TRUE)
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
@@ -74,12 +74,12 @@ setMethod('summary',signature('indication'),function(object,...){
 #' @rdname select
 #' @export 
 setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
-  new('confrontation',
+  new(class(x)
       , ._call = match.call()
-      , ._calls = x$calls[i]
-      , ._value = x$value[i]
-      , ._warn = x$warn[i]
-      , ._error  = x$error[i]
+      , ._calls = x$._calls[i]
+      , ._value = x$._value[i]
+      , ._warn = x$._warn[i]
+      , ._error  = x$._error[i]
   )
 })
 
@@ -92,7 +92,7 @@ setMethod("confront", signature("validator","data"), function(x, y,  ...){
   L <- execute(calls,y)
   new('validation',
       ._call = match.call()
-      , ._calls = calls[!is.assignment(calls)]
+      , ._calls = x$calls(expand_assignments=TRUE)
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
@@ -149,6 +149,7 @@ setMethod('summary',signature('validation'),function(object,...){
     , error = has_error(object)
     , warning = has_warning(object)
     , call = sapply(object$._calls,  call2text)
+    , row.names=NULL
   )  
 })
 
@@ -169,37 +170,16 @@ setMethod('values',signature('confrontation'),function(x,...){
 
 #' @rdname values
 #' @param simplify Combine results with similar dimension structure into arrays?
-setMethod('values',signature('validation'),function(x,simplify=TRUE,...){
-  if (!simplify ){
-    return( getMethod(values,signature='confrontation')(x,...) )
+#' @param drop if a single vector or array results, drop 'list' attribute?
+setMethod('values',signature('validation'),function(x,simplify=TRUE,drop=TRUE,...){
+  out <- if ( simplify ){
+    simplify_list(x$._value[!has_error(x)])
+  } else {
+    getMethod(values,signature='confrontation')(x,...)
   }
-  values <- x$._value[!has_error(x)]
-  simplify_list(values)
+  if (drop && length(out) == 1) out[[1]] else out
 })
 
-#' @rdname values
-#' @export
-setGeneric('severity',def=function(x,...) standardGeneric('severity'))
-
-#' @rdname values
-setMethod('severity', signature('validation'),function(x,...){
-  values <- x$._value[!has_error(x)]
-  lists <- sapply(values,is.list)
-  L <- lapply(values[lists],function(x) x$severity) 
-  simplify_list(L)
-})
-
-#' @rdname values
-#' @export
-setGeneric('impact',def=function(x,...) standardGeneric('impact'))
-
-#' @rdname values
-setMethod('impact', signature('validation'),function(x,...){
-  values <- x$value[!has_error(x)]
-  lists <- sapply(values,is.list)
-  L <- lapply(values[lists],function(x) x$impact) 
-  simplify_list(L)
-})
 
 simplify_list <- function(L){
   len <- sapply(L,num_result)
@@ -211,3 +191,29 @@ simplify_list <- function(L){
   })
 }
 
+
+### currently obsolete stuff ----
+
+# @rdname values
+# @export
+#setGeneric('severity',def=function(x,...) standardGeneric('severity'))
+
+# @rdname values
+# setMethod('severity', signature('validation'),function(x,...){
+#   values <- x$._value[!has_error(x)]
+#   lists <- sapply(values,is.list)
+#   L <- lapply(values[lists],function(x) x$severity) 
+#   simplify_list(L)
+# })
+
+# @rdname values
+# @export
+#setGeneric('impact',def=function(x,...) standardGeneric('impact'))
+
+# @rdname values
+# setMethod('impact', signature('validation'),function(x,...){
+#   values <- x$value[!has_error(x)]
+#   lists <- sapply(values,is.list)
+#   L <- lapply(values[lists],function(x) x$impact) 
+#   simplify_list(L)
+# })

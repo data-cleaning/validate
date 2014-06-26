@@ -25,32 +25,41 @@ Here's an example demonstrating the typical workflow. We'll use the built-in ```
 data(women)
 summary(women)
 ```
-Validating data is all about checking whether a dataset meets presumtions or expectiations you have about it, and the validate package makes is super easy for you to define those expectations. Let's define a ```validator``` object
+Validating data is all about checking whether a dataset meets presumtions or
+expectiations you have about it, and the validate package makes is super easy
+for you to define those expectations. Let's define a ```validator``` object
 that checks whether height and weight are positive.
 ```{r}
 library(validate)
 v <- validator(height > 0, weight > 0)
 v
 ```
-The validator object has stored the rule and assigned names to them (V0001 and V0002) for future reference. 
-To check this, we confront the dataset with the validation rules we've just defined:
+The validator object has stored the rule and assigned names to them (V0001 and
+V0002) for future reference.  To check this, we confront the dataset with the
+validation rules we've just defined:
 ```{r}
 cf <- confront(v, women)
 cf
 ```
-The object ```cf``` contains the result of checking the data in ```women``` against the expectations in ```v```. The 
-fact that there are no warnings or errors means that indeed each rule could be evaluated sucessfully (an error would occur for example, if we'd missspell height). Now let's take a look at the acual results.
+The object ```cf``` contains the result of checking the data in ```women```
+against the expectations in ```v```. The fact that there are no warnings or
+errors means that indeed each rule could be evaluated sucessfully (an error
+would occur for example, if we'd missspell height). Now let's take a look at
+the acual results.
 ```{r}
 summary(cf)
 ```
-Here, we see that of the 15 records in the ```women``` dataset, 15 pass the test. Consequently, there are no records
-that fail the test or yield ```NA```. Now, suppose that we expect that the BMI (weight divided by height squared) of each
-person to be below 23. We need to express the weight in kg and the height in meters, so the equation for BMI becomes
+Here, we see that of the 15 records in the ```women``` dataset, 15 pass the
+test. Consequently, there are no records that fail the test or yield ```NA```.
+Now, suppose that we expect that the BMI (weight divided by height squared) of
+each person to be below 23. We need to express the weight in kg and the height
+in meters, so the equation for BMI becomes
 $$
 BMI = \frac{weight\times0.45359}{(height\times0.0254)^2}
 $$
-Moreover, we demand that the average BMI is between 22 and 22.5.
-Let's create another validator object that first computes the BMI and next test whether the BMI values meet our expectations.
+Moreover, we demand that the average BMI is between 22 and 22.5.  Let's create
+another validator object that first computes the BMI and next test whether the
+BMI values meet our expectations.
 ```{r}
 v <- validator(
   BMI := (weight*0.45359)/(height*0.0254)^2
@@ -72,23 +81,38 @@ We see that of 15 records, 10 meet our demands and that the mean BMI is not with
 
 ### What are validation rules?
 
-Informally, a validation rule states an expectation or presumption that one wishes a data set to satisfy before reliable statistical analyses can take place. It is common to distinguish between the following types of validation rules.
+Informally, a validation rule states an expectation or presumption that one
+wishes a data set to satisfy before reliable statistical analyses can take
+place. It is common to distinguish between the following types of validation
+rules.
 
 - **In-variable validation rules.** These concern basic range checks, for example: is the weight variable nonnegative?
-- **Cross-variable, in-record validation.** These rules check inter-variable relations. The test on BMI-values in the quick
-example above is an example of cross-variable validation. 
-- **Cross-record validation.** These rules are characterised by the fact that theire evaluation depends on more than a single record. For example, one might expect that no _salary_ in a column of salaries exceeds ten times
-the median salary of the column. The test on the mean BMI-value in the quick example above is another demonstration of cross-record validation. 
-- **Cross-dataset validation.** Compare (statistics of) multiple datasets. For example, one may expect that this year's revenue is within 10% of last year's.
+- **Cross-variable, in-record validation.** These rules check inter-variable
+  relations. The test on BMI-values in the quick example above is an example of
+  cross-variable validation. 
+- **Cross-record validation.** These rules are characterised by the fact that
+  theire evaluation depends on more than a single record. For example, one
+  might expect that no _salary_ in a column of salaries exceeds ten times the
+  median salary of the column. The test on the mean BMI-value in the quick
+  example above is another demonstration of cross-record validation. 
+- **Cross-dataset validation.** Compare (statistics of) multiple datasets. For
+  example, one may expect that this year's revenue is within 10% of last
+  year's.
 
 The validate package offers facilities for all these types of validation rules.
 
-Technically, a validation rule is an expression (or function, the difference between the two is not very big) that takes some data and returns either ```TRUE```, ```FALSE``` or ```NA```. The latter occurs only when the dataset contains too many missing values to compute the result of the expression. In the validate package, a validation rule is the subset of R-expressions whose final result is determined by any of the following operators or functions.
+Technically, a validation rule is an expression (or function, the difference
+between the two is not very big) that takes some data and returns either
+```TRUE```, ```FALSE``` or ```NA```. The latter occurs only when the dataset
+contains too many missing values to compute the result of the expression. In
+the validate package, a validation rule is the subset of R-expressions whose
+final result is determined by any of the following operators or functions.
 ```{r,echo=FALSE}
 s <- validate:::SYNTAX$validationsymbols
 s[!s%in% c(':=',':')]
 ```
-Besides these operators, you can define rules that consist of calls to code ```is.-`` functions. 
+Besides these operators, you can define rules that consist of calls to code
+```is.-`` functions. 
 ```{r}
 validator(is.numeric(x),x>0)
 ```
@@ -96,7 +120,9 @@ validator(is.numeric(x),x>0)
 ### Storing and retrieving validation rules
 
 #### From the commandline
-Validation rules may be defined and stored from the commandline with the ```validator``` command. Optionally, you may name each rule or a subset of them. A non-named rule will be assigned a name automatically.
+Validation rules may be defined and stored from the commandline with the
+```validator``` command. Optionally, you may name each rule or a subset of
+them. A non-named rule will be assigned a name automatically.
 ```{r}
 v <- validator(
   xpos = x > 0   # a rule stating that variable x must be positive
@@ -105,8 +131,9 @@ v <- validator(
 )
 v
 ```
-Note that the result of the above rules is indeed the result of one of the operators shown above. If we try to add
-a rule whose result is determined otherwise, that rule is skipped with a warning. For example:
+Note that the result of the above rules is indeed the result of one of the
+operators shown above. If we try to add a rule whose result is determined
+otherwise, that rule is skipped with a warning. For example:
 ```{r}
 v <- validator(
   x + y == z # this is a validation rule
@@ -117,9 +144,10 @@ v
 Finally, we note that the result of the ```validator``` function is an object of class ```validator```.
 
 #### From file
-It is possible to define your validation rules in a textfiles, so you can mainain them separately,
-annotate them in the comments and reuse them accross R sessions. For example, suppose we have a file
-called ```myrules.txt``` with the following content.
+It is possible to define your validation rules in a textfiles, so you can
+mainain them separately, annotate them in the comments and reuse them accross R
+sessions. For example, suppose we have a file called ```myrules.txt``` with the
+following content.
 ```
 # content of myrules.txt
 
@@ -133,21 +161,27 @@ BMI := (weight*0.45359)/(height*0.0254)^2
 # we expect everyone's bmi to be below 23
 BMI < 23
 ```
-To read the above rules, you can either copy the above code in a file called ```myrules.txt``` or read it from the text file that comes installed with the package as in the example below.
+To read the above rules, you can either copy the above code in a file called
+```myrules.txt``` or read it from the text file that comes installed with the
+package as in the example below.
 ```{r}
 examplefile <- system.file('examples/myrules.txt',package='validate')
 w <- validator(.files=examplefile)
 w
 ```
-You can actually feed a vector of file names to ```validator```. The files will be read in the
-order of occurrence in the vector and all rules are added to a single validator object. This allows you to combine rules
-that apply to many of your data files in a single general file and store lesser-used rules in separate files. Or, one could store group definitions (discussed [below](#groups)) in one file and rules using groups in another.
+You can actually feed a vector of file names to ```validator```. The files will
+be read in the order of occurrence in the vector and all rules are added to a
+single validator object. This allows you to combine rules that apply to many of
+your data files in a single general file and store lesser-used rules in
+separate files. Or, one could store group definitions (discussed
+[below](#groups)) in one file and rules using groups in another.
 
 At the moment it is not yet possible to name rules that are stored in a file.
 
 #### Subsetting validation rules
-Subsets can be selected with the single bracket operator, similar to vectors. You may use names, logical indices
-or numbers, just like with regular R vectors. The result of indexing a ```validator``` object is a new and smaller
+Subsets can be selected with the single bracket operator, similar to vectors.
+You may use names, logical indices or numbers, just like with regular R
+vectors. The result of indexing a ```validator``` object is a new and smaller
 validator object. Using the validator ```w``` defined in the previous example:
 ```{r}
 w[1:2]
@@ -157,11 +191,14 @@ w[(1:4) < 2]
 
 #### Different variables, similar rules: variable groups.
 <a name="groups"></a>
-We have already seen that a validator object can contain special rules, in the form of assignments. There is one
-more special type of rule, which can be used to make maintainig your rulebase easyer when many variables have to
-obey similar rules. For example, suppose you have a variable ```x```, and if ```x>0```, then all variables
-```y1, y2, ... , y5``` must be larger than zero as well. You may specify this by denoting five rules of the form
-```if ( x > 0 ) yi > 0```, ```i``` running from 1 to 5. However, the following also works:
+We have already seen that a validator object can contain special rules, in the
+form of assignments. There is one more special type of rule, which can be used
+to make maintainig your rulebase easyer when many variables have to obey
+similar rules. For example, suppose you have a variable ```x```, and if
+```x>0```, then all variables ```y1, y2, ... , y5``` must be larger than zero
+as well. You may specify this by denoting five rules of the form 
+```if ( x > 0 ) yi > 0```, ```i``` running from 1 to 5. However, the following
+also works:
 ```{r}
 v <- validator(
   G : { y1; y2; y3; y4; y5 }
@@ -169,10 +206,13 @@ v <- validator(
 )
 v
 ```
-(As a side note, observe that such an if-else rule indeed evaluates to ```TRUE```, ```FALSE``` or ```NA```, since a
-rule of the form ```if ( P ) Q``` is interpreted as ```!P | Q```.)
+(As a side note, observe that such an if-else rule indeed evaluates to
+```TRUE```, ```FALSE``` or ```NA```, since a rule of the form ```if ( P ) Q```
+is interpreted as ```!P | Q```.)
 
-Here, ```G``` is called a _group variable_. When ```v``` is used, for example in a call to ```confront```, a copy of ```V0002``` is generated for each element in the group.
+Here, ```G``` is called a _group variable_. When ```v``` is used, for example
+in a call to ```confront```, a copy of ```V0002``` is generated for each
+element in the group.
 ```{r}
 # let us generate some random data with x and y1...y5 values
 d <- data.frame(x=rnorm(100))
@@ -184,19 +224,21 @@ summary(cf)
 ```
 
 ### Properties of the validator object
-One may retrieve the names of the rules stored in a validator object using the ```names``` function. 
+One may retrieve the names of the rules stored in a validator object using the
+```names``` function. 
 ```{r}
 v <- validator(typecheck = is.numeric(y), z:=2*x, xbigger = z > y)
 names(v)
 ```
-It is also possible to retrieve the list of variables that are contained in the validator object. Either for the whole
-object or per rule.
+It is also possible to retrieve the list of variables that are contained in the
+validator object. Either for the whole object or per rule.
 ```{r}
 variables(v)
 variables(v,matrix=TRUE)
 ```
-By default, the assigned variable ```z``` is not shown, since it doesn't refer to a variable occurring in the data but
-is only temporary (dummy) variable that makes your rules easier to maintain. Can however request it.
+By default, the assigned variable ```z``` is not shown, since it doesn't refer
+to a variable occurring in the data but is only temporary (dummy) variable that
+makes your rules easier to maintain. Can however request it.
 ```{r}
 variables(v,dummy=TRUE)
 ```
@@ -206,11 +248,60 @@ We can find out where rules have been defined using the ```origin``` function.
 origin(v)
 origin(w)[1]
 ```
+From the printed output, you may have noticed that a ```validator``` object is
+a reference object. You  as a user will probably note much of this. It only
+serves us, the package authors, to control the amount of copying taking place
+when we process validator objects internally.
 
-From the printed output, you may have noticed that a ```validator``` object is a reference object. You  as a user will probably note much of this. It only serves us, the package authors, to control the amount of copying taking place when we process validator objects internally.
+
+### Analysing validation
+A _validation_ object is the result of confronting a set of validating expressions
+with a dataset. It contains all information gathered during the validation, for example
+
+- Which validating expressions could be executed
+- Which validating expressions yielded a warning
+- The results of the expression
+- The way the ```confront``` function was called. 
+
+Just like for ```lm``` objects, for example, there are functions that can be used
+to extract or summarize information stored in ```validation``` objects. We will use
+the built-in ```iris``` dataset in the next example.
+
+```{r}
+v <- validator(
+  NUM : {Sepal.Width; Sepal.Length; Petal.Length; Petal.Width}
+  , isnum = is.numeric(NUM)
+  , ispos = NUM > 0
+  , ratio = if(Species == 'setosa') Sepal.Length/Sepal.Width < 1.7
+  , I := Species == 'setosa'
+  , means = mean(Sepal.Width[I]) > mean(Sepal.Width[!I])
+)
+cf <- confront(v,iris)
+cf
+```
+Here, we test whether the length and width variables are stored as numerics and if they are positive or not. Furthermore, we compare the means of two subgroups (_setosa_ and other species) and test weather the sepal length to width ratio for _setosa_ is within our expected range.
+
+The ```summary``` function returns a ```data.frame``` that summarizes the results.
+Here, we'll just print the first five columns.
+```{r}
+summary(cf)[1:5]
+```
+Here, we see that mean test as well as each of the ```is.numeric``` tests yield a single confrontation. That is: these tests return a single ```TRUE```, ```FALSE``` or
+```NA``` for the entire dataset. The positivity checks on the other hand can be tested
+for te each record and therefore yield 150 (the number of records) results each. The same holds for the ratio test and in fact, we see that there is one observation failing the ratio test.
+
+We van get a closer look at the results by extracting the values:
+```{r}
+val <- values(cf)
+class(val)
+```
+Here ```val``` is a list, containing arrays of ```logical```s. The ```values``` function tries to simplify results by combining the results of expressions when they have the same dimension.
+```{r}
+val[[1]]
+```
 
 
-### Analysing confrontations
+
 
 #### Impact and Severity
 <a name='impactseverity'></a>
