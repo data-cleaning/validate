@@ -8,23 +8,23 @@ NULL
 #' 
 #' \code{\link{indicator}}
 #' @param ... A comma-separated list of indicator definitions
-#' @param files A character vector of file locations
+#' @param .files A character vector of file locations
 #' 
 #' @seealso \code{\link{syntax}}
 #' 
 #' @export
 #' @example ../examples/indicator.R
-indicator <- function(...,files=NULL) new('indicator',...,files=files)
+indicator <- function(..., .files=NULL) new('indicator',..., .files=.files)
 
 setRefClass("indicator", contains='expressionset',
   methods = list(
-    initialize = function(..., files=NULL) ini_indicator(.self,...,files=files)
+    initialize = function(..., .files=NULL) ini_indicator(.self,...,.files=.files)
   )                       
 )
 
 
-ini_indicator <- function(.self,...,files){
-  ini_expressionset(.self,...,files=files, prefix="I")
+ini_indicator <- function(.self,...,.files){
+  ini_expressionset(.self,..., .files=.files, .prefix="I")
   if (length(.self$._calls)==0) return(.self)
   
   i <- sapply(.self$._calls, function(x) !validating(x) || vargroup(x))

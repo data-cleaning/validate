@@ -12,7 +12,7 @@ NULL
 #' the expression is described in \code{\link{syntax}}. 
 #' 
 #' @param ... A comma-separated list of validating expressions
-#' @param files A character vector of file locations
+#' @param .files A character vector of file locations
 #'
 #' @section Details:
 #' A \emph{validating expression} is an expression whose evaluation results in \code{TRUE}, \code{FALSE}
@@ -25,18 +25,18 @@ NULL
 #'
 #' @example ../examples/validator.R
 #' @export
-validator <- function(...,files=NULL) new('validator',...,files=files)
+validator <- function(...,.files=NULL) new('validator',..., .files=.files)
 
 setRefClass("validator"
   , contains = 'expressionset'
   , methods = list(
-    initialize = function(...,files=NULL)  ini_validator(.self,...,files=files)
+    initialize = function(..., .files=NULL)  ini_validator(.self,...,.files=.files)
   )
 )
 
 
-ini_validator <- function(.self, ..., files){
-  ini_expressionset(.self,...,files=files)
+ini_validator <- function(.self, ..., .files){
+  ini_expressionset(.self,..., .files=.files)
   if (length(.self$._calls)==0) return(.self)
 
   i <- sapply(.self$._calls, function(x) validating(x) || vargroup(x))

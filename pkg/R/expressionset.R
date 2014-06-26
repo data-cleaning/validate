@@ -6,7 +6,7 @@ setRefClass("expressionset"
   , fields = list(._calls = 'list', ._origin= 'character')
   , methods= list(
       show = function() show_expressionset(.self)
-    , initialize = function(...,files=NULL) ini_expressionset(.self,...,files=files)
+    , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
     , calls = function(...) get_calls(.self,...)
   )
 )
@@ -26,7 +26,6 @@ get_calls <- function(x, ..., expand_assignments=FALSE
   if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
   calls
 }
-
 
 # get basic information from expressionset objects
 
@@ -139,20 +138,20 @@ setMethod("is_vargroup",signature("expressionset"),function(x,...){
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-ini_expressionset <- function(.self, ..., files,prefix="V"){
+ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   L <- as.list(substitute(list(...))[-1])
   
-  if ( !is.null(files) && is.character(files) ){
+  if ( !is.null(.files) && is.character(.files) ){
     L <- list()
     ifile <- character(0)
-    for ( f in files ){ 
+    for ( f in .files ){ 
       L <- c(L,read_resfile(f))
       ifile <- c(ifile,rep(f,length(L)))
     }
   } else if (length(L)==0){
     return(.self)
   } else {
-    names(L) <- extract_names(L,prefix=prefix)
+    names(L) <- extract_names(L,prefix=.prefix)
     ifile <- rep("command-line",length(L))
   }
   names(ifile) <- names(L)

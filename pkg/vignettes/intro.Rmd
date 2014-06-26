@@ -133,11 +133,10 @@ BMI := (weight*0.45359)/(height*0.0254)^2
 # we expect everyone's bmi to be below 23
 BMI < 23
 ```
-To read the above rules, you can either copy the above code in a file called ```myrules.txt``` or read it from the text
-file that comes installed with the package as in the example below.
+To read the above rules, you can either copy the above code in a file called ```myrules.txt``` or read it from the text file that comes installed with the package as in the example below.
 ```{r}
 examplefile <- system.file('examples/myrules.txt',package='validate')
-w <- validator(files=examplefile)
+w <- validator(.files=examplefile)
 w
 ```
 You can actually feed a vector of file names to ```validator```. The files will be read in the
