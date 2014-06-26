@@ -1,11 +1,11 @@
-#' @include verifier.R
+#' @include expressionset.R
 NULL
 
 #' Define validation rules for data
 #'
 #' With \code{validator} a set of validation rules can defined, which can be
 #' used to \code{\link{confront}} data. \code{validator} is a specific case of
-#' \code{verifier}: a set of rules to verify data. 
+#' \code{expressionset}: a set of rules to verify data. 
 #' 
 #' @section Validating expressions:
 #' Each validating expression should evaluate to a \code{logical}. The syntax of
@@ -28,7 +28,7 @@ NULL
 validator <- function(...,files=NULL) new('validator',...,files=files)
 
 setRefClass("validator"
-  , contains = 'verifier'
+  , contains = 'expressionset'
   , methods = list(
     initialize = function(...,files=NULL)  ini_validator(.self,...,files=files)
   )
@@ -36,7 +36,7 @@ setRefClass("validator"
 
 
 ini_validator <- function(.self, ..., files){
-  ini_verifier(.self,...,files=files)
+  ini_expressionset(.self,...,files=files)
   if (length(.self$calls)==0) return(.self)
 
   i <- sapply(.self$calls, function(x) validating(x) || vargroup(x))

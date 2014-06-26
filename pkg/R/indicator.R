@@ -1,4 +1,4 @@
-#' @include verifier.R
+#' @include expressionset.R
 NULL
 
 # The 'indicator' class holds indicator definitions
@@ -16,7 +16,7 @@ NULL
 #' @example ../examples/indicator.R
 indicator <- function(...,files=NULL) new('indicator',...,files=files)
 
-setRefClass("indicator", contains='verifier',
+setRefClass("indicator", contains='expressionset',
   methods = list(
     initialize = function(..., files=NULL) ini_indicator(.self,...,files=files)
   )                       
@@ -24,7 +24,7 @@ setRefClass("indicator", contains='verifier',
 
 
 ini_indicator <- function(.self,...,files){
-  ini_verifier(.self,...,files=files, prefix="I")
+  ini_expressionset(.self,...,files=files, prefix="I")
   if (length(.self$calls)==0) return(.self)
   
   i <- sapply(.self$calls, function(x) !validating(x) || vargroup(x))

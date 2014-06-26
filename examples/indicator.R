@@ -6,7 +6,7 @@ I <- indicator(
  , fraction_missing()    # fraction of missing variables
  , sum(x)
  , mean(x)
-) -> I
+) 
 
 dat <- data.frame(x=1:2, y=c(NA,1))
 C <- confront(I, dat)

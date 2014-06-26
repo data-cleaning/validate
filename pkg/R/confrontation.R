@@ -25,7 +25,7 @@ setRefClass("confrontation"
 }
 
 
-#' Confront data with a (set of) verifier(s)
+#' Confront data with a (set of) expressionset(s)
 #'
 #' @param x An R object carrying verifications
 #' @param y An R object carrying data

@@ -209,14 +209,13 @@ origin(v)
 origin(w)[1]
 ```
 
-From the printed output, you may have noticed that a ```validator``` object is a reference object. You  as a user will probably note much of this. It only serves us, the package authors to control the amount of copying taking place when we process validator objects internally.
+From the printed output, you may have noticed that a ```validator``` object is a reference object. You  as a user will probably note much of this. It only serves us, the package authors, to control the amount of copying taking place when we process validator objects internally.
 
 
 ### Analysing confrontations
 
 #### Impact and Severity
 <a name='impactseverity'></a>
-
 
 ## Indicators
 

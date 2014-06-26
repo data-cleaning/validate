@@ -2,11 +2,11 @@
 NULL
 
 # Superclass for storing verification rules.
-setRefClass("verifier"
+setRefClass("expressionset"
   , fields = list(calls = 'list',origin= 'character')
   , methods= list(
-      show = function() show_verifier(.self)
-    , initialize = function(...,files=NULL) ini_verifier(.self,...,files=files)
+      show = function() show_expressionset(.self)
+    , initialize = function(...,files=NULL) ini_expressionset(.self,...,files=files)
   )
 )
 
@@ -25,7 +25,7 @@ setGeneric('calls',function(x,...) standardGeneric('calls'))
 #' @param vectorize Vectorize if-statements?
 #' @param replace_dollar Replace dollar with bracket index?
 #' @rdname calls
-setMethod('calls',signature('verifier'),
+setMethod('calls',signature('expressionset'),
   function(x, ..., expand_assignments=FALSE, expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
     calls <- x$calls
     if ( expand_assignments )  calls <- expand_assignments(calls)
@@ -80,9 +80,9 @@ setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
 setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
 #' @rdname origin
-setMethod("origin", signature(x="verifier"), function(x,...) x$origin)
+setMethod("origin", signature(x="expressionset"), function(x,...) x$origin)
 
-setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
+setMethod("as.character","expressionset", function(x,...) sapply(x$calls,deparse))
 
 
 #' Extract names
@@ -91,7 +91,7 @@ setMethod("as.character","verifier", function(x,...) sapply(x$calls,deparse))
 #'
 #' @return A \code{character} with names of variables occurring in \code{x}
 #' @export
-setMethod("names","verifier", function(x) names(x$calls))
+setMethod("names","expressionset", function(x) names(x$calls))
 
 #' Select
 #' 
@@ -105,7 +105,7 @@ setMethod("names","verifier", function(x) names(x$calls))
 #' 
 #' @export
 #' @rdname select
-setMethod("[",signature("verifier"), function(x,i,j,...,drop=TRUE){
+setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   out <- do.call(class(x), x$calls[i])
   out$origin <- x$origin[i]
   out
@@ -118,7 +118,7 @@ setMethod("[",signature("verifier"), function(x,i,j,...,drop=TRUE){
 #' @return By default, a \code{character} vector listing all (non-dummy) variables occuring in \code{x}. 
 #'
 #' @example ../examples/variables.R
-setMethod("variables", signature(x="verifier"), function(x, matrix=FALSE, dummy=FALSE, ...){ 
+setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, dummy=FALSE, ...){ 
     vars <- lapply(calls(x,expand_assignments=!dummy),var_from_call)
     u <- unique(unlist(vars))
     if ( !matrix )
@@ -135,7 +135,7 @@ setMethod("variables", signature(x="verifier"), function(x, matrix=FALSE, dummy=
 
 setGeneric("is_vargroup",function(x,...) standardGeneric("is_vargroup"))
 
-setMethod("is_vargroup",signature("verifier"),function(x,...){
+setMethod("is_vargroup",signature("expressionset"),function(x,...){
   sapply(x$calls, vargroup)  
 })
 
@@ -143,7 +143,7 @@ setMethod("is_vargroup",signature("verifier"),function(x,...){
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-ini_verifier <- function(.self, ..., files,prefix="V"){
+ini_expressionset <- function(.self, ..., files,prefix="V"){
   L <- as.list(substitute(list(...))[-1])
   
   if ( !is.null(files) && is.character(files) ){
@@ -177,7 +177,7 @@ extract_names <- function(L,prefix="V"){
 }
 
   
-show_verifier <- function(.self){
+show_expressionset <- function(.self){
   nr <- length(.self$calls)
   cat(sprintf(
     "Reference object of class '%s' with %s elements\n",class(.self)[1], nr
@@ -194,7 +194,6 @@ show_verifier <- function(.self){
 call2text <- function(x){
   gsub("[[:blank:]]+"," ",paste(deparse(x),collapse=" "))
 }
-
 
 # Extract variable names from a call object
 var_from_call <- function( x, vars=character(0) ){

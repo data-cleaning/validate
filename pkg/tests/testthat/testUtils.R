@@ -14,7 +14,7 @@ test_that("match_data",{
   )  
 })
 
-test_that('verifiers can be named',{
+test_that('validating/indicating expressions can be named',{
   expect_equal(names(validator(aap=x>3)),'aap')
   expect_equal(names(indicator(fiets=mean(x))),'fiets')    
 })
