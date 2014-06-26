@@ -38,13 +38,13 @@ setGeneric("confront",
 setClassUnion('data',c("data.frame","list","environment"))
 
 # indicators serve a different purpose than validations.
-setRefClass("indicatorValue", contains = "confrontation")
+setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
 setMethod("confront",signature("indicator","data"),function(x,y,...){
   calls <- calls(x)
   L <- execute(calls,y)
-  new('indicatorValue',
+  new('indication',
       call = match.call()
       , calls = calls[!is.assignment(calls)]
       , value = lapply(L,"[[",1)
@@ -54,7 +54,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
 })
 
 #' @rdname confront
-setMethod('summary',signature('indicatorValue'),function(object,...){
+setMethod('summary',signature('indication'),function(object,...){
   data.frame(
     indicator = names(object$value)
     , confrontations = sapply(object$value,length)
