@@ -25,10 +25,10 @@ Here's an example demonstrating the typical workflow. We'll use the built-in ```
 data(women)
 summary(women)
 ```
-Validating data is all about checking whether a dataset meets presumtions or
+Validating data is all about checking wether a dataset meets presumtions or
 expectiations you have about it, and the validate package makes is super easy
 for you to define those expectations. Let's define a ```validator``` object
-that checks whether height and weight are positive.
+that checks wether height and weight are positive.
 ```{r}
 library(validate)
 v <- validator(height > 0, weight > 0)
@@ -58,7 +58,7 @@ $$
 BMI = \frac{weight\times0.45359}{(height\times0.0254)^2}
 $$
 Moreover, we demand that the average BMI is between 22 and 22.5.  Let's create
-another validator object that first computes the BMI and next test whether the
+another validator object that first computes the BMI and next test wether the
 BMI values meet our expectations.
 ```{r}
 v <- validator(
@@ -191,10 +191,10 @@ w[(1:4) < 2]
 
 #### Different variables, similar rules: variable groups.
 <a name="groups"></a>
-We have already seen that a validator object can contain special rules, in the
-form of assignments. There is one more special type of rule, which can be used
-to make maintainig your rulebase easyer when many variables have to obey
-similar rules. For example, suppose you have a variable ```x```, and if
+We have already seen that a validator object can contain special statements in
+the form of assignments. There is one more special type of statement, which can
+be used to make maintainig your rulebase easyer when many variables have to
+obey similar rules. For example, suppose you have a variable ```x```, and if
 ```x>0```, then all variables ```y1, y2, ... , y5``` must be larger than zero
 as well. You may specify this by denoting five rules of the form 
 ```if ( x > 0 ) yi > 0```, ```i``` running from 1 to 5. However, the following
@@ -238,7 +238,7 @@ variables(v,matrix=TRUE)
 ```
 By default, the assigned variable ```z``` is not shown, since it doesn't refer
 to a variable occurring in the data but is only temporary (dummy) variable that
-makes your rules easier to maintain. Can however request it.
+makes your rules easier to maintain. You can however request it.
 ```{r}
 variables(v,dummy=TRUE)
 ```
@@ -249,7 +249,7 @@ origin(v)
 origin(w)[1]
 ```
 From the printed output, you may have noticed that a ```validator``` object is
-a reference object. You  as a user will probably note much of this. It only
+a reference object. You  as a user will probably not note much of this. It only
 serves us, the package authors, to control the amount of copying taking place
 when we process validator objects internally.
 
@@ -279,7 +279,7 @@ v <- validator(
 cf <- confront(v,iris)
 cf
 ```
-Here, we test whether the length and width variables are stored as numerics and if they are positive or not. Furthermore, we compare the means of two subgroups (_setosa_ and other species) and test weather the sepal length to width ratio for _setosa_ is within our expected range.
+Here, we test wether the length and width variables are stored as numerics and if they are positive or not. Furthermore, we compare the means of two subgroups (_setosa_ and other species) and test weather the sepal length to width ratio for _setosa_ is within our expected range.
 
 The ```summary``` function returns a ```data.frame``` that summarizes the results.
 Here, we'll just print the first five columns.
@@ -295,16 +295,19 @@ We van get a closer look at the results by extracting the values:
 val <- values(cf)
 class(val)
 ```
-Here ```val``` is a list, containing arrays of ```logical```s. The ```values``` function tries to simplify results by combining the results of expressions when they have the same dimension.
+Here ```val``` is a list, containing arrays of ```logical```s. The ```values``` function tries to simplify results by combining the results of expressions when they have the same dimensions.
 ```{r}
 val[[1]]
+head(val[[2]])
 ```
+Judging from the summary, there is one record that disobeys the ratio rule. We can
+select those values by subsetting the validation object ```cf```:
+```{r}
+i <- which(!values(cf['ratio']))
+iris[i,]
+```
+So record number ```r i``` does not satisfy the ratio rule. 
 
-
-
-
-#### Impact and Severity
-<a name='impactseverity'></a>
 
 ## Indicators
 

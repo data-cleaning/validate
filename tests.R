@@ -6,20 +6,34 @@ fn <- c('expressionset.R','indicator.R','validator.R',
 dmp <-lapply(file.path('pkg/R',fn),source)
 
 
-
-v <- validator(a := height,height > 0)
-cf <- confront(v,women)
-summary(cf)
-
 v <- validator(
-  G : {height; weight}
-  , G > 0
-  )
+  NUM : {Sepal.Width; Sepal.Length; Petal.Length; Petal.Width}
+  , isnum = is.numeric(NUM)
+  , ispos = NUM > 0
+  , ratio = if(Species == 'setosa') Sepal.Length/Sepal.Width < 1.7
+  , I := Species == 'setosa'
+  , means = mean(Sepal.Width[I]) > mean(Sepal.Width[!I])
+)
+
 v
-summary(confront(v,women))
+
+cf <- confront(v,iris)
+
+#
+
+un <- read.table("~/projects/rcourse/src/data/UnitedNations.txt")
+v <- validator(
+  lifeMale > 50
+  , lifeFemale > 50
+  )
+
+cf <- confront(v,un)
+barplot(cf)
 
 
-rm(list=ls(all.names = TRUE))
+
+
+
 
 
 
