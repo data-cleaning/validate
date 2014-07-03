@@ -36,7 +36,7 @@ blocks_expressionset <- function(x){
   }
   blocks <- as.list(blocks)
   # logical, indicating rule blocks.
-  lapply(vb,function(b) sapply(vl,function(v) any(v %in% b) ))
+  lapply(blocks,function(b) sapply(b,function(v) any(v %in% b) ))
 }
 
 
@@ -77,30 +77,6 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 
-#' Check for linear expressions
-#' @param x An R object 
-#' @param ... Arguments to be passed to other methods.
-#' @return A \code{logical} vector
-#'
-#' @export
-setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
-
-
-#' Extract linear coeffiecients from linear expressions
-#'
-#' @section Details: Linear expressions are expressions of the form \eqn{\boldsymbol{Ay}} or
-#' \eqn{\boldsymbol{Ay}\odot\boldsymbol{b}}, where \eqn{\odot\in\{<,\leq,=,\geq,>\}}.
-#' This function uses \code{\link{is_linear}} to find linear expressions in \code{x} and returns
-#' the corresponding coefficients and possibly the operators. 
-#'
-#' @param x An R object
-#' @param ... Arguments to be passed to other methods
-#'
-#' @return A list, containing matrix \eqn{\boldsymbol{A}}, and where possible matrix \eqn{\boldsymbol{b}} 
-#'  and a vector with comparison operators.
-#'
-#' @export 
-setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
 #' @rdname origin
 setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)

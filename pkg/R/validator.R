@@ -31,6 +31,9 @@ setRefClass("validator"
   , contains = 'expressionset'
   , methods = list(
     initialize = function(..., .files=NULL)  ini_validator(.self,...,.files=.files)
+    , is_linear = function() sapply(.self$._calls,linear)
+      # extra argument: normalize=TRUE
+    , linear_coefficients = function(...) get_linear_coefficients(.self, ...) 
   )
 )
 
@@ -50,16 +53,23 @@ ini_validator <- function(.self, ..., .files){
   .self
 }
 
-#' @rdname is_linear
-setMethod("is_linear",signature("validator"), function(x,...){
-  sapply(x$._calls, linear)
-})
 
-#' @param normalize Bring all equations in the \eqn{<} or \eqn{\leq} form. 
-#' @rdname linear_coefficients
-setMethod("linear_coefficients", signature("validator"),function(x, normalize=TRUE,...){
+# Extract linear coeffiecients from linear expressions
+#
+# @section Details: Linear expressions are expressions of the form \eqn{\boldsymbol{Ay}} or
+# \eqn{\boldsymbol{Ay}\odot\boldsymbol{b}}, where \eqn{\odot\in\{<,\leq,=,\geq,>\}}.
+# This function uses \code{\link{is_linear}} to find linear expressions in \code{x} and returns
+# the corresponding coefficients and possibly the operators. 
+#
+# @param x An R object
+# @param ... Arguments to be passed to other methods
+#
+# @return A list, containing matrix \eqn{\boldsymbol{A}}, and where possible matrix \eqn{\boldsymbol{b}} 
+#  and a vector with comparison operators.
+#
+get_linear_coefficients <- function(x, normalize=TRUE,...){
   
-  calls <- x$._calls[is_linear(x)]
+  calls <- x$._calls[x$is_linear()]
   cols <- unique(unlist(lapply(calls, var_from_call)))
   rows <- names(calls)
   
@@ -88,7 +98,7 @@ setMethod("linear_coefficients", signature("validator"),function(x, normalize=TR
   
   list(A=bA[,-1,drop=FALSE],b = -1*bA[,1,drop=FALSE],operators=operators)
   
-})
+}
 
 
 
