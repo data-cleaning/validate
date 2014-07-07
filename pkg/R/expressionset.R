@@ -8,8 +8,38 @@ setRefClass("expressionset"
       show = function() show_expressionset(.self)
     , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
     , calls = function(...) get_calls(.self,...)
+    , expand = function(...) expand_expressionset(.self,...)
+    , blocks = function() blocks_expressionset(.self)
   )
 )
+
+expand_expressionset <- function(x,...){
+  x$._calls <- x$calls(expand_assignments=TRUE,...)
+  x$._origin <- rep("expanded",length(x$._calls))
+  invisible(NULL)
+}
+
+blocks_expressionset <- function(x){
+  varlist <- lapply(x$._calls,var_from_call)
+
+  varblock <- function(v,vlist){
+    sapply(vlist, function(x) any(v %in% x))
+  }
+  # compute variable blocks
+  blocks <- new.env()
+  b <- 0
+  while(length(varlist)>=1){
+      b <- b+1
+      i <- varblock(varlist[[1]],varlist)
+      blocks[[paste0('block',b)]] <- unique(unlist(varlist[i]))
+      varlist <- varlist[!i]
+  }
+  blocks <- as.list(blocks)
+  # logical, indicating rule blocks.
+  lapply(blocks,function(b) sapply(b,function(v) any(v %in% b) ))
+}
+
+
 
 # @param expand_assignments Substitute assignments?
 # @param expand_groups Expand groups?
@@ -47,30 +77,6 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 
-#' Check for linear expressions
-#' @param x An R object 
-#' @param ... Arguments to be passed to other methods.
-#' @return A \code{logical} vector
-#'
-#' @export
-setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
-
-
-#' Extract linear coeffiecients from linear expressions
-#'
-#' @section Details: Linear expressions are expressions of the form \eqn{\boldsymbol{Ay}} or
-#' \eqn{\boldsymbol{Ay}\odot\boldsymbol{b}}, where \eqn{\odot\in\{<,\leq,=,\geq,>\}}.
-#' This function uses \code{\link{is_linear}} to find linear expressions in \code{x} and returns
-#' the corresponding coefficients and possibly the operators. 
-#'
-#' @param x An R object
-#' @param ... Arguments to be passed to other methods
-#'
-#' @return A list, containing matrix \eqn{\boldsymbol{A}}, and where possible matrix \eqn{\boldsymbol{b}} 
-#'  and a vector with comparison operators.
-#'
-#' @export 
-setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
 
 #' @rdname origin
 setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
@@ -80,13 +86,14 @@ setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
 setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,deparse))
 
 
-#' Extract names
+#' Extract or set names
 #' 
 #' @param x An R object
 #'
 #' @return A \code{character} with names of variables occurring in \code{x}
 #' @export
 setMethod("names","expressionset", function(x) names(x$._calls))
+
 
 #' Select
 #' 

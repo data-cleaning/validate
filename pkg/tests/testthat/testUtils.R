@@ -55,5 +55,9 @@ test_that('compare works',{
   expect_equivalent(unclass(compare(v,d1,d2)),a)  
 })
 
+test_that('blocks works',{
+  
+})
+
 
 

@@ -47,15 +47,18 @@ expand_group <- function(calls, group, variables){
   e <- new.env()
   L <- lapply(calls,function(call){
     if ( !has_group(call,group) ) return(list(call))
-    lapply(variables, function(x) {
-      assign(group, as.symbol(x), envir=e)
-      do.call(substitute,list(call, e))
-    })
+    setNames( lapply(variables, function(x) {
+        assign(group, as.symbol(x), envir=e)
+        do.call(substitute,list(call, e))
+      })
+      , variables
+    )
   })
-  origin <- rep(names(L),times=sapply(L,length))
-  L <- unlist(L,use.names=FALSE)
-  names(L) <- paste(origin,variables,sep=".")
-  L
+#  origin <- rep(names(L),times=sapply(L,length))
+#  L <- unlist(L,use.names=FALSE)
+  
+#  names(L) <- paste(origin,variables,sep=".")
+  unlist(L)
 }
 
 expand_groups <- function(calls, groups){
