@@ -37,16 +37,26 @@ setGeneric("confront",
 
 setClassUnion('data',c("data.frame","list","environment"))
 
+#' @rdname variables
+setMethod('variables',signature('data.frame'),function(x,...) names(x))
+
+#' @rdname variables
+setMethod('variables',signature('list'),function(x,...) names(x))
+
+#' @rdname variables
+setMethod('variables',signature('environment'),function(x,...) ls(x))
+
+
 # indicators serve a different purpose than validations.
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
 setMethod("confront",signature("indicator","data"),function(x,y,...){
-  calls <- x$calls()
+  calls <- x$calls(varlist=variables(y))
   L <- execute(calls,y)
   new('indication',
       ._call = match.call()
-      , ._calls = x$calls(expand_assignments=TRUE)
+      , ._calls = x$calls(expand_assignments=TRUE, varlist=variables(y))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
@@ -57,7 +67,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
 setMethod('summary',signature('indication'),function(object,...){
   data.frame(
     indicator = names(object$._value)
-    , confrontations = sapply(object$._value,length)
+    , items = sapply(object$._value,length)
     , class = get_stat(object,class)
     , min = get_stat(object,min,na.rm=TRUE)
     , mean  = get_stat(object,mean,na.rm=TRUE)
@@ -65,7 +75,7 @@ setMethod('summary',signature('indication'),function(object,...){
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$._calls,call2text)
+    , expression = sapply(object$._calls,call2text)
     , row.names=NULL
     , stringsAsFactors=FALSE
   )  
@@ -88,11 +98,11 @@ setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
 setMethod("confront", signature("validator","data"), function(x, y,  ...){
-  calls <- x$calls()
+  calls <- x$calls(varlist=variables(y))
   L <- execute(calls,y)
   new('validation',
       ._call = match.call()
-      , ._calls = x$calls(expand_assignments=TRUE)
+      , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(y))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
@@ -141,14 +151,14 @@ setGeneric('summary')
 #' @rdname confront
 setMethod('summary',signature('validation'),function(object,...){
   data.frame(
-    validator = names(object$._value)
-    , confrontations = sapply(object$._value,length)
+    rule = names(object$._value)
+    , items = sapply(object$._value,length)
     , passes = passes(object)
     , fails  = fails(object)
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$._calls,  call2text)
+    , expression = sapply(object$._calls,  call2text)
     , row.names=NULL
   )  
 })

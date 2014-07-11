@@ -7,7 +7,7 @@ setRefClass("expressionset"
   , methods= list(
       show = function() show_expressionset(.self)
     , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
-    , calls = function(...) get_calls(.self,...)
+    , calls = function(varlist=NULL,...) get_calls(.self,varlist=varlist,...)
     , expand = function(...) expand_expressionset(.self,...)
     , blocks = function() blocks_expressionset(.self)
   )
@@ -43,15 +43,17 @@ blocks_expressionset <- function(x){
 
 # @param expand_assignments Substitute assignments?
 # @param expand_groups Expand groups?
+# @param varlist: a character vector of variables to search through 
+#    when groups are defined with regexps.
 # @param vectorize Vectorize if-statements?
 # @param replace_dollar Replace dollar with bracket index?
 # @rdname calls
 #
 get_calls <- function(x, ..., expand_assignments=FALSE
-    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE, varlist=NULL ){
   calls <- x$._calls
   if ( expand_assignments )  calls <- expand_assignments(calls)
-  if ( expand_groups ) calls <- expand_groups(calls)
+  if ( expand_groups ) calls <- expand_groups(calls, varlist=varlist)
   if ( vectorize ) calls <- lapply(calls, vectorize)
   if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
   calls

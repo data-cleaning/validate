@@ -6,6 +6,23 @@ fn <- c('expressionset.R','indicator.R','validator.R',
 dmp <-lapply(file.path('pkg/R',fn),source)
 
 
+z <- validator(G : {aap;'x'},G>10)
+
+
+
+z <- validator(2*x + 1 +  y -2 > 4 + z - 8)
+
+z$linear_coefficients(normalize=TRUE)
+
+v <- validator(
+  INCOME : {total.rev;turnover}
+  ,COSTS  : {staff.costs; total.costs}
+  ,INCOME > COSTS
+)
+
+
+
+
 v <- validator(
   NUM : {Sepal.Width; Sepal.Length; Petal.Length; Petal.Width}
   , isnum = is.numeric(NUM)
