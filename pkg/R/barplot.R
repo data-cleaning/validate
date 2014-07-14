@@ -22,7 +22,7 @@ setGeneric("barplot")
 #' 
 #' @return A list, containing the bar locations as in \code{\link[graphics]{barplot}}
 #' @export  
-setMethod('barplot',signature('confrontation'), 
+setMethod('barplot',signature('validation'), 
   function(height, ..., order_by = c("fails","passes","nNA")
            , stack_by = c("fails","passes","nNA")
            , topn=Inf, add_legend=TRUE, add_calls=TRUE
