@@ -1,20 +1,81 @@
 ## Helper functions, invisible to users.
 
-# reference class for storing syntax options
 
-syntax <- setRefClass('syntax',
+#' Set or get options for the validation package.
+#' 
+#' @param ... Name of an option (character) to retrieve options or a \code{option = value} pair to set an option. Use 
+#' \code{"reset"} to reset the default options.
+#' 
+#' @section Options for the validate package:
+#' Currently the following options are supported.
+#' 
+#' \itemize{
+#'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
+#'  The 'all' setting is useful when debugging validation scripts.}
+#'  \item{validation_symbols (language; see examples)} Control what statements are allowed as validation statements.
+#' }
+#' 
+#' @examples
+#' # the default allowed validation symbols.
+#' validate_options('reset')
+#' validate_options('validation_symbols')
+#' 
+#' @export 
+validate_options <- function(...){
+  L <- list(...)
+  if (length(L) == 1 && L[[1]] == 'reset'){
+    VOPTION$reset()
+    invisible(NULL)
+  }
+  for ( nm in names(L) )
+    VOPTION$set(nm,L[[nm]])
+  if ( is.null(nm) ){
+    if (length(L) == 0) L = c('raise','validation_symbols') # no arguments given
+    setNames(lapply(L,VOPTION$get),L)
+  }
+}
+
+
+
+# class holding options
+voption <- setRefClass('voption',
   fields = list(
-    validationsymbols = 'character'
+    validation_symbols = 'character'
+    , raise = 'character'
   )
+  , methods=list(
+    check = function(field){
+      if (!field %in% ls(.self)) 
+        stop(sprintf('%s is not a valid "voption" field\n',field))      
+      
+    }
+    , set = function(field,value){
+      check(field)
+      if ( field == 'raise' ) 
+        stopifnot( value %in% c('all','none','errors'))
+      .self[[field]] <- value
+    }
+    , get = function(field){
+      check(field)
+      .self[[field]]
+    }
+    , reset = function(){
+      # top symbols allowed for validation statements
+      .self$validation_symbols = c(
+        '<','<=','==','>','>=', '!=', '%in%', ":"
+        , 'identical', 'all','any', ':=' 
+        , '!', '|', '||', '&', '&&', 'xor'
+      )
+      # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
+      .self$raise = 'none'
+    }
+  )                  
 )
 
-SYNTAX <- syntax(
-  validationsymbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', ":"
-    , 'identical', 'all','any', ':=' 
-    , '!', '|', '||', '&', '&&', 'xor'
-  )
-)
+# Create global (hidden for user) option variable
+VOPTION <- voption()
+VOPTION$reset()
+
 
 
 read_resfile <- function(file){
@@ -62,7 +123,7 @@ replace_dollar <- function(x){
 
 validating <- function(x,...){
   sym <- deparse(x[[1]])
-  sym %in% SYNTAX$validationsymbols || 
+  sym %in% VOPTION$get("validation_symbols") || 
     grepl("^is\\.",sym) || 
     ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
 }

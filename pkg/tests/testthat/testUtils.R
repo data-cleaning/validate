@@ -1,6 +1,17 @@
 
 context("Utilities")
 
+test_that('Options can be set',{
+  # error on nonexistent option 
+  expect_error(validate_options(fiets=3))
+  # invalid 'raise' value
+  expect_error(validate_options(raise='aap'))
+  # this should run without problems
+  validate_options('reset')
+  expect_equal(validate_options('raise')[[1]],'none')
+})
+
+
 test_that("match_data",{
   d1 <- data.frame(id=paste(1:3),x=1:3,y=4:6)
   d2 <- data.frame(id=paste(4:1),y=4:7,x=1:4)

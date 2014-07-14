@@ -9,6 +9,22 @@ test_that("validation syntax is recognized",{
   expect_warning( validator(G:{fiets; 'aap'})$calls() )
 })
 
+test_that('Exception handling can be switched',{
+  
+  validate_options(raise='none')
+  expect_equal(factory(function()stop('aap'))()$err, 'aap')
+  expect_equal(factory(function()warning('aap'))()$warn, 'aap')
+  
+  validate_options(raise='errors')
+  expect_error(factory(function() stop())())
+  
+  validate_options(raise = 'all')
+  expect_error(factory(function() stop())())
+  expect_warning(factory(function() warning())())
+  
+  validate_options('reset')
+})
+
 
 test_that('Missings are counted correctly',{
   d1 <- data.frame(x=1:3,y=4:6) 
