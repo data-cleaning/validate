@@ -1,7 +1,6 @@
 
 context("Validation outcomes")
 
-
 test_that('keys are copied to rownames',{
   w <- women
   w$code <- letters[1:15]

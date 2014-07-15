@@ -21,22 +21,25 @@ expand_expressionset <- function(x,...){
 
 blocks_expressionset <- function(x){
   varlist <- lapply(x$._calls,var_from_call)
-
+  
   varblock <- function(v,vlist){
     sapply(vlist, function(x) any(v %in% x))
   }
+  
   # compute variable blocks
   blocks <- new.env()
   b <- 0
-  while(length(varlist)>=1){
-      b <- b+1
-      i <- varblock(varlist[[1]],varlist)
-      blocks[[paste0('block',b)]] <- unique(unlist(varlist[i]))
-      varlist <- varlist[!i]
+  V <- varlist
+  while( length(V) >= 1 ){
+    b <- b+1
+    i <- varblock(V[[1]],V)
+    blocks[[paste0('block',b)]] <- unique(unlist(V[i]))
+    V <- V[!i]
   }
   blocks <- as.list(blocks)
+  
   # logical, indicating rule blocks.
-  lapply(blocks,function(b) sapply(b,function(v) any(v %in% b) ))
+  lapply(blocks,function(b) sapply(varlist,function(v) any(v %in% b) ))
 }
 
 
