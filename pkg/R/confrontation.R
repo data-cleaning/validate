@@ -56,7 +56,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,key=NULL,...){
   L <- execute(calls,y)
   if (!is.null(key)) L <- add_names(L,x,y,key)
   new('indication',
-      ._call = match.call()
+      ._call = match.call(call=sys.call(sys.parent()))
       , ._calls = x$calls(expand_assignments=TRUE, varlist=variables(y))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
@@ -86,7 +86,7 @@ setMethod('summary',signature('indication'),function(object,...){
 #' @export 
 setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
   new(class(x)
-      , ._call = match.call()
+      , ._call = match.call(call=sys.call(sys.parent()))
       , ._calls = x$._calls[i]
       , ._value = x$._value[i]
       , ._warn = x$._warn[i]
@@ -104,7 +104,7 @@ setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ..
   L <- execute(calls,y)
   if (!is.null(key)) L <- add_names(L,x,y,key)
   new('validation',
-      ._call = match.call()
+      ._call = match.call(call=sys.call(sys.parent()))
       , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(y))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
