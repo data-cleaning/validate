@@ -72,6 +72,10 @@ get_calls <- function(x, ..., expand_assignments=FALSE
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
+#' @export 
+setGeneric('summary')
+
+
 #' Find out where expressions were defined
 #'
 #' @param x and R object
@@ -80,7 +84,6 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 #' 
 #' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
-
 
 
 #' @rdname origin
@@ -137,6 +140,20 @@ setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, d
     }
   }
 )
+
+#' @rdname variables
+#' @param object An object inheriting from \code{expressionset}
+setMethod('summary',signature('expressionset'),function(object,...){
+  b <- object$blocks()
+  data.frame(
+    block = seq_along(b)
+    , nvar  = sapply(b,function(i) length(variables(object[i])))
+    , rules = sapply(b,sum)
+    , linear = sapply(b,function(i) sum(object[i]$is_linear()))
+    , row.names=NULL
+  )
+})
+
 
 # Internal methods ----
 

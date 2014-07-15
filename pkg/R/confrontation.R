@@ -157,8 +157,6 @@ nas <- function(x){
   })
 }
 
-#' @export 
-setGeneric('summary')
 
 #' @rdname confront
 setMethod('summary',signature('validation'),function(object,...){
