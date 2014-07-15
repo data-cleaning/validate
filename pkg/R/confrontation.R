@@ -51,9 +51,10 @@ setMethod('variables',signature('environment'),function(x,...) ls(x))
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront",signature("indicator","data"),function(x,y,...){
+setMethod("confront",signature("indicator","data"),function(x,y,key=NULL,...){
   calls <- x$calls(varlist=variables(y))
   L <- execute(calls,y)
+  if (!is.null(key)) L <- add_names(L,x,y,key)
   new('indication',
       ._call = match.call()
       , ._calls = x$calls(expand_assignments=TRUE, varlist=variables(y))
@@ -97,9 +98,11 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront", signature("validator","data"), function(x, y,  ...){
+#' @param key (optional) name of identifying variable in x.
+setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ...){
   calls <- x$calls(varlist=variables(y))
   L <- execute(calls,y)
+  if (!is.null(key)) L <- add_names(L,x,y,key)
   new('validation',
       ._call = match.call()
       , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(y))
@@ -108,6 +111,15 @@ setMethod("confront", signature("validator","data"), function(x, y,  ...){
       , ._error = lapply(L,"[[",3)     
   )
 })
+
+add_names <- function(L,x,y,key){
+  nkey <- length(y[[key]])
+  L <- lapply(L,function(v){ 
+    if ( length(v[[1]]) == nkey ) 
+      v[[1]] <- setNames(v[[1]],y[[key]])   
+    v
+  })
+}  
 
 # execute calls. 
 # - Assignments are stored in a separate environment and forgotten afterwards.
@@ -182,20 +194,31 @@ setMethod('values',signature('confrontation'),function(x,...){
 #' @param simplify Combine results with similar dimension structure into arrays?
 #' @param drop if a single vector or array results, drop 'list' attribute?
 setMethod('values',signature('validation'),function(x,simplify=TRUE,drop=TRUE,...){
+  int_values(x,simplify,drop,...)
+})
+
+#' @rdname values
+setMethod('values',signature('indication'),function(x,simplify=TRUE,drop=TRUE,...){
+  int_values(x,simplify,drop,...)
+})
+
+
+
+int_values <- function(x,simplify,drop,...){
   out <- if ( simplify ){
     simplify_list(x$._value[!has_error(x)])
   } else {
     getMethod(values,signature='confrontation')(x,...)
   }
   if (drop && length(out) == 1) out[[1]] else out
-})
+}
 
 
 simplify_list <- function(L){
   len <- sapply(L,num_result)
   lapply(unique(len), function(l){
     m <- sapply(L[len==l], get_result)
-    if (l == 1)
+    if ( l == 1 )
       m <- matrix(m,nrow=1,dimnames=list(NULL,names(m)))
     m
   })
