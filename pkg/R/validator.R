@@ -18,14 +18,6 @@ NULL
 #' A \emph{validating expression} is an expression whose evaluation results in \code{TRUE}, \code{FALSE}
 #' or \code{NA}. 
 #' 
-#' @section File parsing:
-#' Files containing rules may include other files by adding one or more \code{# @@validate include <filename>} 
-#' statements.Such a statement may not span more than a single line and one include statement may contain only a single file. 
-#' Files are sought in R's current working directory unless the full path is given. Files that are included may include 
-#' other files as well. Include statements determine the order in which files are parsed: if file A includes file B then 
-#' file B is parsed before file A. If file A includes files B and C in that order, then first file B, then file C and 
-#' finally file A is parsed. Although it will not matter for the result, for readability reasons it is advisable to 
-#' write include statemens at the top of validation files.
 #'  
 #'
 #' @seealso \code{\link{syntax}}, \code{\link{confront}}

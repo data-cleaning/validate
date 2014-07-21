@@ -6,42 +6,55 @@
 #' @name syntax
 #' 
 #'
-#' @section Local assignment:
+#' @section Local, transient assignment:
 #' The operator `\code{:=}' can be used to set up local variables (during, for example, validation) to save
 #' time (the rhs of an assignment is computed only once) or to make your validation code more maintainable. 
 #' Assignments work more or less like common R assignments: they are only valid for statements coming after 
 #' the assignment and they may be overwritten. The result of computing the rhs is not part of a 
 #' \code{\link{confront}}ation with data.
-#' 
-#' @section Predefined indicators:
-#' 
-#' \itemize{
-#'    \item \code{number_missing}
-#'    \item \code{fraction_missing}
-#' }
+#'   
 #'   
 #' @section Groups:
 #' Often the same constraints/rules are valid for groups of variables. 
 #' \code{validate} allows for compact notation. First define a group and than use
 #' that group in a validator statement. 
-#' \code{
-#'   validator( g:{a;b}
-#'            , g > 0
-#'            )
+#' 
+#' \code{validator( g:{a;b}, g > 0 )}
+#' 
+#' Using two groups results in the cartesian product of checks. So the statement
+#'
+#' \code{validator( f:{e;d}, g:{a;b}, g > f)}
+#' 
+#' equals 
+#' 
+#' \code{validator(a > e, a > d, b > e, b > d)}
+#' 
+#' @section File parsing:
+#' Files read via the \code{.files} argument can include other files by adding one or more statements of the form
+#'
+#' \code{# @@validate include <filename>} 
+#' 
+#' Such a statement may not span more than a single line 
+#' and one include statement may contain only a single file. Files are sought in R's current working directory 
+#' unless the full path is given. Files that are included may include other files as well. Include statements 
+#' determine the order in which files are parsed: if file A includes file B then 
+#' file B is parsed before file A. If file A includes files B and C in that order, then first file B, then file C and 
+#' finally file A is parsed. Although it will not matter for the result, for readability reasons it is advisable to 
+#' write include statemens at the top of validation files.
+#' 
+#' @section Global, permanent assignment (files only):
+#' When reading rules from file there are a few statements that are executed immediately. These are statements who are
+#' either 
+#' \itemize{
+#'  \item{An assignment with \code{<-}}
+#'  \item{A \code{source} statement.}
+#'  \item{A \code{library} statement.}
 #' }
-#' 
-#' Using two groups results in the cartesian product of checks.
-#' \code{
-#'   validator( f:{e;d}
-#'            , g:{a;b}
-#'            , g > f    # equals {a>e, a>d, b>e, b>d}
-#'            )
-#' }
-#' 
-#' 
-#' 
-#' 
-#' 
+#' Rather then executing the rhs of \code{:=} at each confrontation with data, the
+#' \code{<-} operator causes the rhs to be evaluated immediately on read. The assigned variable (lhs) 
+#' is substituted in all rules. This may be useful for example when you want to read a classification from
+#' file. The \code{source} statement allows one to include user-written functions and the \code{library} statement
+#' allows for including R packages needed in to execute validation (or indication) rules.
 NULL
 
 # NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
