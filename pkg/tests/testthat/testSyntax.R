@@ -9,6 +9,7 @@ test_that("validation syntax is recognized",{
   expect_warning( validator(G:{fiets; 'aap'})$calls() )
 })
 
+
 test_that('Exception handling can be switched',{
   
   validate_options(raise='none')
