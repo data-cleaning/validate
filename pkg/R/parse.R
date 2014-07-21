@@ -69,7 +69,7 @@ voption <- setRefClass('voption',
       )
       # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
       .self$raise = 'none'
-      .self$preproc_symbols = c('<-','source','library')
+      .self$preproc_symbols = c('<-','library')
     }
   )                  
 )
@@ -112,7 +112,6 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 
 
 # replace occurences x$y --> x[,'y']
-
 replace_dollar <- function(x){
   L <- which.call(x,'$')
   for ( I in L ){

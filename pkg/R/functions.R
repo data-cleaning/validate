@@ -47,14 +47,13 @@
 #' either 
 #' \itemize{
 #'  \item{An assignment with \code{<-}}
-#'  \item{A \code{source} statement.}
 #'  \item{A \code{library} statement.}
 #' }
 #' Rather then executing the rhs of \code{:=} at each confrontation with data, the
 #' \code{<-} operator causes the rhs to be evaluated immediately on read. The assigned variable (lhs) 
 #' is substituted in all rules. This may be useful for example when you want to read a classification from
-#' file. The \code{source} statement allows one to include user-written functions and the \code{library} statement
-#' allows for including R packages needed in to execute validation (or indication) rules.
+#' file. The \code{library} statement allows for including R packages needed in to execute validation 
+#' (or indication) rules.
 NULL
 
 # NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
