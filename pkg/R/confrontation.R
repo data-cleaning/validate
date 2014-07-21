@@ -1,5 +1,5 @@
-#' @include indicator.R
 #' @include validator.R
+#' @include indicator.R
 NULL
 
 # superclass for storing results of a verification activity
@@ -127,10 +127,14 @@ add_names <- function(L,x,y,key){
 execute <- function(calls,env){
   w = new.env()
   lapply(calls, function(g) 
-    if ( g[[1]] == ":=" ) 
+    if ( g[[1]] == ":=" ){ 
+      var <- as.character(left(g))
+      if ( var %in% variables(env) ) 
+        warning(sprintf("Locally overwriting variable '%s'",var))
       w[[as.character(left(g))]] <- tryCatch( eval(right(g), env), error=warning)
-    else 
+    } else { 
       factory(eval)(g, env, w)
+    }
   )[!is.assignment(calls)]
 }
 
