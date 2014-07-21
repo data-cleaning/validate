@@ -14,7 +14,7 @@ setGeneric("barplot")
 #' @param colors Bar colors for validations yielding NA or a violation
 #' @param topn If specified, plot only the top n most violated calls
 #' @param order_by (single \code{character}) order bars decreasingly from top to bottom by the 
-#'      number of fails, passes of NA's.
+#'      number of fails, passes or \code{NA}'s.
 #' @param stack_by (3-vector of \code{characters}) Stacking order for bar chart (left to right)
 #'
 #' @section Credits:

@@ -171,11 +171,14 @@ ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   L <- as.list(substitute(list(...))[-1])
   
   if ( !is.null(.files) && is.character(.files) ){
+    # process include statements.
+    filestack <- unlist(lapply(.files,get_filestack)) 
     L <- list()
     ifile <- character(0)
-    for ( f in .files ){ 
-      L <- c(L,read_resfile(f))
-      ifile <- c(ifile,rep(f,length(L)))
+    for ( f in filestack ){ 
+      L1 <- read_resfile(f)
+      ifile <- c(ifile,rep(f,length(L1)))
+      L <- c(L,L1)
     }
   } else if (length(L)==0){
     return(.self)
@@ -189,12 +192,34 @@ ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   .self
 }
 
+# Get sequence of files to be processed from include statements.
+get_filestack <- function(file){
+  # Detecting include statements.
+  tag <- "#[[:blank:]]+@validate[[:blank:]]+include[[:blank:]]+"
+  
+  f <- function(fl, det=character(0)){
+    det <- c(fl,det)
+    if ( fl %in% det[-1])
+      stop(sprintf("Cyclic dependency detected in %s\n%s\n",fl,paste(rev(det),collapse=" -> ")))
+    r <- readLines(fl)
+    L <- grep(tag,r,value=TRUE)
+    if ( length(L) > 0)
+      L <- gsub(paste0(tag,"|[[:blank:]]*$"),"",L) # also remove trailing blanks.
+    for ( x in L )
+      f(x,det)
+    filestack <<- c(filestack,fl)
+  }
+  filestack <- character(0)
+  f(file)
+  filestack
+}
+
 
 # get names from a list, replacing empty names values with numbers
 extract_names <- function(L,prefix="V"){
   npos <- max(1,ceiling(log10(length(L)+1)))
   fmt <- paste0("%s%0",npos,"d")
-  generic <- sprintf(fmt,prefix,1:length(L))
+  generic <- sprintf(fmt,prefix,seq_along(L))
   given <- names(L)
   if (is.null(given)) return(generic)
   igen <- given == ""
