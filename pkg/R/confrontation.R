@@ -127,7 +127,7 @@ add_names <- function(L,x,y,key){
 execute <- function(calls,env){
   w = new.env()
   lapply(calls, function(g) 
-    if (g[[1]] == c(":=")) 
+    if ( g[[1]] == ":=" ) 
       w[[as.character(left(g))]] <- tryCatch( eval(right(g), env), error=warning)
     else 
       factory(eval)(g, env, w)

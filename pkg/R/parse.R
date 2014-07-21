@@ -41,6 +41,7 @@ validate_options <- function(...){
 voption <- setRefClass('voption',
   fields = list(
     validation_symbols = 'character'
+    , preproc_symbols = 'character'
     , raise = 'character'
   )
   , methods=list(
@@ -68,6 +69,7 @@ voption <- setRefClass('voption',
       )
       # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
       .self$raise = 'none'
+      .self$preproc_symbols = c('<-','source','library')
     }
   )                  
 )
@@ -84,8 +86,12 @@ read_resfile <- function(file){
         cat('Parsing failure at', file,"\n")
         e
   })
-  names(L) <- extract_names(L)
-  lapply(L,as.call)
+  # preprocessing execute some statements directly:
+  I <- sapply(L,function(x) deparse(x[[1]]) %in% VOPTION$get('preproc_symbols'))
+  e <- new.env()
+  lapply(L[I],eval,envir=e)
+  L <- lapply(L[!I], function(x) do.call(substitute, list(x, env=e)))
+  setNames(L,extract_names(L))
 }
 
 
