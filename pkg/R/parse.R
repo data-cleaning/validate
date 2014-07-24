@@ -1,9 +1,8 @@
 #' @import methods
+NULL
 
-## Helper functions, invisible to users.
 
-
-#' Set or get options for the validation package.
+#' Set or get options globally or per object.
 #' 
 #' @param where (optional) an object inheriting from \code{expressionset}, like \code{\link{validator}} or \code{\link{indicator}}.
 #' @param ... Name of an option (character) to retrieve options or \code{option = value} pairs to set options. Use 
@@ -30,9 +29,9 @@
 #' 
 #' # set an option, local to a validator object:
 #' v <- validator(x + y > z)
-#' validate_option(raise='all', where=v)
+#' validate_options(raise='all', where=v)
 #' # check that local option was set:
-#' validate_option('raise',where=v)
+#' validate_options('raise',where=v)
 #' # check that global options have not changed:
 #' validate_options('raise')
 #' 
@@ -40,7 +39,7 @@
 validate_options <- function(...,where=NULL){
   stopifnot( is.null(where) || inherits(where, 'expressionset') )
   if ( !is.null(where) ){ 
-    v$options(...)
+    where$options(...)
   } else {
     v_option(VOPTION,...)
   }  
