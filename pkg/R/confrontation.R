@@ -29,7 +29,7 @@ setRefClass("confrontation"
 #'
 #' @param x An R object carrying verifications
 #' @param y An R object carrying data
-#' @param ... Arguments to be passed to other methods
+#' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
 #' @export 
 setGeneric("confront",
   def = function(x, y, ...) standardGeneric("confront")
@@ -53,7 +53,8 @@ setRefClass("indication", contains = "confrontation")
 #' @rdname confront
 setMethod("confront", signature("indicator","data"), function(x,y,key=NULL,...){
   calls <- x$calls(varlist=variables(y))
-  L <- execute(calls,y)
+  opts <- x$options(...,copy=TRUE)
+  L <- execute(calls,y,opts)
   if (!is.null(key)) L <- add_names(L,x,y,key)
   new('indication',
       ._call = match.call(call=sys.call(sys.parent()))
@@ -101,7 +102,8 @@ setRefClass("validation", contains = "confrontation")
 #' @param key (optional) name of identifying variable in x.
 setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ...){
   calls <- x$calls(varlist=variables(y))
-  L <- execute(calls,y)
+  opts <-x$options(...,copy=TRUE)
+  L <- execute(calls,y,opts)
   if (!is.null(key)) L <- add_names(L,x,y,key)
   new('validation',
       ._call = match.call(call=sys.call(sys.parent()))
@@ -124,13 +126,13 @@ add_names <- function(L,x,y,key){
 # execute calls. 
 # - Assignments are stored in a separate environment and forgotten afterwards.
 # - Failed assignments yield a warning.
-execute <- function(calls,env){
+execute <- function(calls,env,opts){
   w = new.env()
   lapply(calls, function(g) 
     if ( g[[1]] == ":=" ) 
       w[[as.character(left(g))]] <- tryCatch( eval(right(g), env), error=warning)
     else 
-      factory(eval)(g, env, w)
+      factory(eval,opts)(g, env, w)
   )[!is.assignment(calls)]
 }
 

@@ -1,17 +1,27 @@
-#' @import methods
+#' @include parse.R
 NULL
 
 # Superclass for storing verification rules.
 setRefClass("expressionset"
-  , fields = list(._calls = 'list', ._origin= 'character')
+  , fields = list(._calls = 'list', ._origin= 'character',._options='voption')
   , methods= list(
       show = function() show_expressionset(.self)
     , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
     , calls = function(varlist=NULL,...) get_calls(.self,varlist=varlist,...)
     , expand = function(...) expand_expressionset(.self,...)
     , blocks = function() blocks_expressionset(.self)
+    , options = function(...,copy=FALSE) es_option(.self,...,copy=copy) 
   )
 )
+
+es_option <- function(x,...,copy){
+  L <- list(...)
+  setmode <- !is.null(names(L))
+  # prevent that global settings are overwritten.
+  if ( setmode & !copy ) x$._options <- x$._options$copy()
+  do.call(v_option,c(list(x=x$._options),L,copy=copy))
+}
+
 
 expand_expressionset <- function(x,...){
   x$._calls <- x$calls(expand_assignments=TRUE,...)
@@ -169,7 +179,7 @@ setMethod("is_vargroup",signature("expressionset"),function(x,...){
 
 ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   L <- as.list(substitute(list(...))[-1])
-  
+  .self$._options <- VOPTION
   if ( !is.null(.files) && is.character(.files) ){
     # process include statements.
     filestack <- unlist(lapply(.files,get_filestack)) 
@@ -189,6 +199,7 @@ ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   names(ifile) <- names(L)
   .self$._calls <- L
   .self$._origin <- ifile
+  
   .self
 }
 

@@ -1,8 +1,8 @@
 # Martin Morgan's factory; taken from SO. Adapted to make error/warning catching switchable
 # Collects results, warnings and errors.
 # http://stackoverflow.com/questions/4948361/how-do-i-save-warnings-and-errors-as-output-from-a-function
-factory <- function(fun){
-  switch(VOPTION$get('raise')
+factory <- function(fun,opts){
+  switch(opts$getf('raise')
     , 'none' = function(...) { # both errors and warnings are caught
       warn <- err <- NULL
       res <- withCallingHandlers(

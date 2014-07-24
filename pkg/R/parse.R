@@ -1,9 +1,12 @@
+#' @import methods
+
 ## Helper functions, invisible to users.
 
 
 #' Set or get options for the validation package.
 #' 
-#' @param ... Name of an option (character) to retrieve options or a \code{option = value} pair to set an option. Use 
+#' @param where (optional) an object inheriting from \code{expressionset}, like \code{\link{validator}} or \code{\link{indicator}}.
+#' @param ... Name of an option (character) to retrieve options or \code{option = value} pairs to set options. Use 
 #' \code{"reset"} to reset the default options.
 #' 
 #' @section Options for the validate package:
@@ -13,28 +16,79 @@
 #'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
 #'  The 'all' setting is useful when debugging validation scripts.}
 #'  \item{validation_symbols (language; see examples)} Control what statements are allowed as validation statements.
+#'  \item{'reset'} Reset to factory settings.
 #' }
+#' 
+#' @section Details:
+#' If a value for \code{where} is provided, options are set only in that specific object. Otherwise options are set globally.
+#' 
 #' 
 #' @examples
 #' # the default allowed validation symbols.
 #' validate_options('reset')
 #' validate_options('validation_symbols')
 #' 
+#' # set an option, local to a validator object:
+#' v <- validator(x + y > z)
+#' validate_option(raise='all', where=v)
+#' # check that local option was set:
+#' validate_option('raise',where=v)
+#' # check that global options have not changed:
+#' validate_options('raise')
+#' 
 #' @export 
-validate_options <- function(...){
-  L <- list(...)
-  if (length(L) == 1 && L[[1]] == 'reset'){
-    VOPTION$reset()
-    invisible(NULL)
-  }
-  for ( nm in names(L) )
-    VOPTION$set(nm,L[[nm]])
-  if ( is.null(nm) ){
-    if (length(L) == 0) L = c('raise','validation_symbols') # no arguments given
-    setNames(lapply(L,VOPTION$get),L)
-  }
+validate_options <- function(...,where=NULL){
+  stopifnot( is.null(where) || inherits(where, 'expressionset') )
+  if ( !is.null(where) ){ 
+    v$options(...)
+  } else {
+    v_option(VOPTION,...)
+  }  
 }
 
+
+# x a 'voption' object
+# ... name=value pairs for options or just a name
+# copy create a copy of x and return?
+# @return If ... is a name, a single-item list with the option.
+#         If ... is name=value pairs, either x, or an altered copy of it, silently.
+v_option <- function(x,...,copy=FALSE){
+  L <- list(...)
+  
+  # how may arguments?
+  nargs <- length(L)
+  # are we getting (T) or setting (F) options?
+  getmod <- is.null(names(L))
+  setmod <- !getmod
+  
+  if ( nargs == 0 &&  copy ) return(x$copy())
+  if ( nargs == 0 && !copy ) return(as.list(x))
+
+  if ( nargs == 1 && L[[1]] == 'reset' && !copy ){
+    x$reset()
+    return(invisible(as.list(x)))
+  }
+  
+  if ( nargs > 0 && getmod && copy ){
+    stop('Copy not possible when requesting a single field')
+  }
+  
+  if ( nargs > 0 && getmod && !copy){
+    # return a list of requested options.
+    return( setNames( lapply(L, function(field) x$getf(field)), L ))
+  }
+  
+  if ( nargs > 0 && setmod && copy){
+    opt <- x$copy()    
+    for ( nm in names(L) ) opt$setf(nm,L[[nm]])
+    return(opt)
+  }
+  
+  if ( nargs > 0 && setmod && !copy){
+    for ( nm in names(L) ) x$setf(nm,L[[nm]])
+    return(invisible(as.list(x)))
+  }
+}
 
 
 # class holding options
@@ -50,13 +104,13 @@ voption <- setRefClass('voption',
         stop(sprintf('%s is not a valid "voption" field\n',field))      
       
     }
-    , set = function(field,value){
+    , setf = function(field,value){
       check(field)
       if ( field == 'raise' ) 
         stopifnot( value %in% c('all','none','errors'))
       .self[[field]] <- value
     }
-    , get = function(field){
+    , getf = function(field){
       check(field)
       .self[[field]]
     }
@@ -74,6 +128,21 @@ voption <- setRefClass('voption',
   )                  
 )
 
+setGeneric('as.list')
+setMethod('as.list',signature('voption'),function(x,...){
+  fnames <- c('raise','validation_symbols','preproc_symbols')
+  setNames(lapply(fnames,function(i) x$getf(i)),fnames)
+})
+
+
+# copy option object and alter with named arguments in ...
+copy_and_set <- function(x,...){
+  L <- list()
+  y <- x$copy()
+  for ( nm in names(L) ) y$setf(nm,L[[nm]])
+  y
+}
+
 # Create global (hidden for user) option variable
 VOPTION <- voption()
 VOPTION$reset()
@@ -87,7 +156,7 @@ read_resfile <- function(file){
         e
   })
   # preprocessing execute some statements directly:
-  I <- sapply(L,function(x) deparse(x[[1]]) %in% VOPTION$get('preproc_symbols'))
+  I <- sapply(L,function(x) deparse(x[[1]]) %in% VOPTION$getf('preproc_symbols'))
   e <- new.env()
   lapply(L[I],eval,envir=e)
   L <- lapply(L[!I], function(x) do.call(substitute, list(x, env=e)))
@@ -128,7 +197,7 @@ replace_dollar <- function(x){
 
 validating <- function(x,...){
   sym <- deparse(x[[1]])
-  sym %in% VOPTION$get("validation_symbols") || 
+  sym %in% VOPTION$getf("validation_symbols") || 
     grepl("^is\\.",sym) || 
     ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
 }
