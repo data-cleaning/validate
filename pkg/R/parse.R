@@ -29,6 +29,10 @@ NULL
 #' to define options to be used during the current function call}
 #' }
 #' 
+#' To set options in a file, use \code{validate_options(option1=value1,option2=value2,...)} without the \code{where}
+#' argument. This will invoke a local setting in the \code{\link{validator}} or \code{\link{indicator}} object when
+#' the file is read.
+#' 
 #' @return When requesting option settings: a \code{list}. When setting options, the whole options 
 #' list is returned silently.
 #' 
