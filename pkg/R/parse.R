@@ -19,7 +19,17 @@ NULL
 #' }
 #' 
 #' @section Details:
-#' If a value for \code{where} is provided, options are set only in that specific object. Otherwise options are set globally.
+#' There are three ways in which options can be specified.
+#' \itemize{
+#' \item{Globally. Setting \code{validate_options(option1=value1,option2=value2,...)} causes all relevant commands 
+#' (e.g. \code{\link{confront}}, \code{\link{validator}}) to use the new options from then on.}
+#' \item{Per object. Setting \code{validate_options(option1=value1,...,where=<object>)}, causes all relevant functions
+#' that use that object (e.g. \code{\link{confront}}) to use those local settings.}
+#' \item{At execution time. Relevant functions (e.g. \code{\link{confront}}) take optional arguments allowing one
+#' to define options to be used during the current function call}
+#' }
+#' 
+#' 
 #' 
 #' 
 #' @examples
