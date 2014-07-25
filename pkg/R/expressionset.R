@@ -100,7 +100,8 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
 
 #' Convert an expressionset to character
-#' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} or \code{\link{indicator}}.
+#' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} 
+#' or \code{\link{indicator}}.
 setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,deparse))
 
 
@@ -186,7 +187,7 @@ ini_expressionset <- function(.self, ..., .files, .prefix="V"){
     L <- list()
     ifile <- character(0)
     for ( f in filestack ){ 
-      L1 <- read_resfile(f)
+      L1 <- read_resfile(f, .self)
       ifile <- c(ifile,rep(f,length(L1)))
       L <- c(L,L1)
     }

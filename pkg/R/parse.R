@@ -29,7 +29,8 @@ NULL
 #' to define options to be used during the current function call}
 #' }
 #' 
-#' 
+#' @return When requesting option settings: a \code{list}. When setting options, the whole options 
+#' list is returned silently.
 #' 
 #' 
 #' @examples
@@ -157,15 +158,25 @@ VOPTION <- voption()
 VOPTION$reset()
 
 
-
-read_resfile <- function(file){
+# x: an object of class expressionset
+read_resfile <- function(file, x){
   L <- tryCatch(parse(file=file)
       , error = function(e){
         cat('Parsing failure at', file,"\n")
         e
   })
+  # set options in x (if any)
+  I <- sapply(L, function(x) deparse(x[[1]]) == 'validate_options')
+  if ( any(I) ){
+    e <- new.env()
+    e$x <- x
+    M <- lapply(L[I],deparse)
+    v <- lapply(M, function(x) parse(text=gsub(")$",", where = x)",x))[[1]])
+    lapply(v,eval,e)
+    L <- L[!I]
+  }
   # preprocessing execute some statements directly:
-  I <- sapply(L,function(x) deparse(x[[1]]) %in% VOPTION$getf('preproc_symbols'))
+  I <- sapply(L,function(y) deparse(y[[1]]) %in% x$options('preproc_symbols')[[1]])
   e <- new.env()
   lapply(L[I],eval,envir=e)
   L <- lapply(L[!I], function(x) do.call(substitute, list(x, env=e)))
@@ -204,11 +215,11 @@ replace_dollar <- function(x){
   x
 }
 
-validating <- function(x,...){
+validating <- function(x,y,...){
   sym <- deparse(x[[1]])
-  sym %in% VOPTION$getf("validation_symbols") || 
+  sym %in% y$options("validation_symbols")[[1]] || 
     grepl("^is\\.",sym) || 
-    ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
+    ( sym == 'if' && validating(x[[2]],y) && validating(x[[3]],y) ) 
 }
 
 # test if a call defines a variable group
