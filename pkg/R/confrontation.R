@@ -17,7 +17,7 @@ setRefClass("confrontation"
 )
 
 .show_confrontation <- function(.self){
-  cat(sprintf("Reference object of class '%s'\n",class(.self)))
+  cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
   cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))

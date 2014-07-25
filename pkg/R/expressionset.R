@@ -231,7 +231,7 @@ extract_names <- function(L,prefix="V"){
 show_expressionset <- function(.self){
   nr <- length(.self$._calls)
   cat(sprintf(
-    "Reference object of class '%s' with %s elements\n",class(.self)[1], nr
+    "Object of class '%s' with %s elements\n",class(.self)[1], nr
   ))
   if (nr == 0) return(invisible(NULL))
   lab <- names(.self$._calls)
