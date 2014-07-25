@@ -13,15 +13,15 @@ test_that("validation syntax is recognized",{
 test_that('Exception handling can be switched',{
   
   validate_options(raise='none')
-  expect_equal(factory(function()stop('aap'))()$err, 'aap')
-  expect_equal(factory(function()warning('aap'))()$warn, 'aap')
+  expect_equal(factory(function()stop('aap'), VOPTION)()$err, 'aap')
+  expect_equal(factory(function()warning('aap'), VOPTION)()$warn, 'aap')
   
   validate_options(raise='errors')
-  expect_error(factory(function() stop())())
+  expect_error(factory(function() stop(), VOPTION)())
   
   validate_options(raise = 'all')
-  expect_error(factory(function() stop())())
-  expect_warning(factory(function() warning())())
+  expect_error(factory(function() stop(),VOPTION)())
+  expect_warning(factory(function() warning(),VOPTION)())
   
   validate_options('reset')
 })

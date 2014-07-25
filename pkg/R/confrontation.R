@@ -29,7 +29,7 @@ setRefClass("confrontation"
 #'
 #' @param x An R object carrying verifications
 #' @param y An R object carrying data
-#' @param ... Arguments to be passed to other methods
+#' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
 #' @export 
 setGeneric("confront",
   def = function(x, y, ...) standardGeneric("confront")
@@ -38,22 +38,23 @@ setGeneric("confront",
 setClassUnion('data',c("data.frame","list","environment"))
 
 #' @rdname variables
-setMethod('variables',signature('data.frame'),function(x,...) names(x))
+setMethod('variables',signature('data.frame'), function(x,...) names(x))
 
 #' @rdname variables
-setMethod('variables',signature('list'),function(x,...) names(x))
+setMethod('variables',signature('list'), function(x,...) names(x))
 
 #' @rdname variables
-setMethod('variables',signature('environment'),function(x,...) ls(x))
+setMethod('variables',signature('environment'), function(x,...) ls(x))
 
 
 # indicators serve a different purpose than validations.
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront",signature("indicator","data"),function(x,y,key=NULL,...){
+setMethod("confront", signature("indicator","data"), function(x,y,key=NULL,...){
   calls <- x$calls(varlist=variables(y))
-  L <- execute(calls,y)
+  opts <- x$options(...,copy=TRUE)
+  L <- execute(calls,y,opts)
   if (!is.null(key)) L <- add_names(L,x,y,key)
   new('indication',
       ._call = match.call(call=sys.call(sys.parent()))
@@ -65,7 +66,7 @@ setMethod("confront",signature("indicator","data"),function(x,y,key=NULL,...){
 })
 
 #' @rdname confront
-setMethod('summary',signature('indication'),function(object,...){
+setMethod('summary',signature('indication'), function(object,...){
   data.frame(
     indicator = names(object$._value)
     , items = sapply(object$._value,length)
@@ -101,7 +102,8 @@ setRefClass("validation", contains = "confrontation")
 #' @param key (optional) name of identifying variable in x.
 setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ...){
   calls <- x$calls(varlist=variables(y))
-  L <- execute(calls,y)
+  opts <-x$options(...,copy=TRUE)
+  L <- execute(calls,y,opts)
   if (!is.null(key)) L <- add_names(L,x,y,key)
   new('validation',
       ._call = match.call(call=sys.call(sys.parent()))
@@ -124,7 +126,7 @@ add_names <- function(L,x,y,key){
 # execute calls. 
 # - Assignments are stored in a separate environment and forgotten afterwards.
 # - Failed assignments yield a warning.
-execute <- function(calls,env){
+execute <- function(calls,env,opts){
   w = new.env()
   lapply(calls, function(g) 
     if ( g[[1]] == ":=" ){ 
@@ -133,7 +135,7 @@ execute <- function(calls,env){
         warning(sprintf("Locally overwriting variable '%s'",var))
       w[[as.character(left(g))]] <- tryCatch( eval(right(g), env), error=warning)
     } else { 
-      factory(eval)(g, env, w)
+      factory(eval,opts)(g, env, w)
     }
   )[!is.assignment(calls)]
 }
