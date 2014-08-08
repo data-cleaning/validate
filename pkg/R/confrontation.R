@@ -1,5 +1,5 @@
-#' @include indicator.R
 #' @include validator.R
+#' @include indicator.R
 NULL
 
 # superclass for storing results of a verification activity
@@ -17,7 +17,7 @@ setRefClass("confrontation"
 )
 
 .show_confrontation <- function(.self){
-  cat(sprintf("Reference object of class '%s'\n",class(.self)))
+  cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
   cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))
@@ -29,7 +29,7 @@ setRefClass("confrontation"
 #'
 #' @param x An R object carrying verifications
 #' @param y An R object carrying data
-#' @param ... Arguments to be passed to other methods
+#' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
 #' @export 
 setGeneric("confront",
   def = function(x, y, ...) standardGeneric("confront")
@@ -37,16 +37,28 @@ setGeneric("confront",
 
 setClassUnion('data',c("data.frame","list","environment"))
 
+#' @rdname variables
+setMethod('variables',signature('data.frame'), function(x,...) names(x))
+
+#' @rdname variables
+setMethod('variables',signature('list'), function(x,...) names(x))
+
+#' @rdname variables
+setMethod('variables',signature('environment'), function(x,...) ls(x))
+
+
 # indicators serve a different purpose than validations.
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront",signature("indicator","data"),function(x,y,...){
-  calls <- x$calls()
-  L <- execute(calls,y)
+setMethod("confront", signature("indicator","data"), function(x,y,key=NULL,...){
+  calls <- x$calls(varlist=variables(y))
+  opts <- x$options(...,copy=TRUE)
+  L <- execute(calls,y,opts)
+  if (!is.null(key)) L <- add_names(L,x,y,key)
   new('indication',
-      ._call = match.call()
-      , ._calls = x$calls(expand_assignments=TRUE)
+      ._call = match.call(call=sys.call(sys.parent()))
+      , ._calls = x$calls(expand_assignments=TRUE, varlist=variables(y))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
@@ -54,10 +66,10 @@ setMethod("confront",signature("indicator","data"),function(x,y,...){
 })
 
 #' @rdname confront
-setMethod('summary',signature('indication'),function(object,...){
+setMethod('summary',signature('indication'), function(object,...){
   data.frame(
     indicator = names(object$._value)
-    , confrontations = sapply(object$._value,length)
+    , items = sapply(object$._value,length)
     , class = get_stat(object,class)
     , min = get_stat(object,min,na.rm=TRUE)
     , mean  = get_stat(object,mean,na.rm=TRUE)
@@ -65,7 +77,7 @@ setMethod('summary',signature('indication'),function(object,...){
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$._calls,call2text)
+    , expression = sapply(object$._calls,call2text)
     , row.names=NULL
     , stringsAsFactors=FALSE
   )  
@@ -75,7 +87,7 @@ setMethod('summary',signature('indication'),function(object,...){
 #' @export 
 setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
   new(class(x)
-      , ._call = match.call()
+      , ._call = match.call(call=sys.call(sys.parent()))
       , ._calls = x$._calls[i]
       , ._value = x$._value[i]
       , ._warn = x$._warn[i]
@@ -87,28 +99,44 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront", signature("validator","data"), function(x, y,  ...){
-  calls <- x$calls()
-  L <- execute(calls,y)
+#' @param key (optional) name of identifying variable in x.
+setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ...){
+  calls <- x$calls(varlist=variables(y))
+  opts <-x$options(...,copy=TRUE)
+  L <- execute(calls,y,opts)
+  if (!is.null(key)) L <- add_names(L,x,y,key)
   new('validation',
-      ._call = match.call()
-      , ._calls = x$calls(expand_assignments=TRUE)
+      ._call = match.call(call=sys.call(sys.parent()))
+      , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(y))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)     
   )
 })
 
+add_names <- function(L,x,y,key){
+  nkey <- length(y[[key]])
+  L <- lapply(L,function(v){ 
+    if ( length(v[[1]]) == nkey ) 
+      v[[1]] <- setNames(v[[1]],y[[key]])   
+    v
+  })
+}  
+
 # execute calls. 
 # - Assignments are stored in a separate environment and forgotten afterwards.
 # - Failed assignments yield a warning.
-execute <- function(calls,env){
+execute <- function(calls,env,opts){
   w = new.env()
   lapply(calls, function(g) 
-    if (g[[1]] == c(":=")) 
+    if ( g[[1]] == ":=" ){ 
+      var <- as.character(left(g))
+      if ( var %in% variables(env) ) 
+        warning(sprintf("Locally overwriting variable '%s'",var))
       w[[as.character(left(g))]] <- tryCatch( eval(right(g), env), error=warning)
-    else 
-      factory(eval)(g, env, w)
+    } else { 
+      factory(eval,opts)(g, env, w)
+    }
   )[!is.assignment(calls)]
 }
 
@@ -135,20 +163,18 @@ nas <- function(x){
   })
 }
 
-#' @export 
-setGeneric('summary')
 
 #' @rdname confront
 setMethod('summary',signature('validation'),function(object,...){
   data.frame(
-    validator = names(object$._value)
-    , confrontations = sapply(object$._value,length)
+    rule = names(object$._value)
+    , items = sapply(object$._value,length)
     , passes = passes(object)
     , fails  = fails(object)
     , nNA = nas(object)
     , error = has_error(object)
     , warning = has_warning(object)
-    , call = sapply(object$._calls,  call2text)
+    , expression = sapply(object$._calls,  call2text)
     , row.names=NULL
   )  
 })
@@ -172,20 +198,31 @@ setMethod('values',signature('confrontation'),function(x,...){
 #' @param simplify Combine results with similar dimension structure into arrays?
 #' @param drop if a single vector or array results, drop 'list' attribute?
 setMethod('values',signature('validation'),function(x,simplify=TRUE,drop=TRUE,...){
+  int_values(x,simplify,drop,...)
+})
+
+#' @rdname values
+setMethod('values',signature('indication'),function(x,simplify=TRUE,drop=TRUE,...){
+  int_values(x,simplify,drop,...)
+})
+
+
+
+int_values <- function(x,simplify,drop,...){
   out <- if ( simplify ){
     simplify_list(x$._value[!has_error(x)])
   } else {
     getMethod(values,signature='confrontation')(x,...)
   }
   if (drop && length(out) == 1) out[[1]] else out
-})
+}
 
 
 simplify_list <- function(L){
   len <- sapply(L,num_result)
   lapply(unique(len), function(l){
     m <- sapply(L[len==l], get_result)
-    if (l == 1)
+    if ( l == 1 )
       m <- matrix(m,nrow=1,dimnames=list(NULL,names(m)))
     m
   })

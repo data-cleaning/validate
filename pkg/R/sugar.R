@@ -1,9 +1,11 @@
 
 # Variable groups can be defined as <groupname> : {<var1>; <var2>; ... ; <varN> }
+# Where <var> can be a name or a character, in which case it is interpreted as a 
+# regexp, to be matched against the character vector 'varlist'.
 #
 # This function expands a variable group and stores it 
 # as character array in an environment. Input MUST be valid vargroup definition call
-expand_vargroup <- function(x){  
+expand_vargroup <- function(x,varlist=NULL){  
   e <- new.env()
   
   addgroup <- function(xi){
@@ -11,8 +13,16 @@ expand_vargroup <- function(x){
     
     if ( !is.null(e[[group]]) ) warning(sprintf('Multiply defined group %s\n',group))
     
-    vars <- sapply(right(xi),as.character)[-1]
-    
+    vars <- sapply(right(xi), function(y){ 
+      if ( !is.character(y) ){
+        as.character(y)
+      } else {
+        if (is.null(varlist)) 
+          warning(sprintf('Cannot expand regexp group "%s". No names provided',y))
+        varlist[grepl(y,varlist)]
+      }
+    })
+    vars <- unlist(vars[-1],use.names=FALSE)
     if ( length(vars) == 0 ){ 
       warning(sprintf('Ignoring empty group %s\n',group))
     }
@@ -47,21 +57,24 @@ expand_group <- function(calls, group, variables){
   e <- new.env()
   L <- lapply(calls,function(call){
     if ( !has_group(call,group) ) return(list(call))
-    lapply(variables, function(x) {
-      assign(group, as.symbol(x), envir=e)
-      do.call(substitute,list(call, e))
-    })
+    setNames( lapply(variables, function(x) {
+        assign(group, as.symbol(x), envir=e)
+        do.call(substitute,list(call, e))
+      })
+      , variables
+    )
   })
-  origin <- rep(names(L),times=sapply(L,length))
-  L <- unlist(L,use.names=FALSE)
-  names(L) <- paste(origin,variables,sep=".")
-  L
+#  origin <- rep(names(L),times=sapply(L,length))
+#  L <- unlist(L,use.names=FALSE)
+  
+#  names(L) <- paste(origin,variables,sep=".")
+  unlist(L)
 }
 
-expand_groups <- function(calls, groups){
+expand_groups <- function(calls, groups, varlist=NULL){
   igroup <- sapply(calls, vargroup)
   
-  groups <- expand_vargroup(calls[igroup])
+  groups <- expand_vargroup(calls[igroup], varlist=varlist)
 
   calls <- calls[!igroup]
   for ( group in names(groups) ){

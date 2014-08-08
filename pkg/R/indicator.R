@@ -27,7 +27,7 @@ ini_indicator <- function(.self,...,.files){
   ini_expressionset(.self,..., .files=.files, .prefix="I")
   if (length(.self$._calls)==0) return(.self)
   
-  i <- sapply(.self$._calls, function(x) !validating(x) || vargroup(x))
+  i <- sapply(.self$._calls, function(x) !validating(x,.self) || vargroup(x))
   if ( !all(i) ){
     warning(paste(
       "The following rules contain invalid syntax and will be ignored:\n",

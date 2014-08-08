@@ -1,30 +1,190 @@
-## Helper functions, invisible to users.
+#' @import methods
+NULL
 
-# reference class for storing syntax options
 
-syntax <- setRefClass('syntax',
+#' Set or get options globally or per object.
+#' 
+#' @param where (optional) an object inheriting from \code{expressionset}, like \code{\link{validator}} or \code{\link{indicator}}.
+#' @param ... Name of an option (character) to retrieve options or \code{option = value} pairs to set options. Use 
+#' \code{"reset"} to reset the default options.
+#' 
+#' @section Options for the validate package:
+#' Currently the following options are supported.
+#' 
+#' \itemize{
+#'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
+#'  The 'all' setting is useful when debugging validation scripts.}
+#'  \item{validation_symbols (language; see examples)} Control what statements are allowed as validation statements.
+#'  \item{'reset'} Reset to factory settings.
+#' }
+#' 
+#' @section Details:
+#' There are three ways in which options can be specified.
+#' \itemize{
+#' \item{Globally. Setting \code{validate_options(option1=value1,option2=value2,...)} causes all relevant commands 
+#' (e.g. \code{\link{confront}}, \code{\link{validator}}) to use the new options from then on.}
+#' \item{Per object. Setting \code{validate_options(option1=value1,...,where=<object>)}, causes all relevant functions
+#' that use that object (e.g. \code{\link{confront}}) to use those local settings.}
+#' \item{At execution time. Relevant functions (e.g. \code{\link{confront}}) take optional arguments allowing one
+#' to define options to be used during the current function call}
+#' }
+#' 
+#' To set options in a file, use \code{validate_options(option1=value1,option2=value2,...)} without the \code{where}
+#' argument. This will invoke a local setting in the \code{\link{validator}} or \code{\link{indicator}} object when
+#' the file is read.
+#' 
+#' @return When requesting option settings: a \code{list}. When setting options, the whole options 
+#' list is returned silently.
+#' 
+#' 
+#' @examples
+#' # the default allowed validation symbols.
+#' validate_options('reset')
+#' validate_options('validation_symbols')
+#' 
+#' # set an option, local to a validator object:
+#' v <- validator(x + y > z)
+#' validate_options(raise='all', where=v)
+#' # check that local option was set:
+#' validate_options('raise',where=v)
+#' # check that global options have not changed:
+#' validate_options('raise')
+#' 
+#' @export 
+validate_options <- function(...,where=NULL){
+  stopifnot( is.null(where) || inherits(where, 'expressionset') )
+  if ( !is.null(where) ){ 
+    where$options(...)
+  } else {
+    v_option(VOPTION,...)
+  }  
+}
+
+
+# x a 'voption' object
+# ... name=value pairs for options or just a name
+# copy create a copy of x and return?
+# @return If ... is a name, a single-item list with the option.
+#         If ... is name=value pairs, either x, or an altered copy of it, silently.
+v_option <- function(x,...,copy=FALSE){
+  L <- list(...)
+  
+  # how may arguments?
+  nargs <- length(L)
+  # are we getting (T) or setting (F) options?
+  getmod <- is.null(names(L))
+  setmod <- !getmod
+  
+  if ( nargs == 0 &&  copy ) return(x$copy())
+  if ( nargs == 0 && !copy ) return(as.list(x))
+
+  if ( nargs == 1 && L[[1]] == 'reset' && !copy ){
+    x$reset()
+    return(invisible(as.list(x)))
+  }
+  
+  if ( nargs > 0 && getmod && copy ){
+    stop('Copy not possible when requesting a single field')
+  }
+  
+  if ( nargs > 0 && getmod && !copy){
+    # return a list of requested options.
+    return( setNames( lapply(L, function(field) x$getf(field)), L ))
+  }
+  
+  if ( nargs > 0 && setmod && copy){
+    opt <- x$copy()    
+    for ( nm in names(L) ) opt$setf(nm,L[[nm]])
+    return(opt)
+  }
+  
+  if ( nargs > 0 && setmod && !copy){
+    for ( nm in names(L) ) x$setf(nm,L[[nm]])
+    return(invisible(as.list(x)))
+  }
+}
+
+
+# class holding options
+voption <- setRefClass('voption',
   fields = list(
-    validationsymbols = 'character'
+    validation_symbols = 'character'
+    , preproc_symbols = 'character'
+    , raise = 'character'
   )
+  , methods=list(
+    check = function(field){
+      if (!field %in% ls(.self)) 
+        stop(sprintf('%s is not a valid "voption" field\n',field))      
+      
+    }
+    , setf = function(field,value){
+      check(field)
+      if ( field == 'raise' ) 
+        stopifnot( value %in% c('all','none','errors'))
+      .self[[field]] <- value
+    }
+    , getf = function(field){
+      check(field)
+      .self[[field]]
+    }
+    , reset = function(){
+      # top symbols allowed for validation statements
+      .self$validation_symbols = c(
+        '<','<=','==','>','>=', '!=', '%in%', ":"
+        , 'identical', 'all','any', ':=' 
+        , '!', '|', '||', '&', '&&', 'xor'
+      )
+      # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
+      .self$raise = 'none'
+      .self$preproc_symbols = c('<-','library')
+    }
+  )                  
 )
 
-SYNTAX <- syntax(
-  validationsymbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', ":"
-    , 'identical', 'all','any', ':=' 
-    , '!', '|', '||', '&', '&&', 'xor'
-  )
-)
+setGeneric('as.list')
+setMethod('as.list',signature('voption'),function(x,...){
+  fnames <- c('raise','validation_symbols','preproc_symbols')
+  setNames(lapply(fnames,function(i) x$getf(i)),fnames)
+})
 
 
-read_resfile <- function(file){
+# copy option object and alter with named arguments in ...
+copy_and_set <- function(x,...){
+  L <- list()
+  y <- x$copy()
+  for ( nm in names(L) ) y$setf(nm,L[[nm]])
+  y
+}
+
+# Create global (hidden for user) option variable
+VOPTION <- voption()
+VOPTION$reset()
+
+
+# x: an object of class expressionset
+read_resfile <- function(file, x){
   L <- tryCatch(parse(file=file)
       , error = function(e){
         cat('Parsing failure at', file,"\n")
         e
   })
-  names(L) <- extract_names(L)
-  lapply(L,as.call)
+  # set options in x (if any)
+  I <- sapply(L, function(x) deparse(x[[1]]) == 'validate_options')
+  if ( any(I) ){
+    e <- new.env()
+    e$x <- x
+    M <- lapply(L[I],deparse)
+    v <- lapply(M, function(x) parse(text=gsub(")$",", where = x)",x))[[1]])
+    lapply(v,eval,e)
+    L <- L[!I]
+  }
+  # preprocessing execute some statements directly:
+  I <- sapply(L,function(y) deparse(y[[1]]) %in% x$options('preproc_symbols')[[1]])
+  e <- new.env()
+  lapply(L[I],eval,envir=e)
+  L <- lapply(L[!I], function(x) do.call(substitute, list(x, env=e)))
+  setNames(L,extract_names(L))
 }
 
 
@@ -45,7 +205,6 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 
 
 # replace occurences x$y --> x[,'y']
-
 replace_dollar <- function(x){
   L <- which.call(x,'$')
   for ( I in L ){
@@ -60,11 +219,11 @@ replace_dollar <- function(x){
   x
 }
 
-validating <- function(x,...){
+validating <- function(x,y,...){
   sym <- deparse(x[[1]])
-  sym %in% SYNTAX$validationsymbols || 
+  sym %in% y$options("validation_symbols")[[1]] || 
     grepl("^is\\.",sym) || 
-    ( sym == 'if' && validating(x[[2]]) && validating(x[[3]]) ) 
+    ( sym == 'if' && validating(x[[2]],y) && validating(x[[3]],y) ) 
 }
 
 # test if a call defines a variable group

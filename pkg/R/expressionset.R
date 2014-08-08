@@ -1,27 +1,72 @@
-#' @import methods
+#' @include parse.R
 NULL
 
 # Superclass for storing verification rules.
 setRefClass("expressionset"
-  , fields = list(._calls = 'list', ._origin= 'character')
+  , fields = list(._calls = 'list', ._origin= 'character',._options='voption')
   , methods= list(
       show = function() show_expressionset(.self)
     , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
-    , calls = function(...) get_calls(.self,...)
+    , calls = function(varlist=NULL,...) get_calls(.self,varlist=varlist,...)
+    , expand = function(...) expand_expressionset(.self,...)
+    , blocks = function() blocks_expressionset(.self)
+    , options = function(...,copy=FALSE) es_option(.self,...,copy=copy) 
   )
 )
 
+es_option <- function(x,...,copy){
+  L <- list(...)
+  setmode <- !is.null(names(L))
+  # prevent that global settings are overwritten.
+  if ( setmode & !copy ) x$._options <- x$._options$copy()
+  do.call(v_option,c(list(x=x$._options),L,copy=copy))
+}
+
+
+expand_expressionset <- function(x,...){
+  x$._calls <- x$calls(expand_assignments=TRUE,...)
+  x$._origin <- rep("expanded",length(x$._calls))
+  invisible(NULL)
+}
+
+blocks_expressionset <- function(x){
+  varlist <- lapply(x$._calls,var_from_call)
+  
+  varblock <- function(v,vlist){
+    sapply(vlist, function(x) any(v %in% x))
+  }
+  
+  # compute variable blocks
+  blocks <- new.env()
+  b <- 0
+  V <- varlist
+  while( length(V) >= 1 ){
+    b <- b+1
+    i <- varblock(V[[1]],V)
+    blocks[[paste0('block',b)]] <- unique(unlist(V[i]))
+    V <- V[!i]
+  }
+  blocks <- as.list(blocks)
+  
+  # logical, indicating rule blocks.
+  lapply(blocks,function(b) sapply(varlist,function(v) any(v %in% b) ))
+}
+
+
+
 # @param expand_assignments Substitute assignments?
 # @param expand_groups Expand groups?
+# @param varlist: a character vector of variables to search through 
+#    when groups are defined with regexps.
 # @param vectorize Vectorize if-statements?
 # @param replace_dollar Replace dollar with bracket index?
 # @rdname calls
 #
 get_calls <- function(x, ..., expand_assignments=FALSE
-    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE, varlist=NULL ){
   calls <- x$._calls
   if ( expand_assignments )  calls <- expand_assignments(calls)
-  if ( expand_groups ) calls <- expand_groups(calls)
+  if ( expand_groups ) calls <- expand_groups(calls, varlist=varlist)
   if ( vectorize ) calls <- lapply(calls, vectorize)
   if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
   calls
@@ -37,6 +82,10 @@ get_calls <- function(x, ..., expand_assignments=FALSE
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
+#' @export 
+setGeneric('summary')
+
+
 #' Find out where expressions were defined
 #'
 #' @param x and R object
@@ -47,46 +96,23 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 
-#' Check for linear expressions
-#' @param x An R object 
-#' @param ... Arguments to be passed to other methods.
-#' @return A \code{logical} vector
-#'
-#' @export
-setGeneric("is_linear", def=function(x,...) standardGeneric("is_linear"))
-
-
-#' Extract linear coeffiecients from linear expressions
-#'
-#' @section Details: Linear expressions are expressions of the form \eqn{\boldsymbol{Ay}} or
-#' \eqn{\boldsymbol{Ay}\odot\boldsymbol{b}}, where \eqn{\odot\in\{<,\leq,=,\geq,>\}}.
-#' This function uses \code{\link{is_linear}} to find linear expressions in \code{x} and returns
-#' the corresponding coefficients and possibly the operators. 
-#'
-#' @param x An R object
-#' @param ... Arguments to be passed to other methods
-#'
-#' @return A list, containing matrix \eqn{\boldsymbol{A}}, and where possible matrix \eqn{\boldsymbol{b}} 
-#'  and a vector with comparison operators.
-#'
-#' @export 
-setGeneric("linear_coefficients",def=function(x,...) standardGeneric("linear_coefficients"))
-
 #' @rdname origin
 setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
 
 #' Convert an expressionset to character
-#' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} or \code{\link{indicator}}.
+#' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} 
+#' or \code{\link{indicator}}.
 setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,deparse))
 
 
-#' Extract names
+#' Extract or set names
 #' 
 #' @param x An R object
 #'
 #' @return A \code{character} with names of variables occurring in \code{x}
 #' @export
 setMethod("names","expressionset", function(x) names(x$._calls))
+
 
 #' Select
 #' 
@@ -126,6 +152,20 @@ setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, d
   }
 )
 
+#' @rdname variables
+#' @param object An object inheriting from \code{expressionset}
+setMethod('summary',signature('expressionset'),function(object,...){
+  b <- object$blocks()
+  data.frame(
+    block = seq_along(b)
+    , nvar  = sapply(b,function(i) length(variables(object[i])))
+    , rules = sapply(b,sum)
+    , linear = sapply(b,function(i) sum(object[i]$is_linear()))
+    , row.names=NULL
+  )
+})
+
+
 # Internal methods ----
 
 setGeneric("is_vargroup",function(x,...) standardGeneric("is_vargroup"))
@@ -140,13 +180,16 @@ setMethod("is_vargroup",signature("expressionset"),function(x,...){
 
 ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   L <- as.list(substitute(list(...))[-1])
-  
+  .self$._options <- VOPTION
   if ( !is.null(.files) && is.character(.files) ){
+    # process include statements.
+    filestack <- unlist(lapply(.files,get_filestack)) 
     L <- list()
     ifile <- character(0)
-    for ( f in .files ){ 
-      L <- c(L,read_resfile(f))
-      ifile <- c(ifile,rep(f,length(L)))
+    for ( f in filestack ){ 
+      L1 <- read_resfile(f, .self)
+      ifile <- c(ifile,rep(f,length(L1)))
+      L <- c(L,L1)
     }
   } else if (length(L)==0){
     return(.self)
@@ -157,7 +200,30 @@ ini_expressionset <- function(.self, ..., .files, .prefix="V"){
   names(ifile) <- names(L)
   .self$._calls <- L
   .self$._origin <- ifile
+  
   .self
+}
+
+# Get sequence of files to be processed from include statements.
+get_filestack <- function(file){
+  # Detecting include statements.
+  tag <- "#[[:blank:]]+@validate[[:blank:]]+include[[:blank:]]+"
+  
+  f <- function(fl, det=character(0)){
+    det <- c(fl,det)
+    if ( fl %in% det[-1])
+      stop(sprintf("Cyclic dependency detected in %s\n%s\n",fl,paste(rev(det),collapse=" -> ")))
+    r <- readLines(fl)
+    L <- grep(tag,r,value=TRUE)
+    if ( length(L) > 0)
+      L <- gsub(paste0(tag,"|[[:blank:]]*$"),"",L) # also remove trailing blanks.
+    for ( x in L )
+      f(x,det)
+    filestack <<- c(filestack,fl)
+  }
+  filestack <- character(0)
+  f(file)
+  filestack
 }
 
 
@@ -165,7 +231,7 @@ ini_expressionset <- function(.self, ..., .files, .prefix="V"){
 extract_names <- function(L,prefix="V"){
   npos <- max(1,ceiling(log10(length(L)+1)))
   fmt <- paste0("%s%0",npos,"d")
-  generic <- sprintf(fmt,prefix,1:length(L))
+  generic <- sprintf(fmt,prefix,seq_along(L))
   given <- names(L)
   if (is.null(given)) return(generic)
   igen <- given == ""
@@ -177,7 +243,7 @@ extract_names <- function(L,prefix="V"){
 show_expressionset <- function(.self){
   nr <- length(.self$._calls)
   cat(sprintf(
-    "Reference object of class '%s' with %s elements\n",class(.self)[1], nr
+    "Object of class '%s' with %s elements\n",class(.self)[1], nr
   ))
   if (nr == 0) return(invisible(NULL))
   lab <- names(.self$._calls)

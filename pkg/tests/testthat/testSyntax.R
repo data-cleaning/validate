@@ -2,7 +2,28 @@
 context("Syntax attributes")
 
 test_that("validation syntax is recognized",{
+  # fiets(x) is not a validation rule
   expect_warning(validator(fiets(x)))
+  # we complain that the regular expression 'aap' cannot be matched 
+  # since 'varlist' is not specified.
+  expect_warning( validator(G:{fiets; 'aap'})$calls() )
+})
+
+
+test_that('Exception handling can be switched',{
+  
+  validate_options(raise='none')
+  expect_equal(factory(function()stop('aap'), VOPTION)()$err, 'aap')
+  expect_equal(factory(function()warning('aap'), VOPTION)()$warn, 'aap')
+  
+  validate_options(raise='errors')
+  expect_error(factory(function() stop(), VOPTION)())
+  
+  validate_options(raise = 'all')
+  expect_error(factory(function() stop(),VOPTION)())
+  expect_warning(factory(function() warning(),VOPTION)())
+  
+  validate_options('reset')
 })
 
 

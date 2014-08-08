@@ -1,6 +1,17 @@
 
 context("Utilities")
 
+test_that('Options can be set',{
+  # error on nonexistent option 
+  expect_error(validate_options(fiets=3))
+  # invalid 'raise' value
+  expect_error(validate_options(raise='aap'))
+  # this should run without problems
+  validate_options('reset')
+  expect_equal(validate_options('raise')[[1]],'none')
+})
+
+
 test_that("match_data",{
   d1 <- data.frame(id=paste(1:3),x=1:3,y=4:6)
   d2 <- data.frame(id=paste(4:1),y=4:7,x=1:4)
@@ -53,6 +64,12 @@ test_that('compare works',{
       ,6,3,3,3,0,2,2,0,1,1,0 ),dim=c(11,2)
   )
   expect_equivalent(unclass(compare(v,d1,d2)),a)  
+})
+
+test_that('blocks works',{
+  v <- validator(x + y > z, q > 0, z + x == 3)
+  expect_equivalent(v$blocks()[[1]],c(TRUE,FALSE,TRUE))
+  expect_equivalent(v$blocks()[[2]],c(FALSE,TRUE,FALSE))
 })
 
 
