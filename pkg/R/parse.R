@@ -78,7 +78,7 @@ v_option <- function(x,...,copy=FALSE){
   if ( nargs == 0 &&  copy ) return(x$copy())
   if ( nargs == 0 && !copy ) return(as.list(x))
 
-  if ( nargs == 1 && L[[1]] == 'reset' && !copy ){
+  if ( nargs == 1 && is.character(L[[1]]) && L[[1]] == 'reset' && !copy ){
     x$reset()
     return(invisible(as.list(x)))
   }
