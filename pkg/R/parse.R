@@ -6,7 +6,8 @@ NULL
 #' 
 #' @param where (optional) an object inheriting from \code{expressionset}, like \code{\link{validator}} or \code{\link{indicator}}.
 #' @param ... Name of an option (character) to retrieve options or \code{option = value} pairs to set options. Use 
-#' \code{"reset"} to reset the default options.
+#' \code{"reset"} to reset the default options. There is a special option \code{addsymbol} that allows for registring
+#' extra validation symbols it's value should be \code{character}.
 #' 
 #' @section Options for the validate package:
 #' Currently the following options are supported.
@@ -66,7 +67,7 @@ validate_options <- function(...,where=NULL){
 # copy create a copy of x and return?
 # @return If ... is a name, a single-item list with the option.
 #         If ... is name=value pairs, either x, or an altered copy of it, silently.
-v_option <- function(x,...,copy=FALSE){
+v_option <- function(x,...,addsymbols=NULL,copy=FALSE){
   L <- list(...)
   
   # how may arguments?
@@ -84,7 +85,7 @@ v_option <- function(x,...,copy=FALSE){
   }
   
   if ( nargs > 0 && getmod && copy ){
-    stop('Copy not possible when requesting a single field')
+    stop('Copy not possible when requesting fields explicitly')
   }
   
   if ( nargs > 0 && getmod && !copy){
@@ -92,13 +93,24 @@ v_option <- function(x,...,copy=FALSE){
     return( setNames( lapply(L, function(field) x$getf(field)), L ))
   }
   
+  appendsymb <- function(OPT,LL){
+    i <- match("addsymbol",names(LL))
+    if ( !is.na(i) ){
+      OPT$setf("validation_symbols",append(OPT$getf("validation_symbols"),LL[[i]]))
+      message(sprintf("Registred symbol(s): %s",paste(L[[1]],collapse=", ")))
+      LL <- LL[-i]
+    }
+    LL
+  }
   if ( nargs > 0 && setmod && copy){
-    opt <- x$copy()    
+    opt <- x$copy()
+    L <- appendsymb(opt,L)
     for ( nm in names(L) ) opt$setf(nm,L[[nm]])
     return(opt)
   }
   
   if ( nargs > 0 && setmod && !copy){
+    L <- appendsymb(x,L)
     for ( nm in names(L) ) x$setf(nm,L[[nm]])
     return(invisible(as.list(x)))
   }
