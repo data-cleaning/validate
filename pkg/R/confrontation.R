@@ -176,6 +176,7 @@ setMethod('summary',signature('validation'),function(object,...){
     , warning = has_warning(object)
     , expression = sapply(object$._calls,  call2text)
     , row.names=NULL
+    , stringsAsFactors=FALSE
   )  
 })
 
