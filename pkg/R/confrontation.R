@@ -61,6 +61,8 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 #' contains the columns of \code{dat}.
 #' 
 #' 
+#' @seealso \code{\link{summary}}, \code{\link{aggregate,validation-method}}, \code{\link{sort,validation-method}}
+#' 
 #' @export 
 #' 
 #' @example ../examples/confront.R
@@ -114,7 +116,16 @@ setMethod("confront", signature("indicator","data.frame"), function(x,dat,key=NU
 })
 
 
-#' @rdname confront
+#' @rdname validate-summary
+#' @param ... Currently unused
+#' @aliases validate-summary
+#' @section Indication:
+#' Some basic information per evaluated indicator is reported: the number of items to which the 
+#' indicator was applied, the output \code{class}, some statistics (min, max, mean , number of NA)
+#' and wether an exception occurred (warnings or errors). The evaluated expression is reported as well.
+#' 
+#' 
+#' @export 
 setMethod('summary',signature('indication'), function(object,...){
   data.frame(
     indicator = names(object$._value)
@@ -239,7 +250,12 @@ nas <- function(x){
 }
 
 
-#' @rdname confront
+#' @rdname validate-summary
+#' @section Validation:
+#' Some basic information per evaluated validation rule is reported: the number of items to which the 
+#' rule was applied, the output \code{class}, some statistics (passes, fails, number of NA)
+#' and wether an exception occurred (warnings or errors). The evaluated expression is reported as well.
+#' 
 setMethod('summary',signature('validation'),function(object,...){
   data.frame(
     rule = names(object$._value)
@@ -254,6 +270,10 @@ setMethod('summary',signature('validation'),function(object,...){
     , stringsAsFactors=FALSE
   )  
 })
+
+
+### VALUES ----------------------------------------------------------------------
+
 
 #' Get values from object
 #' 
@@ -282,41 +302,6 @@ setMethod('values',signature('indication'),function(x,simplify=TRUE,drop=TRUE,..
   int_values(x,simplify,drop,...)
 })
 
-setGeneric('sort')
-
-#' Sort validation output according to number of violations.
-#' 
-#' Summarize the result of a validation by sorting aggregated results accoring to the
-#' number of failed validations, either per validation rule or per record.
-#' 
-#' @param x An object of class \code{\link{confrontation}}
-#' @param decreasing Sort by decreasing number of violations?
-#' @param by Report on violations per rule (default) or per record?
-#' @param drop drop list attribute if the result has a single argument.
-#'
-#' @return If \code{by='rule'} a \code{data.frame}. If \code{by='record'}, and all \code{\link{values}(x,drop=FALSE)} have the
-#' same dimension structure, a \code{data.frame}, otherwise a \code{list} of \code{data.frames}. If \code{drop=FALSE}
-#' a \code{list} containing one or more \code{data.frame}s.
-#'
-#' @export 
-setMethod('sort',signature('validation'),function(x,decreasing=TRUE, by=c('rule','record'), drop=TRUE,...){
-  v <- values(x, drop=FALSE)
-  by <- match.arg(by)
-  aggr <- if ( by == 'record') rowSums else colSums
-  L <- lapply(v, function(y){
-    s <- aggr(y,na.rm=TRUE)
-    i <- order(s,decreasing=decreasing)
-    data.frame(
-       nfail = s
-      , relative  = s/prod(dim(y))
-      )
-    })
-  if ( length(L) == 1 && drop ) out <- L[[1]]
-  if ( by== 'rule' && is.list(L) )  out <- do.call(rbind,x)
-  out
-})
-
-
 int_values <- function(x,simplify,drop,...){
   out <- if ( simplify ){
     simplify_list(x$._value[!has_error(x)])
@@ -336,6 +321,123 @@ simplify_list <- function(L){
     m
   })
 }
+
+
+### SORT AND VALIDATION -------------------------------------------------------
+setGeneric('aggregate')
+
+#' Aggregate validation results
+#' 
+#' Aggregate results of a validation.
+#'  
+#' @param x An object of class \code{\link{validation}}
+#' @param by Report on violations per rule (default) or per record?
+#' @param drop drop list attribute if the result has a single argument.
+#'
+#' @return By default, a \code{data.frame} with the following columns.
+#' \tabular{ll}{
+#'   \code{npass} \tab Number of items passed\cr
+#'   \code{nfail} \tab Number of items failing\cr
+#'   \code{nNA} \tab Number of items resulting in \code{NA}\cr
+#'   \code{rel.pass} \tab Relative number of items passed\cr
+#'   \code{rel.fail} \tab Relative number of items failing\cr
+#'   \code{rel.NA} \tab Relative number of items resulting in \code{NA}
+#' }
+#' If \code{by='rule'} the relative numbers are computed with respect to the number 
+#' of records for which the rule was evaluated. If \code{by='record'} the relative numbers
+#' are computed with respect to the number of rules the record was tested agains. 
+#'
+#' When \code{by='record'} and not all validation results have the same dimension structure,
+#' a list of \code{data.frames} is returned.
+#' 
+#' @seealso \code{\link{aggregate}}, \code{\link{summary}}
+#'   
+#' @export
+setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'), drop=TRUE,...){
+  v <- values(x, drop=FALSE)
+  by <- match.arg(by)
+  aggr <- if ( by == 'rule') colSums else rowSums
+  ntot <- if ( by == 'rule') nrow else ncol
+  L <- lapply(v, function(y){
+    s <- aggr(y,na.rm=TRUE)
+    s <- s
+    na <- aggr(is.na(y))
+    N <- ntot(y)
+    nfail = N - s - na
+    data.frame( 
+      npass = s
+      , nfail = nfail 
+      , nNA = na
+      , rel.pass  = s/N
+      , rel.fail  = nfail/N
+      , rel.NA = na/N
+    )
+  })
+  if ( length(L) == 1 && drop ) L <- L[[1]]
+  if ( by== 'rule' && !is.data.frame(L) ) L <- do.call(rbind,L)
+  L
+})
+
+
+
+
+setGeneric('sort')
+
+#' Aggregate and sort the results of a validation.
+#'   
+#' @param x An object of class \code{\link{validation}}
+#' @param by Report on violations per rule (default) or per record?
+#' @param drop drop list attribute if the result has a single argument.
+#' @param decreasing Sort by decreasing number of passes?
+#'
+#' @return A \code{data.frame} with the following columns.
+#' \tabular{ll}{
+#'   \code{npass} \tab Number of items passed\cr
+#'   \code{nfail} \tab Number of items failing\cr
+#'   \code{nNA} \tab Number of items resulting in \code{NA}\cr
+#'   \code{rel.pass} \tab Relative number of items passed\cr
+#'   \code{rel.fail} \tab Relative number of items failing\cr
+#'   \code{rel.NA} \tab Relative number of items resulting in \code{NA}
+#' }
+#' If \code{by='rule'} the relative numbers are computed with respect to the number 
+#' of records for which the rule was evaluated. If \code{by='record'} the relative numbers
+#' are computed with respect to the number of rules the record was tested agains. By default
+#' the most failed validations and records with the most fails are on the top. 
+#'
+#' When \code{by='record'} and not all validation results have the same dimension structure,
+#' a list of \code{data.frames} is returned.
+#'
+#' @seealso \code{\link{sort}}, \code{\link{summary}}
+#'
+#' @export 
+setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rule','record'), drop=TRUE,...){
+  v <- values(x, drop=FALSE)
+  by <- match.arg(by)
+  aggr <- if ( by == 'rule') colSums else rowSums
+  ntot <- if ( by == 'rule') nrow else ncol
+  L <- lapply(v, function(y){
+    s <- aggr(y,na.rm=TRUE)
+    i <- order(s,decreasing=decreasing)
+    s <- s[i]
+    na <- aggr(is.na(y))[i]
+    N <- ntot(y)
+    nfail = N - s - na
+    data.frame( 
+       npass = s
+       , nfail = nfail 
+       , nNA = na
+       , rel.pass  = s/N
+       , rel.fail  = nfail/N
+       , rel.NA = na/N
+      )
+    })
+  if ( length(L) == 1 && drop ) L <- L[[1]]
+  if ( by== 'rule' && !is.data.frame(L) ) L <- do.call(rbind,L)
+  L
+})
+
+
+
 
 
 ### currently obsolete stuff ----

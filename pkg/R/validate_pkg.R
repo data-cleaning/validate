@@ -14,7 +14,9 @@
 #'   \item Examining the results of a confrontation by looking at 
 #'   \code{\link{validation}}s and \code{\link{indication}}s
 #' }
+#'
 #'    
+#'        
 #' @docType package
 #' @name validate
 #' @aliases package-validate validate

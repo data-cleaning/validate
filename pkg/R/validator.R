@@ -21,7 +21,7 @@ NULL
 #' 
 #'  
 #'
-#' @seealso \code{\link{syntax}}, \code{\link{confront}}
+#' @seealso \code{\link{syntax}}, \code{\link{confront}}, \code{\link{summary}}
 #' 
 #' @return \code{validator} object. Use this object to check/{\code{\link{confront}}}
 #' data for validity.

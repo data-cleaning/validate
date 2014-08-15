@@ -82,7 +82,8 @@ get_calls <- function(x, ..., expand_assignments=FALSE
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
-#' @export 
+#' Create a summary
+#' @rdname validate-summary
 setGeneric('summary')
 
 
@@ -138,6 +139,8 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
 #'
 #' @return By default, a \code{character} vector listing all (non-dummy) variables occuring in \code{x}. 
 #'
+#' @seealso \code{\link{summary}}
+#'
 #' @example ../examples/variables.R
 setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, dummy=FALSE, ...){ 
     vars <- lapply(x$calls(expand_assignments=!dummy),var_from_call)
@@ -152,8 +155,14 @@ setMethod("variables", signature(x="expressionset"), function(x, matrix=FALSE, d
   }
 )
 
-#' @rdname variables
-#' @param object An object inheriting from \code{expressionset}
+#' @section Validator and indicator objects:
+#' For these objects, the ruleset is split into subsets (blocks) that are disjunct in the
+#' sense that they do not share any variables. For each bloch the number of variables, the number 
+#' of rules and the number of rules that are linear are reported.
+#' 
+#' @return A \code{data.frame} with the information mentioned below information is returned.
+#' 
+#' @rdname validate-summary
 setMethod('summary',signature('expressionset'),function(object,...){
   b <- object$blocks()
   data.frame(
