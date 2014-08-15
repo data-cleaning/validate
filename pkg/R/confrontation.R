@@ -40,6 +40,8 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 
 #' Confront data with a (set of) expressionset(s)
 #'
+#' @aliases confrontation validation indication
+#'
 #' @param x An R object carrying verifications
 #' @param dat An R object carrying data
 #' @param ref Optionally, an R object carrying reference data. See examples for usage.
@@ -145,7 +147,7 @@ setMethod("confront", signature("validator","data.frame"), function(x, dat, key=
 #' @rdname confront
 setMethod("confront",signature("validator","data.frame","environment"), function(x, dat, ref, key=NULL, ...){
   classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
-  if ( !all.equal(class(dat), classes)  )
+  if ( !all(class(dat) == classes)  )
     stop("Class of one or more elements in 'ref' differs from 'dat'")
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
   dat <- list2env(dat,parent=ref)  
@@ -163,12 +165,12 @@ setMethod("confront",signature("validator","data.frame","data.frame"),function(x
 
 #' @rdname confront
 setMethod("confront",signature("validator","data.frame","list"),function(x,dat,ref,key=NULL,...){
-  classes <- sapply(L,class)
-  if ( !all.equal(class(dat), classes)  )
+  classes <- sapply(ref,class)
+  if ( !all(class(dat) == classes)  )
     stop("Class of one or more elements in 'ref' differs from 'dat'")
   env <- list2env(ref)  
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
-  dat <- list2env(dat,parent=ref)  
+  dat <- list2env(dat,parent=env)  
   confront_work(x,dat,key,...)  
 })
 
@@ -280,6 +282,39 @@ setMethod('values',signature('indication'),function(x,simplify=TRUE,drop=TRUE,..
   int_values(x,simplify,drop,...)
 })
 
+setGeneric('sort')
+
+#' Sort validation output according to number of violations.
+#' 
+#' Summarize the result of a validation by sorting aggregated results accoring to the
+#' number of failed validations, either per validation rule or per record.
+#' 
+#' @param x An object of class \code{\link{confrontation}}
+#' @param decreasing Sort by decreasing number of violations?
+#' @param by Report on violations per rule (default) or per record?
+#' @param drop drop list attribute if the result has a single argument.
+#'
+#' @return If \code{by='rule'} a \code{data.frame}. If \code{by='record'}, and all \code{\link{values}(x,drop=FALSE)} have the
+#' same dimension structure, a \code{data.frame}, otherwise a \code{list} of \code{data.frames}. If \code{drop=FALSE}
+#' a \code{list} containing one or more \code{data.frame}s.
+#'
+#' @export 
+setMethod('sort',signature('validation'),function(x,decreasing=TRUE, by=c('rule','record'), drop=TRUE,...){
+  v <- values(x, drop=FALSE)
+  by <- match.arg(by)
+  aggr <- if ( by == 'record') rowSums else colSums
+  L <- lapply(v, function(y){
+    s <- aggr(y,na.rm=TRUE)
+    i <- order(s,decreasing=decreasing)
+    data.frame(
+       nfail = s
+      , relative  = s/prod(dim(y))
+      )
+    })
+  if ( length(L) == 1 && drop ) out <- L[[1]]
+  if ( by== 'rule' && is.list(L) )  out <- do.call(rbind,x)
+  out
+})
 
 
 int_values <- function(x,simplify,drop,...){

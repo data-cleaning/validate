@@ -174,6 +174,7 @@ VOPTION <- voption()
 VOPTION$reset()
 
 parse_annotations <- function(L){
+  token <- NULL # prevent a NOTE when building the package.
   line_nums <- sapply(attr(L, "srcref"), function(sr){sr[1]})
   parseData <- getParseData(L)
   parseData <- subset(parseData, token=="COMMENT")
