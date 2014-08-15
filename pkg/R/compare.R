@@ -299,7 +299,7 @@ setClass('cellComparison',contains='comparison')
 #' the number of altered values and changes therein as compared to the reference
 #' defined in \code{how}.
 #'
-#' @seealso \code{\link{compare}}, \code{\link{match_data}}
+#' @seealso \code{\link{compare}}, \code{\link{match_cells}}
 #'
 #' @export 
 cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
@@ -325,14 +325,14 @@ cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
 
 #' Create matching subsets of a sequence of data
 #'
-#' @param ... A sequence of \code{data.frame}s
+#' @param ... A sequence of \code{data.frame}s, possibly in the form of \code{<name>=<value>} pairs.
 #' @param .list A list of \code{data.frame}s; will be concatenated with \code{...}.
 #' @param id Names or indices of columns to use as index.
 #'
 #' @return A list of \code{data.frames}, subsetted and sorted so that all cells correspond.
 #' @export
-match_data <- function(...,.list=NULL,id=NULL){
-  L <- c(list(...),.list)
+match_cells <- function(...,.list=NULL,id=NULL){
+  L <- c(list(...), .list)
   
   # match columns
   nm <- Reduce(intersect,lapply(L,names))
@@ -345,4 +345,5 @@ match_data <- function(...,.list=NULL,id=NULL){
   }
   L
 }
+
 

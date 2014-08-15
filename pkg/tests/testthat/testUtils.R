@@ -12,16 +12,16 @@ test_that('Options can be set',{
 })
 
 
-test_that("match_data",{
+test_that("match_cells",{
   d1 <- data.frame(id=paste(1:3),x=1:3,y=4:6)
   d2 <- data.frame(id=paste(4:1),y=4:7,x=1:4)
   expect_equal(
-    names(match_data(d1,d2,id='id')[[1]])
-    ,names(match_data(d1,d2,id='id')[[2]])    
+    names(match_cells(d1,d2,id='id')[[1]])
+    ,names(match_cells(d1,d2,id='id')[[2]])    
   )
   expect_equal(
-    as.character(match_data(d1,d2,id='id')[[1]][,'id'])
-    , as.character(match_data(d1,d2,id='id')[[2]][,'id'])
+    as.character(match_cells(d1,d2,id='id')[[1]][,'id'])
+    , as.character(match_cells(d1,d2,id='id')[[2]][,'id'])
   )  
 })
 

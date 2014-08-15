@@ -114,11 +114,13 @@ setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ..
   )
 })
 
+
 add_names <- function(L,x,y,key){
-  nkey <- length(y[[key]])
+  keys <- if ( is.data.frame(y) ) y[[key]] else y[[1]][[key]] 
+  nkey <- length(keys)
   L <- lapply(L,function(v){ 
     if ( length(v[[1]]) == nkey ) 
-      v[[1]] <- setNames(v[[1]],y[[key]])   
+      v[[1]] <- setNames(v[[1]], keys)   
     v
   })
 }  
@@ -176,6 +178,7 @@ setMethod('summary',signature('validation'),function(object,...){
     , warning = has_warning(object)
     , expression = sapply(object$._calls,  call2text)
     , row.names=NULL
+    , stringsAsFactors=FALSE
   )  
 })
 
