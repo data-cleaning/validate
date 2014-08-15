@@ -109,7 +109,7 @@ setMethod("as.character","expressionset", function(x,...) sapply(x$._calls,depar
 #' 
 #' @param x An R object
 #'
-#' @return A \code{character} with names of variables occurring in \code{x}
+#' @return A \code{character} with names of rules occurring in \code{x}
 #' @export
 setMethod("names","expressionset", function(x) names(x$._calls))
 
