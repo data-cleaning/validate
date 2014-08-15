@@ -42,9 +42,26 @@ setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
 #'
 #' @param x An R object carrying verifications
 #' @param dat An R object carrying data
-#' @param ref Optionally, an R object carrying reference data
+#' @param ref Optionally, an R object carrying reference data. See examples for usage.
 #' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
+#' 
+#' 
+#' @section Using reference data:
+#' When reference data sets are given, it is assumed that rows in the reference data
+#' are ordered corresponding to the rows of \code{dat}, except when a \code{key} is specified.
+#' In that case, all reference datasets are matched against the rows of \code{dat} using \code{key}
+#' Nonmatching records are removed from datasets in \code{ref}. If there are records in \code{dat} 
+#' that are not in \code{ref}, then datasets in \code{ref} are extended with records containing only \code{NA}.
+#' In particular, this means that wen reference data is passed in an environment, those reference data sets
+#' may altered by the call to \code{cofront}.
+#'
+#' Technically, reference data will be stored in an environment that is the parent of a (created) environment that
+#' contains the columns of \code{dat}.
+#' 
+#' 
 #' @export 
+#' 
+#' @example ../examples/confront.R
 setGeneric("confront",
   def = function(x, dat, ref, ...) standardGeneric("confront")
 )
@@ -126,8 +143,6 @@ setMethod("confront", signature("validator","data.frame"), function(x, dat, key=
 
 
 #' @rdname confront
-#' @section Using reference data:
-#'
 setMethod("confront",signature("validator","data.frame","environment"), function(x, dat, ref, key=NULL, ...){
   classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
   if ( !all.equal(class(dat), classes)  )
