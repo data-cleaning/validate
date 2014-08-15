@@ -35,7 +35,7 @@ setGeneric("confront",
   def = function(x, y, ...) standardGeneric("confront")
 )
 
-setClassUnion('data',c("data.frame","list","environment"))
+# setClassUnion('data',c("data.frame","list","environment"))
 
 #' @rdname variables
 setMethod('variables',signature('data.frame'), function(x,...) names(x))
@@ -51,7 +51,7 @@ setMethod('variables',signature('environment'), function(x,...) ls(x))
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront", signature("indicator","data"), function(x,y,key=NULL,...){
+setMethod("confront", signature("indicator","data.frame"), function(x,y,key=NULL,...){
   calls <- x$calls(varlist=variables(y))
   opts <- x$options(...,copy=TRUE)
   L <- execute(calls,y,opts)
@@ -64,6 +64,7 @@ setMethod("confront", signature("indicator","data"), function(x,y,key=NULL,...){
       , ._error = lapply(L,"[[",3)     
   )  
 })
+
 
 #' @rdname confront
 setMethod('summary',signature('indication'), function(object,...){
@@ -100,7 +101,7 @@ setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
 #' @param key (optional) name of identifying variable in x.
-setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ...){
+setMethod("confront", signature("validator","data.frame"), function(x, y, key=NULL, ...){
   calls <- x$calls(varlist=variables(y))
   opts <-x$options(...,copy=TRUE)
   L <- execute(calls,y,opts)
