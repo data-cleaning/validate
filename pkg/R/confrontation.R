@@ -24,18 +24,56 @@ setRefClass("confrontation"
   cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
 }
 
+#' @rdname select
+#' @export 
+setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
+  new(class(x)
+      , ._call = match.call(call=sys.call(sys.parent()))
+      , ._calls = x$._calls[i]
+      , ._value = x$._value[i]
+      , ._warn = x$._warn[i]
+      , ._error  = x$._error[i]
+  )
+})
+
+
 
 #' Confront data with a (set of) expressionset(s)
 #'
 #' @param x An R object carrying verifications
-#' @param y An R object carrying data
+#' @param dat An R object carrying data
+#' @param ref Optionally, an R object carrying reference data
 #' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
 #' @export 
 setGeneric("confront",
-  def = function(x, y, ...) standardGeneric("confront")
+  def = function(x, dat, ref, ...) standardGeneric("confront")
 )
 
-setClassUnion('data',c("data.frame","list","environment"))
+
+## The below function is a worker that assumes all relevant data is present in 
+## an environment, possibly with a parent containing reference data. Most, if not
+## all R-based methods will convert to this form and call the worker.
+##
+## x a validator object
+## dat an environment
+## key a character indicating a key.
+##
+confront_work <- function(x,dat,key=NULL,...){
+  calls <- x$calls(varlist=variables(dat))
+  opts <-x$options(...,copy=TRUE)
+  L <- execute(calls,dat,opts)
+  if (!is.null(key)) L <- add_names(L,x,dat,key)
+  new('validation',
+      ._call = match.call(call=sys.call(sys.parent(2)))
+      , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(dat))
+      , ._value = lapply(L,"[[",1)
+      , ._warn =  lapply(L,"[[",2)
+      , ._error = lapply(L,"[[",3)     
+  )
+}
+
+
+# setClassUnion('data',c("data.frame","list","environment"))
 
 #' @rdname variables
 setMethod('variables',signature('data.frame'), function(x,...) names(x))
@@ -51,19 +89,11 @@ setMethod('variables',signature('environment'), function(x,...) ls(x))
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront", signature("indicator","data"), function(x,y,key=NULL,...){
-  calls <- x$calls(varlist=variables(y))
-  opts <- x$options(...,copy=TRUE)
-  L <- execute(calls,y,opts)
-  if (!is.null(key)) L <- add_names(L,x,y,key)
-  new('indication',
-      ._call = match.call(call=sys.call(sys.parent()))
-      , ._calls = x$calls(expand_assignments=TRUE, varlist=variables(y))
-      , ._value = lapply(L,"[[",1)
-      , ._warn =  lapply(L,"[[",2)
-      , ._error = lapply(L,"[[",3)     
-  )  
+setMethod("confront", signature("indicator","data.frame"), function(x,dat,key=NULL,...){
+  dat <- list2env(dat)
+  confront_work(x,dat,key,...)
 })
+
 
 #' @rdname confront
 setMethod('summary',signature('indication'), function(object,...){
@@ -83,40 +113,67 @@ setMethod('summary',signature('indication'), function(object,...){
   )  
 })
 
-#' @rdname select
-#' @export 
-setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
-  new(class(x)
-      , ._call = match.call(call=sys.call(sys.parent()))
-      , ._calls = x$._calls[i]
-      , ._value = x$._value[i]
-      , ._warn = x$._warn[i]
-      , ._error  = x$._error[i]
-  )
-})
 
 # # indicators serve a different purpose than validations.
 setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
 #' @param key (optional) name of identifying variable in x.
-setMethod("confront", signature("validator","data"), function(x, y, key=NULL, ...){
-  calls <- x$calls(varlist=variables(y))
-  opts <-x$options(...,copy=TRUE)
-  L <- execute(calls,y,opts)
-  if (!is.null(key)) L <- add_names(L,x,y,key)
-  new('validation',
-      ._call = match.call(call=sys.call(sys.parent()))
-      , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(y))
-      , ._value = lapply(L,"[[",1)
-      , ._warn =  lapply(L,"[[",2)
-      , ._error = lapply(L,"[[",3)     
-  )
+setMethod("confront", signature("validator","data.frame"), function(x, dat, key=NULL, ...){
+  dat <- list2env(dat)
+  confront_work(x,dat,key,...)
 })
 
 
+#' @rdname confront
+#' @section Using reference data:
+#'
+setMethod("confront",signature("validator","data.frame","environment"), function(x, dat, ref, key=NULL, ...){
+  classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
+  if ( !all.equal(class(dat), classes)  )
+    stop("Class of one or more elements in 'ref' differs from 'dat'")
+  if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
+  dat <- list2env(dat,parent=ref)  
+  confront_work(x,dat,key,...)
+})
+
+#' @rdname confront
+setMethod("confront",signature("validator","data.frame","data.frame"),function(x,dat,ref, key=NULL,...){
+  env <- new.env()
+  env$ref <- ref
+  if (!is.null(key)) match_rows(of=env, against=dat, using=key)
+  dat <- list2env(dat, parent=env)
+  confront_work(x, dat, key, ...)
+})
+
+#' @rdname confront
+setMethod("confront",signature("validator","data.frame","list"),function(x,dat,ref,key=NULL,...){
+  classes <- sapply(L,class)
+  if ( !all.equal(class(dat), classes)  )
+    stop("Class of one or more elements in 'ref' differs from 'dat'")
+  env <- list2env(ref)  
+  if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
+  dat <- list2env(dat,parent=ref)  
+  confront_work(x,dat,key,...)  
+})
+
+
+
+# match rows; prepare for 'left join'.
+# of     : an environment containing data.frames
+# against: a reference data.frame to match againsty.
+# using  : a key (character)
+match_rows <- function(of, against, using){  
+  key1 <- against[,using]
+  for ( nm in ls(of) ){
+    i <- match(key1, of[[nm]][,using], nomatch = nrow(of) + 1)
+    of[[nm]] <- of[[nm]][i,,drop=FALSE]
+  }
+}
+
+
 add_names <- function(L,x,y,key){
-  keys <- if ( is.data.frame(y) ) y[[key]] else y[[1]][[key]] 
+  keys <- y[[key]]
   nkey <- length(keys)
   L <- lapply(L,function(v){ 
     if ( length(v[[1]]) == nkey ) 
@@ -129,15 +186,14 @@ add_names <- function(L,x,y,key){
 # - Assignments are stored in a separate environment and forgotten afterwards.
 # - Failed assignments yield a warning.
 execute <- function(calls,env,opts){
-  w = new.env()
   lapply(calls, function(g) 
     if ( g[[1]] == ":=" ){ 
       var <- as.character(left(g))
       if ( var %in% variables(env) ) 
         warning(sprintf("Locally overwriting variable '%s'",var))
-      w[[as.character(left(g))]] <- tryCatch( eval(right(g), env), error=warning)
+        assign(var, tryCatch( eval(right(g), env), error=warning), envir=env)
     } else { 
-      factory(eval,opts)(g, env, w)
+      factory(eval,opts)(g, env)
     }
   )[!is.assignment(calls)]
 }
