@@ -234,9 +234,9 @@ extract_names <- function(L,prefix="V"){
   generic <- sprintf(fmt,prefix,seq_along(L))
   given <- names(L)
   if (is.null(given)) return(generic)
-  igen <- given == ""
+  igen <- given %in% c("", NA)
   given[igen] <- generic[igen]
-  given
+  make.names(given, unique=T)
 }
 
   

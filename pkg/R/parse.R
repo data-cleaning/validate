@@ -173,14 +173,29 @@ copy_and_set <- function(x,...){
 VOPTION <- voption()
 VOPTION$reset()
 
+parse_annotations <- function(L){
+  line_nums <- sapply(attr(L, "srcref"), function(sr){sr[1]})
+  parseData <- getParseData(L)
+  parseData <- subset(parseData, token=="COMMENT")
+  
+  # filter out @name
+  NAME <- "#\\s+@name\\s+([^\\s]+).*"
+  name_lines <- parseData[grepl(NAME, parseData$text),]
+  name_lines$name <- sub(NAME, "\\1", name_lines$text)
+  name_lines$match <- match(name_lines$line2+1, line_nums)
+  names(L)[name_lines$match] <- name_lines$name
+  #print(list(line_nums=line_nums, parseData=parseData, name_lines=name_lines, names_L = names(L)))
+  L
+}
 
 # x: an object of class expressionset
 read_resfile <- function(file, x){
-  L <- tryCatch(parse(file=file)
+  L <- tryCatch(parse(file=file, keep.source = T)
       , error = function(e){
         cat('Parsing failure at', file,"\n")
         e
   })
+  L <- parse_annotations(L)
   # set options in x (if any)
   I <- sapply(L, function(x) deparse(x[[1]]) == 'validate_options')
   if ( any(I) ){
