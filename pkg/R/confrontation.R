@@ -96,6 +96,8 @@ confront_work <- function(x,dat,key=NULL,...){
 
 # setClassUnion('data',c("data.frame","list","environment"))
 
+
+
 #' @rdname variables
 setMethod('variables',signature('data.frame'), function(x,...) names(x))
 
@@ -321,6 +323,28 @@ simplify_list <- function(L){
     m
   })
 }
+
+
+### WARNINGS AND ERRORRS -----------------------------------------------------
+
+#' Get warning messages from confrontation object
+#' @param x An object of class \code{confrontation}
+#' @export 
+setGeneric("warnings")
+setMethod("warnings","confrontation",function(x,...){
+  i <- has_warn(x)
+  x$._warning[i]
+})
+
+#' Get error messages from confrontation object
+#' @param x An object of class \code{confrontation}
+#' @export 
+setGeneric("errors",def = function(x,...) standardGeneric("errors"))
+setMethod("errors","confrontation",function(x,...){
+  i <- has_error(x)
+  x$._error[i]
+})
+
 
 
 ### SORT AND VALIDATION -------------------------------------------------------
