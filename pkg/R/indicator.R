@@ -40,12 +40,13 @@ ini_indicator <- function(.self,...,.files){
 
 
 get_stat <- function(x,what,...){
-  out <- rep(NA,length(x$value))
+  out <- rep(NA,length(x$._value))
   i <- !has_error(x)
   out[i] <- tryCatch(
-    sapply(x$value[i],what,...)
+    sapply(x$._value[i],what,...)
     , error = function(e) NA
     , warning = function(e) NA
   )
   out
 }
+

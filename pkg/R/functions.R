@@ -114,6 +114,13 @@ col_missing <- function(...){
   ,Id))  
 }
 
+#' @rdname syntax
+#' @return The number of records, unique for the columns specified in \code{...}.
+number_unique <- function(...){
+  L <- as.list(substitute(list(...))[-1])
+  vars <- matchvars(L,parent.frame())
+  length(unique(do.call(paste0,mget(vars,parent.frame()))))
+}
 
 
 # returns a character vector of variables specified in L, matched in env.

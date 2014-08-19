@@ -79,12 +79,12 @@ setGeneric("confront",
 ## dat an environment
 ## key a character indicating a key.
 ##
-confront_work <- function(x,dat,key=NULL,...){
+confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   calls <- x$calls(varlist=variables(dat))
   opts <-x$options(...,copy=TRUE)
   L <- execute(calls,dat,opts)
   if (!is.null(key)) L <- add_names(L,x,dat,key)
-  new('validation',
+  new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))
       , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(dat))
       , ._value = lapply(L,"[[",1)
@@ -114,7 +114,7 @@ setRefClass("indication", contains = "confrontation")
 #' @rdname confront
 setMethod("confront", signature("indicator","data.frame"), function(x,dat,key=NULL,...){
   dat <- list2env(dat)
-  confront_work(x,dat,key,...)
+  confront_work(x,dat,key,'indication',...)
 })
 
 
@@ -153,7 +153,7 @@ setRefClass("validation", contains = "confrontation")
 #' @param key (optional) name of identifying variable in x.
 setMethod("confront", signature("validator","data.frame"), function(x, dat, key=NULL, ...){
   dat <- list2env(dat)
-  confront_work(x,dat,key,...)
+  confront_work(x,dat,key,'validation',...)
 })
 
 
@@ -346,7 +346,7 @@ setGeneric("warnings")
 #' @export 
 setMethod("warnings","confrontation",function(x,...){
   i <- has_warning(x)
-  x$._warning[i]
+  x$._warn[i]
 })
 
 
