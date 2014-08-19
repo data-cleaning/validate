@@ -146,6 +146,7 @@ voption <- setRefClass('voption',
         '<','<=','==','>','>=', '!=', '%in%', ":"
         , 'identical', 'all','any', ':=' 
         , '!', '|', '||', '&', '&&', 'xor'
+        , 'any_duplicated', 'any_missing'
       )
       # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
       .self$raise = 'none'

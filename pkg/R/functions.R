@@ -103,7 +103,8 @@ row_missing <- function(...){
 }
 
 #' @rdname syntax
-#' @return For \code{col_missing} a vector with the number of missings per column defined by \code{...}.
+#' @return For \code{col_missing} a vector with the number of missings per column 
+#'    defined by \code{...}.
 col_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
@@ -115,13 +116,35 @@ col_missing <- function(...){
 }
 
 #' @rdname syntax
-#' @return The number of records, unique for the columns specified in \code{...}.
+#' @return For \code{number_unique} the number of records, unique for 
+#'   the columns specified in \code{...}.
 number_unique <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
   length(unique(do.call(paste0,mget(vars,parent.frame()))))
 }
 
+#' @rdname syntax
+#' @return For \code{any_missing}, \code{TRUE} if any \code{NA} occur in the columns
+#'   specified in \code{...}.
+any_missing <- function(...){
+  L <- as.list(substitute(list(...))[-1])
+  vars <- matchvars(L,parent.frame())
+  e <- parent.frame()
+  a <- FALSE
+  for ( v in vars ) 
+    if (!a) a <- a | anyNA(e[[vars]])
+  a
+}
+
+#' @rdname syntax
+#' @return For \code{any_duplicated}, \code{TRUE} if any (sub)records specified by
+#'  \code{...} are duplicated, \code{FALSE} otherwise. Note that \code{NA} is matched with \code{NA}.
+any_duplicated <- function(...){
+  L <- as.list(substitute(list(...))[-1])
+  vars <- matchvars(L,parent.frame())
+  anyDuplicated( do.call(paste0,mget(vars,parent.frame())) ) > 0
+}
 
 # returns a character vector of variables specified in L, matched in env.
 matchvars <- function(L,env){
