@@ -327,22 +327,26 @@ simplify_list <- function(L){
 
 ### WARNINGS AND ERRORRS -----------------------------------------------------
 
-#' Get warning messages from confrontation object
-#' @param x An object of class \code{confrontation}
-#' @export 
-setGeneric("warnings")
-setMethod("warnings","confrontation",function(x,...){
-  i <- has_warn(x)
-  x$._warning[i]
-})
-
 #' Get error messages from confrontation object
 #' @param x An object of class \code{confrontation}
+#' @param ... Arguments to be passed to other methods.
 #' @export 
 setGeneric("errors",def = function(x,...) standardGeneric("errors"))
+
+#' @rdname errors
 setMethod("errors","confrontation",function(x,...){
   i <- has_error(x)
   x$._error[i]
+})
+
+
+setGeneric("warnings")
+
+#' @rdname errors
+#' @export 
+setMethod("warnings","confrontation",function(x,...){
+  i <- has_warn(x)
+  x$._warning[i]
 })
 
 

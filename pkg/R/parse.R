@@ -15,7 +15,7 @@ NULL
 #' \itemize{
 #'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
 #'  The 'all' setting is useful when debugging validation scripts.}
-#'  \item{validation_symbols (language; see examples)} Control what statements are allowed as validation statements.
+#'  \item{validator_symbols (language; see examples)} Control what statements are allowed as validation statements.
 #'  \item{'reset'} Reset to factory settings.
 #' }
 #' 
@@ -41,7 +41,7 @@ NULL
 #' @examples
 #' # the default allowed validation symbols.
 #' validate_options('reset')
-#' validate_options('validation_symbols')
+#' validate_options('validator_symbols')
 #' 
 #' # set an option, local to a validator object:
 #' v <- validator(x + y > z)
@@ -96,7 +96,7 @@ v_option <- function(x,...,addsymbols=NULL,copy=FALSE){
   appendsymb <- function(OPT,LL){
     i <- match("addsymbol",names(LL))
     if ( !is.na(i) ){
-      OPT$setf("validation_symbols",append(OPT$getf("validation_symbols"),LL[[i]]))
+      OPT$setf("validator_symbols",append(OPT$getf("validator_symbols"),LL[[i]]))
       message(sprintf("Registred symbol(s): %s",paste(L[[1]],collapse=", ")))
       LL <- LL[-i]
     }
@@ -120,7 +120,7 @@ v_option <- function(x,...,addsymbols=NULL,copy=FALSE){
 # class holding options
 voption <- setRefClass('voption',
   fields = list(
-    validation_symbols = 'character'
+    validator_symbols = 'character'
     , preproc_symbols = 'character'
     , raise = 'character'
   )
@@ -142,7 +142,7 @@ voption <- setRefClass('voption',
     }
     , reset = function(){
       # top symbols allowed for validation statements
-      .self$validation_symbols = c(
+      .self$validator_symbols = c(
         '<','<=','==','>','>=', '!=', '%in%', ":"
         , 'identical', 'all','any', ':=' 
         , '!', '|', '||', '&', '&&', 'xor'
@@ -156,7 +156,7 @@ voption <- setRefClass('voption',
 
 setGeneric('as.list')
 setMethod('as.list',signature('voption'),function(x,...){
-  fnames <- c('raise','validation_symbols','preproc_symbols')
+  fnames <- c('raise','validator_symbols','preproc_symbols')
   setNames(lapply(fnames,function(i) x$getf(i)),fnames)
 })
 
@@ -249,7 +249,7 @@ replace_dollar <- function(x){
 
 validating <- function(x,y,...){
   sym <- deparse(x[[1]])
-  sym %in% y$options("validation_symbols")[[1]] || 
+  sym %in% y$options("validator_symbols")[[1]] || 
     grepl("^is\\.",sym) || 
     ( sym == 'if' && validating(x[[2]],y) && validating(x[[3]],y) ) 
 }
