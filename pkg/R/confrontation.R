@@ -345,7 +345,7 @@ setGeneric("warnings")
 #' @rdname errors
 #' @export 
 setMethod("warnings","confrontation",function(x,...){
-  i <- has_warn(x)
+  i <- has_warning(x)
   x$._warning[i]
 })
 
