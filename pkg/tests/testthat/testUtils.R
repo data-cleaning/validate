@@ -45,11 +45,11 @@ test_that("Variables can be retrieved",{
    , sum = x + y == z
   )
   expect_equivalent(
-    variables(v,matrix=TRUE)
+    variables(v,as='matrix')
   , array(c(T,T,F,T),dim=c(2,2))
   )
   expect_equivalent(
-    variables(v,matrix=TRUE,dummy=TRUE)
+    variables(v,as='matrix',dummy=TRUE)
   , array(c(T,F,T,T,T,T,F,F,T),dim=c(3,3))
   )
 })
