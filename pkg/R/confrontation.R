@@ -121,6 +121,7 @@ setMethod("confront", signature("indicator","data.frame"), function(x,dat,key=NU
 #' @rdname validate-summary
 #' @param object An R object
 #' @param ... Currently unused
+#'
 #' @aliases validate-summary
 #' @section Indication:
 #' Some basic information per evaluated indicator is reported: the number of items to which the 
@@ -362,7 +363,7 @@ setGeneric('aggregate')
 #' @param x An object of class \code{\link{validation}}
 #' @param by Report on violations per rule (default) or per record?
 #' @param drop drop list attribute if the result has a single argument.
-#' @param ... options to be passed to or from other methds
+#' @param ... Arguments to be passed to or from other methods.
 #'
 #' @return By default, a \code{data.frame} with the following columns.
 #' \tabular{ll}{
@@ -419,8 +420,7 @@ setGeneric('sort')
 #' @param by Report on violations per rule (default) or per record?
 #' @param drop drop list attribute if the result has a single argument.
 #' @param decreasing Sort by decreasing number of passes?
-#' @param ... options to be passed to or from other methds
-#'
+#' @param ... Arguments to be passed to or from other methods.
 #' @return A \code{data.frame} with the following columns.
 #' \tabular{ll}{
 #'   \code{npass} \tab Number of items passed\cr

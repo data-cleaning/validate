@@ -102,7 +102,7 @@ setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
 
 #' Convert an expressionset to character
 #' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} 
-#' @param ... options to be passed to or from other methods
+#' @param ... Arguments to be passed to or from other methods
 #' or \code{\link{indicator}}.
 setMethod("as.character","expressionset",  function(x,...) sapply(x$._calls,function(y) paste(deparse(y),collapse=" ")))
 
