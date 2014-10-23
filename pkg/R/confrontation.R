@@ -89,7 +89,7 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
       , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(dat))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
-      , ._error = lapply(L,"[[",3)     
+      , ._error = lapply(L,"[[",3)
   )
 }
 
