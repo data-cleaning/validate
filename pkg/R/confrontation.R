@@ -119,6 +119,7 @@ setMethod("confront", signature("indicator","data.frame"), function(x,dat,key=NU
 
 
 #' @rdname validate-summary
+#' @param object An R object
 #' @param ... Currently unused
 #' @aliases validate-summary
 #' @section Indication:
@@ -361,6 +362,7 @@ setGeneric('aggregate')
 #' @param x An object of class \code{\link{validation}}
 #' @param by Report on violations per rule (default) or per record?
 #' @param drop drop list attribute if the result has a single argument.
+#' @param ... options to be passed to or from other methds
 #'
 #' @return By default, a \code{data.frame} with the following columns.
 #' \tabular{ll}{
@@ -417,6 +419,7 @@ setGeneric('sort')
 #' @param by Report on violations per rule (default) or per record?
 #' @param drop drop list attribute if the result has a single argument.
 #' @param decreasing Sort by decreasing number of passes?
+#' @param ... options to be passed to or from other methds
 #'
 #' @return A \code{data.frame} with the following columns.
 #' \tabular{ll}{
