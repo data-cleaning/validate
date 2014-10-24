@@ -42,7 +42,7 @@ setRefClass("validator"
 
 
 ini_validator <- function(.self, ..., .files){
-  ini_expressionset(.self,..., .files=.files)
+  ini_expressionset(.self,..., .files=.files, .options = PKGOPT)
   if (length(.self$._calls)==0) return(.self)
 
   i <- sapply(.self$._calls, function(x) validating(x,.self) || vargroup(x))
@@ -55,6 +55,7 @@ ini_validator <- function(.self, ..., .files){
   .self$._origin <- .self$._origin[i]
   .self
 }
+
 
 
 # Extract linear coeffiecients from linear expressions

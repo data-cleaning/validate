@@ -81,7 +81,8 @@ setGeneric("confront",
 ##
 confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   calls <- x$calls(varlist=variables(dat))
-  opts <-x$options(...,copy=TRUE)
+  # merge options with clone of option manager 
+  opts <- x$clone_options(...)
   L <- execute(calls,dat,opts)
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
@@ -92,9 +93,6 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
       , ._error = lapply(L,"[[",3)
   )
 }
-
-
-# setClassUnion('data',c("data.frame","list","environment"))
 
 
 

@@ -2,7 +2,7 @@
 # Collects results, warnings and errors.
 # http://stackoverflow.com/questions/4948361/how-do-i-save-warnings-and-errors-as-output-from-a-function
 factory <- function(fun,opts){
-  switch(opts$getf('raise')
+  switch(opts('raise')
     , 'none' = function(...) { # both errors and warnings are caught
       warn <- err <- NULL
       res <- withCallingHandlers(

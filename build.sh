@@ -22,7 +22,7 @@ cp build/DESCRIPTION pkg
 
 echo "######## Generate documentation..."
 ## $R -q -f document.R
-$R -e "roxygen2::update_collate('pkg');devtools::document('pkg',clean=TRUE)"
+$R -e "roxygen2::update_collate('pkg');devtools::document('pkg')"
 
 
 echo "######## Building package in output..."

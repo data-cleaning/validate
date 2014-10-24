@@ -24,7 +24,7 @@ setRefClass("indicator", contains='expressionset',
 
 
 ini_indicator <- function(.self,...,.files){
-  ini_expressionset(.self,..., .files=.files, .prefix="I")
+  ini_expressionset(.self,..., .files=.files, .prefix="I",.options = PKGOPT)
   if (length(.self$._calls)==0) return(.self)
   
   i <- sapply(.self$._calls, function(x) !validating(x,.self) || vargroup(x))

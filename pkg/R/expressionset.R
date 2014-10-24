@@ -1,27 +1,34 @@
 #' @include parse.R
 NULL
 
+
 # Superclass for storing verification rules.
 setRefClass("expressionset"
-  , fields = list(._calls = 'list', ._origin= 'character',._options='voption')
+  , fields = list(._calls = 'list', ._origin= 'character',._options='function')
   , methods= list(
       show = function() show_expressionset(.self)
     , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
     , calls = function(varlist=NULL,...) get_calls(.self,varlist=varlist,...)
     , expand = function(...) expand_expressionset(.self,...)
     , blocks = function() blocks_expressionset(.self)
-    , options = function(...,copy=FALSE) es_option(.self,...,copy=copy) 
+    , options = function(...) .self$._options(...)
+    , clone_options = function(...) clone_and_merge(.self$._options,...)
   )
 )
 
-es_option <- function(x,...,copy){
-  L <- list(...)
-  setmode <- !is.null(names(L))
-  # prevent that global settings are overwritten.
-  if ( setmode & !copy ) x$._options <- x$._options$copy()
-  do.call(v_option,c(list(x=x$._options),L,copy=copy))
-}
+#' @rdname validate_options
+setMethod('validate_options','expressionset',function(x=NULL,...){
+  if (options::is_setting(...)){
+    x$._options <- clone_and_merge(x$._options,...)
+  } else {
+    x$._options(...)
+  }
+})
 
+#' @rdname validate_options
+setMethod('validate_reset','expressionset',function(x=NULL){
+  options::reset(x$._options)
+})
 
 expand_expressionset <- function(x,...){
   x$._calls <- x$calls(expand_assignments=TRUE,...)
@@ -195,9 +202,9 @@ setMethod("is_vargroup",signature("expressionset"),function(x,...){
 
 # IMPLEMENTATIONS -------------------------------------------------------------
 
-ini_expressionset <- function(.self, ..., .files, .prefix="V"){
+ini_expressionset <- function(.self, ..., .files, .prefix="V",.options=options_manager()){
   L <- as.list(substitute(list(...))[-1])
-  .self$._options <- VOPTION
+  .self$._options <- .options
   if ( !is.null(.files) && is.character(.files) ){
     # process include statements.
     filestack <- unlist(lapply(.files,get_filestack)) 
