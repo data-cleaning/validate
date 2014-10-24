@@ -66,6 +66,7 @@ setMethod('validate_options','ANY',function(x=NULL,...){
 })
 
 #' @rdname validate_options
+#' @export
 setGeneric('validate_reset',def=function(x=NULL) standardGeneric('validate_reset'))
 
 #' @rdname validate_options
