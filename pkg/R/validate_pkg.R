@@ -20,5 +20,6 @@
 #' @docType package
 #' @name validate
 #' @aliases package-validate validate
-#' @import methods options
+#' @import methods
+#' @import settings
 NULL

@@ -71,7 +71,7 @@ setGeneric('validate_reset',def=function(x=NULL) standardGeneric('validate_reset
 
 #' @rdname validate_options
 setMethod('validate_reset','ANY',function(x=NULL){
-  options::reset(PKGOPT)
+  settings::reset(PKGOPT)
 })
 
 

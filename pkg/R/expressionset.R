@@ -18,7 +18,7 @@ setRefClass("expressionset"
 
 #' @rdname validate_options
 setMethod('validate_options','expressionset',function(x=NULL,...){
-  if (options::is_setting(...)){
+  if (settings::is_setting(...)){
     x$._options <- clone_and_merge(x$._options,...)
   } else {
     x$._options(...)
@@ -27,7 +27,7 @@ setMethod('validate_options','expressionset',function(x=NULL,...){
 
 #' @rdname validate_options
 setMethod('validate_reset','expressionset',function(x=NULL){
-  options::reset(x$._options)
+  settings::reset(x$._options)
 })
 
 expand_expressionset <- function(x,...){
