@@ -9,7 +9,7 @@ Author: Mark van der Loo, Edwin de Jonge
 Description: data quality indicators
 Version: 0.0.1
 Depends: R (>= 3.0.0)
-URL: https://github.com/edwindj/validate
+URL: https://github.com/data-cleaning/validate
 Date: 2013-04-28
 Imports: methods, settings
 Suggests: testthat
