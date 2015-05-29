@@ -146,6 +146,16 @@ any_duplicated <- function(...){
   anyDuplicated( do.call(paste0,mget(vars,parent.frame())) ) > 0
 }
 
+# Internal function that tests for functional dependencies
+`~` <- function(lhs, rhs){
+  Lvars <- all.vars(substitute(lhs))
+  Rvars <- all.vars(substitute(rhs))
+  condition  <- do.call(paste0, mget(Lvars, parent.frame() ) )
+  consequent <- do.call(paste0, mget(Rvars, parent.frame() ) )
+  .Call("R_fdcheck", condition, consequent)
+}
+
+
 # returns a character vector of variables specified in L, matched in env.
 matchvars <- function(L,env){
   if( length(L) == 0 ){

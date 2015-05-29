@@ -203,6 +203,7 @@ setMethod("is_vargroup",signature("expressionset"),function(x,...){
 # IMPLEMENTATIONS -------------------------------------------------------------
 
 ini_expressionset <- function(.self, ..., .files, .prefix="V",.options=options_manager()){
+
   L <- as.list(substitute(list(...))[-1])
   .self$._options <- .options
   if ( !is.null(.files) && is.character(.files) ){

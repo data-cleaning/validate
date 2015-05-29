@@ -3,7 +3,7 @@ NULL
 
 PKGOPT <- options_manager(
   validator_symbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', ":"
+    '<','<=','==','>','>=', '!=', '%in%', ":" , "~"
     , 'identical', 'all','any', ':=' 
     , '!', '|', '||', '&', '&&', 'xor'
     , 'any_duplicated', 'any_missing'
@@ -111,13 +111,12 @@ read_resfile <- function(file, x){
     L <- L[!I]
   }
   # preprocessing executes some statements directly:
-  I <- sapply(L,function(y) deparse(y[[1]]) %in% x$options('preproc_symbols')[[1]])
+  I <- sapply(L,function(y) deparse(y[[1]]) %in% x$options('preproc_symbols')[[1]])  
   e <- new.env()
   lapply(L[I],eval,envir=e)
   L <- lapply(L[!I], function(x) do.call(substitute, list(x, env=e)))
   setNames(L,extract_names(L))
 }
-
 
 
 # find a symbol in a call. Returns a list of multi-indices.

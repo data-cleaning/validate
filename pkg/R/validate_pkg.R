@@ -19,6 +19,7 @@
 #'        
 #' @docType package
 #' @name validate
+#' @useDynLib validate
 #' @aliases package-validate validate
 #' @import methods
 #' @import settings
