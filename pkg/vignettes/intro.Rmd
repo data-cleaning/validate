@@ -108,8 +108,8 @@ contains too many missing values to compute the result of the expression. In
 the validate package, a validation rule is the subset of R-expressions whose
 final result is determined by any of the following operators or functions.
 ```{r,echo=FALSE}
-s <- validate:::SYNTAX$validationsymbols
-s[!s%in% c(':=',':')]
+#s <- validate:::SYNTAX$validationsymbols
+#s[!s%in% c(':=',':')]
 ```
 Besides these operators, you can define rules that consist of calls to code
 ```is.-`` functions. 

@@ -3,7 +3,7 @@ NULL
 
 PKGOPT <- options_manager(
   validator_symbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', ":" , "~"
+    '<','<=','==','>','>=', '!=', '%in%', ":" , "~", "%->%"
     , 'identical', 'all','any', ':=' 
     , '!', '|', '||', '&', '&&', 'xor'
     , 'any_duplicated', 'any_missing'
