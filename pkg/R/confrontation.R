@@ -235,13 +235,25 @@ has_value <- function(x) sapply(x$._value, function(a) !is.null(a))
 
 passes <- function(x){
   sapply(x$._value, function(a){
-    ifelse( is.null(a), 0, sum(a,na.rm=TRUE)) 
+    ifelse( is.null(a)
+      , 0
+      , ifelse( is.logical(a)
+         , sum(a,na.rm=TRUE)      # case of regular rule
+         , sum(a == seq_along(a)) # case of FD
+        )
+    )
   })
 }
 
 fails <- function(x){
   sapply(x$._value, function(a){
-    ifelse(is.null(a),0,sum(!a,na.rm=TRUE))
+    ifelse( is.null(a)
+      , 0
+      , ifelse( is.logical(a)
+          , sum(a,na.rm=TRUE)      # case of regular rule
+          , sum(a != seq_along(a)) # case of FD
+        )
+    )
   })
 }
 
