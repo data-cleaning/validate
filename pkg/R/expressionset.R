@@ -1,4 +1,5 @@
 #' @include parse.R
+#' @include sugar.R
 NULL
 
 
