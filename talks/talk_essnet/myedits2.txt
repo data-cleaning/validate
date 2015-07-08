@@ -1,0 +1,21 @@
+
+G := {turnover; other.rev; total.rev}
+G > 0
+
+# edits for the retailers file
+#turnover >= 0
+#other.rev >= 0
+#total.rev >= 0
+
+
+if (staff > 0) staff.costs > 0
+total.rev + total.costs == profit
+
+# transient variable
+ratio := profit/total.rev
+ratio < 0.6
+
+# a more complicated function
+turnover < 5*median(turnover,na.rm=TRUE)
+
+

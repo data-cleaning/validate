@@ -1,0 +1,12 @@
+
+# edits for the retailers file
+turnover >= 0
+
+other.rev >= 0
+
+total.rev >= 0
+
+if (staff > 0) staff.costs > 0
+
+total.rev + total.costs == profit
+
