@@ -60,14 +60,14 @@ ini_ruleset <- function(obj, ..., .file){
 }
 
 
-setGeneric("variables",function(object) standardGeneric("variables"))
+#setGeneric("variables",function(object) standardGeneric("variables"))
 
-setMethod("variables","rule", function(object){
-  var_from_call(object@call)
+setMethod("variables","rule", function(x,...){
+  var_from_call(x@call)
 })
 
-setMethod("variables", "ruleset", function(object){
-  lapply(object$rules, variables)
+setMethod("variables", "ruleset", function(x,...){
+  lapply(x$rules, variables)
 })
 
 
