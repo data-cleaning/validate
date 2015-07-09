@@ -146,6 +146,20 @@ any_duplicated <- function(...){
   anyDuplicated( do.call(paste0,mget(vars,parent.frame())) ) > 0
 }
 
+# Internal function that tests for functional dependencies
+`~` <- function(lhs, rhs){
+  Lvars <- all.vars(substitute(lhs))
+  Rvars <- all.vars(substitute(rhs))
+  
+  condition  <- do.call(paste, c(mget(Lvars, parent.frame()), sep="|"))
+  consequent <- do.call(paste0, c(mget(Rvars, parent.frame()), sep="|"))
+  .Call("R_fdcheck", condition, consequent)
+}
+
+# synonym of `~`, may be more understandable
+`%->%` <- `~`
+
+
 # returns a character vector of variables specified in L, matched in env.
 matchvars <- function(L,env){
   if( length(L) == 0 ){
