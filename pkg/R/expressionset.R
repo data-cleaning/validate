@@ -9,7 +9,7 @@ setRefClass("expressionset"
   , methods= list(
       show = function() show_expressionset(.self)
     , initialize = function(..., .files=NULL) ini_expressionset(.self,..., .files=.files)
-    , calls = function(varlist=NULL,...) get_calls(.self,varlist=varlist,...)
+    , calls = function(varlist=NULL,...) get_calls(.self, varlist=varlist, ...)
     , expand = function(...) expand_expressionset(.self,...)
     , blocks = function() blocks_expressionset(.self)
     , options = function(...) .self$._options(...)
