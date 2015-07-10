@@ -1,6 +1,10 @@
 #' @include validate_pkg.R
 NULL
 
+# File parsing and functions computing on the language
+
+
+
 PKGOPT <- options_manager(
   validator_symbols = c(
     '<','<=','==','>','>=', '!=', '%in%', ":" , "~", "%->%"
@@ -116,6 +120,17 @@ read_resfile <- function(file, x){
   lapply(L[I],eval,envir=e)
   L <- lapply(L[!I], function(x) do.call(substitute, list(x, env=e)))
   setNames(L,extract_names(L))
+}
+
+# Extract variable names from a call object
+var_from_call <- function( x, vars=character(0) ){
+  
+  if ( length(x)==1 && is.symbol(x) ) return(deparse(x) )
+  
+  if (length(x) > 1){
+    for ( i in 2:length(x) ) vars <- c(vars,var_from_call(x[[i]]))
+  }
+  unique(vars)
 }
 
 
