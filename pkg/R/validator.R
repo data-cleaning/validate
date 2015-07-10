@@ -12,7 +12,7 @@ NULL
 #' the expression is described in \code{\link{syntax}}. 
 #' 
 #' @param ... A comma-separated list of validating expressions
-#' @param .files A character vector of file locations (see also the section on file parsing in the 
+#' @param .file A character vector of file locations (see also the section on file parsing in the 
 #' \code{\link{syntax}} help file).
 #'
 #' @section Validating expressions:

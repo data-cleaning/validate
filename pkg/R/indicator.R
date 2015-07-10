@@ -1,11 +1,11 @@
 #' @include expressionset.R
 NULL
 
-  library(settings)
-  source('pkg/R/sugar.R')
-  source('pkg/R/parse.R')
-  source('pkg/R/rule.R')
-  source('pkg/R/expressionset.R')
+#   library(settings)
+#   source('pkg/R/sugar.R')
+#   source('pkg/R/parse.R')
+#   source('pkg/R/rule.R')
+#   source('pkg/R/expressionset.R')
 
 
 # The 'indicator' class holds indicator definitions
@@ -43,15 +43,4 @@ ini_indicator <- function(obj, ..., .file){
 
 
 
-
-get_stat <- function(x,what,...){
-  out <- rep(NA,length(x$._value))
-  i <- !has_error(x)
-  out[i] <- tryCatch(
-    sapply(x$._value[i],what,...)
-    , error = function(e) NA
-    , warning = function(e) NA
-  )
-  out
-}
 

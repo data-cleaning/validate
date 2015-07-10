@@ -178,10 +178,37 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
 
-
-setMethod("variables", "expressionset", function(x,...){
-  lapply(x$rules, variables)
+#' @rdname variables
+#' @param as how to return variables: 
+#' \itemize{
+#'   \item{\code{'vector'}} Return the uniqe vector of variables occurring in \code{x}.
+#'   \item{\code{'matrix'}} Return a boolean matrix, each row representing a rule, each column representing a variable.
+#'   \item{\code{'list'}} Return a named \code{list}, each entry containing a character vector with variable names.
+#' }
+#' @param dummy Also retrieve transient variables set with the \code{:=} operator.
+#'
+#' @return By default, a \code{character} vector listing all (non-dummy) variables occuring in \code{x}. 
+#'
+#' @seealso \code{\link{summary}}
+#'
+#' @example ../examples/variables.R
+setMethod("variables", "expressionset", function(x, as=c('vector','matrix','list'), dummy=FALSE, ...){ 
+  as <- match.arg(as)
+  vars <- lapply(x$calls(expand_assignments=!dummy),var_from_call)
+  u <- unique(unlist(vars))
+  
+  switch(as
+   , 'vector' = u
+   , 'list'   = vars
+   , 'matrix' = {  
+     a <- array(FALSE,dim=c(length(vars),length(u)),dimnames=list(rule=names(vars),variable=u) )
+     for (i in seq_along(vars)) a[i,vars[[i]]] <- TRUE
+     a
+   })
 })
+
+
+
 
 #' @rdname validate_options
 setMethod('validate_options','expressionset',function(x=NULL,...){
@@ -244,7 +271,6 @@ setMethod('summary',signature('expressionset'),function(object,...){
     , row.names=NULL
   )
 })
-
 
 
 #' Select a subset
