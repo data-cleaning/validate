@@ -176,7 +176,7 @@ vargroup <- function(x){
 not <- function(x) parse(text=paste0("!(",deparse(x),")"))[[1]]
 
 `%or%` <- function(x,y){
-  parse(text=paste(deparse(x),'|',deparse(y)))[[1]]
+  parse(text=paste(call2text(x),'|',call2text(y)))[[1]]
 }
 
 # x: a validation call

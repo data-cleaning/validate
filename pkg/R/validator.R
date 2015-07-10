@@ -56,7 +56,7 @@ ini_validator <- function(obj, ..., .file){
       obj$rules <- obj$rules[i]
     } 
   } else {
-    ini_expressionset_yml(obj, file, .prefix="V")
+    ini_expressionset_yml(obj, file=.file, .prefix="V")
   }
 }
 
