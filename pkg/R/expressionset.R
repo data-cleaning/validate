@@ -59,12 +59,24 @@ ini_expressionset_yml <- function(obj, file, .prefix="R"){
 
 
 
-rules_from_yml <- function(file){
+rules_from_yml <- function(file,prefix="V"){
   L <- tryCatch(yaml.load_file(file)
     , error=function(e){
       stop(sprintf("\nNot a valid yaml file, 'yaml.load_file' says:\n %s",e$message))
   })
   rules <- lapply(L$rules, function(x) x$expr)
+  
+  
+  # name extraction; generic name if needed.
+  npos <- max(1,ceiling(log10(length(rules)+1)))
+  fmt <- paste0("%s%0",npos,"d")
+  generic <- sprintf(fmt,prefix,seq_along(L))
+  for ( i in seq_along(L$rules) ){
+    if (is.null( L$rules[[i]]$name)) {
+      L$rules[[i]]$name <- generic[i]
+    }
+  }
+  
   labs <- sapply(L$rules, function(x) as.character(x$name))
   inull <- sapply(rules,is.null)
   if (any(inull)){
@@ -80,7 +92,7 @@ rules_from_yml <- function(file){
   R <- vector(length(rules),mode='list')
   for ( i in seq_along(rules) ){
     R[[i]] <- rule(
-      call = parse(text=rules[i])[[1]]
+      call = parse(text=rules[[i]])[[1]]
       , name = labs[i]
       , short = short[[i]] 
       , long = long[[i]]
