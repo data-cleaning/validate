@@ -3,10 +3,10 @@
 #' @include rule.R
 NULL
 
- library(settings)
- source('pkg/R/sugar.R')
- source('pkg/R/parse.R')
- source('pkg/R/rule.R')
+#  library(settings)
+#  source('pkg/R/sugar.R')
+#  source('pkg/R/parse.R')
+#  source('pkg/R/rule.R')
 
 #### EXPRESSIONSET OBJECT -----------------------------------------------------
 # superclass storing a set of rich expressions
