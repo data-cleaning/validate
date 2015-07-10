@@ -1,43 +1,12 @@
 #' @include parse.R
 #' @include sugar.R
+#' @include rule.R
 NULL
 
-
-
-library(settings)
-source('pkg/R/sugar.R')
-source('pkg/R/parse.R')
-
-# RULE OBJECT -----------------------------------------------------------------
-# A rule is a call object endowed with extra attributes
-rule <- setClass("rule",
-  slots = c(
-    call         = "call"
-    , name       = "character"
-    , short_note = "character"
-    , long_note  = "character"
-    , origin     = "character"
-    , created    = "POSIXct"
-    )
-  , prototype = list(
-    call         = NULL
-    , name       = ""
-    , short_note = ""
-    , long_note  = ""
-    , origin     = ""
-    , created    = as.POSIXct(NA)
-    )
-)
-
-# full print method for rules
-setMethod("show", "rule", function(object){
-  cat(sprintf("\nObject of class %s.\n",class(obj)))
-  nm <- slotNames(object)
-  n <- max(nchar(nm))
-  vl <- sapply(nm,function(x) slot(object,x) )
-  fmt <- paste0("%-",n,"s: %s\n")
-  cat(sprintf(fmt,nm,vl))
-})
+ library(settings)
+ source('pkg/R/sugar.R')
+ source('pkg/R/parse.R')
+ source('pkg/R/rule.R')
 
 #### EXPRESSIONSET OBJECT -----------------------------------------------------
 # superclass storing a set of rich expressions
@@ -47,7 +16,6 @@ expressionset <- setRefClass("expressionset"
       , ._options = "function"
   )
   , methods= list(
-#        initialize = function(..., .file) ini_expressionset(.self, ..., .file = .file)
         show = function() show_expressionset(.self)
       , calls      = function(varlist=NULL,...) get_calls(.self, varlist=varlist,...)
       , blocks     = function() blocks_expressionset(.self)
@@ -57,26 +25,55 @@ expressionset <- setRefClass("expressionset"
 )
 
 
-## dead code (for now)
-# ini_expressionset <- function(obj, ..., .file){  
-#   prefix = "V"
-#   
-#   if ( missing(.file) ){
-#     L <- as.list(substitute(list(...))[-1])
-#     nm <- extract_names(L, prefix=prefix)
-#     cr <- Sys.time()
-#     R <- vector(length(L), mode='list')
-#     for ( i in seq_along(L) ){
-#       R[[i]] <- rule(
-#           call = L[[i]]
-#         , name = nm[i]
-#         , origin="command-line"
-#         , created = cr
-#         )
-#     }
-#   } # else: parse from (yaml) file
-#   obj$rules <- R
-# }
+## Service for filling an expressionset from commandline
+ini_expressionset_cli <- function(obj, ..., .prefix="R"){  
+
+  L <- as.list(substitute(list(...))[-1])
+  nm <- extract_names(L, prefix = .prefix)
+  cr <- Sys.time()
+  R <- vector(length(L), mode='list')
+  for ( i in seq_along(L) ){
+    R[[i]] <- rule(
+        call = L[[i]]
+      , name = nm[i]
+      , origin="command-line"
+      , created = cr
+      )
+  }
+  obj$rules <- R
+}
+
+## TODO: Service for creating child objects of expressionset from file
+ini_expressionset_yml <- function(obj,file,.prefix="R"){
+  obj
+}
+
+# Get sequence of files to be processed from include statements.
+get_filestack <- function(file){
+  # Detecting include statements.
+  tag <- "#[[:blank:]]+@validate[[:blank:]]+include[[:blank:]]+"
+  
+  f <- function(fl, det=character(0)){
+    det <- c(fl,det)
+    if ( fl %in% det[-1])
+      stop(sprintf("Cyclic dependency detected in %s\n%s\n",fl,paste(rev(det),collapse=" -> ")))
+    r <- readLines(fl)
+    L <- grep(tag,r,value=TRUE)
+    if ( length(L) > 0)
+      L <- gsub(paste0(tag,"|[[:blank:]]*$"),"",L) # also remove trailing blanks.
+    for ( x in L )
+      f(x,det)
+    filestack <<- c(filestack,fl)
+  }
+  filestack <- character(0)
+  f(file)
+  filestack
+}
+
+
+
+
+
 
 
 show_expressionset <- function(obj){
@@ -159,13 +156,6 @@ blocks_expressionset <- function(x){
 # S4 GENERICS -----------------------------------------------------------------
 
 
-#' Extract variable names
-#'
-#' @param x An R object
-#' @param ... Arguments to be passed to other methods.
-#' 
-#' @export
-setGeneric("variables", function(x,...) standardGeneric("variables"))
 
 
 #' Create a summary
@@ -186,9 +176,6 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
 
-setMethod("variables","rule", function(x,...){
-  var_from_call(x@call)
-})
 
 setMethod("variables", "expressionset", function(x,...){
   lapply(x$rules, variables)
@@ -228,6 +215,15 @@ setMethod("names","expressionset",function(x){
   sapply(x$rules, function(rule) rule@name)
 })
 
+setMethod("validating", "expressionset", function(x,...){
+  allowed_symbols <- x$options("validator_symbols")
+  sapply(x$rules,validating,allowed_symbols)
+})
+
+setMethod("linear","expressionset", function(x,...){
+  sapply(x$rules, linear)
+})
+
 
 #' Select a subset
 #' 
@@ -248,12 +244,20 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   if (is.character(i)){
     i <- i %in% names(x)
   }
-  do.call(class(x)
-    , list(rules=x$rules[i]
-    , ._options = clone_and_merge(x$._options)
-    )
-  )
+  out <- new(class(x))
+  out$rules <- x$rules[i]
+  out$._options = clone_and_merge(x$._options)
+  out
 })
+
+#' @param exact Not implemented
+#' @rdname select
+setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
+  x$rules[[i]]
+})
+
+
+
 
 # demonstruction
 # L <- list(
@@ -261,6 +265,8 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
 #  , rule(call = expression(p + q == z)[[1]], name="noot")
 #  , rule(call = expression(a*b == c)[[1]],   name="mies")
 # )
-# 
+# # 
 # r <- expressionset(rules=L,._options=options_manager())
+
+
 

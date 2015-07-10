@@ -164,12 +164,6 @@ replace_dollar <- function(x){
   x
 }
 
-validating <- function(x,y,...){
-  sym <- deparse(x[[1]])
-  sym %in% y$options("validator_symbols") || 
-    grepl("^is\\.",sym) || 
-    ( sym == 'if' && validating(x[[2]],y) && validating(x[[3]],y) ) 
-}
 
 # test if a call defines a variable group
 vargroup <- function(x){
@@ -196,12 +190,22 @@ left  <- function(x) if ( is.call(x) && length(x)>2) x[[2]] else NULL
 right <- function(x) if ( is.call(x) ) x[[min(length(x),3)]] else NULL
 
 
-linear <- function(x){
+linear_call <- function(x){
   if ( is.null(node(x)) ) return(TRUE) 
   n <- deparse(node(x))
   if ( !n %in% c("+","-","*","<","<=","==",">=",">" ) ) return(FALSE)
   if ( n == "*" && !( is.numeric(left(x)) || is.numeric(right(x)) )  ) return(FALSE)
-  linear(left(x)) & linear(right(x))
+  linear_call(left(x)) & linear_call(right(x))
+}
+
+# check whether a call is validating, based on a set of 
+# predifined allowed symbols that result in a boolean.
+validating_call <- function(call,allowed_symbols){
+  sym <- deparse(call[[1]])
+  sym %in% allowed_symbols || 
+    grepl("^is\\.",sym) || 
+    ( sym == 'if' && validating_call(call[[2]],allowed_symbols) && 
+        validating_call(call[[3]],allowed_symbols) ) 
 }
 
 
