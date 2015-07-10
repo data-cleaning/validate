@@ -12,7 +12,7 @@ NULL
 #' the expression is described in \code{\link{syntax}}. 
 #' 
 #' @param ... A comma-separated list of validating expressions
-#' @param .files A character vector of file locations (see also the section on file parsing in the 
+#' @param .file A character vector of file locations (see also the section on file parsing in the 
 #' \code{\link{syntax}} help file).
 #'
 #' @section Validating expressions:
@@ -28,32 +28,36 @@ NULL
 #'
 #' @example ../examples/validator.R
 #' @export
-validator <- function(...,.files=NULL) new('validator',..., .files=.files)
+validator <- function(..., .file) new('validator',..., .file = .file)
 
 setRefClass("validator"
   , contains = 'expressionset'
   , methods = list(
-    initialize = function(..., .files=NULL)  ini_validator(.self,...,.files=.files)
-    , is_linear = function() sapply(.self$._calls,linear)
+    initialize = function(..., .file)  ini_validator(.self,...,.file=.file)
+    , is_linear = function() linear(.self)
       # extra argument: normalize=TRUE
     , linear_coefficients = function(...) get_linear_coefficients(.self, ...) 
   )
 )
 
-
-ini_validator <- function(.self, ..., .files){
-  ini_expressionset(.self,..., .files=.files, .options = PKGOPT)
-  if (length(.self$._calls)==0) return(.self)
-
-  i <- sapply(.self$._calls, function(x) validating(x,.self) || vargroup(x))
-  if ( !all(i) ){
-    warning(paste(
-      "The following rules contain invalid syntax and will be ignored:\n",
-      paste(1:sum(!i), ':', sapply(.self$._calls[!i],deparse), 'from', .self$._origin[!i], collapse="\n ")))
-  } 
-  .self$._calls  <- .self$._calls[i]
-  .self$._origin <- .self$._origin[i]
-  .self
+ini_validator <- function(obj, ..., .file){
+  
+  if (missing(.file)){
+    ini_expressionset_cli(obj, ..., .prefix="V")
+    obj$._options <- PKGOPT
+    i <- validating(obj)
+    if ( !all(i) ){
+      not_validating <- sapply(which(!i),function(k) deparse(obj[[k]]@call))
+      wrn <- sprintf("\n[%03d] %s",which(!i),not_validating)
+      warning(paste0(
+        "Invalid syntax detected, the following expressions have been ignored:"
+        , paste0(wrn,collapse="")
+        ))
+      obj$rules <- obj$rules[i]
+    } 
+  } else {
+    ini_expressionset_yml(obj, file, .prefix="V")
+  }
 }
 
 
@@ -72,10 +76,11 @@ ini_validator <- function(.self, ..., .files){
 #  and a vector with comparison operators.
 #
 get_linear_coefficients <- function(x, normalize=TRUE,...){
-  
-  calls <- x$._calls[x$is_linear()]
+  x <- x[x$is_linear()]
+  calls <- get_calls(x)
+    
   cols <- unique(unlist(lapply(calls, var_from_call)))
-  rows <- names(calls)
+  rows <- names(x)
   
   bA <- matrix(0
      , nrow = length(rows)
@@ -87,6 +92,7 @@ get_linear_coefficients <- function(x, normalize=TRUE,...){
   rcoef <- lapply(calls, function(x) coefficients(right(x)))
   
   for ( i in seq_along(lcoef) ){
+    print(i)
     cls <- names(lcoef[[i]])
     bA[i,cls] <- lcoef[[i]]
     cls <- names(rcoef[[i]])

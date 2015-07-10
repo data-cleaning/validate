@@ -2,6 +2,8 @@
 #' @include indicator.R
 NULL
 
+# CONFRONTATION OBJECT --------------------------------------------------------
+
 # superclass for storing results of a verification activity
 setRefClass("confrontation"
   ,fields = list(
@@ -24,19 +26,8 @@ setRefClass("confrontation"
   cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
 }
 
-#' @rdname select
-#' @export 
-setMethod('[',signature('confrontation'),function(x,i,j,...,drop=TRUE){
-  new(class(x)
-      , ._call = match.call(call=sys.call(sys.parent()))
-      , ._calls = x$._calls[i]
-      , ._value = x$._value[i]
-      , ._warn = x$._warn[i]
-      , ._error  = x$._error[i]
-  )
-})
 
-
+# S4 GENERICS -----------------------------------------------------------------
 
 #' Confront data with a (set of) expressionset(s)
 #'
@@ -70,10 +61,36 @@ setGeneric("confront",
   def = function(x, dat, ref, ...) standardGeneric("confront")
 )
 
+#' Get values from object
+#' 
+#' @aliases severity, impact
+#' 
+#' @param x an R object
+#' @param ... Arguments to pass to or from other methods
+#'
+#' @export
+setGeneric('values',def=function(x,...) standardGeneric('values'))
+
+#' Get error messages from confrontation object
+#' @param x An object of class \code{confrontation}
+#' @param ... Arguments to be passed to other methods.
+#' @export 
+setGeneric("errors",def = function(x,...) standardGeneric("errors"))
+
+# retrieve warnings from a confrontation object
+setGeneric("warnings")
+
+# useful ways to aggregate confrontations
+setGeneric('aggregate')
+
+# useful ways to sort confrontations
+setGeneric('sort')
+
+# S4 METHODS ------------------------------------------------------------------
 
 ## The below function is a worker that assumes all relevant data is present in 
 ## an environment, possibly with a parent containing reference data. Most, if not
-## all R-based methods will convert to this form and call the worker.
+## all R-based 'confront' methods will convert to this form and call the worker.
 ##
 ## x a validator object
 ## dat an environment
@@ -83,7 +100,7 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   calls <- x$calls(varlist=variables(dat))
   # merge options with clone of option manager 
   opts <- x$clone_options(...)
-  L <- execute(calls,dat,opts)
+  L <- setNames(execute(calls,dat,opts),names(x))
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))
@@ -95,6 +112,16 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
 }
 
 
+#' @rdname select
+setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
+  new(class(x)
+    , ._call = match.call(call=sys.call(sys.parent()))
+    , ._calls = x$._calls[i]
+    , ._value = x$._value[i]
+    , ._warn = x$._warn[i]
+    , ._error  = x$._error[i]
+  )
+})
 
 #' @rdname variables
 setMethod('variables',signature('data.frame'), function(x,...) names(x))
@@ -144,6 +171,19 @@ setMethod('summary',signature('indication'), function(object,...){
     , stringsAsFactors=FALSE
   )  
 })
+
+# helper function: x is a confrontation object
+get_stat <- function(x,what,...){
+  out <- rep(NA,length(x$._value))
+  i <- !has_error(x)
+  out[i] <- tryCatch(
+    sapply(x$._value[i],what,...)
+    , error = function(e) NA
+    , warning = function(e) NA
+  )
+  out
+}
+
 
 
 # # indicators serve a different purpose than validations.
@@ -250,7 +290,7 @@ fails <- function(x){
     ifelse( is.null(a)
       , 0
       , ifelse( is.logical(a)
-          , sum(a,na.rm=TRUE)      # case of regular rule
+          , sum(!a,na.rm=TRUE)      # case of regular rule
           , sum(a != seq_along(a)) # case of FD
         )
     )
@@ -286,18 +326,6 @@ setMethod('summary',signature('validation'),function(object,...){
 })
 
 
-### VALUES ----------------------------------------------------------------------
-
-
-#' Get values from object
-#' 
-#' @aliases severity, impact
-#' 
-#' @param x an R object
-#' @param ... Arguments to pass to or from other methods
-#'
-#' @export
-setGeneric('values',def=function(x,...) standardGeneric('values'))
 
 #' @rdname values
 setMethod('values',signature('confrontation'),function(x,...){
@@ -337,14 +365,6 @@ simplify_list <- function(L){
 }
 
 
-### WARNINGS AND ERRORRS -----------------------------------------------------
-
-#' Get error messages from confrontation object
-#' @param x An object of class \code{confrontation}
-#' @param ... Arguments to be passed to other methods.
-#' @export 
-setGeneric("errors",def = function(x,...) standardGeneric("errors"))
-
 #' @rdname errors
 setMethod("errors","confrontation",function(x,...){
   i <- has_error(x)
@@ -352,7 +372,6 @@ setMethod("errors","confrontation",function(x,...){
 })
 
 
-setGeneric("warnings")
 
 #' @rdname errors
 #' @export 
@@ -361,10 +380,6 @@ setMethod("warnings","confrontation",function(x,...){
   x$._warn[i]
 })
 
-
-
-### SORT AND VALIDATION -------------------------------------------------------
-setGeneric('aggregate')
 
 #' Aggregate validation results
 #' 
@@ -422,8 +437,6 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
 
 
 
-setGeneric('sort')
-
 #' Aggregate and sort the results of a validation.
 #'   
 #' @param x An object of class \code{\link{validation}}
@@ -479,30 +492,3 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
 
 
 
-
-
-### currently obsolete stuff ----
-
-# @rdname values
-# @export
-#setGeneric('severity',def=function(x,...) standardGeneric('severity'))
-
-# @rdname values
-# setMethod('severity', signature('validation'),function(x,...){
-#   values <- x$._value[!has_error(x)]
-#   lists <- sapply(values,is.list)
-#   L <- lapply(values[lists],function(x) x$severity) 
-#   simplify_list(L)
-# })
-
-# @rdname values
-# @export
-#setGeneric('impact',def=function(x,...) standardGeneric('impact'))
-
-# @rdname values
-# setMethod('impact', signature('validation'),function(x,...){
-#   values <- x$value[!has_error(x)]
-#   lists <- sapply(values,is.list)
-#   L <- lapply(values[lists],function(x) x$impact) 
-#   simplify_list(L)
-# })
