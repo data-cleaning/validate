@@ -115,11 +115,11 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
 #' @rdname select
 setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
   new(class(x)
-      , ._call = match.call(call=sys.call(sys.parent()))
-      , ._calls = x$._calls[i]
-      , ._value = x$._value[i]
-      , ._warn = x$._warn[i]
-      , ._error  = x$._error[i]
+    , ._call = match.call(call=sys.call(sys.parent()))
+    , ._calls = x$._calls[i]
+    , ._value = x$._value[i]
+    , ._warn = x$._warn[i]
+    , ._error  = x$._error[i]
   )
 })
 
@@ -290,7 +290,7 @@ fails <- function(x){
     ifelse( is.null(a)
       , 0
       , ifelse( is.logical(a)
-          , sum(a,na.rm=TRUE)      # case of regular rule
+          , sum(!a,na.rm=TRUE)      # case of regular rule
           , sum(a != seq_along(a)) # case of FD
         )
     )
