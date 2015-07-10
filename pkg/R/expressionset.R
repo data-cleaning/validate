@@ -44,23 +44,70 @@ ini_expressionset_cli <- function(obj, ..., .prefix="R"){
 }
 
 ## TODO: Service for creating child objects of expressionset from file
-ini_expressionset_yml <- function(obj,file,.prefix="R"){
-  obj
+ini_expressionset_yml <- function(obj, file, .prefix="R"){
+  S <- get_filestack_yml(file)
+  R <- list()
+  for ( fl in S )
+    R <- c(R, rules_from_yml(fl))
+  obj$rules <- R
+  obj$._options <- PKGOPT
+  # options only from the 'including' file (not from included)
+  local_opt <- options_from_yml(file)
+  if ( length(local_opt) > 0 )
+    do.call(obj$options, local_opt)
+}
+
+
+
+rules_from_yml <- function(file){
+  L <- tryCatch(yaml.load_file(file)
+    , error=function(e){
+      stop(sprintf("\nNot a valid yaml file, 'yaml.load_file' says:\n %s",e$message))
+  })
+  rules <- lapply(L$rules, function(x) x$expr)
+  labs <- sapply(L$rules, function(x) as.character(x$name))
+  inull <- sapply(rules,is.null)
+  if (any(inull)){
+    nm <- paste0(labs[inull],collapse=", ")
+    warning(sprintf("Skipped rules without 'expr' attribute at %s \n",nm))
+    rules <- rules[!inull]
+    labs <- labs[!inull]
+  }
+  short  <- sapply(L$rules, function(x) as.character(x$short))
+  long  <- sapply(L$rules, function(x) as.character(x$long)) 
+  
+  now <- Sys.time()
+  R <- vector(length(rules),mode='list')
+  for ( i in seq_along(rules) ){
+    R[[i]] <- rule(
+      call = parse(text=rules[i])[[1]]
+      , name = labs[i]
+      , short = short[[i]] 
+      , long = long[[i]]
+      , origin = file
+      , created = now
+    )
+  }
+  R
+}
+
+options_from_yml <- function(file){
+  L <- tryCatch(yaml.load_file(file)
+    , error=function(e){
+      stop(sprintf("\nNot a valid yaml file, 'yaml.load_file' says:\n %s",e$message))
+  })
+  L$options 
 }
 
 # Get sequence of files to be processed from include statements.
-get_filestack <- function(file){
-  # Detecting include statements.
-  tag <- "#[[:blank:]]+@validate[[:blank:]]+include[[:blank:]]+"
-  
+get_filestack_yml <- function(file){
+
   f <- function(fl, det=character(0)){
     det <- c(fl,det)
     if ( fl %in% det[-1])
       stop(sprintf("Cyclic dependency detected in %s\n%s\n",fl,paste(rev(det),collapse=" -> ")))
-    r <- readLines(fl)
-    L <- grep(tag,r,value=TRUE)
-    if ( length(L) > 0)
-      L <- gsub(paste0(tag,"|[[:blank:]]*$"),"",L) # also remove trailing blanks.
+    Y <- yaml.load_file(fl)
+    L <- as.character(Y$include)
     for ( x in L )
       f(x,det)
     filestack <<- c(filestack,fl)

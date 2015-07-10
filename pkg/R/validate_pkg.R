@@ -23,4 +23,5 @@
 #' @aliases package-validate validate
 #' @import methods
 #' @import settings
+#' @import yaml
 NULL
