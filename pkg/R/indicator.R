@@ -1,6 +1,13 @@
 #' @include expressionset.R
 NULL
 
+  library(settings)
+  source('pkg/R/sugar.R')
+  source('pkg/R/parse.R')
+  source('pkg/R/rule.R')
+  source('pkg/R/expressionset.R')
+
+
 # The 'indicator' class holds indicator definitions
 # An indicator maps a data.frame to a single number.
 
@@ -8,35 +15,33 @@ NULL
 #' 
 #' \code{\link{indicator}}
 #' @param ... A comma-separated list of indicator definitions
-#' @param .files A character vector of file locations
+#' @param .file (optional) A character vector of file locations
 #' 
 #' @seealso \code{\link{syntax}}
 #' 
 #' @export
 #' @example ../examples/indicator.R
-indicator <- function(..., .files=NULL) new('indicator',..., .files=.files)
+indicator <- function(..., .file) new('indicator',..., .file=.file)
 
 setRefClass("indicator", contains='expressionset',
   methods = list(
-    initialize = function(..., .files=NULL) ini_indicator(.self,...,.files=.files)
+    initialize = function(..., .file) ini_indicator(.self, ..., .file = .file)
   )                       
 )
 
-
-ini_indicator <- function(.self,...,.files){
-  ini_expressionset(.self,..., .files=.files, .prefix="I",.options = PKGOPT)
-  if (length(.self$._calls)==0) return(.self)
+ini_indicator <- function(obj, ..., .file){
   
-  i <- sapply(.self$._calls, function(x) !validating(x,.self) || vargroup(x))
-  if ( !all(i) ){
-    warning(paste(
-      "The following rules contain invalid syntax and will be ignored:\n",
-      paste(1:sum(!i), ':', sapply(.self$._calls[!i],deparse), 'from', .self$._origin[!i], collapse="\n ")))
+  if (missing(.file)){
+    ini_expressionset_cli(obj, ..., .prefix="I")
+    obj$._options <- PKGOPT
+  } else {
+    ini_expressionset_yml(obj, file, .prefix="V")
   }
-  .self$._calls  <- .self$._calls[i]
-  .self$._origin <- .self$._origin[i]
-  .self 
+  obj
 }
+
+
+
 
 
 get_stat <- function(x,what,...){
