@@ -175,7 +175,6 @@ setGeneric('summary')
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 
-
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
 
 #' @rdname variables
