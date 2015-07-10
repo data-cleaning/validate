@@ -92,6 +92,8 @@ show_expressionset <- function(obj){
 
 
 
+
+
 # from call to oneliner text
 call2text <- function(x){
   gsub("[[:blank:]]+"," ",paste(deparse(x),collapse=" "))
@@ -223,6 +225,26 @@ setMethod("validating", "expressionset", function(x,...){
 setMethod("linear","expressionset", function(x,...){
   sapply(x$rules, linear)
 })
+
+#' @section Validator and indicator objects:
+#' For these objects, the ruleset is split into subsets (blocks) that are disjunct in the
+#' sense that they do not share any variables. For each bloch the number of variables, the number 
+#' of rules and the number of rules that are linear are reported.
+#' 
+#' @return A \code{data.frame} with the information mentioned below information is returned.
+#' 
+#' @rdname validate-summary
+setMethod('summary',signature('expressionset'),function(object,...){
+  b <- object$blocks()
+  data.frame(
+    block = seq_along(b)
+    , nvar  = sapply(b,function(i) length(variables(object[i])))
+    , rules = sapply(b,sum)
+    , linear = sapply(b,function(i) sum(object[i]$is_linear()))
+    , row.names=NULL
+  )
+})
+
 
 
 #' Select a subset
