@@ -131,7 +131,7 @@ get_calls <- function(x, ..., expand_assignments=FALSE
 }
 
 blocks_expressionset <- function(x){
-  varlist <- variables(x)
+  varlist <- variables(x, as="list")
   
   varblock <- function(v,vlist){
     sapply(vlist, function(x) any(v %in% x))
@@ -192,7 +192,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 #' @seealso \code{\link{summary}}
 #'
 #' @example ../examples/variables.R
-setMethod("variables", "expressionset", function(x, as=c('vector','matrix','list'), dummy=FALSE, ...){ 
+setMethod("variables", "expressionset",  function(x, as=c('vector','matrix','list'), dummy=FALSE, ...){ 
   as <- match.arg(as)
   vars <- lapply(x$calls(expand_assignments=!dummy),var_from_call)
   u <- unique(unlist(vars))
