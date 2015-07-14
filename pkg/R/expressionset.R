@@ -48,7 +48,7 @@ ini_expressionset_yml <- function(obj, file, .prefix="R"){
   S <- get_filestack_yml(file)
   R <- list()
   for ( fl in S )
-    R <- c(R, rules_from_yml(fl))
+    R <- c(R, rules_from_yrf_file(fl))
   obj$rules <- R
   obj$._options <- PKGOPT
   # options only from the 'including' file (not from included)
@@ -59,56 +59,64 @@ ini_expressionset_yml <- function(obj, file, .prefix="R"){
 
 
 
-rules_from_yml <- function(file,prefix="V"){
-  L <- tryCatch(yaml.load_file(file)
-    , error=function(e){
-      stop(sprintf("\nNot a valid yaml file, 'yaml.load_file' says:\n %s",e$message))
-  })
-  rules <- lapply(L$rules, function(x) x$expr)
+rules_from_block <- function(block, origin){
+
+  # helper functions.
+  rules_from_freeform <- function(string, origin){
+    S <- tryCatch(parse(text=string), error = function(e){
+      stop(sprintf("parsing freeform block. Parser returned:\n  %s", e$msg))
+    })
+    lapply(S,function(s) rule(call=s, origin=origin, created=now))
+  }
+  
+  rules_from_yrf <- function(block, origin){  
+    lapply(block$rules, function(x){
+      rule(
+        call = parse(text=x$expr)[[1]]
+        , name = as.character(x$name)
+        , short = as.character(x$short)
+        , long = as.character(x$long)
+        , origin = origin
+        , created = now
+      )  
+    })
+  }
+  
+  now <- Sys.time()
+    
+  type <- yrf_block_type(block)
+  if ( identical(type,"free") ){
+    rules_from_freeform(block, origin=origin)
+  } else if (identical(type, "yrf")){
+    rules_from_yrf(block, origin=origin)
+  }
+  
+}
+
+
+rules_from_yrf_file <- function(file,prefix="V"){
+
+  lines <- readlines_utf8(file)
+  blocks <- yaml_blocks(lines)
+  rules <- unlist(lapply(blocks, rules_from_block, origin="file"))
   
   
-  # name extraction; generic name if needed.
+  # set generic name if needed.
   npos <- max(1,ceiling(log10(length(rules)+1)))
   fmt <- paste0("%s%0",npos,"d")
-  generic <- sprintf(fmt,prefix,seq_along(L))
-  for ( i in seq_along(L$rules) ){
-    if (is.null( L$rules[[i]]$name)) {
-      L$rules[[i]]$name <- generic[i]
+  generic <- sprintf(fmt,prefix,seq_along(rules))
+  for ( i in seq_along(rules) ){
+    if ( identical(rules[[i]]@name,character(0)) ) {
+      rules[[i]]@name <- generic[i]
     }
   }
   
-  labs <- sapply(L$rules, function(x) as.character(x$name))
-  inull <- sapply(rules,is.null)
-  if (any(inull)){
-    nm <- paste0(labs[inull],collapse=", ")
-    warning(sprintf("Skipped rules without 'expr' attribute at %s \n",nm))
-    rules <- rules[!inull]
-    labs <- labs[!inull]
-  }
-  short  <- sapply(L$rules, function(x) as.character(x$short))
-  long  <- sapply(L$rules, function(x) as.character(x$long)) 
-  
-  now <- Sys.time()
-  R <- vector(length(rules),mode='list')
-  for ( i in seq_along(rules) ){
-    R[[i]] <- rule(
-      call = parse(text=rules[[i]])[[1]]
-      , name = labs[i]
-      , short = short[[i]] 
-      , long = long[[i]]
-      , origin = file
-      , created = now
-    )
-  }
-  R
+  rules
 }
 
 options_from_yml <- function(file){
-  L <- tryCatch(yaml.load_file(file)
-    , error=function(e){
-      stop(sprintf("\nNot a valid yaml file, 'yaml.load_file' says:\n %s",e$message))
-  })
-  L$options 
+  lines <- readlines_utf8(file)
+  parse_yrf_options(lines)
 }
 
 # Get sequence of files to be processed from include statements.
@@ -118,8 +126,7 @@ get_filestack_yml <- function(file){
     det <- c(fl,det)
     if ( fl %in% det[-1])
       stop(sprintf("Cyclic dependency detected in %s\n%s\n",fl,paste(rev(det),collapse=" -> ")))
-    Y <- yaml.load_file(fl)
-    L <- as.character(Y$include)
+    L <- parse_yrf_incude(fl)
     for ( x in L )
       f(x,det)
     filestack <<- c(filestack,fl)

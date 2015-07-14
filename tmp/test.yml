@@ -1,0 +1,27 @@
+---
+options:
+  raise: none
+include:
+  - fiets.yaml
+---
+aap * noot == mies
+foo + bar == baz
+---
+rules:
+- 
+  expr : x + y == z
+  short: somregel
+  name : mijnsom
+  long : |
+    een lange omschrijving
+-
+  expr: |
+    mean(x) < median(x)
+  name: scheefheid
+  short: scheef verdeeld
+  long: |
+    De variabele x is min of meer exponentieel verdeeld. 
+    Deze regel voert een eenvoudige controle op scheefheid uit.
+
+
+

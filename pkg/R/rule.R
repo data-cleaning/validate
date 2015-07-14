@@ -12,10 +12,10 @@ rule <- setClass("rule",
   )
   , prototype = list(
    call         = NULL
-   , name       = ""
-   , short      = ""
-   , long       = ""
-   , origin     = ""
+   , name       = character(0)
+   , short      = character(0)
+   , long       = character(0)
+   , origin     = character(0)
    , created    = as.POSIXct(NA)
   )
 )

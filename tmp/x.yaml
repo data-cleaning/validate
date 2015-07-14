@@ -1,0 +1,8 @@
+rules:
+- 
+  expr : x + y == z
+  short: somregel
+  name : mijnsom
+  long : |
+    een lange omschrijving
+
