@@ -92,7 +92,6 @@ get_linear_coefficients <- function(x, normalize=TRUE,...){
   rcoef <- lapply(calls, function(x) coefficients(right(x)))
   
   for ( i in seq_along(lcoef) ){
-    print(i)
     cls <- names(lcoef[[i]])
     bA[i,cls] <- lcoef[[i]]
     cls <- names(rcoef[[i]])
