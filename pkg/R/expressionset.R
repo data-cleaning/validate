@@ -98,7 +98,7 @@ rules_from_yrf_file <- function(file,prefix="V"){
 
   lines <- readlines_utf8(file)
   blocks <- yaml_blocks(lines)
-  rules <- unlist(lapply(blocks, rules_from_block, origin="file"))
+  rules <- unlist(lapply(blocks, rules_from_block, origin=file))
   
   
   # set generic name if needed.
@@ -120,13 +120,21 @@ options_from_yml <- function(file){
 }
 
 # Get sequence of files to be processed from include statements.
+# the filestack is returned reversely depth-first, e.g.
+#
+# ROOT
+#  - CHILD1
+#  - CHILD2
+#    - CHILD3
+# is returnd in the order CHILD1 CHILD3 CHILD2 CHILD1 ROOT
+#
 get_filestack_yml <- function(file){
 
   f <- function(fl, det=character(0)){
     det <- c(fl,det)
     if ( fl %in% det[-1])
-      stop(sprintf("Cyclic dependency detected in %s\n%s\n",fl,paste(rev(det),collapse=" -> ")))
-    L <- parse_yrf_incude(fl)
+      stop(sprintf("Cyclic dependency detected in %s\n%s\n",fl,paste(rev(det),collapse="\n -> ")))
+    L <- parse_yrf_include(fl)
     for ( x in L )
       f(x,det)
     filestack <<- c(filestack,fl)
@@ -231,14 +239,6 @@ blocks_expressionset <- function(x){
 setGeneric('summary')
 
 
-#' Find out where expressions were defined
-#'
-#' @param x and R object
-#' @param ... Arguments to be passed to other methods
-#' @return A \code{character} vector.
-#' 
-#' @export
-setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
 
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
@@ -290,7 +290,7 @@ setMethod('validate_reset','expressionset',function(x=NULL){
 })
 
 #' @rdname origin
-setMethod("origin", signature(x="expressionset"), function(x,...) x$._origin)
+setMethod("origin", signature(x="expressionset"), function(x,...) sapply(x$rules,origin)) 
 
 #' Convert an expressionset to character
 #' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} 

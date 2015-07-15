@@ -1,0 +1,12 @@
+---
+include:
+  - child3.yaml
+---
+rules:
+-
+  name : test1
+  expr : x + y == z
+-
+  expr : 2*x + 3*y == 8*z
+  name : test2
+  short: A linear rule

@@ -1,0 +1,8 @@
+# A simple rule file, without yaml structure
+
+# simple test for skewness
+mean(x) < median(x)
+
+# a sum rule
+x + y == z
+

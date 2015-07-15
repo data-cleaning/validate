@@ -55,6 +55,16 @@ setGeneric("validating",function(x,...) standardGeneric('validating'))
 setGeneric("linear",function(x,...) standardGeneric("linear"))
 
 
+#' Find out where expressions were defined
+#'
+#' @param x and R object
+#' @param ... Arguments to be passed to other methods
+#' @return A \code{character} vector.
+#' 
+#' @export
+setGeneric("origin",def=function(x,...) standardGeneric("origin"))
+
+
 
 
 # S4 METHODS ------------------------------------------------------------------
@@ -74,7 +84,7 @@ setMethod("show", "rule", function(object){
   cat(sprintf(fmt,nm,vl))
 })
 
-setMethod("validating",c("rule"), function(x,y,...){
+setMethod("validating","rule", function(x,y,...){
   validating_call(x@call,y)  
 })
 
@@ -82,7 +92,10 @@ setMethod("linear","rule",function(x,...){
   linear_call(x@call)
 })
 
-
+#' @rdname origin
+setMethod("origin","rule",function(x,...){
+  x@origin
+})
 
 
 

@@ -20,6 +20,12 @@ filter_yrf_options <- function(lines){
   }
 }
 
+# detect whether a string starts with a drive letter, tilde (home), "\\" or
+is_full_path <- function(string){
+  grepl("(^[[:alpha:]^.]+:(/|\\\\))|(^\\\\)|(^//)|(^~/)|(^~\\\\).+",string) 
+}
+
+
 
 parse_yrf_options <- function(lines){
   option_lines <- filter_yrf_options(lines)
@@ -27,10 +33,14 @@ parse_yrf_options <- function(lines){
   L$options
 }
 
-parse_yrf_incude <- function(lines){
+parse_yrf_include <- function(file){
+  lines <- readlines_utf8(file)
   option_lines <- filter_yrf_options(lines)
   L <- yaml::yaml.load(string = paste0(option_lines,collapse="\n"))
-  L$include  
+  paths <- L$include
+  rel_path <- !is_full_path(paths)
+  paths[rel_path] <- file.path(dirname(file),paths[rel_path])
+  paths
 }
 
 
@@ -47,17 +57,33 @@ yrf_block_type <- function(block){
   }
 }
 
+valid_yaml <- function(string){
+  root <- names(yaml::yaml.load(string))
+  length(root) > 0 && all(root %in% c("options","include","rules"))
+}
+
+is_yaml <- function(string){
+  out <- tryCatch(yaml::yaml.load(string),error = function(e) FALSE)
+  !identical(out,FALSE)
+}
+
+is_r <- function(string){
+  out <- tryCatch(parse(text=string),error = function(e) FALSE)
+  !identical(out,FALSE)
+}
 
 # find yaml documents and parse them
 yaml_blocks <- function(lines){
-  S <- strsplit(x = paste0(lines,collapse="\n"), split="(^|\\n*)---[[:blank:]]*\\n")[[1]]
+  S <- strsplit(x = paste0(lines,collapse="\n"), split="(^|\\n*)---[[:blank:]]*\\n?")[[1]]
   lapply(S, function(s){ 
-    yml_block <- yaml::yaml.load(s)
-    # free-form rules are not parsed by yaml.
-    if ( identical(yrf_block_type(yml_block), "free") ){
+    if (is_yaml(s) && valid_yaml(s) ){ 
+      yaml::yaml.load(s)
+    } else if ( is_r(s) ){
       s
     } else {
-      yml_block
+      cat(sprintf("\nThe following invalid block is skipped:\n %s\n",s))
+      warning("Blocks detected consisting of invalid yaml or R syntax")
+      NULL
     }
   })
 }
