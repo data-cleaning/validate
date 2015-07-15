@@ -238,7 +238,9 @@ blocks_expressionset <- function(x){
 #' @rdname validate-summary
 setGeneric('summary')
 
-
+#' Number of expressions
+#' @rdname validate-length
+setGeneric("length")
 
 
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
@@ -274,7 +276,6 @@ setMethod("variables", "expressionset",  function(x, as=c('vector','matrix','lis
 
 
 
-
 #' @rdname validate_options
 setMethod('validate_options','expressionset',function(x=NULL,...){
   if (settings::is_setting(...)){
@@ -290,7 +291,26 @@ setMethod('validate_reset','expressionset',function(x=NULL){
 })
 
 #' @rdname origin
-setMethod("origin", signature(x="expressionset"), function(x,...) sapply(x$rules,origin)) 
+setMethod("origin", "expressionset", function(x,...) sapply(x$rules,origin))
+
+
+#' @rdname short
+setMethod("short","expressionset",function(x,...) sapply(x$rules, short))
+
+#' @rdname long
+setMethod("long", "expressionset", function(x,...) sapply(x$rules, long))
+
+
+#' @rdname created
+setMethod("created", "expressionset", function(x,...){ 
+  # obj. of class POSIXct; sapply strips the POSIXct class attribute
+  cr <- rep(Sys.time(),length(x))
+  for ( i in seq_along(x)){
+    cr[i] <- created(x$rules[[i]])
+  }
+  cr
+})
+
 
 #' Convert an expressionset to character
 #' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} 
@@ -299,7 +319,7 @@ setMethod("origin", signature(x="expressionset"), function(x,...) sapply(x$rules
 setMethod("as.character","expressionset",  function(x,...) sapply(x$calls(),function(y) paste(deparse(y),collapse=" ")))
 
 
-#' Extract or set names
+#' Extract names
 #' 
 #' @param x An R object
 #'
@@ -323,7 +343,7 @@ setMethod("linear","expressionset", function(x,...){
 #' sense that they do not share any variables. For each bloch the number of variables, the number 
 #' of rules and the number of rules that are linear are reported.
 #' 
-#' @return A \code{data.frame} with the information mentioned below information is returned.
+#' @return A \code{data.frame} with the information mentioned below is returned.
 #' 
 #' @rdname validate-summary
 setMethod('summary',signature('expressionset'),function(object,...){
@@ -336,6 +356,13 @@ setMethod('summary',signature('expressionset'),function(object,...){
     , row.names=NULL
   )
 })
+
+#' Get number of rules
+#' 
+#' @param x An R object
+#' @rdname validate-length
+#' 
+setMethod("length","expressionset",function(x) length(x$rules))
 
 
 #' Select a subset
@@ -350,9 +377,10 @@ setMethod('summary',signature('expressionset'),function(object,...){
 #' @param ... Arguments to be passed to other methods
 #' 
 #' @return An new object, of the same class as \code{x} subsetted according to \code{i}.
+#' @rdname select
+#' @aliases [,expressionset-method
 #' 
 #' @export
-#' @rdname select
 setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   if (is.character(i)){
     i <- i %in% names(x)
@@ -365,6 +393,7 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
 
 #' @param exact Not implemented
 #' @rdname select
+#' @aliases [[,expressionset-method
 setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
   x$rules[[i]]
 })

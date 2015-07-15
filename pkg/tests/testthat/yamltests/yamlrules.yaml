@@ -1,0 +1,13 @@
+rules:
+-
+  expr: x + y == z
+  name: sumrule
+  short: sum of x and y
+  long: a looong description here
+-
+  expr: if (x > 0 ) y > 0
+  name: conditional
+  short: if x positive then y also
+  long: | 
+    a looong description here
+

@@ -1,0 +1,6 @@
+---
+options:
+  raise: all
+---
+x + y == 10
+  

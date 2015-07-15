@@ -59,7 +59,14 @@ yrf_block_type <- function(block){
 
 valid_yaml <- function(string){
   root <- names(yaml::yaml.load(string))
-  length(root) > 0 && all(root %in% c("options","include","rules"))
+  keys <- c("options","include","rules")
+  valid <-  length(root) > 0 && all(root %in% keys)
+  if ( !valid & length(root) > 0 ){
+    warning(
+     sprintf("Found invalid keys: %s\n", paste0(root[!root %in% keys],collapse=", "))
+    )
+  }
+  valid
 }
 
 is_yaml <- function(string){
@@ -74,9 +81,10 @@ is_r <- function(string){
 
 # find yaml documents and parse them
 yaml_blocks <- function(lines){
-  S <- strsplit(x = paste0(lines,collapse="\n"), split="(^|\\n*)---[[:blank:]]*\\n?")[[1]]
+  S <- strsplit(x = paste0(lines,collapse="\n"), split="---[[:blank:]]*\\n?")[[1]]
+  S <- Filter(function(x) nchar(x)>0,S)
   lapply(S, function(s){ 
-    if (is_yaml(s) && valid_yaml(s) ){ 
+    if ( is_yaml(s)  && valid_yaml(s) ){ 
       yaml::yaml.load(s)
     } else if ( is_r(s) ){
       s

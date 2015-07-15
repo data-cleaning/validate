@@ -1,13 +1,16 @@
 Package: validate
 Maintainer: Mark van der Loo <mark.vanderloo@gmail.com>
 License: GPL-3
-Title: data quality indicators
+Title: Data Validation Infrastructure
 LazyData: no
 Type: Package
 LazyLoad: yes
 Author: Mark van der Loo, Edwin de Jonge
-Description: data quality indicators
-Version: 0.0.1
+Description: Declare data validation rules and data quality indicators; confront 
+    data with them and analyze or vizualize the results. The package supports
+    rules that are per-field, in-record, cross-record or cross-dataset. Rules
+    can be automatically analyzed for rule type and connectivity.
+Version: 0.0.2
 Depends: R (>= 3.0.0)
 URL: https://github.com/data-cleaning/validate
 Date: 2013-04-28

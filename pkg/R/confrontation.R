@@ -111,8 +111,8 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   )
 }
 
-
 #' @rdname select
+#' @aliases [,confrontation-method
 setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
   new(class(x)
     , ._call = match.call(call=sys.call(sys.parent()))
