@@ -9,5 +9,5 @@ I <- indicator(
 ) 
 
 dat <- data.frame(x=1:2, y=c(NA,1))
-C <- confront(I, dat)
+C <- confront(dat, I)
 values(C)

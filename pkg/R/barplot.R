@@ -43,7 +43,7 @@ setMethod('barplot',signature('validation'),
     args <- list(...)
     argn <- names(args)
     if ( !'xlab' %in% argn ) args$xlab <- 'Items'
-    if ( !'main' %in% argn ) args$main <- deparse(cf$._call[[3]])
+    if ( !'main' %in% argn ) args$main <- deparse(height$._call[[3]])
     
     # values with different dimensionality are plotted in different row.
     par(mfrow=c(length(val),1))

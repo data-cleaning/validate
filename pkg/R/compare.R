@@ -63,14 +63,14 @@ setMethod('compare', 'validator',
     names(L) <- make_listnames(L)
     
     out <- if (how == 'to_first'){
-        ref <- confront(x,L[[1]])
-        vapply(L, function(y) compare2(confront(x, y), ref)
+        ref <- confront(L[[1]],x)
+        vapply(L, function(y) compare2(confront(y, x), ref)
                ,FUN.VALUE=numeric(11))
       } else {
         ref <- NULL
         vapply(seq_along(L), function(i){
           j <- ifelse(i==1,1,i-1)
-          compare2( confront(x,L[[i]]),confront(x,L[[j]]) )
+          compare2( confront(L[[i]],x),confront(L[[j]],x) )
         }
         , FUN.VALUE = numeric(11) )
     }
@@ -244,9 +244,10 @@ setMethod('compare','indicator',
     L <- c( list(...), .list)
     if ( length(L) < 2 ) stop('you need at least two datasets')
     names(L) <- make_listnames(L)
-    for ( d in L ) 
-      if ( !matches(L[[1]],d) ) 
+    for ( i in seq_along(L) ){
+      if ( !matches(L[[1]],L[[i]]) ) 
         stop('dataset ',names(L)[i],'does not match with dataset',names(L)[1])
+    }
     n <- names(x)
     v <- setNames( lapply(n, function(i) sapply(L, function(y) values(confront(x[i],y))[[1]] )), n)
     # simplify where possible

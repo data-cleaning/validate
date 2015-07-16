@@ -33,8 +33,8 @@ setRefClass("confrontation"
 #'
 #' @aliases confrontation validation indication
 #'
-#' @param x An R object carrying verifications
 #' @param dat An R object carrying data
+#' @param x An R object carrying verifications
 #' @param ref Optionally, an R object carrying reference data. See examples for usage.
 #' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
 #' 
@@ -58,8 +58,31 @@ setRefClass("confrontation"
 #' 
 #' @example ../examples/confront.R
 setGeneric("confront",
-  def = function(x, dat, ref, ...) standardGeneric("confront")
+  def = function(dat, x, ref, ...) standardGeneric("confront")
 )
+
+
+## syntactic sugar function
+
+#' Simple data validation interface
+#'
+#' @section Details:
+#' Creates an object of class \code{\link{validator}} and \code{\link{confront}}s it with the data.
+#' This function is easy to use in combination with the \pkg{magrittr} pipe operator.
+#' 
+#' @param dat an R object carrying data
+#' @param ... a comma-separated set of validating expressions.
+#' 
+#' @return An object of class \code{\link{validation}}
+#' @example ../examples/check_that.R   
+#' @export
+check_that <- function(dat,...){
+  confront(dat,validator(...))
+}
+
+
+
+
 
 #' Get values from object
 #' 
@@ -137,7 +160,7 @@ setMethod('variables',signature('environment'), function(x,...) ls(x))
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront", signature("indicator","data.frame"), function(x,dat,key=NULL,...){
+setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=NULL,...){
   dat <- list2env(dat)
   confront_work(x,dat,key,'indication',...)
 })
@@ -191,14 +214,14 @@ setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
 #' @param key (optional) name of identifying variable in x.
-setMethod("confront", signature("validator","data.frame"), function(x, dat, key=NULL, ...){
+setMethod("confront", signature("data.frame","validator"), function(dat, x, key=NULL, ...){
   dat <- list2env(dat)
   confront_work(x,dat,key,'validation',...)
 })
 
 
 #' @rdname confront
-setMethod("confront",signature("validator","data.frame","environment"), function(x, dat, ref, key=NULL, ...){
+setMethod("confront",signature("data.frame","validator","environment"), function(dat, x, ref, key=NULL, ...){
   classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
   if ( !all(class(dat) == classes)  )
     stop("Class of one or more elements in 'ref' differs from 'dat'")
@@ -208,7 +231,7 @@ setMethod("confront",signature("validator","data.frame","environment"), function
 })
 
 #' @rdname confront
-setMethod("confront",signature("validator","data.frame","data.frame"),function(x,dat,ref, key=NULL,...){
+setMethod("confront",signature("data.frame","validator","data.frame"),function(dat, x,ref, key=NULL,...){
   env <- new.env()
   env$ref <- ref
   if (!is.null(key)) match_rows(of=env, against=dat, using=key)
@@ -217,7 +240,7 @@ setMethod("confront",signature("validator","data.frame","data.frame"),function(x
 })
 
 #' @rdname confront
-setMethod("confront",signature("validator","data.frame","list"),function(x,dat,ref,key=NULL,...){
+setMethod("confront",signature("data.frame","validator","list"),function(dat, x,ref,key=NULL,...){
   classes <- sapply(ref,class)
   if ( !all(class(dat) == classes)  )
     stop("Class of one or more elements in 'ref' differs from 'dat'")
