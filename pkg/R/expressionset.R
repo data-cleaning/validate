@@ -395,7 +395,10 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
 #' @rdname select
 #' @aliases [[,expressionset-method
 setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
-  x$rules[[i]]
+  if ( is.character(i) ){
+    i <- which(i %in% names(x))
+  }
+    x$rules[[i]]
 })
 
 
