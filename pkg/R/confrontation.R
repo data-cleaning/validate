@@ -155,6 +155,8 @@ setMethod('variables',signature('list'), function(x,...) names(x))
 #' @rdname variables
 setMethod('variables',signature('environment'), function(x,...) ls(x))
 
+#' @rdname validate-length
+setMethod("length","confrontation",function(x) length(x$._value))
 
 # indicators serve a different purpose than validations.
 setRefClass("indication", contains = "confrontation")
