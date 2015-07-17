@@ -120,14 +120,14 @@ setGeneric('sort')
 ## key a character indicating a key.
 ##
 confront_work <- function(x,dat,key=NULL,class='confrontation',...){
-  calls <- x$calls(varlist=variables(dat))
+  calls <- x$exprs(varlist=variables(dat))
   # merge options with clone of option manager 
   opts <- x$clone_options(...)
   L <- setNames(execute(calls,dat,opts),names(x))
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))
-      , ._calls = x$calls(expand_assignments=TRUE,varlist=variables(dat))
+      , ._calls = x$exprs(expand_assignments=TRUE,varlist=variables(dat))
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)

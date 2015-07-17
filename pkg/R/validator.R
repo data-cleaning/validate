@@ -47,7 +47,7 @@ ini_validator <- function(obj, ..., .file){
     obj$._options <- PKGOPT
     i <- validating(obj)
     if ( !all(i) ){
-      not_validating <- sapply(which(!i),function(k) deparse(obj[[k]]@call))
+      not_validating <- sapply(which(!i),function(k) deparse(expr(obj[[k]])))
       wrn <- sprintf("\n[%03d] %s",which(!i),not_validating)
       warning(paste0(
         "Invalid syntax detected, the following expressions have been ignored:"
@@ -77,7 +77,7 @@ ini_validator <- function(obj, ..., .file){
 #
 get_linear_coefficients <- function(x, normalize=TRUE,...){
   x <- x[x$is_linear()]
-  calls <- get_calls(x)
+  calls <- get_exprs(x)
     
   cols <- unique(unlist(lapply(calls, var_from_call)))
   rows <- names(x)

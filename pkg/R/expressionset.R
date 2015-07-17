@@ -17,7 +17,7 @@ expressionset <- setRefClass("expressionset"
   )
   , methods= list(
         show = function() show_expressionset(.self)
-      , calls      = function(varlist=NULL,...) get_calls(.self, varlist=varlist,...)
+      , exprs      = function(varlist=NULL,...) get_exprs(.self, varlist=varlist,...)
       , blocks     = function() blocks_expressionset(.self)
       , options = function(...) .self$._options(...)
       , clone_options = function(...) clone_and_merge(.self$._options,...)
@@ -34,7 +34,7 @@ ini_expressionset_cli <- function(obj, ..., .prefix="R"){
   R <- vector(length(L), mode='list')
   for ( i in seq_along(L) ){
     R[[i]] <- rule(
-        call = L[[i]]
+        expr = L[[i]]
       , name = nm[i]
       , origin="command-line"
       , created = cr
@@ -66,13 +66,13 @@ rules_from_block <- function(block, origin){
     S <- tryCatch(parse(text=string), error = function(e){
       stop(sprintf("parsing freeform block. Parser returned:\n  %s", e$msg))
     })
-    lapply(S,function(s) rule(call=s, origin=origin, created=now))
+    lapply(S,function(s) rule(expr=s, origin=origin, created=now))
   }
   
   rules_from_yrf <- function(block, origin){  
     lapply(block$rules, function(x){
       rule(
-        call = parse(text=x$expr)[[1]]
+        expr = parse(text=x$expr)[[1]]
         , name = as.character(x$name)
         , short = as.character(x$short)
         , long = as.character(x$long)
@@ -158,7 +158,7 @@ show_expressionset <- function(obj){
   if (nr == 0) return(invisible(NULL))
   lab <- names(obj)
   n <- max(nchar(lab))
-  lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$calls(), call2text))
+  lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(), call2text))
   cat(noquote(paste(lab,collapse="\n")))
   cat("\n")
 }
@@ -194,14 +194,14 @@ extract_names <- function(L,prefix="V"){
 # @param replace_dollar Replace dollar with bracket index?
 # 
 #
-get_calls <- function(x, ..., expand_assignments=FALSE
+get_exprs <- function(x, ..., expand_assignments=FALSE
     , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE, varlist=NULL ){
-  calls <- lapply(x$rules, function(y) y@call )
-  if ( expand_assignments )  calls <- expand_assignments(calls)
-  if ( expand_groups ) calls <- expand_groups(calls, varlist=varlist)
-  if ( vectorize ) calls <- lapply(calls, vectorize)
-  if ( replace_dollar ) calls <- lapply(calls, replace_dollar)
-  calls
+  exprs <- lapply(x$rules, expr )
+  if ( expand_assignments )  exprs <- expand_assignments(exprs)
+  if ( expand_groups ) exprs <- expand_groups(exprs, varlist=varlist)
+  if ( vectorize ) exprs <- lapply(exprs, vectorize)
+  if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
+  exprs
 }
 
 blocks_expressionset <- function(x){
@@ -261,7 +261,7 @@ setGeneric("length")
 #' @example ../examples/variables.R
 setMethod("variables", "expressionset",  function(x, as=c('vector','matrix','list'), dummy=FALSE, ...){ 
   as <- match.arg(as)
-  vars <- lapply(x$calls(expand_assignments=!dummy),var_from_call)
+  vars <- lapply(x$exprs(expand_assignments=!dummy),var_from_call)
   u <- unique(unlist(vars))
   
   switch(as
@@ -316,7 +316,7 @@ setMethod("created", "expressionset", function(x,...){
 #' @param x an object inheriting from \code{expressionse}, for example \code{\link{validator}} 
 #' @param ... Arguments to be passed to or from other methods
 #' or \code{\link{indicator}}.
-setMethod("as.character","expressionset",  function(x,...) sapply(x$calls(),function(y) paste(deparse(y),collapse=" ")))
+setMethod("as.character","expressionset",  function(x,...) sapply(x$exprs(),function(y) paste(deparse(y),collapse=" ")))
 
 
 #' Extract names
@@ -406,9 +406,9 @@ setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
 
 # demonstruction
 # L <- list(
-#   rule(call = expression(x + y == z)[[1]],  name="aap")
-#  , rule(call = expression(p + q == z)[[1]], name="noot")
-#  , rule(call = expression(a*b == c)[[1]],   name="mies")
+#   rule(expr = expression(x + y == z)[[1]],  name="aap")
+#  , rule(expr = expression(p + q == z)[[1]], name="noot")
+#  , rule(expr = expression(a*b == c)[[1]],   name="mies")
 # )
 # # 
 # r <- expressionset(rules=L,._options=options_manager())

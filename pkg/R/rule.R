@@ -3,7 +3,7 @@
 # A rule is a call object endowed with extra attributes
 rule <- setClass("rule",
   slots = c(
-   call         = "language"  # MUST be a 'call'[*]
+   expr         = "language"  # MUST be a 'call'[*]
    , name       = "character"
    , short      = "character" # short description
    , long       = "character" # long description
@@ -11,7 +11,7 @@ rule <- setClass("rule",
    , created    = "POSIXct"
   )
   , prototype = list(
-   call         = NULL
+   expr         = NULL
    , name       = character(0)
    , short      = character(0)
    , long       = character(0)
@@ -54,6 +54,8 @@ setGeneric("validating",function(x,...) standardGeneric('validating'))
 
 setGeneric("linear",function(x,...) standardGeneric("linear"))
 
+# retrieve expression
+setGeneric("expr",def=function(x,...) standardGeneric("expr"))
 
 #' Origin of rules
 #'
@@ -102,9 +104,12 @@ setGeneric("created", function(x,...) standardGeneric("created"))
 
 # S4 METHODS ------------------------------------------------------------------
 
+
+setMethod("expr","rule",function(x,...) x@expr)
+
 #' @rdname variables
 setMethod("variables","rule", function(x,...){
-  var_from_call(x@call)
+  var_from_call(x@expr)
 })
 
 # full print method for rules
@@ -118,11 +123,11 @@ setMethod("show", "rule", function(object){
 })
 
 setMethod("validating","rule", function(x,y,...){
-  validating_call(x@call,y)  
+  validating_call(x@expr,y)  
 })
 
 setMethod("linear","rule",function(x,...){
-  linear_call(x@call)
+  linear_call(x@expr)
 })
 
 #' @rdname origin
