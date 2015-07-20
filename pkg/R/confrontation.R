@@ -398,7 +398,6 @@ setMethod("errors","confrontation",function(x,...){
 })
 
 
-
 #' @rdname errors
 #' @export 
 setMethod("warnings","confrontation",function(x,...){
