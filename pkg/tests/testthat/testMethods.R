@@ -46,6 +46,18 @@ test_that("Confrontation extraction",{
   expect_equal(length(cf[1]),1)
 })
 
+# just a simple test to check consistency between barplot and confrontation objects.
+test_that("barplot doesn't crash",{
+  nullplot <- function(...){
+    pdf(NULL)
+    on.exit(dev.off())
+    barplot(check_that(women, height>0, weight/height > 2),...)
+  }
+  nullplot()
+  nullplot(add_exprs=TRUE)
+  nullplot(add_legend=FALSE)
+  nullplot(topn=5)
+})
 
 
 
