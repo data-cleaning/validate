@@ -178,16 +178,16 @@ matchvars <- function(L,env){
 # @param severity R expression: an expression. Must result in a numeric.
 # @rdname syntax
 # @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
-V <- function(rule, impact=NULL, severity=NULL){
-  r <- substitute(rule)
-  i <- substitute(impact)
-  s <- substitute(severity)
-  list(
-    result   = eval(r,envir=sys.parent())
-    , impact   = eval(i,envir=sys.parent())
-    , severity = eval(s,envir=sys.parent())
-  )
-}
+# V <- function(rule, impact=NULL, severity=NULL){
+#   r <- substitute(rule)
+#   i <- substitute(impact)
+#   s <- substitute(severity)
+#   list(
+#     result   = eval(r,envir=sys.parent())
+#     , impact   = eval(i,envir=sys.parent())
+#     , severity = eval(s,envir=sys.parent())
+#   )
+# }
 
 # severity and impact for Linear validators
 
@@ -195,25 +195,25 @@ V <- function(rule, impact=NULL, severity=NULL){
 # @param linrule A \emph{linear} validating expression
 # @param p $L^p$-norm to use (default is the Euclidean norm)
 # @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
-L <- function(linrule, p=2){
-  e <- substitute(linrule)
-  q <- p/(p-1)
-  a <- const_norm(e,p/(p-1))
-  result <- eval(e,envir=sys.parent())
-  severity <- abs(eval(left(e),envir=sys.parent()) - eval(right(e),envir=sys.parent()))  
-  impact <- severity/a
-  list(result=result,severity=severity,impact=impact)
-}
+# L <- function(linrule, p=2){
+#   e <- substitute(linrule)
+#   q <- p/(p-1)
+#   a <- const_norm(e,p/(p-1))
+#   result <- eval(e,envir=sys.parent())
+#   severity <- abs(eval(left(e),envir=sys.parent()) - eval(right(e),envir=sys.parent()))  
+#   impact <- severity/a
+#   list(result=result,severity=severity,impact=impact)
+# }
 
-const_norm <- function(expr,q){
-  l <- coefficients(left(expr))
-  r <- coefficients(right(expr))
-  vars <- unique(names(c(l,r)))
-  a <- setNames(numeric(length(vars)),vars)
-  a[names(l)] <- l
-  a[names(r)] <- a[names(r)] - r
-  a = sum(abs(a[!names(a)=='CONSTANT'])^q)^(1/q)
-}
+# const_norm <- function(expr,q){
+#   l <- coefficients(left(expr))
+#   r <- coefficients(right(expr))
+#   vars <- unique(names(c(l,r)))
+#   a <- setNames(numeric(length(vars)),vars)
+#   a[names(l)] <- l
+#   a[names(r)] <- a[names(r)] - r
+#   a = sum(abs(a[!names(a)=='CONSTANT'])^q)^(1/q)
+# }
 
 # d <- data.frame(
 #   x = c(1,NA,3,5)
