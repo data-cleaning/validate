@@ -48,5 +48,21 @@ test_that("indication object contents",{
 })
 
 
+test_that("Confrontation methods with reference data",{
+  v1 <- validator(height > 0, weight / height > 0, height == ref$height)
+  cf1 <- confront(women,v1,ref = women)
+  v2 <- validator(height > 0, weight / height > 0, height == w1$height)
+  cf2 <- confront(women,v2,ref=list(w1=women))
+  e <- new.env()
+  e$w1 <- women
+  cf3 <- confront(women, v2, ref=e)
+  expect_equal(summary(cf1)[1:7],summary(cf2)[1:7])
+  expect_equal(summary(cf2)[1:7],summary(cf3)[1:7])
+})
+
+
+
+
+
 
 

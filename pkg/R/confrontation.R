@@ -229,7 +229,7 @@ setMethod("confront",signature("data.frame","validator","environment"), function
     stop("Class of one or more elements in 'ref' differs from 'dat'")
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
   dat <- list2env(dat,parent=ref)  
-  confront_work(x,dat,key,...)
+  confront_work(x,dat,key,class="validation",...)
 })
 
 #' @rdname confront
@@ -238,7 +238,7 @@ setMethod("confront",signature("data.frame","validator","data.frame"),function(d
   env$ref <- ref
   if (!is.null(key)) match_rows(of=env, against=dat, using=key)
   dat <- list2env(dat, parent=env)
-  confront_work(x, dat, key, ...)
+  confront_work(x, dat, key, class="validation", ...)
 })
 
 #' @rdname confront
@@ -249,7 +249,7 @@ setMethod("confront",signature("data.frame","validator","list"),function(dat, x,
   env <- list2env(ref)  
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
   dat <- list2env(dat,parent=env)  
-  confront_work(x,dat,key,...)  
+  confront_work(x,dat,key,class="validation",...)  
 })
 
 
