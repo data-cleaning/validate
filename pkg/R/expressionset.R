@@ -402,6 +402,9 @@ setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
 })
 
 
+setMethod("is_tran_assign","expressionset",function(x,...){
+  sapply(x$rules,is_tran_assign)
+})
 
 
 # demonstruction

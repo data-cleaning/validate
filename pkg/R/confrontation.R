@@ -123,7 +123,8 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   calls <- x$exprs(varlist=variables(dat))
   # merge options with clone of option manager 
   opts <- x$clone_options(...)
-  L <- setNames(execute(calls,dat,opts),names(x))
+  i <- !is_tran_assign(x)
+  L <- setNames(execute(calls,dat,opts),names(x)[i])
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))

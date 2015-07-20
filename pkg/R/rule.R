@@ -57,6 +57,10 @@ setGeneric("linear",function(x,...) standardGeneric("linear"))
 # retrieve expression
 setGeneric("expr",def=function(x,...) standardGeneric("expr"))
 
+# check for transient assignments (:=)
+setGeneric("is_tran_assign", function(x,...) standardGeneric("is_tran_assign"))
+
+
 #' Origin of rules
 #'
 #'
@@ -144,6 +148,8 @@ setMethod("long", "rule", function(x,...) x@long)
 #' @rdname created
 setMethod("created", "rule", function(x,...) x@created)
 
-
+setMethod("is_tran_assign","rule", function(x){
+  x@expr[[1]] == ":="
+})
 
 

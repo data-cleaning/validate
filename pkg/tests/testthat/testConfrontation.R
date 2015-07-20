@@ -61,6 +61,17 @@ test_that("Confrontation methods with reference data",{
 })
 
 
+test_that("confrontations with group assignment",{
+  v <- validator(G : {height;weight}, G > 0)
+  expect_equivalent(values(confront(women,v)),array(TRUE,dim=c(15,2)))
+})
+
+test_that("confrontations with transient variables",{
+  v <- validator(rat := weight/height, rat >0)
+  expect_equivalent(values(confront(women,v)), array(TRUE,dim=c(15,1)))
+    
+})
+
 
 
 
