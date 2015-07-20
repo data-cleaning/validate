@@ -121,6 +121,7 @@ col_missing <- function(...){
 number_unique <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
+  if ( identical(vars,TRUE)) vars <- ls(parent.frame())
   length(unique(do.call(paste0,mget(vars,parent.frame()))))
 }
 
@@ -132,7 +133,7 @@ any_missing <- function(...){
   vars <- matchvars(L,parent.frame())
   e <- parent.frame()
   a <- FALSE
-  if (identical(L,TRUE)) vars <- ls(e)
+  if (identical(vars,TRUE)) vars <- ls(e)
   for ( v in vars ) a <- a | anyNA(e[[v]])
   a
 }
@@ -143,6 +144,7 @@ any_missing <- function(...){
 any_duplicated <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
+  if (identical(vars,TRUE)) vars <- ls(parent.frame())
   anyDuplicated( do.call(paste0,mget(vars,parent.frame())) ) > 0
 }
 
