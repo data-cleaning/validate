@@ -132,8 +132,8 @@ any_missing <- function(...){
   vars <- matchvars(L,parent.frame())
   e <- parent.frame()
   a <- FALSE
-  for ( v in vars ) 
-    if (!a) a <- a | anyNA(e[[vars]])
+  if (identical(L,TRUE)) vars <- ls(e)
+  for ( v in vars ) a <- a | anyNA(e[[v]])
   a
 }
 

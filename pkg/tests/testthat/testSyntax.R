@@ -54,8 +54,17 @@ test_that('Missings are counted correctly',{
   expect_equal(evalq(col_missing(x),d2),   c(x=2L)     )
   expect_equal(evalq(col_missing(x,y),d2), c(x=2L,y=1L))
   expect_equal(evalq(col_missing("."),d2), c(x=2L,y=1L))  
+
+  expect_equal(evalq(any_missing(),d1), FALSE)  
+  expect_equal(evalq(any_missing("."),d1), FALSE)  
+  expect_equal(evalq(any_missing(),d2), TRUE)  
+  expect_equal(evalq(any_missing("."),d2), TRUE)  
+  expect_equal(evalq(any_missing(x),d2), TRUE)  
+  expect_equal(evalq(any_missing(x,y),d2), TRUE)  
+  
   
 })
+
 
 
 
