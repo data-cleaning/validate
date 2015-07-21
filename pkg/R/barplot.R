@@ -103,13 +103,4 @@ setMethod('barplot',signature('validation'),
     invisible(out)
 })
 
-drawbarat <- function(y,height,width,col){
- w <- width/2
- polygon(
-   c(0,height,height,0)
-   , c(y-w,y-w,y+w,y+w)
-   ,col=col
-   ,border=NA
- )
-}
 
