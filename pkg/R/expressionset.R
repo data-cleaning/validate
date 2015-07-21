@@ -297,7 +297,7 @@ setMethod("origin", "expressionset", function(x,...) sapply(x$rules,origin))
 #' @rdname short
 setMethod("short","expressionset",function(x,...) sapply(x$rules, short))
 
-#' @rdname long
+# @rdname long
 setMethod("long", "expressionset", function(x,...) sapply(x$rules, long))
 
 

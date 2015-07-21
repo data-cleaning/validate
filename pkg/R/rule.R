@@ -69,7 +69,7 @@ setGeneric("is_tran_assign", function(x,...) standardGeneric("is_tran_assign"))
 #' @return A \code{character} vector.
 #'
 #' @seealso \code{\link{short}}, \code{\link{long}}, \code{\link{created}}
-#'   
+#'  
 #' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
@@ -78,7 +78,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
-#' @seealso \code{\link{origin}}, \code{\link{long}}, \code{\link{created}}
+#' 
 #' @export
 setGeneric("short", function(x,...) standardGeneric("short"))
 
@@ -89,7 +89,7 @@ setGeneric("short", function(x,...) standardGeneric("short"))
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
-#' @seealso \code{\link{origin}}, \code{\link{short}}, \code{\link{created}}
+#' 
 #' @export
 setGeneric("long", function(x,...) standardGeneric("long"))
 
@@ -100,7 +100,7 @@ setGeneric("long", function(x,...) standardGeneric("long"))
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{POSIXct} vector.
-#' @seealso \code{\link{origin}}, \code{\link{short}}, \code{\link{created}}
+#' 
 #' @export
 #' @rdname created
 setGeneric("created", function(x,...) standardGeneric("created"))

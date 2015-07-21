@@ -86,7 +86,6 @@ check_that <- function(dat,...){
 
 #' Get values from object
 #' 
-#' @aliases severity, impact
 #' 
 #' @param x an R object
 #' @param ... Arguments to pass to or from other methods
@@ -97,6 +96,7 @@ setGeneric('values',def=function(x,...) standardGeneric('values'))
 #' Get error messages from confrontation object
 #' @param x An object of class \code{confrontation}
 #' @param ... Arguments to be passed to other methods.
+#' 
 #' @export 
 setGeneric("errors",def = function(x,...) standardGeneric("errors"))
 

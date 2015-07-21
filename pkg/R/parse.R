@@ -50,6 +50,7 @@ PKGOPT <- options_manager(
 #' @param x (optional) an object inheriting from \code{expressionset} such as \code{\link{validator}} or \code{\link{indicator}}.
 #' @param ... Name of an option (character) to retrieve options or \code{option = value} pairs to set options. 
 #' 
+#' 
 #' @export
 #' @examples
 #' # the default allowed validation symbols.

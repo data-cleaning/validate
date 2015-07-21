@@ -16,7 +16,6 @@
 #' }
 #'
 #'    
-#'        
 #' @docType package
 #' @name validate
 #' @useDynLib validate

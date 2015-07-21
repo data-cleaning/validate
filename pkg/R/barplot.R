@@ -21,6 +21,8 @@ setGeneric("barplot")
 #' The default colors were generated with the \code{RColorBrewer} package of Erich Neuwirth.
 #' 
 #' @return A list, containing the bar locations as in \code{\link[graphics]{barplot}}
+#' 
+#' 
 #' @export  
 setMethod('barplot',signature('validation'), 
   function(height, ..., order_by = c("fails","passes","nNA")
