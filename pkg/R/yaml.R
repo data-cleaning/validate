@@ -90,7 +90,7 @@ yaml_blocks <- function(lines){
       s
     } else {
       cat(sprintf("\nThe following invalid block is skipped:\n %s\n",s))
-      warning("Blocks detected consisting of invalid yaml or R syntax")
+      warning("Blocks containing invalid yaml or R syntax detected")
       NULL
     }
   })
