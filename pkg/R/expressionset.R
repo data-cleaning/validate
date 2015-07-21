@@ -383,7 +383,7 @@ setMethod("length","expressionset",function(x) length(x$rules))
 #' @export
 setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   if (is.character(i)){
-    i <- i %in% names(x)
+    i <- i == names(x)
   }
   out <- new(class(x))
   out$rules <- x$rules[i]

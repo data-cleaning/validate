@@ -10,6 +10,7 @@ test_that("Expressionset extraction",{
   expect_equivalent(class(v[1]),"validator")
   expect_equal(length(v[1]),1)
   expect_equal(length(v[1:2]),2)
+  expect_equal(length(v["V1"]),1)
   expect_equivalent(class(summary(v)),"data.frame")
   expect_true(all(c("block","nvar","rules") %in% names(summary(v))) )
 })
@@ -58,6 +59,13 @@ test_that("barplot doesn't crash",{
   nullplot(add_legend=FALSE)
   nullplot(topn=5)
 })
+
+
+test_that("show methods do not crash",{
+  x <- capture.output(validator(x + y == z))
+  x <- capture.output(check_that(women,height>0))
+})
+
 
 
 
