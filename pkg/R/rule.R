@@ -44,6 +44,12 @@ rule <- setClass("rule",
 #' @param x An R object
 #' @param ... Arguments to be passed to other methods.
 #' 
+#' @seealso 
+#' \itemize{
+#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
+#' \item{\code{\link{long}}, \code{\link{short}}, \code{\link{created}}, \code{\link{origin}}}
+#' }
+#' @name variables
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
@@ -68,7 +74,11 @@ setGeneric("is_tran_assign", function(x,...) standardGeneric("is_tran_assign"))
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
 #'
-#' @seealso \code{\link{short}}, \code{\link{long}}, \code{\link{created}}
+#' @seealso 
+#' \itemize{
+#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
+#' \item{\code{\link{long}}, \code{\link{short}}, \code{\link{created}}, \code{\link{variables}}}
+#' }
 #'  
 #' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
@@ -79,6 +89,11 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
 #' 
+#' @seealso 
+#' \itemize{
+#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
+#' \item{\code{\link{long}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
+#' }
 #' @export
 setGeneric("short", function(x,...) standardGeneric("short"))
 
@@ -90,6 +105,11 @@ setGeneric("short", function(x,...) standardGeneric("short"))
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
 #' 
+#' @seealso 
+#' \itemize{
+#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
+#' \item{\code{\link{short}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
+#' }
 #' @export
 setGeneric("long", function(x,...) standardGeneric("long"))
 
@@ -101,20 +121,34 @@ setGeneric("long", function(x,...) standardGeneric("long"))
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{POSIXct} vector.
 #' 
+#' @seealso 
+#' \itemize{
+#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
+#' \item{\code{\link{long}}, \code{\link{short}}, \code{\link{origin}} \code{\link{variables}}}
+#' }
 #' @export
-#' @rdname created
 setGeneric("created", function(x,...) standardGeneric("created"))
 
 
 # S4 METHODS ------------------------------------------------------------------
 
-
 setMethod("expr","rule",function(x,...) x@expr)
 
-#' @rdname variables
+#' @describeIn variables Retrieve unique variable names
 setMethod("variables","rule", function(x,...){
   var_from_call(x@expr)
 })
+
+#' @describeIn variables Alias to \code{names.list}
+setMethod('variables',signature('list'), function(x,...) names(x))
+
+#' @describeIn variables Alias to \code{names.data.frame}
+setMethod('variables',signature('data.frame'), function(x,...) names(x))
+
+#' @describeIn variables Alias to \code{ls}
+setMethod('variables',signature('environment'), function(x,...) ls(x))
+
+
 
 # full print method for rules
 setMethod("show", "rule", function(object){

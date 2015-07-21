@@ -245,7 +245,7 @@ setGeneric("length")
 
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
 
-#' @rdname variables
+#' @describeIn  variables Variables occuring in \code{x} either as a single list, or per rule.
 #' @param as how to return variables: 
 #' \itemize{
 #'   \item{\code{'vector'}} Return the uniqe vector of variables occurring in \code{x}.
@@ -254,9 +254,6 @@ setGeneric("length")
 #' }
 #' @param dummy Also retrieve transient variables set with the \code{:=} operator.
 #'
-#' @return By default, a \code{character} vector listing all (non-dummy) variables occuring in \code{x}. 
-#'
-#' @seealso \code{\link{summary}}
 #'
 #' @example ../examples/variables.R
 setMethod("variables", "expressionset",  function(x, as=c('vector','matrix','list'), dummy=FALSE, ...){ 
@@ -290,14 +287,14 @@ setMethod('validate_reset','expressionset',function(x=NULL){
   settings::reset(x$._options)
 })
 
-#' @rdname origin
+#' @describeIn origin Origin of every rule in \code{x}
 setMethod("origin", "expressionset", function(x,...) sapply(x$rules,origin))
 
 
-#' @rdname short
+#' @describeIn  short Short description of every rule in \code{x}
 setMethod("short","expressionset",function(x,...) sapply(x$rules, short))
 
-# @rdname long
+#' @describeIn long Long description of every rule in \code{x}
 setMethod("long", "expressionset", function(x,...) sapply(x$rules, long))
 
 

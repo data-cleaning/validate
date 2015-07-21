@@ -147,14 +147,7 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
   )
 })
 
-#' @rdname variables
-setMethod('variables',signature('data.frame'), function(x,...) names(x))
 
-#' @rdname variables
-setMethod('variables',signature('list'), function(x,...) names(x))
-
-#' @rdname variables
-setMethod('variables',signature('environment'), function(x,...) ls(x))
 
 #' @rdname validate-length
 setMethod("length","confrontation",function(x) length(x$._value))
