@@ -32,17 +32,6 @@ factory <- function(fun,opts){
   )
 }
 
-# Martin Morgan's helper-outers
-.has <- function(x, what) !sapply(lapply(x, "[[", what), is.null)
-hasWarning <- function(x) .has(x, "warn")
-hasError <- function(x) .has(x, "err")
-isClean <- function(x) !(hasError(x) | hasWarning(x))
-value <- function(x) sapply(x, "[[", 1)
-cleanv <- function(x) sapply(x[isClean(x)], "[[", 1)
-# end
-
-types <- function(x) sapply(x,function(x) class(x[[1]]))
-sizes <- function(x) sapply(x,function(x) length(x[[1]]))
 Id <- function(x) x
 num_result <- function(x) if (is.list(x)) length(x$result) else length(x)
 get_result <- function(x) if (is.list(x)) x$result else x
