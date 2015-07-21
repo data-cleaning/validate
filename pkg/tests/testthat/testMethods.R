@@ -36,6 +36,8 @@ test_that("Variables can be retrieved",{
     variables(v,as='matrix',dummy=TRUE)
   , array(c(T,F,T,T,T,T,F,F,T),dim=c(3,3))
   )
+  v <- validator(x + y > 0, z>0)
+  expect_equal(sort(variables(v[[1]])), c('x','y'))
 })
 
 
@@ -63,6 +65,7 @@ test_that("barplot doesn't crash",{
 
 test_that("show methods do not crash",{
   x <- capture.output(validator(x + y == z))
+  x <- capture.output(validator(x + y == z)[[1]])
   x <- capture.output(check_that(women,height>0))
 })
 

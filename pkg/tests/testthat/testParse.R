@@ -31,6 +31,7 @@ test_that("Parsing yrf format", {
   expect_true(all(created(v)-now < 10))
   expect_warning(validator(x?y))
   expect_warning(validator(.file="yamltests/invalid.yaml"))
+  expect_warning(validator(.file="yamltests/invalidR.yaml"))
 })
 
 
