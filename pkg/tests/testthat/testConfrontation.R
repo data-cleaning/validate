@@ -62,7 +62,7 @@ test_that("Confrontation methods with reference data",{
 
 
 test_that("confrontations with group assignment",{
-  v <- validator(G : {height;weight}, G > 0)
+  v <- validator(G := var_group(height, weight), G > 0)
   expect_equivalent(values(confront(women,v)),array(TRUE,dim=c(15,2)))
 })
 

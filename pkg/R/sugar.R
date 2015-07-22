@@ -1,43 +1,30 @@
 
-# Variable groups can be defined as <groupname> : {<var1>; <var2>; ... ; <varN> }
-# Where <var> can be a name or a character, in which case it is interpreted as a 
-# regexp, to be matched against the character vector 'varlist'.
-#
-# This function expands a variable group and stores it 
-# as character array in an environment. Input MUST be valid vargroup definition call
-expand_vargroup <- function(x,varlist=NULL){  
-  e <- new.env()
-  
-  addgroup <- function(xi){
-    group <- as.character(left(xi))
-    
-    if ( !is.null(e[[group]]) ) warning(sprintf('Multiply defined group %s\n',group))
-    
-    vars <- sapply(right(xi), function(y){ 
-      if ( !is.character(y) ){
-        as.character(y)
+# function to be specified by user in syntax.
+var_group <- function(...){
+  vars <- as.list(substitute(list(...))[-1])
+  function(varlist){
+    unlist(lapply(vars, function(x){
+      if (is.name(x)){ 
+         as.character(x)
       } else {
-        if (is.null(varlist)) 
-          warning(sprintf('Cannot expand regexp group "%s". No names provided',y))
-        varlist[grepl(y,varlist)]
+        grep(x,varlist,value=TRUE)
       }
-    })
-    vars <- unlist(vars[-1],use.names=FALSE)
-    if ( length(vars) == 0 ){ 
-      warning(sprintf('Ignoring empty group %s\n',group))
-    }
-    
-    e[[group]] <- vars
-    
-    fail <- ls(e) %in% vars
-    if ( any(fail) ){
-      stop(sprintf("Group '%s' also occurs as variable\n",ls(e)[fail]))  
-    }
+    }))
   }
-  
-  lapply(x,addgroup)
+}
+
+# call MUST be for the form [name] := var_group([arglist]) 
+# returns a list whose names are the group names, and whose
+# entries are character vectors, possibly matched by regexps defined in the
+# var_group.
+expand_vargroup <- function(calls,varlist){
+  e <- new.env()
+  lapply(calls, function(call){ 
+    assign(deparse(call[[2]]), eval(call[[3]])(varlist), envir=e)
+  })
   as.list(e)
 }
+
 
 # determine which groups a call refers to.
 groups_from_call <- function(x, groups, e=new.env()){
@@ -64,15 +51,11 @@ expand_group <- function(calls, group, variables){
       , variables
     )
   })
-#  origin <- rep(names(L),times=sapply(L,length))
-#  L <- unlist(L,use.names=FALSE)
-  
-#  names(L) <- paste(origin,variables,sep=".")
   unlist(L)
 }
 
 expand_groups <- function(calls, groups, varlist=NULL){
-  igroup <- sapply(calls, vargroup)
+  igroup <- sapply(calls, defines_var_group)
   
   groups <- expand_vargroup(calls[igroup], varlist=varlist)
 

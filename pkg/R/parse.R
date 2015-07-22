@@ -7,7 +7,7 @@ NULL
 
 PKGOPT <- options_manager(
   validator_symbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', ":" , "~", "%->%"
+    '<','<=','==','>','>=', '!=', '%in%', "~", "%->%"
     , 'identical', 'all','any', ':=' 
     , '!', '|', '||', '&', '&&', 'xor'
     , 'any_duplicated', 'any_missing'
@@ -125,8 +125,8 @@ replace_dollar <- function(x){
 
 
 # test if a call defines a variable group
-vargroup <- function(x){
-  length(x) == 3 && x[[1]] == ':' && is.name(x[[2]]) && x[[3]][[1]] == '{'
+defines_var_group <- function(x){
+  length(x) == 3 && x[[1]] == ':=' && is.name(x[[2]]) && x[[3]][[1]] == 'var_group'
 }
 
 
