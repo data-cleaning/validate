@@ -21,8 +21,13 @@ NULL
 #' 
 #'  
 #'
-#' @seealso \code{\link{syntax}}, \code{\link{confront}}, \code{\link{summary}}
-#' 
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{syntax}}} 
+#'  \item{\code{\link{confront}}}, \code{\link{check_that}}
+#'  \item{\code{\link{summary,expressionset-method}}}
+#'  \item{\code{\link{validator-class}}}
+#' }
 #' @return \code{validator} object. Use this object to check/{\code{\link{confront}}}
 #' data for validity.
 #'
@@ -30,6 +35,30 @@ NULL
 #' @export
 validator <- function(..., .file) new('validator',..., .file = .file)
 
+#### VALIDATOR CLASS ----------------------------------------------------------
+
+#' Store a set of rich validating rules.
+#'
+#' @section Details:
+#' A validator stores a set of validatin rules. It is a child class of \code{\link{expressionset}} and
+#' can be constructed with  \code{\link{validator}}.
+#'
+#' @section Exported S4 methods for \code{validator}:
+#'   \itemize{
+#'  \item{Methods inherited from \code{\link{expressionset}}}
+#'  \item{\code{\link{confront}}}
+#'  \item{\code{\link{compare}}}
+#' }
+#' 
+#'
+#' @section See also:
+#' \itemize{
+#'  \item{\code{\link{validator}}}
+#'  \item{\code{\link{expressionset}}}
+#' }
+#'
+#' @keywords internal
+#' 
 setRefClass("validator"
   , contains = 'expressionset'
   , methods = list(

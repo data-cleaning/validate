@@ -1,6 +1,37 @@
 
 # RULE OBJECT -----------------------------------------------------------------
-# A rule is a call object endowed with extra attributes
+
+#' A rich expression
+#' 
+#' @section Details:
+#' Technically, \code{rule} is a \code{call} object endowed with extra attributes such
+#' as a name, a short and a long description, creation time and a reference to its origin.
+#' Rule objects are not for direct use by users of the package, but may be of interest for
+#' developers of this package, or packages depending on it.
+#' 
+#' @section Exported S4 methods for \code{rule}:
+#' \itemize{
+#' \item{\code{show}}
+#' \item{\code{\link{origin}}}
+#' \item{\code{\link{short}}}
+#' \item{\code{\link{long}}}
+#' \item{\code{\link{created}}}
+#' }
+#'
+#' @section Private S4 methods for \code{rule}:
+#' \itemize{
+#'  \item{validating}
+#'  \item{linear}
+#'  \item{expr}
+#'  \item{is_tran_assign}
+#' }
+#' 
+#' @section See also:
+#' \itemize{
+#'  \item{\code{\link{expressionset-class}}}
+#' }
+#'
+#' @keywords internal
 rule <- setClass("rule",
   slots = c(
    expr         = "language"  # MUST be a 'call'[*]

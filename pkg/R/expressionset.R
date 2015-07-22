@@ -3,13 +3,55 @@
 #' @include rule.R
 NULL
 
-#  library(settings)
-#  source('pkg/R/sugar.R')
-#  source('pkg/R/parse.R')
-#  source('pkg/R/rule.R')
 
 #### EXPRESSIONSET OBJECT -----------------------------------------------------
-# superclass storing a set of rich expressions
+
+
+#' Superclass for storing a set of rich expressions.
+#'
+#' @section Details:
+#' This class is aimed at developers of this package or packages depending on
+#' it, not at users. It is the parent object of both the \code{\link{validator}}
+#' and the \code{\link{indicator}} class.
+#' 
+#' 
+#' An \code{expressionset} is a reference class storing a list of
+#' \code{\link{rule}}s. It contains a number of methods that are not exported
+#' and may change or dissapear without notice. We strongly encourage developers
+#' to use the exported S4 generics to set or extract variables
+#' 
+#' @section Exported S4 methods for \code{expressionset}:
+#' \itemize{
+#'  \item{\code{\link{variables}}}
+#'  \item{\code{\link{names}}}
+#'  \item{\code{\link{length,expressionset-method}}}
+#'  \item{\code{\link{created}}}
+#'  \item{\code{\link{origin}}}
+#'  \item{\code{\link{short}}}
+#'  \item{\code{\link{long}}}
+#'  \item{\code{\link{[,expressionset-method}}}
+#'  \item{\code{\link{[[,expressionset-method}}}
+#'  \item{\code{\link{summary,expressionset-method}}}
+#' }
+#' 
+#' 
+#' @section Private S4 methods for \code{expressionset}:
+#' \itemize{
+#'  \item{validating}
+#'  \item{linear}
+#'  \item{is_tran_assign}
+#' }
+#' 
+#' 
+#' @section See also:
+#' \itemize{
+#'  \item{\code{\link{rule}}}
+#'  \item{\code{\link{validator}}}
+#'  \item{\code{\link{indicator}}}
+#' } 
+#'
+#' 
+#' @keywords internal
 expressionset <- setRefClass("expressionset"
   , fields = list(
         rules = "list"
@@ -298,7 +340,7 @@ setMethod("short","expressionset",function(x,...) sapply(x$rules, short))
 setMethod("long", "expressionset", function(x,...) sapply(x$rules, long))
 
 
-#' @rdname created
+#' @describeIn created Creation time of every rule in \code{x}
 setMethod("created", "expressionset", function(x,...){ 
   # obj. of class POSIXct; sapply strips the POSIXct class attribute
   cr <- rep(Sys.time(),length(x))
