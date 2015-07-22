@@ -30,19 +30,13 @@
 #' \code{validator(a > e, a > d, b > e, b > d)}
 #' 
 #' @section File parsing:
-#' Files read via the \code{.files} argument can include other files by adding one or more statements of the form
 #'
-#' \code{# @@validate include <filename>} 
-#' 
-#' Such a statement may not span more than a single line 
-#' and one include statement may contain only a single file. Files are sought in R's current working directory 
-#' unless the full path is given. Files that are included may include other files as well. Include statements 
-#' determine the order in which files are parsed: if file A includes file B then 
-#' file B is parsed before file A. If file A includes files B and C in that order, then first file B, then file C and 
-#' finally file A is parsed. Although it will not matter for the result, for readability reasons it is advisable to 
-#' write include statemens at the top of validation files.
-#' 
+#' TODO: update to YAML
+#'   
 #' @section Global, permanent assignment (files only):
+#' 
+#' TODO: update to YAML.
+#' 
 #' When reading rules from file there are a few statements that are executed immediately. These are statements who are
 #' either 
 #' \itemize{
