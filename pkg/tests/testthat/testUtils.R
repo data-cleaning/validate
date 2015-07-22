@@ -32,28 +32,6 @@ test_that('validating/indicating expressions can be named',{
 
 
 
-test_that("Variables can be retrieved",{
-  expect_equal( variables(validator(x > 0)),'x')
-  expect_equal( sort(variables(validator(x > 0, y > 0))) , c('x','y') ) 
-  expect_equal( variables(validator(x>0, x<1 )), 'x')
-  expect_equal( sort(variables(validator(x +y > 0, y < 1))), c('x','y') )
-  expect_equal( variables(validator(x := 2*y, x>1)),'y')
-  expect_equal( sort(variables(validator(x := 2*y, x>1),dummy=TRUE)), c('x','y'))  
-  v <- validator(
-    root = y := sqrt(x)
-   , average = mean(x) > 3
-   , sum = x + y == z
-  )
-  expect_equivalent(
-    variables(v,as='matrix')
-  , array(c(T,T,F,T),dim=c(2,2))
-  )
-  expect_equivalent(
-    variables(v,as='matrix',dummy=TRUE)
-  , array(c(T,F,T,T,T,T,F,F,T),dim=c(3,3))
-  )
-})
-
 
 test_that('compare works',{
   d1 <- data.frame(x=1:3,y=4:6)
