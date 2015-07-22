@@ -22,7 +22,14 @@ setGeneric("barplot")
 #' 
 #' @return A list, containing the bar locations as in \code{\link[graphics]{barplot}}
 #' 
-#' 
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{summary,validation-method}}}
+#'  \item{\code{\link{aggregate,validation-method}}}
+#'  \item{\code{\link{sort,validation-method}}}
+#'  \item{\code{\link{validation}}}
+#' }
+#' @aliases barplot,validation-method 
 #' @export  
 setMethod('barplot',signature('validation'), 
   function(height, ..., order_by = c("fails","passes","nNA")

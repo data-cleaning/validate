@@ -2,13 +2,10 @@
 NULL
 
 #' Define validation rules for data
-#'
-#' With \code{validator} a set of validation rules can defined, which can be
-#' used to \code{\link{confront}} data. \code{validator} is a specific case of
-#' \code{expressionset}: a set of rules to verify data. 
+#' 
 #' 
 #' @section Validating expressions:
-#' Each validating expression should evaluate to a \code{logical}. The syntax of
+#' Each validating expression should evaluate to a \code{logical}. Allowed syntax of
 #' the expression is described in \code{\link{syntax}}. 
 #' 
 #' @param ... A comma-separated list of validating expressions
@@ -28,8 +25,8 @@ NULL
 #'  \item{\code{\link{summary,expressionset-method}}}
 #'  \item{\code{\link{validator-class}}}
 #' }
-#' @return \code{validator} object. Use this object to check/{\code{\link{confront}}}
-#' data for validity.
+#' @return An object of class \code{validator} (see \code{\link{validator-class}}).
+#' 
 #'
 #' @example ../examples/validator.R
 #' @export
@@ -53,7 +50,6 @@ validator <- function(..., .file) new('validator',..., .file = .file)
 #'
 #' @section See also:
 #' \itemize{
-#'  \item{\code{\link{validator}}}
 #'  \item{\code{\link{expressionset}}}
 #' }
 #'

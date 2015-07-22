@@ -280,8 +280,14 @@ blocks_expressionset <- function(x){
 #' @rdname validate-summary
 setGeneric('summary')
 
-#' Number of expressions
-#' @rdname validate-length
+#' Get object lenght
+#' @name validate-length
+#' @aliases validate-length
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{expressionset}}}
+#'  \item{\code{\link{confrontation}}
+#' }
 setGeneric("length")
 
 
@@ -390,11 +396,9 @@ setMethod('summary',signature('expressionset'),function(object,...){
   )
 })
 
-#' Get number of rules
-#' 
 #' @param x An R object
-#' @rdname validate-length
-#' 
+#' @describeIn validate-length Number of rules.
+#' @aliases length,expressionset-method 
 setMethod("length","expressionset",function(x) length(x$rules))
 
 

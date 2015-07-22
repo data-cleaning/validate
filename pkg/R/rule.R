@@ -129,7 +129,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 setGeneric("short", function(x,...) standardGeneric("short"))
 
 
-#' Long description of rules
+#' Long description
 #'
 #'
 #' @param x and R object
@@ -145,7 +145,7 @@ setGeneric("short", function(x,...) standardGeneric("short"))
 setGeneric("long", function(x,...) standardGeneric("long"))
 
 
-#' Creation time of rules
+#' Creation time
 #'
 #'
 #' @param x and R object
