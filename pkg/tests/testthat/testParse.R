@@ -29,6 +29,9 @@ test_that("Parsing yrf format", {
   expect_equal(short(v),c("sum of x and y","if x positive then y also"))
   expect_equal(long(v),c("a looong description here","a looong description here\n"))
   expect_true(all(created(v)-now < 10))
+  expect_warning(validator(x?y))
+  expect_warning(validator(.file="yamltests/invalid.yaml"))
+  expect_warning(validator(.file="yamltests/invalidR.yaml"))
 })
 
 test_that("Parsing options",{

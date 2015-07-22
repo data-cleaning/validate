@@ -33,6 +33,14 @@ test_that('validating/indicating expressions can be named',{
 
 
 
+# code for these methods in confrontation.R
+test_that("other methods for 'variables'",{
+  expect_equal(variables(women),c("height","weight"))  
+  expect_equal(variables(as.list(women)),c("height","weight"))
+  expect_equal(variables(as.environment(women)),c("height","weight"))
+})
+
+
 test_that('compare works',{
   d1 <- data.frame(x=1:3,y=4:6)
   d2 <- data.frame(x=c(NA,2,NA),y=c(4,5,NA))  

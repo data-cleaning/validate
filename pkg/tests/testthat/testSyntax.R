@@ -54,7 +54,30 @@ test_that('Missings are counted correctly',{
   expect_equal(evalq(col_missing(x),d2),   c(x=2L)     )
   expect_equal(evalq(col_missing(x,y),d2), c(x=2L,y=1L))
   expect_equal(evalq(col_missing("."),d2), c(x=2L,y=1L))  
+
+  expect_equal(evalq(number_unique(),d1),3)
+  expect_equal(evalq(any_duplicated(),d1),FALSE)
   
+    
+  expect_equal(evalq(any_missing(),d1), FALSE)
+  expect_equal(evalq(any_missing("."),d1), FALSE)
+  expect_equal(evalq(any_missing(),d2), TRUE)
+  expect_equal(evalq(any_missing("."),d2), TRUE)
+  expect_equal(evalq(any_missing(x),d2), TRUE)
+  expect_equal(evalq(any_missing(x,y),d2), TRUE)
+  
+})
+
+
+test_that("Functional dependencies", {
+  v1 <- validator(stad + straat ~ postcode)
+  dat <- data.frame(
+    straat = c('kerkstraat','kerkstraat','kerkstraat','kerkstraat')
+    ,stad = c('DH','DH','H','DH')
+    ,postcode = c('2495','2496','8888','2495')
+  )
+  cf <- confront(dat,v1)
+  expect_equivalent(values(cf),array(c(1,1,3,4),dim=c(4,1)))
 })
 
 

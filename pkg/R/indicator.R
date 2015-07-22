@@ -23,6 +23,32 @@ NULL
 #' @example ../examples/indicator.R
 indicator <- function(..., .file) new('indicator',..., .file=.file)
 
+
+
+
+#### INDICATOR CLASS ----------------------------------------------------------
+
+#' Store a set of rich indicator expressions
+#'
+#' @section Details:
+#' An indicator stores a set of indicators. It is a child class of \code{\link{expressionset}} and
+#' can be constructed with  \code{\link{indicator}}.
+#'
+#' @section Exported S4 methods for \code{validator}:
+#'   \itemize{
+#'  \item{Methods inherited from \code{\link{expressionset}}}
+#'  \item{\code{\link{confront}}}
+#'  \item{\code{\link{compare}}}
+#' }
+#' 
+#'
+#' @section See also:
+#' \itemize{
+#'  \item{\code{\link{expressionset}}}
+#' }
+#'
+#' @keywords internal
+#' 
 setRefClass("indicator", contains='expressionset',
   methods = list(
     initialize = function(..., .file) ini_indicator(.self, ..., .file = .file)

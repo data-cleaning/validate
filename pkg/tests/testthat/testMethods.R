@@ -10,6 +10,7 @@ test_that("Expressionset extraction",{
   expect_equivalent(class(v[1]),"validator")
   expect_equal(length(v[1]),1)
   expect_equal(length(v[1:2]),2)
+  expect_equal(length(v["V1"]),1)
   expect_equivalent(class(summary(v)),"data.frame")
   expect_true(all(c("block","nvar","rules") %in% names(summary(v))) )
 })
@@ -35,6 +36,8 @@ test_that("Variables can be retrieved",{
     variables(v,as='matrix',dummy=TRUE)
   , array(c(T,F,T,T,T,T,F,F,T),dim=c(3,3))
   )
+  v <- validator(x + y > 0, z>0)
+  expect_equal(sort(variables(v[[1]])), c('x','y'))
 })
 
 
@@ -44,6 +47,26 @@ test_that("Confrontation extraction",{
   cf <- check_that(women,height > weight, height > 0)  
   expect_equal(length(cf),2)
   expect_equal(length(cf[1]),1)
+})
+
+# just a simple test to check consistency between barplot and confrontation objects.
+test_that("barplot doesn't crash",{
+  nullplot <- function(...){
+    pdf(NULL)
+    on.exit(dev.off())
+    barplot(check_that(women, height>0, weight/height > 2),...)
+  }
+  nullplot()
+  nullplot(add_exprs=TRUE)
+  nullplot(add_legend=FALSE)
+  nullplot(topn=5)
+})
+
+
+test_that("show methods do not crash",{
+  x <- capture.output(validator(x + y == z))
+  x <- capture.output(validator(x + y == z)[[1]])
+  x <- capture.output(check_that(women,height>0))
 })
 
 

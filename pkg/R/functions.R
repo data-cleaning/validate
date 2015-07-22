@@ -30,19 +30,13 @@
 #' \code{validator(a > e, a > d, b > e, b > d)}
 #' 
 #' @section File parsing:
-#' Files read via the \code{.files} argument can include other files by adding one or more statements of the form
 #'
-#' \code{# @@validate include <filename>} 
-#' 
-#' Such a statement may not span more than a single line 
-#' and one include statement may contain only a single file. Files are sought in R's current working directory 
-#' unless the full path is given. Files that are included may include other files as well. Include statements 
-#' determine the order in which files are parsed: if file A includes file B then 
-#' file B is parsed before file A. If file A includes files B and C in that order, then first file B, then file C and 
-#' finally file A is parsed. Although it will not matter for the result, for readability reasons it is advisable to 
-#' write include statemens at the top of validation files.
-#' 
+#' TODO: update to YAML
+#'   
 #' @section Global, permanent assignment (files only):
+#' 
+#' TODO: update to YAML.
+#' 
 #' When reading rules from file there are a few statements that are executed immediately. These are statements who are
 #' either 
 #' \itemize{
@@ -121,6 +115,7 @@ col_missing <- function(...){
 number_unique <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
+  if ( identical(vars,TRUE)) vars <- ls(parent.frame())
   length(unique(do.call(paste0,mget(vars,parent.frame()))))
 }
 
@@ -132,8 +127,8 @@ any_missing <- function(...){
   vars <- matchvars(L,parent.frame())
   e <- parent.frame()
   a <- FALSE
-  for ( v in vars ) 
-    if (!a) a <- a | anyNA(e[[vars]])
+  if (identical(vars,TRUE)) vars <- ls(e)
+  for ( v in vars ) a <- a | anyNA(e[[v]])
   a
 }
 
@@ -143,6 +138,7 @@ any_missing <- function(...){
 any_duplicated <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
+  if (identical(vars,TRUE)) vars <- ls(parent.frame())
   anyDuplicated( do.call(paste0,mget(vars,parent.frame())) ) > 0
 }
 
@@ -178,16 +174,16 @@ matchvars <- function(L,env){
 # @param severity R expression: an expression. Must result in a numeric.
 # @rdname syntax
 # @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
-V <- function(rule, impact=NULL, severity=NULL){
-  r <- substitute(rule)
-  i <- substitute(impact)
-  s <- substitute(severity)
-  list(
-    result   = eval(r,envir=sys.parent())
-    , impact   = eval(i,envir=sys.parent())
-    , severity = eval(s,envir=sys.parent())
-  )
-}
+# V <- function(rule, impact=NULL, severity=NULL){
+#   r <- substitute(rule)
+#   i <- substitute(impact)
+#   s <- substitute(severity)
+#   list(
+#     result   = eval(r,envir=sys.parent())
+#     , impact   = eval(i,envir=sys.parent())
+#     , severity = eval(s,envir=sys.parent())
+#   )
+# }
 
 # severity and impact for Linear validators
 
@@ -195,25 +191,25 @@ V <- function(rule, impact=NULL, severity=NULL){
 # @param linrule A \emph{linear} validating expression
 # @param p $L^p$-norm to use (default is the Euclidean norm)
 # @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
-L <- function(linrule, p=2){
-  e <- substitute(linrule)
-  q <- p/(p-1)
-  a <- const_norm(e,p/(p-1))
-  result <- eval(e,envir=sys.parent())
-  severity <- abs(eval(left(e),envir=sys.parent()) - eval(right(e),envir=sys.parent()))  
-  impact <- severity/a
-  list(result=result,severity=severity,impact=impact)
-}
+# L <- function(linrule, p=2){
+#   e <- substitute(linrule)
+#   q <- p/(p-1)
+#   a <- const_norm(e,p/(p-1))
+#   result <- eval(e,envir=sys.parent())
+#   severity <- abs(eval(left(e),envir=sys.parent()) - eval(right(e),envir=sys.parent()))  
+#   impact <- severity/a
+#   list(result=result,severity=severity,impact=impact)
+# }
 
-const_norm <- function(expr,q){
-  l <- coefficients(left(expr))
-  r <- coefficients(right(expr))
-  vars <- unique(names(c(l,r)))
-  a <- setNames(numeric(length(vars)),vars)
-  a[names(l)] <- l
-  a[names(r)] <- a[names(r)] - r
-  a = sum(abs(a[!names(a)=='CONSTANT'])^q)^(1/q)
-}
+# const_norm <- function(expr,q){
+#   l <- coefficients(left(expr))
+#   r <- coefficients(right(expr))
+#   vars <- unique(names(c(l,r)))
+#   a <- setNames(numeric(length(vars)),vars)
+#   a[names(l)] <- l
+#   a[names(r)] <- a[names(r)] - r
+#   a = sum(abs(a[!names(a)=='CONSTANT'])^q)^(1/q)
+# }
 
 # d <- data.frame(
 #   x = c(1,NA,3,5)

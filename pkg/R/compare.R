@@ -22,13 +22,19 @@ setMethod('show',signature('comparison'),function(object){
 
 #' Compare similar data sets
 #'
-#' The purpose of this function is to compare different versions of the same 
-#' dataset with respect
-#' to predifined indicators. Results are simplified in a sensible way. 
+#' Compare different versions of the same dataset with respect to predifined
+#' indicators. Results are simplified in a sensible way.
 #'
-#' @param x An R object (usually a \code{\link{validator}} or \code{\link{indicator}}
+#' @param x An R object
 #' @param ... (named) data sets (\emph{e.g.} data.frames) 
-#' @seealso \code{\link{cells}}
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{cells}}}
+#'  \item{\code{\link{validator}}, \code{\link{validator-class}}}
+#'  \item{\code{\link{indicator}}, \code{\link{indicator-class}}}
+#' }
+#' 
+#' 
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
@@ -300,8 +306,11 @@ setClass('cellComparison',contains='comparison')
 #' the number of altered values and changes therein as compared to the reference
 #' defined in \code{how}.
 #'
-#' @seealso \code{\link{compare}}, \code{\link{match_cells}}
-#'
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{compare}}} 
+#'  \item{\code{\link{match_cells}}}
+#' }
 #' @export 
 cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
   L <- c( list(...), .list)
@@ -332,6 +341,10 @@ cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
 #'
 #' @return A list of \code{data.frames}, subsetted and sorted so that all cells correspond.
 #' @export
+#' @seealso
+#' \itemize{
+#'  \item{\code{\list{cells}}}
+#' }
 match_cells <- function(...,.list=NULL,id=NULL){
   L <- c(list(...), .list)
   

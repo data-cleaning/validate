@@ -10,7 +10,7 @@ setGeneric("barplot")
 #' @param ... parameters to be passed to \code{\link[graphics]{barplot}} but not 
 #'  \code{height}, \code{horiz}, \code{border},\code{las}, and \code{las}.
 #' @param add_legend Display legend?
-#' @param add_calls Display rules?
+#' @param add_exprs Display rules?
 #' @param colors Bar colors for validations yielding NA or a violation
 #' @param topn If specified, plot only the top n most violated calls
 #' @param order_by (single \code{character}) order bars decreasingly from top to bottom by the 
@@ -21,19 +21,28 @@ setGeneric("barplot")
 #' The default colors were generated with the \code{RColorBrewer} package of Erich Neuwirth.
 #' 
 #' @return A list, containing the bar locations as in \code{\link[graphics]{barplot}}
+#' 
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{summary,validation-method}}}
+#'  \item{\code{\link{aggregate,validation-method}}}
+#'  \item{\code{\link{sort,validation-method}}}
+#'  \item{\code{\link{validation}}}
+#' }
+#' @aliases barplot,validation-method 
 #' @export  
 setMethod('barplot',signature('validation'), 
   function(height, ..., order_by = c("fails","passes","nNA")
            , stack_by = c("fails","passes","nNA")
-           , topn=Inf, add_legend=TRUE, add_calls=TRUE
+           , topn=Inf, add_legend=TRUE, add_exprs=TRUE
            , colors=c(fails = "#FC8D59",passes = "#91CF60", nNA = "#FFFFBF")
            ){
-    
     order_by <- match.arg(order_by)
-    stopifnot(topn>0,is.character(order_by),is.logical(add_legend),is.logical(add_calls))
+    stopifnot(topn>0,is.character(order_by),is.logical(add_legend),is.logical(add_exprs))
     
     # get calls & values from confrontation object
-    calls <- sapply(height$._calls,deparse)
+    calls <- sapply(height$._calls, deparse)
+    names(calls) <- names(height$._value)
     val <- values(height,drop=FALSE)
     
     # reorder colors to match stacking order
@@ -62,7 +71,7 @@ setMethod('barplot',signature('validation'),
       I <- order(count[,order_by])
       count <- count[I,,drop=FALSE]
       labels <- labels[I]
-       
+    
       if ( topn < Inf ){
         I <- order(count[,order_by],decreasing=TRUE)
         I <- 1:nrow(count) %in% I[1:min(topn,length(I))]
@@ -84,7 +93,7 @@ setMethod('barplot',signature('validation'),
       p = do.call(barplot,c(arglist,args))[seq_along(labels)]
       
       # Add labels & legend
-      if (add_calls) text(0.1,p,labels,pos=4)
+      if (add_exprs) text(0.1,p,labels,pos=4)
 
       if(add_legend){ 
        legend('topright'
@@ -103,13 +112,4 @@ setMethod('barplot',signature('validation'),
     invisible(out)
 })
 
-drawbarat <- function(y,height,width,col){
- w <- width/2
- polygon(
-   c(0,height,height,0)
-   , c(y-w,y-w,y+w,y+w)
-   ,col=col
-   ,border=NA
- )
-}
 

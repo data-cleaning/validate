@@ -4,7 +4,48 @@ NULL
 
 # CONFRONTATION OBJECT --------------------------------------------------------
 
-# superclass for storing results of a verification activity
+
+#' Superclass storing results of confronting data with rules
+#'
+#' @section Details:
+#' This class is aimed at developers of this package or packages depending on 
+#' it. It is the parent of classes \code{\link{indication}} and 
+#' \code{\link{validation}} which are user-facing.
+#' 
+#' Using \code{\link{confront}}, a set of rules can be executed in the context
+#' of one or more (nested) environments holding data. The results of such evaluations
+#' are stored in a \code{confrontation} object along with metadata. 
+#' 
+#' We strongly advise against accessing the data fields or methods internal to
+#' this object directly, as we may change or remove them without notice. Use
+#' the exported methods listed below in stead.
+#' 
+#' @section Exported S4 methods for \code{confrontation}:
+#' 
+#' \itemize{
+#'  \item{\code{show}}
+#'  \item{\code{\link{values}}}
+#'  \item{\code{\link{warnings,confrontation-method}}}
+#'  \item{\code{\link{errors}}}
+#'  \item{\code{\link{aggregate}}}
+#'  \item{\code{\link{sort}}}
+#'  \item{\code{\link{length,confrontation-method}}}
+#'  \item{\code{\link{[,confrontation-method}}}
+#' }
+#'
+#' @section Private S4 methods for \code{confrontation}:
+#' 
+#' Currently N/A
+#' 
+#' @section See also:
+#' \itemize{
+#'  \item{\code{\link{validation}}}
+#'  \item{\code{\link{indication}}}
+#'  \item{\code{\link{expressionset}}}
+#' }
+#' 
+#' @aliases confrontation
+#' @keywords internal
 setRefClass("confrontation"
   ,fields = list(
       ._call  = "call"  # (user's) call that generated the object
@@ -31,10 +72,8 @@ setRefClass("confrontation"
 
 #' Confront data with a (set of) expressionset(s)
 #'
-#' @aliases confrontation validation indication
-#'
 #' @param dat An R object carrying data
-#' @param x An R object carrying verifications
+#' @param x An R object carrying \code{\link{rule}}s.
 #' @param ref Optionally, an R object carrying reference data. See examples for usage.
 #' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
 #' 
@@ -46,14 +85,20 @@ setRefClass("confrontation"
 #' Nonmatching records are removed from datasets in \code{ref}. If there are records in \code{dat} 
 #' that are not in \code{ref}, then datasets in \code{ref} are extended with records containing only \code{NA}.
 #' In particular, this means that wen reference data is passed in an environment, those reference data sets
-#' may altered by the call to \code{cofront}.
+#' may altered by the call to \code{confront}.
 #'
 #' Technically, reference data will be stored in an environment that is the parent of a (created) environment that
 #' contains the columns of \code{dat}.
 #' 
 #' 
-#' @seealso \code{\link{summary}}, \code{\link{aggregate,validation-method}}, \code{\link{sort,validation-method}}
-#' 
+#' @seealso
+#' \itemize{
+#'  \item{\code{\link{validate_options}}}
+#'  \item{\code{\link{summary,validation-method}}, \code{\link{aggregate,validation-method}}, \code{\link{sort,validation-method}}}
+#'  \item{\code{\link{summary,indication-method}}}
+#'  \item{\code{\link{indicator}}, \code{\link{indicator-class}}}
+#'  \item{\code{\link{validator}}, \code{\link{validator-class}}}
+#' }
 #' @export 
 #' 
 #' @example ../examples/confront.R
@@ -86,7 +131,6 @@ check_that <- function(dat,...){
 
 #' Get values from object
 #' 
-#' @aliases severity, impact
 #' 
 #' @param x an R object
 #' @param ... Arguments to pass to or from other methods
@@ -94,9 +138,16 @@ check_that <- function(dat,...){
 #' @export
 setGeneric('values',def=function(x,...) standardGeneric('values'))
 
-#' Get error messages from confrontation object
-#' @param x An object of class \code{confrontation}
+#' Get messages from  a confrontation object
+#' @param x An object of class \code{\link{confrontation}}
 #' @param ... Arguments to be passed to other methods.
+#' 
+#' 
+#' @seealso
+#' \itemize{
+#'  \item{\code{\link{confront}}}
+#' }
+#' 
 #' @export 
 setGeneric("errors",def = function(x,...) standardGeneric("errors"))
 
@@ -123,7 +174,8 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   calls <- x$exprs(varlist=variables(dat))
   # merge options with clone of option manager 
   opts <- x$clone_options(...)
-  L <- setNames(execute(calls,dat,opts),names(x))
+  i <- !is_tran_assign(x)
+  L <- setNames(execute(calls,dat,opts),names(x)[i])
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))
@@ -136,6 +188,7 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
 
 #' @rdname select
 #' @aliases [,confrontation-method
+#' @export 
 setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
   new(class(x)
     , ._call = match.call(call=sys.call(sys.parent()))
@@ -146,19 +199,36 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
   )
 })
 
-#' @rdname variables
-setMethod('variables',signature('data.frame'), function(x,...) names(x))
 
-#' @rdname variables
-setMethod('variables',signature('list'), function(x,...) names(x))
 
-#' @rdname variables
-setMethod('variables',signature('environment'), function(x,...) ls(x))
-
-#' @rdname validate-length
+#' @describeIn validate-length Number of evaluated rules.
+#' @aliases length,confrontation-method
 setMethod("length","confrontation",function(x) length(x$._value))
 
 # indicators serve a different purpose than validations.
+
+
+#' Store results of evaluating indicators
+#'
+#' @section Details:
+#' An \code{indication} stores a set of results generated by evaluating
+#' an \code{\link{indicator}} in the context of data along with some metadata.
+#' 
+#' 
+#' @section Exported S4 methods for \code{indication}:
+#' \itemize{
+#'  \item{Methods exported for objects of class \code{\link{confrontation}}}
+#'  \item{\code{\link{summary,indication-method}}}
+#'  \item{\code{\link{values,indication-method}}}
+#' }
+#' 
+#' 
+#' @section See also:
+#' \itemize{
+#' \item{\code{\link{confront}}}
+#' \item{\code{\link{validation-class}}}
+#' }
+#' @aliases indication 
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
@@ -172,7 +242,7 @@ setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=
 #' @param object An R object
 #' @param ... Currently unused
 #'
-#' @aliases validate-summary
+#' @aliases validate-summary summary,indication-method
 #' @section Indication:
 #' Some basic information per evaluated indicator is reported: the number of items to which the 
 #' indicator was applied, the output \code{class}, some statistics (min, max, mean , number of NA)
@@ -211,7 +281,31 @@ get_stat <- function(x,what,...){
 
 
 
-# # indicators serve a different purpose than validations.
+#' Store results of evaluating validating expressions
+#'
+#' @section Details:
+#' A object of class \code{validation} stores a set of results generated by
+#' evaluating an \code{\link{validator}} in the context of data along with some
+#' metadata.
+#' 
+#' 
+#' @section Exported S4 methods for \code{validation}:
+#' \itemize{
+#'  \item{Methods exported for objects of class \code{\link{confrontation}}}
+#'  \item{\code{\link{summary,validation-method}}}
+#'  \item{\code{\link{values,validation-method}}}
+#'  \item{\code{\link{barplot,validation-method}}}
+#'  \item{\code{\link{aggregate,validation-method}}}
+#'  \item{\code{\link{sort,validation-method}}}
+#' }
+#' 
+#' 
+#' @section See also:
+#' \itemize{
+#' \item{\code{\link{confront}}}
+#' \item{\code{\link{validator}}}
+#' }
+#' @aliases validation  
 setRefClass("validation", contains = "confrontation")
 
 #' @rdname confront
@@ -229,7 +323,7 @@ setMethod("confront",signature("data.frame","validator","environment"), function
     stop("Class of one or more elements in 'ref' differs from 'dat'")
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
   dat <- list2env(dat,parent=ref)  
-  confront_work(x,dat,key,...)
+  confront_work(x,dat,key,class="validation",...)
 })
 
 #' @rdname confront
@@ -238,7 +332,7 @@ setMethod("confront",signature("data.frame","validator","data.frame"),function(d
   env$ref <- ref
   if (!is.null(key)) match_rows(of=env, against=dat, using=key)
   dat <- list2env(dat, parent=env)
-  confront_work(x, dat, key, ...)
+  confront_work(x, dat, key, class="validation", ...)
 })
 
 #' @rdname confront
@@ -249,7 +343,7 @@ setMethod("confront",signature("data.frame","validator","list"),function(dat, x,
   env <- list2env(ref)  
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
   dat <- list2env(dat,parent=env)  
-  confront_work(x,dat,key,...)  
+  confront_work(x,dat,key,class="validation",...)  
 })
 
 
@@ -358,6 +452,7 @@ setMethod('values',signature('confrontation'),function(x,...){
 })
 
 #' @rdname values
+#' @aliases values,validation-method
 #' @param simplify Combine results with similar dimension structure into arrays?
 #' @param drop if a single vector or array results, drop 'list' attribute?
 setMethod('values',signature('validation'),function(x,simplify=TRUE,drop=TRUE,...){
@@ -365,6 +460,7 @@ setMethod('values',signature('validation'),function(x,simplify=TRUE,drop=TRUE,..
 })
 
 #' @rdname values
+#' @aliases  values,indication-method
 setMethod('values',signature('indication'),function(x,simplify=TRUE,drop=TRUE,...){
   int_values(x,simplify,drop,...)
 })
@@ -397,7 +493,6 @@ setMethod("errors","confrontation",function(x,...){
 })
 
 
-
 #' @rdname errors
 #' @export 
 setMethod("warnings","confrontation",function(x,...){
@@ -412,7 +507,7 @@ setMethod("warnings","confrontation",function(x,...){
 #'  
 #' @param x An object of class \code{\link{validation}}
 #' @param by Report on violations per rule (default) or per record?
-#' @param drop drop list attribute if the result has a single argument.
+#' @param drop drop list attribute if the result is list of length 1
 #' @param ... Arguments to be passed to or from other methods.
 #'
 #' @return By default, a \code{data.frame} with the following columns.
@@ -431,8 +526,14 @@ setMethod("warnings","confrontation",function(x,...){
 #' When \code{by='record'} and not all validation results have the same dimension structure,
 #' a list of \code{data.frames} is returned.
 #' 
-#' @seealso \code{\link{aggregate}}, \code{\link{summary}}
-#'   
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{summary,validation-method}}}
+#'  \item{\code{\link{barplot,validation-method}}}
+#'  \item{\code{\link{sort,validation-method}}}
+#'  \item{\code{\link{validation}}}
+#' }
+#' @aliases aggregate,validation-method
 #' @export
 setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'), drop=TRUE,...){
   v <- values(x, drop=FALSE)
@@ -486,8 +587,14 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
 #' When \code{by='record'} and not all validation results have the same dimension structure,
 #' a list of \code{data.frames} is returned.
 #'
-#' @seealso \code{\link{sort}}, \code{\link{summary}}
-#'
+#' @seealso 
+#' \itemize{
+#'  \item{\code{\link{summary,validation-method}}}
+#'  \item{\code{\link{aggregate,validation-method}}}
+#'  \item{\code{\link{barplot,validation-method}}}
+#'  \item{\code{\link{validation}}}
+#' }
+#' @aliases sort,validation-method
 #' @export 
 setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rule','record'), drop=TRUE,...){
   v <- values(x, drop=FALSE)

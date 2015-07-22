@@ -1,10 +1,12 @@
 
 context('Options')
 
-test_that("Options can be set locally",{
+test_that("Options can be set and reset locally",{
   v <- validator()
   validate_options(v, raise='all')
-  expect_false(validate_options()$raise == validate_options(v)$raise)
+  expect_false(validate_options()$raise == validate_options(v)$raise, info="local option set")
+  validate_reset(v)
+  expect_equal(validate_options(v,'raise'),"none",info="local option reset")
 })
 
 test_that("Options can be executed locally without side effects",{

@@ -1,0 +1,3 @@
+# invalid R block should yield an exception.
+x)y
+

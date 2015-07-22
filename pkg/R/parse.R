@@ -50,6 +50,7 @@ PKGOPT <- options_manager(
 #' @param x (optional) an object inheriting from \code{expressionset} such as \code{\link{validator}} or \code{\link{indicator}}.
 #' @param ... Name of an option (character) to retrieve options or \code{option = value} pairs to set options. 
 #' 
+#' 
 #' @export
 #' @examples
 #' # the default allowed validation symbols.
@@ -80,47 +81,6 @@ setMethod('validate_reset','ANY',function(x=NULL){
 
 
 
-parse_annotations <- function(L){
-  token <- NULL # prevent a NOTE when building the package.
-  line_nums <- sapply(attr(L, "srcref"), function(sr){sr[1]})
-  parseData <- getParseData(L)
-  parseData <- subset(parseData, token=="COMMENT")
-  
-  # filter out @name
-  NAME <- "#\\s+@name\\s+([^\\s]+).*"
-  name_lines <- parseData[grepl(NAME, parseData$text),]
-  name_lines$name <- sub(NAME, "\\1", name_lines$text)
-  name_lines$match <- match(name_lines$line2+1, line_nums)
-  names(L)[name_lines$match] <- name_lines$name
-  #print(list(line_nums=line_nums, parseData=parseData, name_lines=name_lines, names_L = names(L)))
-  L
-}
-
-# x: an object of class expressionset
-read_resfile <- function(file, x){
-  L <- tryCatch(parse(file=file, keep.source = T)
-      , error = function(e){
-        cat('Parsing failure at', file,"\n")
-        e
-  })
-  L <- parse_annotations(L)
-  # set options in x (if any)
-  I <- sapply(L, function(x) deparse(x[[1]]) == 'validate_options')
-  if ( any(I) ){
-    e <- new.env()
-    e$x <- x
-    M <- lapply(L[I],deparse)
-    v <- lapply(M, function(d) parse(text=gsub("validate_options\\(","validate_options\\(x,",d))[[1]])
-    lapply(v,eval,e)
-    L <- L[!I]
-  }
-  # preprocessing executes some statements directly:
-  I <- sapply(L,function(y) deparse(y[[1]]) %in% x$options('preproc_symbols')[[1]])  
-  e <- new.env()
-  lapply(L[I],eval,envir=e)
-  L <- lapply(L[!I], function(x) do.call(substitute, list(x, env=e)))
-  setNames(L,extract_names(L))
-}
 
 # Extract variable names from a call object
 var_from_call <- function( x, vars=character(0) ){
@@ -132,7 +92,6 @@ var_from_call <- function( x, vars=character(0) ){
   }
   unique(vars)
 }
-
 
 # find a symbol in a call. Returns a list of multi-indices.
 which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
