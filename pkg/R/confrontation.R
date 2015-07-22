@@ -201,7 +201,7 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
 
 
 
-#' @describeIn validate-length Number of evaluated rules.
+#' @rdname length
 #' @aliases length,confrontation-method
 setMethod("length","confrontation",function(x) length(x$._value))
 

@@ -343,7 +343,7 @@ cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
 #' @export
 #' @seealso
 #' \itemize{
-#'  \item{\code{\list{cells}}}
+#'  \item{\code{\link{cells}}}
 #' }
 match_cells <- function(...,.list=NULL,id=NULL){
   L <- c(list(...), .list)
