@@ -50,7 +50,7 @@ setRefClass("confrontation"
   ,fields = list(
       ._call  = "call"  # (user's) call that generated the object
     , ._value = "list"  # results of confrontation 
-    , ._calls = "list"  # calls executed during confrontation
+    , ._calls = "expression"  # calls executed during confrontation
     , ._warn  = "list"  # list of 'warning' objects
     , ._error = "list"  # list of 'error' objects
   )

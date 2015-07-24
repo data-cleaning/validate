@@ -1,8 +1,6 @@
 
 context("confrontation")
 
-
-
 test_that("validation object contents",{
   cf <- check_that(women, height > 0, ape > 0,weight / height > 2 )  
   expect_equal(length(cf),3)

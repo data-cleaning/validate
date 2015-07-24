@@ -243,7 +243,7 @@ get_exprs <- function(x, ..., expand_assignments=FALSE
   if ( expand_groups ) exprs <- expand_groups(exprs, varlist=varlist)
   if ( vectorize ) exprs <- lapply(exprs, vectorize)
   if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
-  exprs
+  as.expression(exprs)
 }
 
 blocks_expressionset <- function(x){
