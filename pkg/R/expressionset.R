@@ -340,10 +340,10 @@ setMethod("origin", "expressionset", function(x,...) sapply(x$rules,origin))
 
 
 #' @describeIn  short Short description of every rule in \code{x}
-setMethod("short","expressionset",function(x,...) sapply(x$rules, short))
+setMethod("short","expressionset",function(x,...) unlist(sapply(x$rules, short)))
 
 #' @describeIn long Long description of every rule in \code{x}
-setMethod("long", "expressionset", function(x,...) sapply(x$rules, long))
+setMethod("long", "expressionset", function(x,...) unlist(sapply(x$rules, long)))
 
 
 #' @describeIn created Creation time of every rule in \code{x}
