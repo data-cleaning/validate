@@ -444,8 +444,10 @@ setMethod("is_tran_assign","expressionset",function(x,...){
 })
 
 as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
-  lapply(x$rules, as.list, expr_as_text = expr_as_text, ...)
-}
+  list(
+    options = x$options(),
+    rules = lapply(x$rules, as.list, expr_as_text = expr_as_text, ...)
+)}
 # demonstruction
 # L <- list(
 #   rule(expr = expression(x + y == z)[[1]],  name="aap")
