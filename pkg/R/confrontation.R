@@ -63,6 +63,8 @@ setRefClass("confrontation"
   cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
+  cat(sprintf('Records passed: %d\n', sum(!failed_records(.self), na.rm = T)))
+  cat(sprintf('Records failed: %d\n', sum(failed_records(.self), na.rm = T)))
   cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))
   cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
 }
@@ -122,7 +124,9 @@ setGeneric("confront",
 #' @example ../examples/check_that.R   
 #' @export
 check_that <- function(dat,...){
-  confront(dat,validator(...))
+  cf <- confront(dat,validator(...))
+  cf$._call <- sys.call()
+  cf
 }
 
 
@@ -402,6 +406,11 @@ passes <- function(x){
         )
     )
   })
+}
+
+# return records that failed
+failed_records <- function(x){
+  !apply(values(x), 1, all)
 }
 
 fails <- function(x){

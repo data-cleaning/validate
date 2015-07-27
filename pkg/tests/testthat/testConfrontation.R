@@ -72,6 +72,10 @@ test_that("confrontations with transient variables",{
     
 })
 
+test_that("check_that works with simple example",{
+  dat <- data.frame(x=1:2, y=3:2)
+  cf <- check_that(dat, x >= y)
+})
 
 
 
