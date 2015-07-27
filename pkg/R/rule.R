@@ -217,4 +217,19 @@ setMethod("is_tran_assign","rule", function(x){
   x@expr[[1]] == ":="
 })
 
+# handy for rule to yaml/json
+as.list.rule <- function(x, expr_as_text = TRUE, ...){
+  expr <- x@expr
+  if (expr_as_text){
+    expr <- deparse(expr, width.cutoff = 500L)
+  }
+  list(
+    expr=expr,
+    name = x@name,
+    short = x@short,
+    long = x@long, 
+    created = x@created,
+    origin = x@origin
+  )
+}
 
