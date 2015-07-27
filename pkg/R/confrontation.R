@@ -63,8 +63,12 @@ setRefClass("confrontation"
   cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
-  cat(sprintf('Records passed: %d\n', sum(!failed_records(.self), na.rm = T)))
-  cat(sprintf('Records failed: %d\n', sum(failed_records(.self), na.rm = T)))
+  
+  failed_records <- failed_records(.self)
+  cat(sprintf('Records       : %d\n', length(failed_records)))
+  cat(sprintf('  - passed    : %d\n', sum(!failed_records, na.rm = T)))
+  cat(sprintf('  - failed    : %d\n', sum(failed_records, na.rm = T)))
+  
   cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))
   cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
 }
