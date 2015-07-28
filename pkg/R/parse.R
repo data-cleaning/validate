@@ -159,12 +159,18 @@ linear_call <- function(x){
 
 # check whether a call is validating, based on a set of 
 # predifined allowed symbols that result in a boolean.
-validating_call <- function(call,allowed_symbols){
+validating_call <- function(call,allowed_symbols, allow_logical=TRUE){
+  if (is.atomic(call)){
+    return(is.logical(call))  # i.e. TRUE or FALSE?
+  }
+  if (is.symbol(call)){ 
+    return(allow_logical)              # design issue: should we allow logical statement as 'if (married) age > 17'
+  }
   sym <- deparse(call[[1]])
   sym %in% allowed_symbols || 
     grepl("^is\\.",sym) || 
-    ( sym == 'if' && validating_call(call[[2]],allowed_symbols) && 
-        validating_call(call[[3]],allowed_symbols) ) 
+    ( sym == 'if' && validating_call(call[[2]],allowed_symbols, allow_logical) && 
+        validating_call(call[[3]],allowed_symbols, allow_logical) ) 
 }
 
 
