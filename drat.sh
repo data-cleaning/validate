@@ -23,7 +23,7 @@ if ( is.null(pkg) ){
 } 
 
 if (!file.exists(pkg)){
-  stop(sprintf("%s not found"))
+  stop(sprintf("%s not found",pkg))
 }
 
 drat::insertPackage(pkg, repodir=opt$dratrepo, commit=opt$commit)
