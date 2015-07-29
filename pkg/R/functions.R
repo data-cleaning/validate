@@ -27,7 +27,7 @@
 #' 
 #' equals 
 #' 
-#' \code{validator(a > e, a > d, b > e, b > d)}
+#' \code{validator(a > c, b > c, a > d, b > d)}
 #' 
 #' @section File parsing:
 #'
