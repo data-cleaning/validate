@@ -370,15 +370,18 @@ setMethod("names","expressionset",function(x){
 
 setMethod("validating", "expressionset", function(x,...){
   allowed_symbols <- x$options("validator_symbols")
+  if (length(x) == 0) return(logical(0))
   sapply(x$rules,validating,allowed_symbols)
 })
 
 setMethod("group_definition","expressionset",function(x,...){
+  if (length(x)==0) return(logical(0))
   sapply(x$rules, group_definition)
 })
 
 
 setMethod("linear","expressionset", function(x,...){
+  if(length(x)==0) return(logical(0))
   sapply(x$rules, linear)
 })
 

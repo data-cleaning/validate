@@ -49,36 +49,6 @@ expand_groups <- function(calls){
 
 
 
-# # demonstruction
-# m <- group(name=groupy, x, y)
-# e <- expression(groupy > 0)[[1]]
-# m(e)
-L <- list(
-  V1 = expression(var_group(g,x,y))[[1]]
-  , V2 = expression(g > 0)[[1]]
-  , V3 = expression(x + y == z)[[1]]
-)
-K <- expand_groups(L)
-K
-# 
-# L <- list(
-#   V1 = expression(var_group(name=G, ))[[1]]
-#   , V2 = expression(G > 0)[[1]]
-# )
-# 
-# expand_groups(L,varlist=c("X1","Xmoo","YXp"))
-# 
-# 
-# v <- validator(var_group(name=G,x,y,"X.*"),G>0)
-# dat <- data.frame(x = runif(10)-1/2,y=runif(10)-1/2, X10 = rnorm(10))
-# confront(dat,v)
-
-# L <- list(
-#   expression(x + y ==2)[[1]]
-#   , expression(x-y == 2)[[1]]
-# )
-# expand_groups(L)
-
 
 
 
