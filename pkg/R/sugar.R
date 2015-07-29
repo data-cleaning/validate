@@ -1,70 +1,70 @@
 
 # function to be specified by user in syntax.
-var_group <- function(...){
-  vars <- as.list(substitute(list(...))[-1])
-  function(varlist){
-    unlist(lapply(vars, function(x){
-      if (is.name(x)){ 
-         as.character(x)
-      } else {
-        grep(x,varlist,value=TRUE)
-      }
-    }))
-  }
-}
+# var_group <- function(...){
+#   vars <- as.list(substitute(list(...))[-1])
+#   function(varlist){
+#     unlist(lapply(vars, function(x){
+#       if (is.name(x)){ 
+#          as.character(x)
+#       } else {
+#         grep(x,varlist,value=TRUE)
+#       }
+#     }))
+#   }
+# }
 
 # call MUST be for the form [name] := var_group([arglist]) 
 # returns a list whose names are the group names, and whose
 # entries are character vectors, possibly matched by regexps defined in the
 # var_group.
-expand_vargroup <- function(calls,varlist){
-  e <- new.env()
-  lapply(calls, function(call){ 
-    assign(deparse(call[[2]]), eval(call[[3]])(varlist), envir=e)
-  })
-  as.list(e)
-}
+# expand_vargroup <- function(calls,varlist){
+#   e <- new.env()
+#   lapply(calls, function(call){ 
+#     assign(deparse(call[[2]]), eval(call[[3]])(varlist), envir=e)
+#   })
+#   as.list(e)
+# }
 
 
 # determine which groups a call refers to.
-groups_from_call <- function(x, groups, e=new.env()){
-  if ( is.name(x) && deparse(x) %in% groups ) assign(as.character(x),1,envir=e)
-  for (i in seq_along(x)[-1]) groups_from_call(x[[i]],groups,e)
-  return(ls(e))
-}
+# groups_from_call <- function(x, groups, e=new.env()){
+#   if ( is.name(x) && deparse(x) %in% groups ) assign(as.character(x),1,envir=e)
+#   for (i in seq_along(x)[-1]) groups_from_call(x[[i]],groups,e)
+#   return(ls(e))
+# }
+# 
+# has_group <- function(x, group, has=FALSE){
+#   if (is.name(x) && deparse(x) == group ) return(TRUE)
+#   for(i in seq_along(x)[-1] ) has = has | has_group(x[[i]],group)
+#   has
+# }
+# 
+# 
+# expand_group <- function(calls, group, variables){
+#   e <- new.env()
+#   L <- lapply(calls,function(call){
+#     if ( !has_group(call,group) ) return(list(call))
+#     setNames( lapply(variables, function(x) {
+#         assign(group, as.symbol(x), envir=e)
+#         do.call(substitute,list(call, e))
+#       })
+#       , variables
+#     )
+#   })
+#   unlist(L)
+# }
 
-has_group <- function(x, group, has=FALSE){
-  if (is.name(x) && deparse(x) == group ) return(TRUE)
-  for(i in seq_along(x)[-1] ) has = has | has_group(x[[i]],group)
-  has
-}
-
-
-expand_group <- function(calls, group, variables){
-  e <- new.env()
-  L <- lapply(calls,function(call){
-    if ( !has_group(call,group) ) return(list(call))
-    setNames( lapply(variables, function(x) {
-        assign(group, as.symbol(x), envir=e)
-        do.call(substitute,list(call, e))
-      })
-      , variables
-    )
-  })
-  unlist(L)
-}
-
-expand_groups <- function(calls, groups, varlist=NULL){
-  igroup <- sapply(calls, defines_var_group)
-  
-  groups <- expand_vargroup(calls[igroup], varlist=varlist)
-
-  calls <- calls[!igroup]
-  for ( group in names(groups) ){
-    calls <- expand_group(calls,group,groups[[group]])
-  }
-  calls  
-}
+# expand_groups <- function(calls, groups, varlist=NULL){
+#   igroup <- sapply(calls, defines_var_group)
+#   
+#   groups <- expand_vargroup(calls[igroup], varlist=varlist)
+# 
+#   calls <- calls[!igroup]
+#   for ( group in names(groups) ){
+#     calls <- expand_group(calls,group,groups[[group]])
+#   }
+#   calls  
+# }
 
 
 ## Substitute assignments in subsequent calls

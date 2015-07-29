@@ -59,7 +59,7 @@ expressionset <- setRefClass("expressionset"
   )
   , methods= list(
         show = function() show_expressionset(.self)
-      , exprs      = function(varlist=NULL,...) get_exprs(.self, varlist=varlist,...)
+      , exprs      = function(...) get_exprs(.self,...)
       , blocks     = function() blocks_expressionset(.self)
       , options = function(...) .self$._options(...)
       , clone_options = function(...) clone_and_merge(.self$._options,...)
@@ -193,14 +193,14 @@ get_filestack_yml <- function(file){
 
 
 show_expressionset <- function(obj){
-  nr <- length(obj$rules)
+  nr <- length(obj)
   cat(sprintf(
     "Object of class '%s' with %s elements:\n",class(obj)[1], nr
   ))
   if (nr == 0) return(invisible(NULL))
   lab <- names(obj)
   n <- max(nchar(lab))
-  lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(), call2text))
+  lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE), call2text))
   cat(noquote(paste(lab,collapse="\n")))
   cat("\n")
 }
@@ -237,10 +237,10 @@ extract_names <- function(L,prefix="V"){
 # 
 #
 get_exprs <- function(x, ..., expand_assignments=FALSE
-    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE, varlist=NULL ){
-  exprs <- lapply(x$rules, expr )
+    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+  exprs <- setNames(lapply(x$rules, expr ),names(x))
   if ( expand_assignments )  exprs <- expand_assignments(exprs)
-  if ( expand_groups ) exprs <- expand_groups(exprs, varlist=varlist)
+  if ( expand_groups ) exprs <- expand_groups(exprs)
   if ( vectorize ) exprs <- lapply(exprs, vectorize)
   if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
   exprs
@@ -372,6 +372,11 @@ setMethod("validating", "expressionset", function(x,...){
   allowed_symbols <- x$options("validator_symbols")
   sapply(x$rules,validating,allowed_symbols)
 })
+
+setMethod("group_definition","expressionset",function(x,...){
+  sapply(x$rules, group_definition)
+})
+
 
 setMethod("linear","expressionset", function(x,...){
   sapply(x$rules, linear)

@@ -70,10 +70,10 @@ ini_validator <- function(obj, ..., .file){
   if (missing(.file)){
     ini_expressionset_cli(obj, ..., .prefix="V")
     obj$._options <- PKGOPT
-    i <- validating(obj)
+    i <- validating(obj) | group_definition(obj)
     if ( !all(i) ){
-      not_validating <- sapply(which(!i),function(k) deparse(expr(obj[[k]])))
-      wrn <- sprintf("\n[%03d] %s",which(!i),not_validating)
+      invalid <- sapply(which(!i),function(k) deparse(expr(obj[[k]])))
+      wrn <- sprintf("\n[%03d] %s",which(!i), invalid)
       warning(paste0(
         "Invalid syntax detected, the following expressions have been ignored:"
         , paste0(wrn,collapse="")

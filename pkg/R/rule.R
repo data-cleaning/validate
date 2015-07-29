@@ -85,8 +85,6 @@ rule <- setClass("rule",
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
 
-# x: object holding a call
-# y: object holding validating symbols
 setGeneric("validating",function(x,...) standardGeneric('validating'))
 
 setGeneric("linear",function(x,...) standardGeneric("linear"))
@@ -96,6 +94,8 @@ setGeneric("expr",def=function(x,...) standardGeneric("expr"))
 
 # check for transient assignments (:=)
 setGeneric("is_tran_assign", function(x,...) standardGeneric("is_tran_assign"))
+
+setGeneric("group_definition", function(x,...) standardGeneric('group_definition'))
 
 
 #' Origin of rules
@@ -193,6 +193,10 @@ setMethod("show", "rule", function(object){
 
 setMethod("validating","rule", function(x,y,...){
   validating_call(x@expr,y)  
+})
+
+setMethod("group_definition","rule",function(x,...){
+  defines_group(x@expr)
 })
 
 setMethod("linear","rule",function(x,...){
