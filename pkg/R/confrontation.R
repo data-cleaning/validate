@@ -398,15 +398,9 @@ has_warning <- function(x) !sapply(x$._warn, is.null)
 has_value <- function(x) sapply(x$._value, function(a) !is.null(a))
 
 passes <- function(x){
-  sapply(x$._value, function(a){
-    ifelse( is.null(a)
-      , 0
-      , ifelse( is.logical(a)
-         , sum(a,na.rm=TRUE)      # case of regular rule
-         , sum(a == seq_along(a)) # case of FD
-        )
-    )
-  })
+  sapply(x$._value, function(a) 
+    if ( is.null(a) ) 0 else sum(a,na.rm=TRUE)  
+  )
 }
 
 # return confrontation that failed
@@ -415,21 +409,15 @@ failed_confrontations <- function(x){
 }
 
 fails <- function(x){
-  sapply(x$._value, function(a){
-    ifelse( is.null(a)
-      , 0
-      , ifelse( is.logical(a)
-          , sum(!a,na.rm=TRUE)      # case of regular rule
-          , sum(a != seq_along(a)) # case of FD
-        )
-    )
-  })
+  sapply(x$._value, function(a) 
+    if ( is.null(a) ) 0 else sum(!a,na.rm=TRUE) 
+  )
 }
 
 nas <- function(x){
-  sapply(x$._value, function(a){
-    ifelse(is.null(a),0,sum(is.na(a)))
-  })
+  sapply(x$._value, function(a)
+    if ( is.null(a) ) 0 else sum(is.na(a))
+  )
 }
 
 

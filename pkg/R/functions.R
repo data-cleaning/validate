@@ -149,7 +149,8 @@ any_duplicated <- function(...){
   
   condition  <- do.call(paste, c(mget(Lvars, parent.frame()), sep="|"))
   consequent <- do.call(paste0, c(mget(Rvars, parent.frame()), sep="|"))
-  .Call("R_fdcheck", condition, consequent)
+  cf <- .Call("R_fdcheck", condition, consequent)
+  cf == seq_along(cf)
 }
 
 # synonym of `~`, may be more understandable

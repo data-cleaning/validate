@@ -77,7 +77,7 @@ test_that("Functional dependencies", {
     ,postcode = c('2495','2496','8888','2495')
   )
   cf <- confront(dat,v1)
-  expect_equivalent(values(cf),array(c(1,1,3,4),dim=c(4,1)))
+  expect_equivalent(values(cf),array(c(TRUE,FALSE,TRUE,TRUE),dim=c(4,1)))
 })
 
 
