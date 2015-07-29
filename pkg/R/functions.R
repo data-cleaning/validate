@@ -19,11 +19,11 @@
 #' \code{validate} allows for compact notation. First define a group and than use
 #' that group in a validator statement. 
 #' 
-#' \code{validator( g:{a;b}, g > 0 )}
+#' \code{validator( var_group(name=g,a,b), g > 0 )}
 #' 
 #' Using two groups results in the cartesian product of checks. So the statement
 #'
-#' \code{validator( f:{e;d}, g:{a;b}, g > f)}
+#' \code{validator( var_group(name=f,c,d), var_group(name=g,a,b), g > f)}
 #' 
 #' equals 
 #' 

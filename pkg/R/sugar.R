@@ -47,7 +47,9 @@ expand_groups <- function(calls){
   if ( !any(i_groups) ) return(calls)
   groups <- setNames(calls[i_groups],NULL)
   calls <- calls[!i_groups]
-  unlist( lapply(groups, function(g) lapply(calls, eval(g)) )  )
+  for (g in groups )
+    calls <- unlist(lapply(calls,eval(g)))
+  calls
 }
 
 
