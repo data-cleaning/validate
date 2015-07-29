@@ -63,12 +63,7 @@ setRefClass("confrontation"
   cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
-  
-  failed_records <- failed_records(.self)
-  cat(sprintf('Records       : %d\n', length(failed_records)))
-  cat(sprintf('  - passed    : %d\n', sum(!failed_records, na.rm = T)))
-  cat(sprintf('  - failed    : %d\n', sum(failed_records, na.rm = T)))
-  
+  cat(sprintf('With fails    : %d\n', failed_confrontations(.self)))
   cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))
   cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
 }
@@ -414,9 +409,9 @@ passes <- function(x){
   })
 }
 
-# return records that failed
-failed_records <- function(x){
-  !apply(values(x), 1, all)
+# return confrontation that failed
+failed_confrontations <- function(x){
+  sum(fails(x) > 0)
 }
 
 fails <- function(x){
