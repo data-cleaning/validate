@@ -5,7 +5,7 @@
 #' 
 #' @section Details:
 #' Technically, \code{rule} is a \code{call} object endowed with extra attributes such
-#' as a name, a title and a long description, creation time and a reference to its origin.
+#' as a name, a title and a description description, creation time and a reference to its origin.
 #' Rule objects are not for direct use by users of the package, but may be of interest for
 #' developers of this package, or packages depending on it.
 #' 
@@ -14,7 +14,7 @@
 #' \item{\code{show}}
 #' \item{\code{\link{origin}}}
 #' \item{\code{\link{title}}}
-#' \item{\code{\link{long}}}
+#' \item{\code{\link{description}}}
 #' \item{\code{\link{created}}}
 #' }
 #'
@@ -37,7 +37,7 @@ rule <- setClass("rule",
    expr         = "language"  # MUST be a 'call'[*]
    , name       = "character"
    , title      = "character" # title description
-   , long       = "character" # long description
+   , description       = "character" # description description
    , origin     = "character" 
    , created    = "POSIXct"
   )
@@ -45,7 +45,7 @@ rule <- setClass("rule",
    expr         = NULL
    , name       = character(0)
    , title      = character(0)
-   , long       = character(0)
+   , description       = character(0)
    , origin     = character(0)
    , created    = as.POSIXct(NA)
   )
@@ -78,7 +78,7 @@ rule <- setClass("rule",
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{long}}, \code{\link{title}}, \code{\link{created}}, \code{\link{origin}}}
+#' \item{\code{\link{description}}, \code{\link{title}}, \code{\link{created}}, \code{\link{origin}}}
 #' }
 #' @name variables
 #' @export
@@ -108,7 +108,7 @@ setGeneric("group_definition", function(x,...) standardGeneric('group_definition
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{long}}, \code{\link{title}}, \code{\link{created}}, \code{\link{variables}}}
+#' \item{\code{\link{description}}, \code{\link{title}}, \code{\link{created}}, \code{\link{variables}}}
 #' }
 #'  
 #' @export
@@ -123,13 +123,13 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{long}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
+#' \item{\code{\link{description}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
 #' }
 #' @export
 setGeneric("title", function(x,...) standardGeneric("title"))
 
 
-#' Long description
+#' description description
 #'
 #'
 #' @param x and R object
@@ -142,7 +142,7 @@ setGeneric("title", function(x,...) standardGeneric("title"))
 #' \item{\code{\link{title}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
 #' }
 #' @export
-setGeneric("long", function(x,...) standardGeneric("long"))
+setGeneric("description", function(x,...) standardGeneric("description"))
 
 
 #' Creation time
@@ -155,7 +155,7 @@ setGeneric("long", function(x,...) standardGeneric("long"))
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{long}}, \code{\link{title}}, \code{\link{origin}} \code{\link{variables}}}
+#' \item{\code{\link{description}}, \code{\link{title}}, \code{\link{origin}} \code{\link{variables}}}
 #' }
 #' @export
 setGeneric("created", function(x,...) standardGeneric("created"))
@@ -211,8 +211,8 @@ setMethod("origin","rule",function(x,...){
 #' @rdname title
 setMethod("title","rule",function(x,...) x@title)
 
-#' @rdname long
-setMethod("long", "rule", function(x,...) x@long)
+#' @rdname description
+setMethod("description", "rule", function(x,...) x@description)
 
 #' @rdname created
 setMethod("created", "rule", function(x,...) x@created)
@@ -231,7 +231,7 @@ as.list.rule <- function(x, expr_as_text = TRUE, ...){
     expr=expr,
     name = x@name,
     title = x@title,
-    long = x@long, 
+    description = x@description, 
     created = x@created,
     origin = x@origin
   )
