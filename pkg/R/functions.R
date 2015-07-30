@@ -50,8 +50,10 @@
 #' (or indication) rules.
 NULL
 
-# NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
 
+#### MISSINGNES COUNTERS ------------------------------------------------------
+
+# NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
 
 #' @param ... comma-separated list of variable names (not character). If no
 #'  variables are specified, the number of missings over all data is counted.
@@ -141,6 +143,25 @@ any_duplicated <- function(...){
   if (identical(vars,TRUE)) vars <- ls(parent.frame())
   anyDuplicated( do.call(paste0,mget(vars,parent.frame())) ) > 0
 }
+
+# variational functions act on a chosen set of variables. If no variables are
+# chosen they act on all variables. This function detect if such a funtion is
+# present in a call.
+
+VARFUN <- c(
+  "number_missing"
+  , "fraction_missing" 
+  , "row_missing"
+  , "col_missing"
+  , "number_unique"
+  , "any_missing"
+  , "any_duplicated"
+)
+
+
+
+
+#### FUNCTIONAL DEPENDENCIES --------------------------------------------------
 
 # Internal function that tests for functional dependencies
 `~` <- function(lhs, rhs){

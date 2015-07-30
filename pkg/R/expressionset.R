@@ -250,7 +250,7 @@ blocks_expressionset <- function(x){
   varlist <- variables(x, as="list")
   
   varblock <- function(v,vlist){
-    sapply(vlist, function(x) any(v %in% x))
+    sapply(vlist, function(x) any(v %in% x) | identical(v,character(0)) )
   }
   
   # compute variable blocks
@@ -266,7 +266,8 @@ blocks_expressionset <- function(x){
   blocks <- as.list(blocks)
   
   # logical, indicating rule blocks.
-  lapply(blocks,function(b) sapply(varlist,function(v) any(v %in% b) ))
+  lapply(blocks,function(b) sapply(varlist
+                      , function(v) any(v %in% b) | identical(v,character(0)) ))
 }
 
 
