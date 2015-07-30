@@ -27,7 +27,7 @@ NULL
 #'  \item{\code{\link{length,expressionset-method}}}
 #'  \item{\code{\link{created}}}
 #'  \item{\code{\link{origin}}}
-#'  \item{\code{\link{short}}}
+#'  \item{\code{\link{title}}}
 #'  \item{\code{\link{long}}}
 #'  \item{\code{\link{[,expressionset-method}}}
 #'  \item{\code{\link{[[,expressionset-method}}}
@@ -116,7 +116,7 @@ rules_from_block <- function(block, origin){
       rule(
         expr = parse(text=x$expr)[[1]]
         , name = as.character(x$name)
-        , short = as.character(x$short)
+        , title = as.character(x$title)
         , long = as.character(x$long)
         , origin = origin
         , created = now
@@ -339,8 +339,8 @@ setMethod('validate_reset','expressionset',function(x=NULL){
 setMethod("origin", "expressionset", function(x,...) sapply(x$rules,origin))
 
 
-#' @describeIn  short Short description of every rule in \code{x}
-setMethod("short","expressionset",function(x,...) unlist(sapply(x$rules, short)))
+#' @describeIn  title title description of every rule in \code{x}
+setMethod("title","expressionset",function(x,...) unlist(sapply(x$rules, title)))
 
 #' @describeIn long Long description of every rule in \code{x}
 setMethod("long", "expressionset", function(x,...) unlist(sapply(x$rules, long)))

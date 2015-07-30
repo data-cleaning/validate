@@ -9,4 +9,4 @@ rules:
 -
   expr : 2*x + 3*y == 8*z
   name : test2
-  short: A linear rule
+  title: A linear rule
