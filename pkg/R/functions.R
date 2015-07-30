@@ -53,7 +53,7 @@ NULL
 # NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
 
 
-#' @param ... comma-separated list of variable names (not character) or a quoted regular expression. If no
+#' @param ... comma-separated list of variable names (not character). If no
 #'  variables are specified, the number of missings over all data is counted.
 #'  
 #' @return For \code{number_missing}, the total number of missings over all specified variables.
@@ -158,15 +158,16 @@ any_duplicated <- function(...){
 
 
 # returns a character vector of variables specified in L, matched in env.
+# regexps are switched off untill we can analyze relation with literal variables better.
 matchvars <- function(L,env){
   if( length(L) == 0 ){
     TRUE 
   } else { 
-    if (is.character(L[[1]])) {
-      grep(pattern = L[[1]], x = ls(env), value = TRUE)  
-    } else { 
+#    if (is.character(L[[1]])) {
+#      grep(pattern = L[[1]], x = ls(env), value = TRUE)  
+#    } else { 
       sapply(L,as.character)
-    }
+#    }
   }
 }
 
