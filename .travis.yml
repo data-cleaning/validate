@@ -10,12 +10,12 @@ install:
   - ../travis-tool.sh install_deps
   - ../travis-tool.sh install_r roxygen2
   - R -e "roxygen2::update_collate('.');devtools::document()"
-  - ../travis-tool.sh github_package jimhester/covr
 script: 
   - ../travis-tool.sh run_tests
 after_failure:
   - ../travis-tool.sh dump_logs
 after_success:
+  - ../travis-tool.sh install_r covr
   - Rscript -e 'library(covr);coveralls()'
 
 notifications:
