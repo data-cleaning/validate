@@ -55,7 +55,36 @@ test_that("Parsing included files",{
 })
 
 
+context("Computing on language")
 
+# 
+test_that("var_from_call",{
+  
+  # regular case, concering two variables
+  expect_equal(
+    var_from_call(expression(x > y)[[1]])
+    , c("x","y")
+  )
+  
+  # case of referencing all variables
+  expect_equal(
+    var_from_call( expression(number_missing() == 0)[[1]])
+  , character(0)
+  )
+  
+  # case of 'all' variables (but undefined which they are)
+  expect_equal(
+    var_from_call( expression(x + number_missing() > 0)[[1]])
+    , character(0)
+  )
+  
+  # case of no variables at all
+  expect_equal(
+    var_from_call(expression(1 > 0)[[1]])
+    , NULL
+  )
+    
+})
 
 
 
