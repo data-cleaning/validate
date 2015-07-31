@@ -26,7 +26,7 @@ test_that("Parsing yrf format", {
   expect_equal(length(v),2)
   expect_equal(names(v),c("sumrule","conditional"))
   expect_equal(origin(v),c("yamltests/yamlrules.yaml","yamltests/yamlrules.yaml"))
-  expect_equal(title(v),c("sum of x and y","if x positive then y also"))
+  expect_equal(label(v),c("sum of x and y","if x positive then y also"))
   expect_equal(description(v),c("a looong description here","a looong description here\n"))
   expect_true(all(created(v)-now < 10))
   expect_warning(validator(x?y))

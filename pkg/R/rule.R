@@ -5,7 +5,7 @@
 #' 
 #' @section Details:
 #' Technically, \code{rule} is a \code{call} object endowed with extra attributes such
-#' as a name, a title and a description description, creation time and a reference to its origin.
+#' as a name, a label and a description description, creation time and a reference to its origin.
 #' Rule objects are not for direct use by users of the package, but may be of interest for
 #' developers of this package, or packages depending on it.
 #' 
@@ -13,7 +13,7 @@
 #' \itemize{
 #' \item{\code{show}}
 #' \item{\code{\link{origin}}}
-#' \item{\code{\link{title}}}
+#' \item{\code{\link{label}}}
 #' \item{\code{\link{description}}}
 #' \item{\code{\link{created}}}
 #' }
@@ -36,7 +36,7 @@ rule <- setClass("rule",
   slots = c(
    expr         = "language"  # MUST be a 'call'[*]
    , name       = "character"
-   , title      = "character" # title description
+   , label      = "character" # label description
    , description       = "character" # description description
    , origin     = "character" 
    , created    = "POSIXct"
@@ -44,7 +44,7 @@ rule <- setClass("rule",
   , prototype = list(
    expr         = NULL
    , name       = character(0)
-   , title      = character(0)
+   , label      = character(0)
    , description       = character(0)
    , origin     = character(0)
    , created    = as.POSIXct(NA)
@@ -78,7 +78,7 @@ rule <- setClass("rule",
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{description}}, \code{\link{title}}, \code{\link{created}}, \code{\link{origin}}}
+#' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{created}}, \code{\link{origin}}}
 #' }
 #' @name variables
 #' @export
@@ -108,13 +108,13 @@ setGeneric("group_definition", function(x,...) standardGeneric('group_definition
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{description}}, \code{\link{title}}, \code{\link{created}}, \code{\link{variables}}}
+#' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{created}}, \code{\link{variables}}}
 #' }
 #'  
 #' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
-#' title description of rules
+#' label description of rules
 #' 
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
@@ -126,7 +126,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 #' \item{\code{\link{description}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
 #' }
 #' @export
-setGeneric("title", function(x,...) standardGeneric("title"))
+setGeneric("label", function(x,...) standardGeneric("label"))
 
 
 #' description description
@@ -139,7 +139,7 @@ setGeneric("title", function(x,...) standardGeneric("title"))
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{title}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
+#' \item{\code{\link{label}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
 #' }
 #' @export
 setGeneric("description", function(x,...) standardGeneric("description"))
@@ -155,7 +155,7 @@ setGeneric("description", function(x,...) standardGeneric("description"))
 #' @seealso 
 #' \itemize{
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{description}}, \code{\link{title}}, \code{\link{origin}} \code{\link{variables}}}
+#' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{origin}} \code{\link{variables}}}
 #' }
 #' @export
 setGeneric("created", function(x,...) standardGeneric("created"))
@@ -208,8 +208,8 @@ setMethod("origin","rule",function(x,...){
   x@origin
 })
 
-#' @rdname title
-setMethod("title","rule",function(x,...) x@title)
+#' @rdname label
+setMethod("label","rule",function(x,...) x@label)
 
 #' @rdname description
 setMethod("description", "rule", function(x,...) x@description)
@@ -230,7 +230,7 @@ as.list.rule <- function(x, expr_as_text = TRUE, ...){
   list(
     expr=expr,
     name = x@name,
-    title = x@title,
+    label = x@label,
     description = x@description, 
     created = x@created,
     origin = x@origin

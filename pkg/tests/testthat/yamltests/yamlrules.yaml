@@ -2,12 +2,12 @@ rules:
 -
   expr: x + y == z
   name: sumrule
-  title: sum of x and y
+  label: sum of x and y
   description: a looong description here
 -
   expr: if (x > 0 ) y > 0
   name: conditional
-  title: if x positive then y also
+  label: if x positive then y also
   description: | 
     a looong description here
 
