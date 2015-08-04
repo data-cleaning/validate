@@ -66,7 +66,7 @@ setRefClass("validator"
 )
 
 ini_validator <- function(obj, ..., .file){
-  
+  check_primitives()
   if (missing(.file)){
     ini_expressionset_cli(obj, ..., .prefix="V")
     obj$._options <- PKGOPT
@@ -85,7 +85,14 @@ ini_validator <- function(obj, ..., .file){
   }
 }
 
-
+# note: for some reason this function is not testable from devtools::test('pkg')
+check_primitives <- function(){
+  # todo: extract this from validate_options()
+   prim <- c("<","<=","==","!=",">=",">","%in%")
+   for ( p in prim )
+     if (!identical(body(p),body(getFromNamespace(p,"base"))))
+       warning(sprintf("Using implementation of %s that differs from base::`%s`",p,p))
+}
 
 # Extract linear coeffiecients from linear expressions
 #

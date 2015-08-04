@@ -57,8 +57,6 @@ test_that("Parsing included files",{
 context("Computing on language")
 
 
-
-
 # 
 test_that("var_from_call",{
   
