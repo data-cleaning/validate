@@ -370,9 +370,8 @@ setMethod("names","expressionset",function(x){
 })
 
 setMethod("validating", "expressionset", function(x,...){
-  allowed_symbols <- x$options("validator_symbols")
   if (length(x) == 0) return(logical(0))
-  sapply(x$rules,validating,allowed_symbols)
+  sapply(x$rules, validating)
 })
 
 setMethod("group_definition","expressionset",function(x,...){
@@ -449,6 +448,7 @@ setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
 
 
 setMethod("is_tran_assign","expressionset",function(x,...){
+  if (length(x)==0) return(logical(0))
   sapply(x$rules,is_tran_assign)
 })
 

@@ -191,8 +191,8 @@ setMethod("show", "rule", function(object){
   cat(sprintf(fmt,nm,vl))
 })
 
-setMethod("validating","rule", function(x,y,...){
- !is.null(variables(x)) && validating_call(x@expr,y)  
+setMethod("validating","rule", function(x,...){
+ !is.null(variables(x)) && validating_call(x@expr)  
 })
 
 setMethod("group_definition","rule",function(x,...){

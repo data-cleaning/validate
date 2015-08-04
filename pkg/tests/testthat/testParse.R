@@ -85,5 +85,21 @@ test_that("var_from_call",{
   )
 })
 
+test_that("validating_call",{
+  expect_true(validating_call(expression(x > y)[[1]]))
+  expect_true(validating_call(expression(x >= y)[[1]]))
+  expect_true(validating_call(expression(x == y)[[1]]))
+  expect_true(validating_call(expression(x != y)[[1]]))
+  expect_true(validating_call(expression(x <= y)[[1]]))
+  expect_true(validating_call(expression(x < y)[[1]]))
+  expect_true(validating_call(expression(identical(x,y))[[1]]))
 
+  expect_true(validating_call(expression(!(x > y))[[1]]))
+  expect_true(validating_call(expression(all(x > y))[[1]]))
+  expect_true(validating_call(expression(any(x > y))[[1]]))
+  
+  expect_true(validating_call(expression(if(x == 1) y == 1)[[1]]))
+  expect_true(validating_call(expression(xor(x == 1, y == 1))[[1]]))
+  expect_false(validating_call(expression(x)[[1]]))
+})
 

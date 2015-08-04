@@ -70,7 +70,7 @@ ini_validator <- function(obj, ..., .file){
   if (missing(.file)){
     ini_expressionset_cli(obj, ..., .prefix="V")
     obj$._options <- PKGOPT
-    i <- validating(obj) | group_definition(obj)
+    i <- validating(obj) | group_definition(obj) | is_tran_assign(obj)
     if ( !all(i) ){
       invalid <- sapply(which(!i),function(k) deparse(expr(obj[[k]])))
       wrn <- sprintf("\n[%03d] %s",which(!i), invalid)

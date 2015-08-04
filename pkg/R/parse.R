@@ -191,21 +191,51 @@ linear_call <- function(x){
 
 # check whether a call is validating, based on a set of 
 # predifined allowed symbols that result in a boolean.
-validating_call <- function(call,allowed_symbols, allow_logical=FALSE){
-  if (is.atomic(call)){
-    return(is.logical(call))  # i.e. TRUE or FALSE?
+# validating_call <- function(call,allowed_symbols, allow_logical=FALSE){
+#   if (is.atomic(call)){
+#     return(is.logical(call))  # i.e. TRUE or FALSE?
+#   }
+#   if (is.symbol(call)){ 
+#     return(allow_logical)              # design issue: should we allow logical statement as 'if (married) age > 17'
+#   }
+#   sym <- deparse(call[[1]])
+#   sym %in% allowed_symbols || 
+#     grepl("^is\\.",sym) || 
+#     ( sym == 'if' && validating_call(call[[2]],allowed_symbols, allow_logical) && 
+#         validating_call(call[[3]],allowed_symbols, allow_logical) ) 
+# }
+
+
+validating_call <- function(cl){
+  pure <- c("<", "<=", "==", "!=", ">=", ">", "%in%", "identical", "~" ,"%->%"
+          , "any_missing", "any_duplicated")
+  unary <- c("!", "(", "all", "any" )
+  binary <- c("|","||","&","&&","if","xor")
+
+  # push-button semantic changer. See issue #41
+  assume_logical = FALSE
+  
+  vc <- function(x){
+    if (is.symbol(x)) return(assume_logical) 
+    node <- deparse(x[[1]])
+    if ( node %in% pure || grepl("^is\\.",node) ) return(TRUE)
+    if ( node %in% unary && vc(x[[2]])) return(TRUE)
+    if ( node %in% binary && vc(x[[2]]) && vc(x[[3]]) ) return(TRUE)
+    FALSE
   }
-  if (is.symbol(call)){ 
-    return(allow_logical)              # design issue: should we allow logical statement as 'if (married) age > 17'
-  }
-  sym <- deparse(call[[1]])
-  sym %in% allowed_symbols || 
-    grepl("^is\\.",sym) || 
-    ( sym == 'if' && validating_call(call[[2]],allowed_symbols, allow_logical) && 
-        validating_call(call[[3]],allowed_symbols, allow_logical) ) 
+  
+  vc(cl)
+  
 }
 
+#
+# validating_call(expression(x==1)[[1]])
+# validating_call(expression(x)[[1]])
+# validating_call(expression((x==1)|(y==2)))
+# validating_call(expression(x==1|y==2)[[1]])
+# validating_call(expression(x==1|(y==2))[[1]])
 
+#
 
 # coefficients for normalized linear expressions (constant after the comparison operator)
 nodesign <- c('+' = 1, '-' = -1)
