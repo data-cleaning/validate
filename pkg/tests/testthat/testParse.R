@@ -29,7 +29,6 @@ test_that("Parsing yrf format", {
   expect_equal(label(v),c("sum of x and y","if x positive then y also"))
   expect_equal(description(v),c("a looong description here","a looong description here\n"))
   expect_true(all(created(v)-now < 10))
-  expect_warning(validator(x?y))
   expect_warning(validator(.file="yamltests/invalid.yaml"))
   expect_warning(validator(.file="yamltests/invalidR.yaml"))
 })
@@ -57,6 +56,9 @@ test_that("Parsing included files",{
 
 context("Computing on language")
 
+
+
+
 # 
 test_that("var_from_call",{
   
@@ -83,7 +85,6 @@ test_that("var_from_call",{
     var_from_call(expression(1 > 0)[[1]])
     , NULL
   )
-    
 })
 
 

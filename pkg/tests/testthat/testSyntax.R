@@ -4,9 +4,10 @@ context("Syntax attributes")
 test_that("validation syntax is recognized",{
   # fiets(x) is not a validation rule
   expect_warning(validator(fiets(x)))
-  # we complain that the regular expression 'aap' cannot be matched 
-  # since 'varlist' is not specified.
-  #expect_warning( validator(G:{fiets; 'aap'})$exprs() )
+
+  # these are not validating statements
+  expect_warning(validator(x?y))
+  expect_warning(validator(1>0))
 })
 
 

@@ -191,7 +191,7 @@ linear_call <- function(x){
 
 # check whether a call is validating, based on a set of 
 # predifined allowed symbols that result in a boolean.
-validating_call <- function(call,allowed_symbols, allow_logical=TRUE){
+validating_call <- function(call,allowed_symbols, allow_logical=FALSE){
   if (is.atomic(call)){
     return(is.logical(call))  # i.e. TRUE or FALSE?
   }
