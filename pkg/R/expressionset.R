@@ -247,29 +247,25 @@ get_exprs <- function(x, ..., expand_assignments=FALSE
 }
 
 blocks_expressionset <- function(x){
-  varlist <- variables(x, as="list")
-  
   varblock <- function(v,vlist){
     sapply(vlist, function(x) any(v %in% x) | identical(v,character(0)) )
   }
+  # variable x rule matrix
+  V <- variables(x,as="matrix")
+  # all connections
+  A <- V %*% t(V) > 0
+  L <- apply(A,2,which)
   
-  # compute variable blocks
   blocks <- new.env()
   b <- 0
-  V <- varlist
-  while( length(V) >= 1 ){
+  while( length(L) > 0){
     b <- b+1
-    i <- varblock(V[[1]],V)
-    blocks[[paste0('block',b)]] <- unique(unlist(V[i]))
-    V <- V[!i]
+    i <- varblock(L[[1]],L)
+    blocks[[paste0('block',b)]] <- unique(unlist(L[i]))
+    L <- L[!i]
   }
-  blocks <- as.list(blocks)
-  
-  # logical, indicating rule blocks.
-  lapply(blocks,function(b) sapply(varlist
-                      , function(v) any(v %in% b) | identical(v,character(0)) ))
+  as.list(blocks)
 }
-
 
 
 # S4 GENERICS -----------------------------------------------------------------
@@ -398,7 +394,7 @@ setMethod('summary',signature('expressionset'),function(object,...){
   data.frame(
     block = seq_along(b)
     , nvar  = sapply(b,function(i) length(variables(object[i])))
-    , rules = sapply(b,sum)
+    , rules = sapply(b,length)
     , linear = sapply(b,function(i) sum(object[i]$is_linear()))
     , row.names=NULL
   )

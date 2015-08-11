@@ -54,8 +54,15 @@ test_that('compare works',{
 
 test_that('blocks works',{
   v <- validator(x + y > z, q > 0, z + x == 3)
-  expect_equivalent(v$blocks()[[1]],c(TRUE,FALSE,TRUE))
-  expect_equivalent(v$blocks()[[2]],c(FALSE,TRUE,FALSE))
+  expect_equivalent(v$blocks()[[1]],c(1,3))
+  expect_equivalent(v$blocks()[[2]],2)
+  v <- validator(
+    x > 0
+    , y > 0
+    , x + y == z
+    , u + v == w
+    , u > 0)
+  expect_equal(length(v$blocks()),2)
 })
 
 
