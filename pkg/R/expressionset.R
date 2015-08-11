@@ -252,7 +252,7 @@ blocks_expressionset <- function(x){
   }
   # variable x rule matrix
   V <- variables(x,as="matrix")
-  # all connections
+  # all connections 
   A <- V %*% t(V) > 0
   L <- apply(A,2,which)
   
@@ -364,6 +364,22 @@ setMethod("created", "expressionset", function(x,...){
 setMethod("names","expressionset",function(x){
   sapply(x$rules, function(rule) rule@name)
 })
+
+#' Set names
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export "names-expressionset-method"
+setReplaceMethod("names",c("expressionset","character"),function(x,value){
+  if (length(x) != length(value)){
+    stop("Number of names unequal to the number of rules")
+  }
+  for ( i in seq_len(length(x))){
+    names(x$rules[[i]]) <- value[i]
+  }
+  x
+})
+
 
 setMethod("validating", "expressionset", function(x,...){
   if (length(x) == 0) return(logical(0))

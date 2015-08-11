@@ -84,6 +84,20 @@ rule <- setClass("rule",
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
+#' Set names
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export "names-expressionset-method"
+setReplaceMethod("names",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("name must be 'character' of length 1")
+  }
+  x@name <- value
+  x
+})
+
+
 
 setGeneric("validating",function(x,...) standardGeneric('validating'))
 
