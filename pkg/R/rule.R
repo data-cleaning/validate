@@ -84,6 +84,28 @@ rule <- setClass("rule",
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
+
+#' Set origin
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+setGeneric("origin<-",function(x,value) standardGeneric("origin<-"))
+
+#' Set label
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+setGeneric("label<-",function(x,value) standardGeneric("label<-"))
+
+#' Set description
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+setGeneric("description<-",function(x,value) standardGeneric("description<-"))
+
 #' Set names
 #'
 #' @param x Object
@@ -98,7 +120,47 @@ setReplaceMethod("names",c("rule","character"),function(x,value){
   x
 })
 
+#' Set origin
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("origin",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("origin must be 'character' of length 1")
+  }
+  x@origin <- value
+  x
+})
 
+#' Set label
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("label",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("label must be 'character' of length 1")
+  }
+  x@label <- value
+  x
+})
+
+#' Set description
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("description",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("description must be 'character' of length 1")
+  }
+  x@description <- value
+  x
+})
 
 setGeneric("validating",function(x,...) standardGeneric('validating'))
 
@@ -224,10 +286,10 @@ setMethod("origin","rule",function(x,...){
 })
 
 #' @rdname label
-setMethod("label","rule",function(x,...) x@label)
+setMethod("label","rule",function(x,...) paste0("",x@label) )
 
 #' @rdname description
-setMethod("description", "rule", function(x,...) x@description)
+setMethod("description", "rule", function(x,...) paste0("",x@description) )
 
 #' @rdname created
 setMethod("created", "rule", function(x,...) x@created)

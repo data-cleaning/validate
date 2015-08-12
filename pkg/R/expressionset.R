@@ -27,7 +27,7 @@ NULL
 #'  \item{\code{\link{length,expressionset-method}}}
 #'  \item{\code{\link{created}}}
 #'  \item{\code{\link{origin}}}
-#'  \item{\code{\link{label}}}
+#'  \item{\code{\link{labels}}}
 #'  \item{\code{\link{description}}}
 #'  \item{\code{\link{[,expressionset-method}}}
 #'  \item{\code{\link{[[,expressionset-method}}}
@@ -380,6 +380,50 @@ setReplaceMethod("names",c("expressionset","character"),function(x,value){
   x
 })
 
+#' Set origins
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+setReplaceMethod("origin",c("expressionset","character"), function(x,value){
+  if (length(x) != length(value)){
+    stop("Number of origins unequal to the number of rules")
+  }
+  for ( i in seq_len(length(x))){
+    origin(x$rules[[i]]) <- value[i]
+  }
+  x
+})
+
+#' Set labels
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+setReplaceMethod("label",c("expressionset","character"),function(x,value){
+  if (length(x) != length(value)){
+    stop("Number of names unequal to the number of rules")
+  }
+  for ( i in seq_len(length(x))){
+    label(x$rules[[i]]) <- value[i]
+  }
+  x
+})
+
+#' Set descriptions
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+setReplaceMethod("description",c("expressionset","character"),function(x,value){
+  if (length(x) != length(value)){
+    stop("Number of descriptions unequal to the number of rules")
+  }
+  for ( i in seq_len(length(x))){
+    description(x$rules[[i]]) <- value[i]
+  }
+  x
+})
 
 setMethod("validating", "expressionset", function(x,...){
   if (length(x) == 0) return(logical(0))
