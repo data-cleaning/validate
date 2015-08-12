@@ -369,7 +369,7 @@ setMethod("names","expressionset",function(x){
 #'
 #' @param x Object
 #' @param value Value to set
-#' @export "names-expressionset-method"
+#' @export 
 setReplaceMethod("names",c("expressionset","character"),function(x,value){
   if (length(x) != length(value)){
     stop("Number of names unequal to the number of rules")

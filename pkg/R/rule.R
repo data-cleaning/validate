@@ -88,7 +88,8 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 #'
 #' @param x Object
 #' @param value Value to set
-#' @export "names-expressionset-method"
+#' @export 
+#' @keywords internal
 setReplaceMethod("names",c("rule","character"),function(x,value){
   if (length(value) > 1){
     stop("name must be 'character' of length 1")
