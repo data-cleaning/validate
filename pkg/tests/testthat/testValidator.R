@@ -12,7 +12,14 @@ test_that("setting properties",{
   expect_equal(label(v),c("fee",""))
   description(v)[1] <- "foobar"
   expect_equal(description(v),c("foobar",""))
+
+  # a name, label, origin or description should be a single 'character' element 
+  expect_error(names(v)[1] <- c("fu","bar"))
+  expect_error(origin(v)[1] <- c("fu","bar"))
+  expect_error(label(v)[1] <- c("fu","bar"))
+  expect_error(description(v)[1] <- c("fu","bar"))
   
+   
 })
 
 

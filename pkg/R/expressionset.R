@@ -191,14 +191,15 @@ get_filestack_yml <- function(file){
 
 
 
-
 show_expressionset <- function(obj){
   nr <- length(obj)
   cat(sprintf(
     "Object of class '%s' with %s elements:\n",class(obj)[1], nr
   ))
   if (nr == 0) return(invisible(NULL))
-  lab <- names(obj)
+  nam <- names(obj)
+  lab <- label(obj)
+  lab <- paste0(nam,ifelse(nchar(lab)>0,paste0(" [",lab,"]"),lab))
   n <- max(nchar(lab))
   lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE), call2text))
   cat(noquote(paste(lab,collapse="\n")))
@@ -371,9 +372,6 @@ setMethod("names","expressionset",function(x){
 #' @param value Value to set
 #' @export 
 setReplaceMethod("names",c("expressionset","character"),function(x,value){
-  if (length(x) != length(value)){
-    stop("Number of names unequal to the number of rules")
-  }
   for ( i in seq_len(length(x))){
     names(x$rules[[i]]) <- value[i]
   }
@@ -386,9 +384,6 @@ setReplaceMethod("names",c("expressionset","character"),function(x,value){
 #' @param value Value to set
 #' @export 
 setReplaceMethod("origin",c("expressionset","character"), function(x,value){
-  if (length(x) != length(value)){
-    stop("Number of origins unequal to the number of rules")
-  }
   for ( i in seq_len(length(x))){
     origin(x$rules[[i]]) <- value[i]
   }
@@ -401,9 +396,6 @@ setReplaceMethod("origin",c("expressionset","character"), function(x,value){
 #' @param value Value to set
 #' @export 
 setReplaceMethod("label",c("expressionset","character"),function(x,value){
-  if (length(x) != length(value)){
-    stop("Number of names unequal to the number of rules")
-  }
   for ( i in seq_len(length(x))){
     label(x$rules[[i]]) <- value[i]
   }
@@ -416,9 +408,6 @@ setReplaceMethod("label",c("expressionset","character"),function(x,value){
 #' @param value Value to set
 #' @export 
 setReplaceMethod("description",c("expressionset","character"),function(x,value){
-  if (length(x) != length(value)){
-    stop("Number of descriptions unequal to the number of rules")
-  }
   for ( i in seq_len(length(x))){
     description(x$rules[[i]]) <- value[i]
   }
