@@ -6,15 +6,15 @@ NULL
 
 
 PKGOPT <- options_manager(
-  validator_symbols = c(
-    '<','<=','==','>','>=', '!=', '%in%', "~", "%->%"
-    , 'identical', 'all','any', ':=' 
-    , '!', '|', '||', '&', '&&', 'xor'
-    , 'any_duplicated', 'any_missing'
-  )
+#   validator_symbols = c(
+#     '<','<=','==','>','>=', '!=', '%in%', "~", "%->%"
+#     , 'identical', 'all','any', ':=' 
+#     , '!', '|', '||', '&', '&&', 'xor'
+#     , 'any_duplicated', 'any_missing'
+#   )
   # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
-  , raise = 'none'
-  , preproc_symbols = c('<-','library')
+   raise = 'none'
+#  , preproc_symbols = c('<-','library')
 )
 
 

@@ -288,6 +288,38 @@ setGeneric('summary')
 #' }
 setGeneric("length")
 
+#' Export to yaml file
+#'
+#' Translate a \pkg{validate} object to yaml format and write to file.
+#'
+#' @param x An R object
+#' @param file A file location or connection (passed to \code{base::\link[base]{write}}).
+#' @param ... Options passed to \code{yaml::\link[yaml]{as.yaml}}
+#' 
+#' @export
+#' 
+#' @example ../examples/export_yaml.R
+#' 
+setGeneric("export_yaml",function(x,file,...) standardGeneric("export_yaml"))
+
+#' @rdname export_yaml
+#' @export
+setGeneric("as_yaml", function(x,...) standardGeneric("as_yaml"))
+
+#' @rdname export_yaml
+setMethod("export_yaml","expressionset", function(x, file,...){
+  write(x = as.yaml(x,...), file=file)
+})
+
+#' @rdname export_yaml
+setMethod("as_yaml","expressionset",function(x,...){
+  option_string <- ""
+  if (!identical(x$._options,PKGOPT)){ # export options when set.
+    option_string <- paste0("---\n",yaml::as.yaml(list(options=x$options()),...))
+  }
+  rule_string <- yaml::as.yaml(rapply(as.list.expressionset(x), f=function(y) paste0("",y),how="replace"),...)
+  paste0(option_string,"---\n",rule_string)
+})
 
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
 
@@ -499,9 +531,9 @@ setMethod("is_tran_assign","expressionset",function(x,...){
 
 as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
   list(
-    options = x$options(),
-    rules = lapply(x$rules, as.list, expr_as_text = expr_as_text, ...)
-)}
+    rules = lapply(x$rules, as.list.rule, expr_as_text = expr_as_text, ...)
+  )
+}
 # demonstruction
 # L <- list(
 #   rule(expr = expression(x + y == z)[[1]],  name="aap")
