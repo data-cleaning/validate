@@ -14,8 +14,8 @@ test_that("setting properties",{
   expect_equal(description(v),c("foobar",""))
 
   # a name, label, origin or description should be a single 'character' element 
-  expect_warning(names(v)[1] <- c("fu","bar"))
   expect_warning(origin(v)[1] <- c("fu","bar"))
+  expect_warning(names(v)[1] <- c("fu","bar"))
   expect_warning(label(v)[1] <- c("fu","bar"))
   expect_warning(description(v)[1] <- c("fu","bar"))
   
@@ -23,4 +23,6 @@ test_that("setting properties",{
 })
 
 
-  
+ get_filestack_yml("pkg/tests/testthat/yamltests/top.yaml")
+ 
+ 
