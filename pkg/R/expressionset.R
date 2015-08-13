@@ -306,21 +306,6 @@ setGeneric("export_yaml",function(x,file,...) standardGeneric("export_yaml"))
 #' @export
 setGeneric("as_yaml", function(x,...) standardGeneric("as_yaml"))
 
-#' @rdname export_yaml
-setMethod("export_yaml","expressionset", function(x, file,...){
-  write(x = as.yaml(x,...), file=file)
-})
-
-#' @rdname export_yaml
-setMethod("as_yaml","expressionset",function(x,...){
-  option_string <- ""
-  if (!identical(x$._options,PKGOPT)){ # export options when set.
-    option_string <- paste0("---\n",yaml::as.yaml(list(options=x$options()),...))
-  }
-  rule_string <- yaml::as.yaml(rapply(as.list.expressionset(x), f=function(y) paste0("",y),how="replace"),...)
-  paste0(option_string,"---\n",rule_string)
-})
-
 # S4 IMPLEMENTATIONS ----------------------------------------------------------
 
 #' @describeIn  variables Variables occuring in \code{x} either as a single list, or per rule.
@@ -528,6 +513,25 @@ setMethod("is_tran_assign","expressionset",function(x,...){
   if (length(x)==0) return(logical(0))
   sapply(x$rules,is_tran_assign)
 })
+
+
+#' @rdname export_yaml
+setMethod("export_yaml","expressionset", function(x, file,...){
+  write(x = as_yaml(x,...), file=file)
+})
+
+#' @rdname export_yaml
+setMethod("as_yaml","expressionset",function(x,...){
+  option_string <- ""
+  if (!identical(x$._options,PKGOPT)){ # export options when set.
+    option_string <- paste0("---\n",yaml::as.yaml(list(options=x$options()),...),"---\n")
+  }
+  rule_string <- yaml::as.yaml(rapply(as.list.expressionset(x), f=function(y) paste0("",y),how="replace"),...)
+  paste0(option_string,rule_string)
+})
+
+
+
 
 as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
   list(

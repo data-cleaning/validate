@@ -18,10 +18,8 @@ test_that("setting properties",{
   expect_warning(names(v)[1] <- c("fu","bar"))
   expect_warning(label(v)[1] <- c("fu","bar"))
   expect_warning(description(v)[1] <- c("fu","bar"))
-  
    
 })
-
 
  
  

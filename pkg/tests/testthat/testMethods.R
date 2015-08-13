@@ -69,6 +69,15 @@ test_that("show methods do not crash",{
   x <- capture.output(check_that(women,height>0))
 })
 
-
+test_that("yaml export",{
+  # smoke test
+  as_yaml(validator(x>0))
+  export_yaml(x=validator(x>0), file=tempfile())
+  # test that options are included, only when provided
+  v <- validator(x>0)
+  expect_false(grepl("options:",as_yaml(v)))
+  validate_options(v,raise="all")
+  expect_true(grepl("options:",as_yaml(v)))
+})
 
 
