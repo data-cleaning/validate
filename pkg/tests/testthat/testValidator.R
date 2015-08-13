@@ -23,6 +23,5 @@ test_that("setting properties",{
 })
 
 
- get_filestack_yml("pkg/tests/testthat/yamltests/top.yaml")
  
  
