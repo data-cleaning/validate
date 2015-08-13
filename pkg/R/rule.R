@@ -263,7 +263,7 @@ setMethod("show", "rule", function(object){
   cat(sprintf("\nObject of class %s.",class(object)))
   nm <- slotNames(object)
   n <- max(nchar(nm))
-  vl <- sapply(nm,function(x) format(slot(object,x)) )
+  vl <- sapply(nm,function(x) paste0("",slot(object,x)))
   fmt <- paste0("\n %-",n,"s: %s")
   cat(sprintf(fmt,nm,vl))
 })
