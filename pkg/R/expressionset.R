@@ -202,7 +202,7 @@ show_expressionset <- function(obj){
   lab <- paste0(nam,ifelse(nchar(lab)>0,paste0(" [",lab,"]"),lab))
   n <- max(nchar(lab))
   lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE
-                                                , replace_lin_eq=FALSE), call2text))
+                                                , lin.eq.eps=0), call2text))
   cat(noquote(paste(lab,collapse="\n")))
   opt <- ""
   if (!identical(obj$._options,PKGOPT)){
