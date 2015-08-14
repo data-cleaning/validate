@@ -6,14 +6,9 @@ NULL
 
 
 PKGOPT <- options_manager(
-#   validator_symbols = c(
-#     '<','<=','==','>','>=', '!=', '%in%', "~", "%->%"
-#     , 'identical', 'all','any', ':=' 
-#     , '!', '|', '||', '&', '&&', 'xor'
-#     , 'any_duplicated', 'any_missing'
-#   )
   # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
    raise = 'none'
+   , lin.eq.eps = 0
 #  , preproc_symbols = c('<-','library')
 )
 
@@ -26,7 +21,8 @@ PKGOPT <- options_manager(
 #' \itemize{
 #'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
 #'  The 'all' setting is useful when debugging validation scripts.}
-#'  \item{validator_symbols (language; see examples)} Control what statements are allowed as validation statements.
+#'  \item{lin.eq.eps ('numeric'; 0) Control the amount of slack allowed
+#'  when evaluating linear equalities. To be used to control for machine rounding.}
 #'  \item{'reset'} Reset to factory settings.
 #' }
 #'
@@ -139,6 +135,19 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 }
 
 
+# 
+replace_linear_equality <- function(x,eps){
+  if (!linear_call(x) && x[[1]] != '==' ) return(x)
+  m <- expression(e1-e2)[[1]]
+  a <- expression(abs(x))[[1]]
+  lt <- expression(e1 < e2)[[1]]
+  m[[2]] <- left(x)
+  m[[3]] <- right(x)
+  a[[2]] <- m
+  lt[[2]] <- a
+  lt[[3]] <- eps
+  lt
+}
 
 # replace occurences x$y --> x[,'y']
 replace_dollar <- function(x){
@@ -189,21 +198,6 @@ linear_call <- function(x){
   linear_call(left(x)) & linear_call(right(x))
 }
 
-# check whether a call is validating, based on a set of 
-# predifined allowed symbols that result in a boolean.
-# validating_call <- function(call,allowed_symbols, allow_logical=FALSE){
-#   if (is.atomic(call)){
-#     return(is.logical(call))  # i.e. TRUE or FALSE?
-#   }
-#   if (is.symbol(call)){ 
-#     return(allow_logical)              # design issue: should we allow logical statement as 'if (married) age > 17'
-#   }
-#   sym <- deparse(call[[1]])
-#   sym %in% allowed_symbols || 
-#     grepl("^is\\.",sym) || 
-#     ( sym == 'if' && validating_call(call[[2]],allowed_symbols, allow_logical) && 
-#         validating_call(call[[3]],allowed_symbols, allow_logical) ) 
-# }
 
 
 validating_call <- function(cl){
@@ -228,14 +222,6 @@ validating_call <- function(cl){
   
 }
 
-#
-# validating_call(expression(x==1)[[1]])
-# validating_call(expression(x)[[1]])
-# validating_call(expression((x==1)|(y==2)))
-# validating_call(expression(x==1|y==2)[[1]])
-# validating_call(expression(x==1|(y==2))[[1]])
-
-#
 
 # coefficients for normalized linear expressions (constant after the comparison operator)
 nodesign <- c('+' = 1, '-' = -1)
@@ -266,7 +252,7 @@ coefficients <- function(x, sign=1, coef=new.env()){
     val <- if ( is.numeric(left(x)) ) left(x) else right(x)
     var <- if ( is.name(left(x)) ) left(x) else right(x)
     addcoef(deparse(var), sign*val, coef)
-  } else {
+    } else {
     coefficients(left(x),1,coef)
     coefficients(right(x),sign,coef)
   }

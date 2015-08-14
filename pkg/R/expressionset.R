@@ -201,9 +201,16 @@ show_expressionset <- function(obj){
   lab <- label(obj)
   lab <- paste0(nam,ifelse(nchar(lab)>0,paste0(" [",lab,"]"),lab))
   n <- max(nchar(lab))
-  lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE), call2text))
+  lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE
+                                                , replace_lin_eq=FALSE), call2text))
   cat(noquote(paste(lab,collapse="\n")))
-  cat("\n")
+  opt <- ""
+  if (!identical(obj$._options,PKGOPT)){
+    opt <- unlist(obj$options())
+    opt <- paste0(sprintf("%s: %s",names(opt),paste0(opt)),collapse="; ")
+    opt <- paste0("\nOptions:\n",opt)
+  }
+  cat(sprintf("%s\n",opt))
 }
 
 
@@ -237,13 +244,19 @@ extract_names <- function(L,prefix="V"){
 # @param replace_dollar Replace dollar with bracket index?
 # 
 #
-get_exprs <- function(x, ..., expand_assignments=FALSE
-    , expand_groups=TRUE, vectorize=TRUE, replace_dollar=TRUE ){
+get_exprs <- function(x, ...
+    , expand_assignments=FALSE
+    , expand_groups=TRUE
+    , vectorize=TRUE
+    , replace_dollar=TRUE
+    , lin_eq_eps = x$options('lin.eq.eps')
+){
   exprs <- setNames(lapply(x$rules, expr ),names(x))
   if ( expand_assignments )  exprs <- expand_assignments(exprs)
   if ( expand_groups ) exprs <- expand_groups(exprs)
   if ( vectorize ) exprs <- lapply(exprs, vectorize)
   if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
+  if (lin_eq_eps > 0) exprs <- lapply(exprs, replace_linear_equality, lin_eq_eps)
   exprs
 }
 

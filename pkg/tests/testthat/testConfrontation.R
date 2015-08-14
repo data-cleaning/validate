@@ -77,7 +77,12 @@ test_that("check_that works with simple example",{
   cf <- check_that(dat, x >= y)
 })
 
-
+test_that("Confrontations with slach on linear equalities",{
+  v <- validator(x == 10)
+  d <- data.frame(x=9)
+  expect_false(values(confront(d,v)))
+  expect_true(values(confront(d,v,lin.eq.eps=2)))
+})
 
 
 
