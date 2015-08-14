@@ -91,9 +91,6 @@ test_that("Confrontations with slack on linear equalities",{
   d <- data.frame(x=9,y=-1)
   expect_true(values(confront(d,u)))
   expect_false(values(confront(d,u,lin.eq.eps=2)))
-  
-  
-  
 })
 
 

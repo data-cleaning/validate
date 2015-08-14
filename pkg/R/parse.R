@@ -138,6 +138,8 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 # 
 replace_linear_equality <- function(x,eps){
     repl <- function(x,eps){
+      # by replacing nodes in the call tree
+      # we need not conern about brackets
       if (x[[1]] != '==' ) return(x)
       m <- expression(e1-e2)[[1]]
       a <- expression(abs(x))[[1]]
