@@ -21,8 +21,8 @@ PKGOPT <- options_manager(
 #' \itemize{
 #'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
 #'  The 'all' setting is useful when debugging validation scripts.}
-#'  \item{lin.eq.eps ('numeric'; 1e-8) Control the amount of slack allowed
-#'  when evaluating linear equalities. To be used to control for machine rounding.}
+#'  \item{lin.eq.eps ('numeric'; 1e-8) The precision used when evaluating linear equalities. 
+#'     To be used to control for machine rounding.}
 #'  \item{'reset'} Reset to factory settings.
 #' }
 #'
@@ -137,18 +137,34 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 
 # 
 replace_linear_equality <- function(x,eps){
-  if (!linear_call(x) || x[[1]] != '==' ) return(x)
-  m <- expression(e1-e2)[[1]]
-  a <- expression(abs(x))[[1]]
-  lt <- expression(e1 < e2)[[1]]
-  m[[2]] <- left(x)
-  m[[3]] <- right(x)
-  a[[2]] <- m
-  lt[[2]] <- a
-  lt[[3]] <- eps
-  lt
-}
+    repl <- function(x,eps){
+      if (x[[1]] != '==' ) return(x)
+      m <- expression(e1-e2)[[1]]
+      a <- expression(abs(x))[[1]]
+      lt <- expression(e1 < e2)[[1]]
+      m[[2]] <- left(x)
+      m[[3]] <- right(x)
+      a[[2]] <- m
+      lt[[2]] <- a
+      lt[[3]] <- eps
+      lt
+    }
 
+    if (length(x) == 3 && linear_call(x)){
+      return(repl(x,eps))
+    } else if (length(x) > 1) {
+      for ( i in 2:length(x) ){
+        x[[i]] <- replace_linear_equality(x[[i]],eps)
+      }
+    } 
+    x
+}
+  
+# e <- expression(if (x + y == 3) z>0)[[1]]  
+#  e <- expression(aap / noot > z)[[1]]
+#  replace_linear_equality(e,1e-8)
+  
+  
 # replace occurences x$y --> x[,'y']
 replace_dollar <- function(x){
   L <- which.call(x,'$')

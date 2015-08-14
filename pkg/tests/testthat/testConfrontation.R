@@ -77,7 +77,7 @@ test_that("check_that works with simple example",{
   cf <- check_that(dat, x >= y)
 })
 
-test_that("Confrontations with slach on linear equalities",{
+test_that("Confrontations with slack on linear equalities",{
   v <- validator(x == 10)
   d <- data.frame(x=9)
   expect_false(values(confront(d,v)))
@@ -86,6 +86,14 @@ test_that("Confrontations with slach on linear equalities",{
   w <- validator(x > 10)
   expect_false(values(confront(d,w)))
   expect_false(values(confront(d,w,lin.eq.eps=2)))
+  # should also work in linear subexpressions
+  u <- validator( if (x == 10) y > 0)
+  d <- data.frame(x=9,y=-1)
+  expect_true(values(confront(d,u)))
+  expect_false(values(confront(d,u,lin.eq.eps=2)))
+  
+  
+  
 })
 
 
