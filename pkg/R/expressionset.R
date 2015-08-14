@@ -431,6 +431,18 @@ setReplaceMethod("description",c("expressionset","character"),function(x,value){
   x
 })
 
+#' Set timestamps
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+setReplaceMethod("created",c("expressionset","POSIXct"),function(x,value){
+  for ( i in seq_len(length(x))){
+    created(x$rules[[i]]) <- value[i]
+  }
+  x
+})
+
 setMethod("validating", "expressionset", function(x,...){
   if (length(x) == 0) return(logical(0))
   sapply(x$rules, validating)

@@ -106,61 +106,14 @@ setGeneric("label<-",function(x,value) standardGeneric("label<-"))
 #' @export 
 setGeneric("description<-",function(x,value) standardGeneric("description<-"))
 
-#' Set names
-#'
-#' @param x Object
-#' @param value Value to set
-#' @export 
-#' @keywords internal
-setReplaceMethod("names",c("rule","character"),function(x,value){
-  if (length(value) > 1){
-    stop("name must be 'character' of length 1")
-  }
-  x@name <- value
-  x
-})
 
-#' Set origin
+#' Set creation timestamp
 #'
 #' @param x Object
 #' @param value Value to set
 #' @export 
-#' @keywords internal
-setReplaceMethod("origin",c("rule","character"),function(x,value){
-  if (length(value) > 1){
-    stop("origin must be 'character' of length 1")
-  }
-  x@origin <- value
-  x
-})
+setGeneric("created<-",function(x,value) standardGeneric("created<-"))
 
-#' Set label
-#'
-#' @param x Object
-#' @param value Value to set
-#' @export 
-#' @keywords internal
-setReplaceMethod("label",c("rule","character"),function(x,value){
-  if (length(value) > 1){
-    stop("label must be 'character' of length 1")
-  }
-  x@label <- value
-  x
-})
-
-#' Set description
-#'
-#' @param x Object
-#' @param value Value to set
-#' @export 
-#' @keywords internal
-setReplaceMethod("description",c("rule","character"),function(x,value){
-  if (length(value) > 1){
-    stop("description must be 'character' of length 1")
-  }
-  x@description <- value
-  x
-})
 
 setGeneric("validating",function(x,...) standardGeneric('validating'))
 
@@ -222,7 +175,7 @@ setGeneric("label", function(x,...) standardGeneric("label"))
 setGeneric("description", function(x,...) standardGeneric("description"))
 
 
-#' Creation time
+#' Creation timestamp
 #'
 #'
 #' @param x and R object
@@ -236,6 +189,7 @@ setGeneric("description", function(x,...) standardGeneric("description"))
 #' }
 #' @export
 setGeneric("created", function(x,...) standardGeneric("created"))
+
 
 
 # S4 METHODS ------------------------------------------------------------------
@@ -297,6 +251,80 @@ setMethod("created", "rule", function(x,...) x@created)
 setMethod("is_tran_assign","rule", function(x){
   x@expr[[1]] == ":="
 })
+
+
+#' Set names
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("names",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("name must be 'character' of length 1")
+  }
+  x@name <- value
+  x
+})
+
+#' Set origin
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("origin",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("origin must be 'character' of length 1")
+  }
+  x@origin <- value
+  x
+})
+
+#' Set label
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("label",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("label must be 'character' of length 1")
+  }
+  x@label <- value
+  x
+})
+
+#' Set description
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("description",c("rule","character"),function(x,value){
+  if (length(value) > 1){
+    stop("description must be 'character' of length 1")
+  }
+  x@description <- value
+  x
+})
+
+#' Set creation timestamp
+#'
+#' @param x Object
+#' @param value Value to set
+#' @export 
+#' @keywords internal
+setReplaceMethod("created",c("rule","POSIXct"),function(x,value){
+  if (length(value) > 1){
+    stop("timestamp must be 'POSIXct' of length 1")
+  }
+  x@description <- value
+  x
+})
+
+
+
 
 # handy for rule to yaml/json
 as.list.rule <- function(x, expr_as_text = TRUE, ...){
