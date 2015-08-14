@@ -8,7 +8,7 @@ NULL
 PKGOPT <- options_manager(
   # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
    raise = 'none'
-   , lin.eq.eps = 0
+   , lin.eq.eps = 1e-8
 #  , preproc_symbols = c('<-','library')
 )
 
@@ -21,7 +21,7 @@ PKGOPT <- options_manager(
 #' \itemize{
 #'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
 #'  The 'all' setting is useful when debugging validation scripts.}
-#'  \item{lin.eq.eps ('numeric'; 0) Control the amount of slack allowed
+#'  \item{lin.eq.eps ('numeric'; 1e-8) Control the amount of slack allowed
 #'  when evaluating linear equalities. To be used to control for machine rounding.}
 #'  \item{'reset'} Reset to factory settings.
 #' }
@@ -137,7 +137,7 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 
 # 
 replace_linear_equality <- function(x,eps){
-  if (!linear_call(x) && x[[1]] != '==' ) return(x)
+  if (!linear_call(x) || x[[1]] != '==' ) return(x)
   m <- expression(e1-e2)[[1]]
   a <- expression(abs(x))[[1]]
   lt <- expression(e1 < e2)[[1]]

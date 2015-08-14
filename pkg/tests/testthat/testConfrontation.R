@@ -82,6 +82,10 @@ test_that("Confrontations with slach on linear equalities",{
   d <- data.frame(x=9)
   expect_false(values(confront(d,v)))
   expect_true(values(confront(d,v,lin.eq.eps=2)))
+  # setting slack on equalities should not matter for inequalities
+  w <- validator(x > 10)
+  expect_false(values(confront(d,w)))
+  expect_false(values(confront(d,w,lin.eq.eps=2)))
 })
 
 
