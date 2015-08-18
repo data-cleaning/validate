@@ -81,7 +81,16 @@ test_that("Functional dependencies", {
   expect_equivalent(values(cf),array(c(TRUE,FALSE,TRUE,TRUE),dim=c(4,1)))
 })
 
-
+test_that("group_expansion",{
+  L <- list(expression(var_group(a,b)>0)[[1]])
+  expect_equal(length(expand_groups(L)),2)
+  # one expression not containing group
+  L <- list(expression(var_group(a,b)>0)[[1]],expression(x>0)[[1]])
+  expect_equal(length(expand_groups(L)),3)
+  # two groups (cartesian product)
+  L <- list(expression(var_group(a,b)>var_group(b,c))[[1]])
+  expect_equal(length(expand_groups(L)),4)
+})
 
 
 

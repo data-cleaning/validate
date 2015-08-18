@@ -125,7 +125,6 @@ setGeneric("expr",def=function(x,...) standardGeneric("expr"))
 # check for transient assignments (:=)
 setGeneric("is_tran_assign", function(x,...) standardGeneric("is_tran_assign"))
 
-setGeneric("group_definition", function(x,...) standardGeneric('group_definition'))
 
 
 #' Origin of rules
@@ -226,9 +225,6 @@ setMethod("validating","rule", function(x,...){
  !is.null(variables(x)) && validating_call(x@expr)  
 })
 
-setMethod("group_definition","rule",function(x,...){
-  defines_group(x@expr)
-})
 
 setMethod("linear","rule",function(x,...){
   linear_call(x@expr)

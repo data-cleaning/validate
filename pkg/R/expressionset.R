@@ -461,10 +461,6 @@ setMethod("validating", "expressionset", function(x,...){
   sapply(x$rules, validating)
 })
 
-setMethod("group_definition","expressionset",function(x,...){
-  if (length(x)==0) return(logical(0))
-  sapply(x$rules, group_definition)
-})
 
 
 setMethod("linear","expressionset", function(x,...){

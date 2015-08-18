@@ -176,12 +176,8 @@ setGeneric('sort')
 confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   opts <- x$clone_options(...)
   lin_eq_eps <- opts('lin.eq.eps')
-  calls <- x$exprs(lin_eq_eps=lin_eq_eps)
-  # merge options with clone of option manager 
-  # TODO this is a workaround. is_tran_assign may be deleted as a generic and replaced with
-  # a common function
-  i <- sapply(calls, function(cl) cl[[1]] != ':=')
-  L <- setNames(execute(calls,dat,opts),names(calls)[i])
+  calls <- x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps)
+  L <- execute(calls,dat,opts)
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))

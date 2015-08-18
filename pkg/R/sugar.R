@@ -9,48 +9,55 @@
 #
 # name  (possibly unqouted) name of the group.
 # ...
-var_group <- function(name,...){
-  group <- as.character(substitute(name))
-  groupvars <- as.list(substitute(list(...))[-1])
-  
-  function(cl){
-    if ( !group %in% all.vars(cl) ) return(cl)
-    lapply(groupvars,function(v){
-      replace_in(cl,group,v)
-    })
+var_group <- function(...){
+  L <- as.list(substitute(list(...))[-1])
+  function(){
+    if (length(L)==0) return(NULL)
+    out <- L[[1]]
+    L <<- L[-1]
+    out
   }
 }
 
 ## UNDER THE HOOD
 
-# replace a name by a call in a 'call' object.
-# x : a call object
-# what: a character, name to replace
-# replacement: a call to replace the name with.
-replace_in <- function(x, what, replacement){
-  if ( x == what ){
-    return (replacement)
-  } else if ( length(x) > 1 ) {
-    for ( i in seq_along(x) ) 
-      x[[i]] <- replace_in(x[[i]],what,replacement)
-  }
-  x
-}
 
-defines_group <- function(x){
-  x[[1]] == "var_group"
-}
-
-
+#' Replace occurrences of 'vargroup(v1,v2,...,vn)'
+#' calls: 'list' of calls
+#' output: the same list of calls, but ocurrences of 'vargroup' have been multiplied
+#'
 expand_groups <- function(calls){
-  i_groups <- sapply(calls, defines_group)
-  if ( !any(i_groups) ) return(calls)
-  groups <- setNames(calls[i_groups],NULL)
-  calls <- calls[!i_groups]
-  for (g in groups )
-    calls <- unlist(lapply(calls,eval(g)))
-  calls
+  L <- list()
+  for (k in seq_along(calls)){
+    # this copies the name.
+    U <- calls[k]
+    # find var groups, if any.
+    cl <- calls[[k]]
+    I <- which.call(cl,'var_group')
+    if (length(I) > 0){
+      i <- I[[1]]
+      i <- i[-length(i)]
+      f <- eval(cl[[i]])
+      U <- list()
+      while(!is.null(x <- f())){
+        u <- cl
+        u[[i]] <- x
+        U <- c(U,u)
+      }
+      names(U) <- paste0(names(calls)[k],".",seq_along(U))
+    }
+    L <- c(L,U)
+  }
+  L <- unlist(L)
+  # recurse to check if groups are still present.
+  if (length(L) > length(calls)) 
+    expand_groups(L) 
+  else 
+    L
 }
+
+
+
 
 
 #### ASSIGNMENT SUBSTITUTION --------------------------------------------------
