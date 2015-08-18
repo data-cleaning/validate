@@ -22,10 +22,10 @@ var_group <- function(...){
 ## UNDER THE HOOD
 
 
-#' Replace occurrences of 'vargroup(v1,v2,...,vn)'
-#' calls: 'list' of calls
-#' output: the same list of calls, but ocurrences of 'vargroup' have been multiplied
-#'
+# Replace occurrences of 'vargroup(v1,v2,...,vn)'
+# calls: 'list' of calls
+# output: the same list of calls, but ocurrences of 'vargroup' have been multiplied
+#
 expand_groups <- function(calls){
   L <- list()
   for (k in seq_along(calls)){

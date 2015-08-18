@@ -16,16 +16,24 @@
 #'   
 #' @section Groups:
 #' Often the same constraints/rules are valid for groups of variables. 
-#' \code{validate} allows for compact notation. First define a group and than use
-#' that group in a validator statement. 
+#' \code{validate} allows for compact notation. Variable groups can be used in-statement
+#' or by defining them with the \code{:=} operator.
 #' 
-#' \code{validator( var_group(name=g,a,b), g > 0 )}
+#' \code{validator( var_group(a,b) > 0 )}
+#' 
+#' is equivalent to
+#' 
+#' \code{validator(G := var_group(a,b), G > 0)}
+#' 
+#' is equivalent to
+#' 
+#' \code{validator(a>0,b>0)}.
 #' 
 #' Using two groups results in the cartesian product of checks. So the statement
 #'
-#' \code{validator( var_group(name=f,c,d), var_group(name=g,a,b), g > f)}
+#' \code{validator( f=var_group(c,d), g=var_group(a,b), g > f)}
 #' 
-#' equals 
+#' is equivalent to
 #' 
 #' \code{validator(a > c, b > c, a > d, b > d)}
 #' 
