@@ -26,16 +26,26 @@ data(women)
 summary(women)
 ```
 Validating data is all about checking wether a dataset meets presumtions or
-expectiations you have about it, and the validate package makes is super easy
-for you to define those expectations. Let's define a ```validator``` object
+expectiations you have about it, and the validate package makes it super easy
+for you to define those expectations. Let's do a quick check on variables
+in the `women` dataset.
+```
+cf <- check_that(women, height > 0, weight > 0)
+summary(cf)
+```
+`check_that` returns an object containing all sorts of information on the validation results.
+The easiest way to check the results is with `summary`, which returns a `data.frame`.
+
+
+
+Let's define a ```validator``` object
 that checks wether height and weight are positive.
 ```{r}
 library(validate)
 v <- validator(height > 0, weight > 0)
 v
 ```
-The validator object has stored the rule and assigned names to them (V0001 and
-V0002) for future reference.  To check this, we confront the dataset with the
+The validator object has stored the rule and assigned names to them for future reference.  To check this, we confront the dataset with the
 validation rules we've just defined:
 ```{r}
 cf <- confront(v, women)
