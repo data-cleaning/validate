@@ -13,6 +13,8 @@ NULL
 
 #' Define indicators for data
 #' 
+#' \bold{This feature is currently experimental and may change in future versions}
+#' 
 #' \code{\link{indicator}}
 #' @param ... A comma-separated list of indicator definitions
 #' @param .file (optional) A character vector of file locations
@@ -20,6 +22,7 @@ NULL
 #' @seealso \code{\link{syntax}}
 #' 
 #' @export
+#' @keywords internal
 #' @example ../examples/indicator.R
 indicator <- function(..., .file) new('indicator',..., .file=.file)
 
@@ -30,6 +33,8 @@ indicator <- function(..., .file) new('indicator',..., .file=.file)
 
 #' Store a set of rich indicator expressions
 #'
+#' \bold{This feature is currently experimental and may change in future versions}
+#' 
 #' @section Details:
 #' An indicator stores a set of indicators. It is a child class of \code{\link{expressionset}} and
 #' can be constructed with  \code{\link{indicator}}.
