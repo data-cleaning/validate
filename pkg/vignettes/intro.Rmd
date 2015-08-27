@@ -14,13 +14,24 @@ output:
 
 
 ### Introduction
-The validate package is intended to make checking your data easy, maintainable and reproducible. The validate package
-allows you to
+The validate package is intended to make checking your data easy, maintainable
+and reproducible. The validate package allows you to
+
 - Test your data set(s) against predefined rules, either in- or cross-data set
 - Store and re-use user-defined indicators, such as summary statistics
 - Compare multiple versions of your data set as it gets processed step by step during for example data cleaning.
 
-We've added plenty of summarizing and visualizations so you can get a quick and attractive look at the results.
+There are a few nouns related to the infrastructure offered by validate,
+
+- data set: your data
+- `validator` an object representing a set of rules your data must satisfy
+- `confrontation` an object representing the results of confronting data with rules
+
+There is also a single verb, namely
+
+- `confront`: evaluate the validation rules in the context of one or more data sets.
+
+
 
 ### A quick example
 Here's an example demonstrating the typical workflow. We'll use the built-in ```women``` data set (average heights and weighs for American women aged 30-39).
