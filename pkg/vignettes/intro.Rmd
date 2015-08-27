@@ -18,8 +18,9 @@ The validate package is intended to make checking your data easy, maintainable
 and reproducible. The validate package allows you to
 
 - Test your data set(s) against predefined rules, either in- or cross-data set
-- Store and re-use user-defined indicators, such as summary statistics
-- Compare multiple versions of your data set as it gets processed step by step during for example data cleaning.
+- Import and export rule sets from structured or free-format files
+- Investigate and visualize the results of a data validation step
+- Do basic rule maintenance tasks
 
 There are a few nouns related to the infrastructure offered by validate,
 
