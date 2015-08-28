@@ -121,9 +121,27 @@ The outcome of confronting a validator object with a data set is an object of cl
 `confrontation`. There are several ways to extract information from a `confrontation` object.
 
 - `summary`: summarize output; returns a `data.frame`
+- `aggregate`: aggregate validation in several ways
+- `sort` : aggregate and sort in several ways
 - `values`: Get the values in an array, or a list of arrays if rules have different output dimension structure
 - `errors`: Retrieve error messages caught during the confrontation
 - `warnings`: Retrieve warning messages caught during the confrontation.
+
+By default aggregates are produced by rule.
+```
+cf <- check_that(women, height>0, weight>0,height/weight < 0.5)
+aggregate(cf) 
+```
+To aggregate by record, use `by='record'`
+```
+head(aggregate(cf,by='record'))
+```
+Aggregated results can be automatically sorted, so records with the most violations or
+rules that are violated most sort higher.
+```{r}
+# rules with most violations sorting first:
+sort(cf)
+```
 
 Confrontation objects can be subsetted with single bracket operators (like vectors), to 
 obtain a sub-object pertaining only to the selected rules.
