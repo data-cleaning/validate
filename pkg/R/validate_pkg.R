@@ -31,6 +31,8 @@
 #' @useDynLib validate
 #' @aliases package-validate validate
 #' @import methods
+#' @importFrom graphics legend par text
+#' @importFrom utils getFromNamespace
 #' @import settings
 #' @import yaml
 NULL
