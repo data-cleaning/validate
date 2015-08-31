@@ -5,7 +5,9 @@ Title: Data Validation Infrastructure
 LazyData: no
 Type: Package
 LazyLoad: yes
-Author: Mark van der Loo, Edwin de Jonge
+Authors@R: c(person("Mark", "van der Loo",role=c("cre","aut"),email="mark.vanderloo@gmail.com")
+    , person("Edwin", "de Jonge", role="aut")
+    , person("Paul","Hsieh",role="ctb"))
 Description: Declare data validation rules and data quality indicators; confront 
     data with them and analyze or visualize the results. The package supports
     rules that are per-field, in-record, cross-record or cross-dataset. Rules
