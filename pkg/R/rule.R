@@ -89,6 +89,7 @@ setGeneric("variables", function(x,...) standardGeneric("variables"))
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setGeneric("origin<-",function(x,value) standardGeneric("origin<-"))
 
@@ -96,6 +97,7 @@ setGeneric("origin<-",function(x,value) standardGeneric("origin<-"))
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setGeneric("label<-",function(x,value) standardGeneric("label<-"))
 
@@ -103,6 +105,7 @@ setGeneric("label<-",function(x,value) standardGeneric("label<-"))
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setGeneric("description<-",function(x,value) standardGeneric("description<-"))
 
@@ -111,6 +114,7 @@ setGeneric("description<-",function(x,value) standardGeneric("description<-"))
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setGeneric("created<-",function(x,value) standardGeneric("created<-"))
 
@@ -140,6 +144,7 @@ setGeneric("is_tran_assign", function(x,...) standardGeneric("is_tran_assign"))
 #' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{created}}, \code{\link{variables}}}
 #' }
 #'  
+#' @example ../examples/properties.R
 #' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
@@ -154,6 +159,7 @@ setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
 #' \item{\code{\link{description}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
 #' }
+#' @example ../examples/properties.R
 #' @export
 setGeneric("label", function(x,...) standardGeneric("label"))
 
@@ -170,6 +176,7 @@ setGeneric("label", function(x,...) standardGeneric("label"))
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
 #' \item{\code{\link{label}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
 #' }
+#' @example ../examples/properties.R
 #' @export
 setGeneric("description", function(x,...) standardGeneric("description"))
 
@@ -186,6 +193,7 @@ setGeneric("description", function(x,...) standardGeneric("description"))
 #' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
 #' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{origin}} \code{\link{variables}}}
 #' }
+#' @example ../examples/properties.R
 #' @export
 setGeneric("created", function(x,...) standardGeneric("created"))
 

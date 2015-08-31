@@ -5,20 +5,16 @@
 #' analysis is verifying and validating your data. Package \code{validate} is a
 #' toolbox for creating validation rules and checking data against these rules.
 #' 
-#' Secondly, the package offers ways to create and maintain so-called indicators,
-#' that are particularly useful to follow the condition of a data set as it gets treated
-#' during cleaning and transformation. 
 #' 
 #' @section Getting started:
 #' 
 #' The easiest way to get started is through the examples given in \code{\link{check_that}}. 
 #' 
-#' The general workflow in \code{validate} follows the pattern of: 
+#' The general workflow in \code{validate} follows the following pattern.
 #' \itemize{
-#'   \item Defining a set of \code{\link{validator}} and/
-#'    \code{\link{indicator}} rules
-#'   \item \code{\link{confront}}ing data with the validator and indicator rules
-#'   \item Examining the results either graphically or by summary.
+#'   \item Define a set of rules using \code{\link{validator}}. 
+#'   \item \code{\link{confront}} data with the validation rules
+#'   \item Examine the results either graphically or by summary.
 #' }
 #'
 #' There are several convenience functions that allow one to define rules from the

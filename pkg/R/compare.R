@@ -302,15 +302,17 @@ setClass('cellComparison',contains='comparison')
 #' @param compare How to compare the datasets.
 #' 
 #' 
-#' @return An array, labeling the total number of cells, the number of missings,
-#' the number of altered values and changes therein as compared to the reference
-#' defined in \code{how}.
+#' @return An object of class \code{cellComparison}, which is really an array 
+#'   with a few attributes. It counts the total number of cells, the number of 
+#'   missings, the number of altered values and changes therein as compared to 
+#'   the reference defined in \code{how}.
 #'
 #' @seealso 
 #' \itemize{
 #'  \item{\code{\link{compare}}} 
 #'  \item{\code{\link{match_cells}}}
 #' }
+#' @example ../examples/cells.R
 #' @export 
 cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
   L <- c( list(...), .list)
@@ -322,12 +324,14 @@ cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
       if ( how == 'to_first'){
         vapply(L,FUN=compare2,FUN.VALUE=numeric(9),x=L[[1]],)
       } else { 
-        vapply(seq_along(L)
-           , FUN = function(i){
-             j = ifelse(i==1,1,i-1)     
-             compare2(L[[j]],L[[i]])
-           }, FUN.VALUE=numeric(10)
+        v <- vapply(seq_along(L)
+              , FUN = function(i){
+                j = ifelse(i==1,1,i-1)     
+                compare2(L[[j]],L[[i]])
+                }, FUN.VALUE=numeric(9)
         )
+        colnames(v) <- names(L)
+        v
       }
     , call=sys.call()
   )

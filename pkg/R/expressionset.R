@@ -202,7 +202,7 @@ show_expressionset <- function(obj){
   lab <- paste0(nam,ifelse(nchar(lab)>0,paste0(" [",lab,"]"),lab))
   n <- max(nchar(lab))
   lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE
-                                                , lin.eq.eps=0), call2text))
+                                                , lin_eq_eps=0), call2text))
   cat(noquote(paste(lab,collapse="\n")))
   opt <- ""
   if (!identical(obj$._options,PKGOPT)){
@@ -289,6 +289,7 @@ blocks_expressionset <- function(x){
 
 #' Create a summary
 #' @rdname validate-summary
+#' @example ../examples/summary.R
 setGeneric('summary')
 
 #' Get object lenght
@@ -299,6 +300,7 @@ setGeneric('summary')
 #'  \item{\code{\link{expressionset}}}
 #'  \item{\code{\link{confrontation}}}
 #' }
+#' @example ../examples/properties.R
 setGeneric("length")
 
 #' Export to yaml file
@@ -392,6 +394,7 @@ setMethod("created", "expressionset", function(x,...){
 #'
 #' @return A \code{character} with names of rules occurring in \code{x}
 #' @export
+#' @example ../examples/properties.R
 setMethod("names","expressionset",function(x){
   sapply(x$rules, function(rule) rule@name)
 })
@@ -400,6 +403,7 @@ setMethod("names","expressionset",function(x){
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("names",c("expressionset","character"),function(x,value){
   for ( i in seq_len(length(x))){
@@ -412,6 +416,7 @@ setReplaceMethod("names",c("expressionset","character"),function(x,value){
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("origin",c("expressionset","character"), function(x,value){
   for ( i in seq_len(length(x))){
@@ -424,6 +429,7 @@ setReplaceMethod("origin",c("expressionset","character"), function(x,value){
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("label",c("expressionset","character"),function(x,value){
   for ( i in seq_len(length(x))){
@@ -433,9 +439,11 @@ setReplaceMethod("label",c("expressionset","character"),function(x,value){
 })
 
 #' Set descriptions
-#'
+#' 
+#' 
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("description",c("expressionset","character"),function(x,value){
   for ( i in seq_len(length(x))){
@@ -448,6 +456,7 @@ setReplaceMethod("description",c("expressionset","character"),function(x,value){
 #'
 #' @param x Object
 #' @param value Value to set
+#' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("created",c("expressionset","POSIXct"),function(x,value){
   for ( i in seq_len(length(x))){

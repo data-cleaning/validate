@@ -3,6 +3,12 @@
 #' The functions mentioned in this help file should only be used in the
 #' context of defining a \code{\link{validator}} or \code{\link{indicator}} object.
 #'
+#' @section Note:
+#' This document only provides a short reference. Please refer to the vignette for worked
+#' examples.
+#' 
+#' vignette("intro",package="validate")
+#'
 #' @name syntax
 #' 
 #'
@@ -38,24 +44,11 @@
 #' \code{validator(a > c, b > c, a > d, b > d)}
 #' 
 #' @section File parsing:
-#'
-#' TODO: update to YAML
+#' Please see the vignette on how to read rules from and write rules to file:
+#' 
+#' \code{vignette("rule-files",package="validate")}
+#' 
 #'   
-#' @section Global, permanent assignment (files only):
-#' 
-#' TODO: update to YAML.
-#' 
-#' When reading rules from file there are a few statements that are executed immediately. These are statements who are
-#' either 
-#' \itemize{
-#'  \item{An assignment with \code{<-}}
-#'  \item{A \code{library} statement.}
-#' }
-#' Rather then executing the rhs of \code{:=} at each confrontation with data, the
-#' \code{<-} operator causes the rhs to be evaluated immediately on read. The assigned variable (lhs) 
-#' is substituted in all rules. This may be useful for example when you want to read a classification from
-#' file. The \code{library} statement allows for including R packages needed in to execute validation 
-#' (or indication) rules.
 NULL
 
 

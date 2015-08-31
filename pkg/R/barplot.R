@@ -30,6 +30,7 @@ setGeneric("barplot")
 #'  \item{\code{\link{validation}}}
 #' }
 #' @aliases barplot,validation-method 
+#' @example ../examples/barplot.R
 #' @export  
 setMethod('barplot',signature('validation'), 
   function(height, ..., order_by = c("fails","passes","nNA")

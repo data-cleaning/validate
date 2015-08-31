@@ -150,7 +150,7 @@ setGeneric('values',def=function(x,...) standardGeneric('values'))
 #' \itemize{
 #'  \item{\code{\link{confront}}}
 #' }
-#' 
+#' @example ../examples/exceptions.R
 #' @export 
 setGeneric("errors",def = function(x,...) standardGeneric("errors"))
 
@@ -532,6 +532,7 @@ setMethod("warnings","confrontation",function(x,...){
 #'  \item{\code{\link{validation}}}
 #' }
 #' @aliases aggregate,validation-method
+#' @example ../examples/aggregate.R
 #' @export
 setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'), drop=TRUE,...){
   v <- values(x, drop=FALSE)
@@ -593,6 +594,7 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
 #'  \item{\code{\link{validation}}}
 #' }
 #' @aliases sort,validation-method
+#' @example ../examples/aggregate.R
 #' @export 
 setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rule','record'), drop=TRUE,...){
   v <- values(x, drop=FALSE)
