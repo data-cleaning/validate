@@ -15,7 +15,7 @@ output:
 
 ### Introduction
 The validate package is intended to make checking your data easy, maintainable
-and reproducible. The validate package allows you to
+and reproducible. The package allows you to
 
 - Test your data set(s) against predefined rules, either in- or cross-data set
 - Import and export rule sets from structured or free-format files
@@ -41,7 +41,7 @@ data(women)
 summary(women)
 ```
 Validating data is all about checking whether a data set meets presumptions or
-expectations you have about it, and the validate package makes it super easy
+expectations you have about it, and the validate package makes it easy
 for you to define those expectations. Let's do a quick check on variables
 in the `women` data set.
 ```{r}
@@ -128,12 +128,12 @@ The outcome of confronting a validator object with a data set is an object of cl
 - `warnings`: Retrieve warning messages caught during the confrontation.
 
 By default aggregates are produced by rule.
-```
+```{r}
 cf <- check_that(women, height>0, weight>0,height/weight < 0.5)
 aggregate(cf) 
 ```
 To aggregate by record, use `by='record'`
-```
+```{r}
 head(aggregate(cf,by='record'))
 ```
 Aggregated results can be automatically sorted, so records with the most violations or
@@ -164,7 +164,9 @@ confront(women, v, raise='all')
 ```
 
 
-Linear equalities form an important class of validation rules. To prevent equalities to be strictly tested, there is an option called `len.eq.eps` (with default value $10^{-8}$) that allows one to add some slack to these tests.
+Linear equalities form an important class of validation rules. To prevent equalities to be strictly tested, there is an option called `len.eq.eps` (with default value $10^{-8}$) that allows one to add some slack to these tests. The amount of slack is intended to prevent false negatives (unneccesary failures) caused by machine rounding. If you want to check whether a sum-rule is satisfied to within one or two units of measurement, it is cleaner to define two inequalities for that.
+
+
 
 
 

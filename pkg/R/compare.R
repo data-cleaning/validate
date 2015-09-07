@@ -322,7 +322,7 @@ cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
     
   new('cellComparison',
       if ( how == 'to_first'){
-        vapply(L,FUN=compare2,FUN.VALUE=numeric(9),x=L[[1]],)
+        vapply(L,FUN=compare2,FUN.VALUE=numeric(9),x=L[[1]])
       } else { 
         v <- vapply(seq_along(L)
               , FUN = function(i){

@@ -35,7 +35,7 @@ We can read the rules using
 ```{r,eval=FALSE}
 v <- validator(.file="ex-1.txt")
 ```
-Note that the `#` is used to start comment-lines, just like in regular R syntax.
+Note that the `#` is used to start comment-lines, just like in regular R syntax. Validation rules may span several lines. The only restriction is that rules are stated in valid syntax and can be recognized by validate as validating (basically, it should result in a `logical`).
 
 
 ### Importing from yaml files

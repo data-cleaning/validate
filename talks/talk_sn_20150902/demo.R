@@ -3,7 +3,7 @@
 # simple use
 library(validate)
 cf <- check_that(women
-      , height>0
+      , height > 0
       , height/weight < 0.5
       )
 summary(cf)
@@ -12,6 +12,19 @@ library(magrittr)
 women %>% 
   check_that(height > 0, height/weight < 0.5) %>% 
   summary()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # storing rules
 data(retailers)
@@ -24,9 +37,11 @@ v <- validator(
   , turnover + other.rev == total.rev
   , profit + total.costs == total.rev
 )
-cf <- confront(retailers,v)
+cf <- confront(retailers, v)
 summary(cf)
 barplot(cf,main="Retailers")
+
+aggregate(cf)
 
 
 

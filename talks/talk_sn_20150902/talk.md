@@ -297,7 +297,7 @@ Object of class rule.
  label      :  
  description:  
  origin     : command-line 
- created    : 2015-09-02 11:35:23
+ created    : 2015-09-02 11:55:29
 ```
 
 Metadata from file: yaml format
