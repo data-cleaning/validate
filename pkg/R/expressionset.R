@@ -67,7 +67,18 @@ expressionset <- setRefClass("expressionset"
 )
 
 
-## Service for filling an expressionset from commandline
+#' Service for filling an expressionset from commandline
+#'
+#' @section Details:
+#' This function is aimed at developers importing the package and 
+#' not at direct users of \pkg{validate}.
+#'
+#' @param obj An expressionset object (or an object inheriting from expressionset).
+#' @param ... Comma-separated list of expressions
+#' @param .prefix Prefix to use in default names.
+#'
+#' @export
+#' @keywords internal
 ini_expressionset_cli <- function(obj, ..., .prefix="R"){  
 
   L <- as.list(substitute(list(...))[-1])
@@ -85,7 +96,19 @@ ini_expressionset_cli <- function(obj, ..., .prefix="R"){
   obj$rules <- R
 }
 
-## TODO: Service for creating child objects of expressionset from file
+
+#' Service for filling an expressionset from file
+#'
+#' @section Details:
+#' This function is aimed at developers importing the package and 
+#' not at direct users of \pkg{validate}.
+#'
+#' @param obj An expressionset object (or an object inheriting from expressionset).
+#' @param file a filename
+#' @param .prefix Prefix to use in default names.
+#'
+#' @export
+#' @keywords internal
 ini_expressionset_yml <- function(obj, file, .prefix="R"){
   S <- get_filestack_yml(file)
   R <- list()
