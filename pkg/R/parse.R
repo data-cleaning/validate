@@ -9,7 +9,7 @@ PKGOPT <- options_manager(
   # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
    raise = 'none'
    , lin.eq.eps = 1e-8
-#  , preproc_symbols = c('<-','library')
+   , na.value = NA
 )
 
 

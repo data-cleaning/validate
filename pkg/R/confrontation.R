@@ -387,7 +387,11 @@ execute <- function(calls,env,opts){
         warning(sprintf("Locally overwriting variable '%s'",var))
         assign(var, tryCatch( eval(right(g), env), error=warning), envir=env)
     } else { 
-      factory(eval,opts)(g, env)
+      val <- factory(eval,opts)(g, env)
+      if ( !is.na(opts('na.value')) ){
+        val[[1]] <- ifelse(is.na(val[[1]]), opts('na.value'), val[[1]])
+      }
+      val
     }
   )[!is.assignment(calls)]
 }

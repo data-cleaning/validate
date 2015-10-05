@@ -83,6 +83,7 @@ ini_validator <- function(obj, ..., .file){
   } else {
     ini_expressionset_yml(obj, file=.file, .prefix="V")
   }
+  # do options check.
 }
 
 # note: for some reason this function is not testable from devtools::test('pkg')
