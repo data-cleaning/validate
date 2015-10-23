@@ -3,12 +3,12 @@ context("Utilities")
 
 test_that('Options can be set',{
   # warning on nonexistent option 
-  expect_warning(validate_options(fiets=3))
+  expect_warning(voptions(fiets=3))
   # invalid 'raise' value -- not implemented yet
-  #expect_error(validate_options(raise='aap'))
+  #expect_error(voptions(raise='aap'))
   # this should run without problems
-  validate_reset(validate_options)
-  expect_equal(validate_options('raise')[[1]],'none')
+  validate_reset(voptions)
+  expect_equal(voptions('raise')[[1]],'none')
 })
 
 

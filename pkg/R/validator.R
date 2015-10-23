@@ -87,7 +87,7 @@ ini_validator <- function(obj, ..., .file){
 
 # note: for some reason this function is not testable from devtools::test('pkg')
 check_primitives <- function(){
-  # todo: extract this from validate_options()
+  # todo: extract this from voptions()
    prim <- c("<","<=","==","!=",">=",">","%in%")
    for ( p in prim )
      if (!identical(body(p),body(getFromNamespace(p,"base"))))

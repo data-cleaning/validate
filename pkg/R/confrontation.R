@@ -76,7 +76,7 @@ setRefClass("confrontation"
 #' @param dat An R object carrying data
 #' @param x An R object carrying \code{\link{rule}}s.
 #' @param ref Optionally, an R object carrying reference data. See examples for usage.
-#' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{validate_options}}.
+#' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{voptions}}.
 #' 
 #' 
 #' @section Using reference data:
@@ -94,7 +94,7 @@ setRefClass("confrontation"
 #' 
 #' @seealso
 #' \itemize{
-#'  \item{\code{\link{validate_options}}}
+#'  \item{\code{\link{voptions}}}
 #'  \item{\code{\link{summary,validation-method}}, \code{\link{aggregate,validation-method}}, \code{\link{sort,validation-method}}}
 #'  \item{\code{\link{summary,indication-method}}}
 #'  \item{\code{\link{indicator}}, \code{\link{indicator-class}}}

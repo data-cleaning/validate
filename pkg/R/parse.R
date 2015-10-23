@@ -30,14 +30,14 @@ PKGOPT <- options_manager(
 #' @section Details:
 #' There are three ways in which options can be specified.
 #' \itemize{
-#' \item{Globally. Setting \code{validate_options(option1=value1,option2=value2,...)} sets global options.
-#' \item{Per object. Setting \code{validate_options(where=<object>, option1=value1,...)}, causes all relevant functions
+#' \item{Globally. Setting \code{voptions(option1=value1,option2=value2,...)} sets global options.
+#' \item{Per object. Setting \code{voptions(where=<object>, option1=value1,...)}, causes all relevant functions
 #' that use that object (e.g. \code{\link{confront}}) to use those local settings.}
 #' \item{At execution time. Relevant functions (e.g. \code{\link{confront}}) take optional arguments allowing one
 #' to define options to be used during the current function call}
 #' }}
 #' 
-#' To set options in a file, use \code{validate_options(option1=value1,option2=value2,...)} without the \code{where}
+#' To set options in a file, use \code{voptions(option1=value1,option2=value2,...)} without the \code{where}
 #' argument. This will invoke a local setting in the object created when the file is parsed.
 #' 
 #' @return When requesting option settings: a \code{list}. When setting options, the whole options 
@@ -50,27 +50,37 @@ PKGOPT <- options_manager(
 #' @export
 #' @examples
 #' # the default allowed validation symbols.
-#' validate_options('validator_symbols')
+#' voptions('validator_symbols')
 #' 
 #' # set an option, local to a validator object:
 #' v <- validator(x + y > z)
-#' validate_options(v,raise='all')
+#' voptions(v,raise='all')
 #' # check that local option was set:
-#' validate_options(v,'raise')
+#' voptions(v,'raise')
 #' # check that global options have not changed:
-#' validate_options('raise')
-setGeneric('validate_options',def = function(x=NULL,...) standardGeneric('validate_options'))
+#' voptions('raise')
+setGeneric('voptions',def = function(x=NULL,...) standardGeneric('voptions'))
 
-#' @rdname validate_options
-setMethod('validate_options','ANY',function(x=NULL,...){
+#' @rdname voptions
+setMethod('voptions','ANY',function(x=NULL,...){
   do.call(PKGOPT,c(x,list(...)))
 })
 
-#' @rdname validate_options
+#' @rdname voptions
+#' @export 
+validate_options <- function(...){ 
+  .Deprecated(new="voptions")
+    voptions(...)
+}
+
+#' @rdname voptions
 #' @export
 setGeneric('validate_reset',def=function(x=NULL) standardGeneric('validate_reset'))
 
-#' @rdname validate_options
+
+
+
+#' @rdname voptions
 setMethod('validate_reset','ANY',function(x=NULL){
   settings::reset(PKGOPT)
 })

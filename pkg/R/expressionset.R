@@ -213,7 +213,16 @@ get_filestack_yml <- function(file){
 
 
 
-
+#' Print an expressionset to screen
+#'
+#' @section Details:
+#' This function is aimed at developers importing the package and 
+#' not at direct users of \pkg{validate}.
+#' 
+#' @param obj
+#'
+#' @export
+#' @keywords internal
 show_expressionset <- function(obj){
   nr <- length(obj)
   cat(sprintf(
@@ -374,8 +383,8 @@ setMethod("variables", "expressionset",  function(x, as=c('vector','matrix','lis
 
 
 
-#' @rdname validate_options
-setMethod('validate_options','expressionset',function(x=NULL,...){
+#' @rdname voptions
+setMethod('voptions','expressionset',function(x=NULL,...){
   if (settings::is_setting(...)){
     x$._options <- clone_and_merge(x$._options,...)
   } else {
@@ -383,7 +392,7 @@ setMethod('validate_options','expressionset',function(x=NULL,...){
   }
 })
 
-#' @rdname validate_options
+#' @rdname voptions
 setMethod('validate_reset','expressionset',function(x=NULL){
   settings::reset(x$._options)
 })

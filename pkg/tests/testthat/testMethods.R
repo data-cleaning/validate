@@ -76,7 +76,7 @@ test_that("yaml export",{
   # test that options are included, only when provided
   v <- validator(x>0)
   expect_false(grepl("options:",as_yaml(v)))
-  validate_options(v,raise="all")
+  voptions(v,raise="all")
   expect_true(grepl("options:",as_yaml(v)))
 })
 

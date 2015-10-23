@@ -35,7 +35,7 @@ test_that("Parsing yrf format", {
 
 test_that("Parsing options",{
   v <- validator(.file="yamltests/yamloptions.yaml") 
-  expect_equal(validate_options(v,"raise"),"all")
+  expect_equal(voptions(v,"raise"),"all")
   expect_equal(length(v),1)
 })
 
