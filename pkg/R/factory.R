@@ -24,7 +24,7 @@ factory <- function(fun,opts){
     }
     , 'all' = function(...){
       warn <- err <- NULL
-      res <- fun(...) # errors and warinings are raised.
+      res <- fun(...) # errors and warnings are raised.
       list(res,warn=warn,err=err)
     }
   )
