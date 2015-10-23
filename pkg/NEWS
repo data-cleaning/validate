@@ -1,0 +1,5 @@
+version 0.1.4
+- Deprecated 'validate_options' in favour of the shorter 'voptions'
+
+version 0.1.3
+- initial release
