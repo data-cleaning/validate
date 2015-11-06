@@ -100,9 +100,9 @@ setRefClass("confrontation"
 #'  \item{\code{\link{indicator}}, \code{\link{indicator-class}}}
 #'  \item{\code{\link{validator}}, \code{\link{validator-class}}}
 #' }
-#' @export 
 #' 
 #' @example ../examples/confront.R
+#' @export 
 setGeneric("confront",
   def = function(dat, x, ref, ...) standardGeneric("confront")
 )

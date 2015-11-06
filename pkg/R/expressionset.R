@@ -343,10 +343,10 @@ setGeneric("length")
 #' @param file A file location or connection (passed to \code{base::\link[base]{write}}).
 #' @param ... Options passed to \code{yaml::\link[yaml]{as.yaml}}
 #' 
-#' @export
 #' 
 #' @example ../examples/export_yaml.R
 #' 
+#' @export
 setGeneric("export_yaml",function(x,file,...) standardGeneric("export_yaml"))
 
 #' @rdname export_yaml
