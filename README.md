@@ -21,7 +21,4 @@ Next, install `validate` as follows.
 drat::addRepo("data-cleaning")
 install.packages("validate")
 ```
-Note that the beta version can contain bugs and interfaces that may not be stable.
-
-
-
+Note that the beta version can contain bugs and interfaces that may not be stable..
