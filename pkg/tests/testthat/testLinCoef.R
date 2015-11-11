@@ -19,6 +19,10 @@ test_that("linear coeffiencts can be derived",{
   expect_equivalent(z$linear_coefficients()$b,matrix(3,1,1))
 })
 
+test_that("linear equalities are detected",{
+  expect_false(validator(x=="aap")$is_linear())
+})
+
 test_that("normalisation can be switched off",{
   # check normalisation
   z <- validator(2*x + 1 +  y -2 > 4 + z - 8)

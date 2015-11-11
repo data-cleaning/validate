@@ -219,6 +219,7 @@ right <- function(x) if ( is.call(x) ) x[[min(length(x),3)]] else NULL
 
 
 linear_call <- function(x){
+  if (is.character(x)) return(FALSE)
   if ( is.null(node(x)) ) return(TRUE) 
   n <- deparse(node(x))
   if ( !n %in% c("+","-","*","<","<=","==",">=",">" ) ) return(FALSE)
