@@ -75,13 +75,13 @@ validate_options <- function(...){
 
 #' @rdname voptions
 #' @export
-setGeneric('validate_reset',def=function(x=NULL) standardGeneric('validate_reset'))
+setGeneric('reset',def=function(x=NULL) standardGeneric('reset'))
 
 
 
 
 #' @rdname voptions
-setMethod('validate_reset','ANY',function(x=NULL){
+setMethod('reset','ANY',function(x=NULL){
   settings::reset(PKGOPT)
 })
 

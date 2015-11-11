@@ -7,7 +7,7 @@ test_that('Options can be set',{
   # invalid 'raise' value -- not implemented yet
   #expect_error(voptions(raise='aap'))
   # this should run without problems
-  validate_reset(voptions)
+  reset(voptions)
   expect_equal(voptions('raise')[[1]],'none')
 })
 

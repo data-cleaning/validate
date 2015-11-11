@@ -393,7 +393,7 @@ setMethod('voptions','expressionset',function(x=NULL,...){
 })
 
 #' @rdname voptions
-setMethod('validate_reset','expressionset',function(x=NULL){
+setMethod('reset','expressionset',function(x=NULL){
   settings::reset(x$._options)
 })
 
