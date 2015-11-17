@@ -38,6 +38,12 @@ test_that("Variables can be retrieved",{
   )
   v <- validator(x + y > 0, z>0)
   expect_equal(sort(variables(v[[1]])), c('x','y'))
+  
+  # test reuse of dummy variables to define other dummies.
+  # this also tests expand_assignments
+  v <- validator( dummy_x:=1,  dummy_y:= dummy_x + 1, z > dummy_y)
+  expect_equal(variables(v, dummy=FALSE),"z")
+  
 })
 
 

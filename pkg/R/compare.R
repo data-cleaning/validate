@@ -38,7 +38,7 @@ setMethod('show',signature('comparison'),function(object){
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
-#' 
+#' Compare data sets
 #'
 #' @param how how to compare
 #' @param .list Optional list of data sets, will be concatenated with \code{...}.

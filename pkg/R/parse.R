@@ -75,13 +75,13 @@ validate_options <- function(...){
 
 #' @rdname voptions
 #' @export
-setGeneric('validate_reset',def=function(x=NULL) standardGeneric('validate_reset'))
+setGeneric('reset',def=function(x=NULL) standardGeneric('reset'))
 
 
 
 
 #' @rdname voptions
-setMethod('validate_reset','ANY',function(x=NULL){
+setMethod('reset','ANY',function(x=NULL){
   settings::reset(PKGOPT)
 })
 
@@ -219,6 +219,7 @@ right <- function(x) if ( is.call(x) ) x[[min(length(x),3)]] else NULL
 
 
 linear_call <- function(x){
+  if (is.character(x)) return(FALSE)
   if ( is.null(node(x)) ) return(TRUE) 
   n <- deparse(node(x))
   if ( !n %in% c("+","-","*","<","<=","==",">=",">" ) ) return(FALSE)

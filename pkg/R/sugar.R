@@ -67,12 +67,13 @@ expand_groups <- function(calls){
 ## Substitute assignments in subsequent calls
 expand_assignments <- function(calls){
   e <- new.env()
-  lapply(calls, function(x) 
-    if(x[[1]] == ':=') 
-      add_assignment(x,e) 
-    else 
-      substitute_assignments(x,e)
-    )[!is.assignment(calls)]
+  lapply(calls, function(x){ 
+      x <- substitute_assignments(x,e)
+      if(x[[1]] == ':=') 
+        add_assignment(x,e) 
+      x
+    }
+  )[!is.assignment(calls)]
 }
 
 substitute_assignments <- function(call,assignments){

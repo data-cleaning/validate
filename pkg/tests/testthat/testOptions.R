@@ -5,7 +5,7 @@ test_that("Options can be set and reset locally",{
   v <- validator()
   voptions(v, raise='all')
   expect_false(voptions()$raise == voptions(v)$raise, info="local option set")
-  validate_reset(v)
+  reset(v)
   expect_equal(voptions(v,'raise'),"none",info="local option reset")
 })
 
