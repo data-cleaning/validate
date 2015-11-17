@@ -40,8 +40,8 @@ PKGOPT <- options_manager(
 #' To set options in a file, use \code{voptions(option1=value1,option2=value2,...)} without the \code{where}
 #' argument. This will invoke a local setting in the object created when the file is parsed.
 #' 
-#' @return When requesting option settings: a \code{list}. When setting options, the whole options 
-#' list is returned silently.
+#' @return When requesting option settings: a \code{list}. When setting options,
+#'   the whole options list is returned silently.
 #'
 #' @param x (optional) an object inheriting from \code{expressionset} such as \code{\link{validator}} or \code{\link{indicator}}.
 #' @param ... Name of an option (character) to retrieve options or \code{option = value} pairs to set options. 
