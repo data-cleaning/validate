@@ -10,6 +10,7 @@ PKGOPT <- options_manager(
    raise = 'none'
    , lin.eq.eps = 1e-8
    , na.value = NA
+   , sequential = TRUE # option for the 'dcmodify' package
 )
 
 
