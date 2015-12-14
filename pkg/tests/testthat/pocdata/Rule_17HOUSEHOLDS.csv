@@ -1,0 +1,6 @@
+"household-id","members","expected"
+1,2,"valid"
+2,3,"invalid"
+3,2,"invalid"
+4,3,"valid"
+5,,"undecided"

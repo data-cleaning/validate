@@ -1,0 +1,7 @@
+"person-id","person","year_of_birth","gender","expected"
+1,"Ernie",1965,"male","valid"
+2,"Bert",1967,"male","invalid"
+3,"Elmo",1997,"male","valid"
+4,"Kermit",1974,"male","valid"
+5,"Rosita",,"female","undecided"
+6,"Grover",2001,"invalid"

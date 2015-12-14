@@ -1,0 +1,6 @@
+"product-id","season","price_t","quantity_t","price_t-1","quantity_t-1","expected"
+1,"in",12,5,12,5,"valid"
+2,"out",12,5,12,5,"valid"
+3,"out",12,5,15,5,"invalid"
+4,"out",12,5,12,4,"invalid"
+5,"out",12,5,12,,"undecided"

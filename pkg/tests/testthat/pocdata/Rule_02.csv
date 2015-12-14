@@ -1,0 +1,5 @@
+"business-id","cost","profit","turnover","expected"
+1,24,48,72,"valid"
+2,13,50,64,"invalid"
+3,5,-10,-5,"valid"
+4,,10,11,"undecided"
