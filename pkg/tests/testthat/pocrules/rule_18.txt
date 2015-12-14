@@ -1,0 +1,5 @@
+# def_max:
+total_members :=  household$members[match(household_id, household$household_id)]
+
+# rule18:
+person_id >= 1 && person_id <= total_members

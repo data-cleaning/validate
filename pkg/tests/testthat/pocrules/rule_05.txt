@@ -1,0 +1,5 @@
+# def_age_gp:
+age_gp :=  age[match(grandchild_of, person_id)]
+
+# rule_04:
+age_gp - 28 >= age

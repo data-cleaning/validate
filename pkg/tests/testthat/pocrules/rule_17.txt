@@ -1,0 +1,5 @@
+# def_count:
+person_count :=  table(person$household_id)
+
+# rule17:
+members == person_count[household_id]

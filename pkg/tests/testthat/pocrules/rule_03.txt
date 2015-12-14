@@ -1,0 +1,5 @@
+# def_03:
+counts :=  table(level)
+
+# rule_03:
+counts["high"] < 0.1 * sum(counts)

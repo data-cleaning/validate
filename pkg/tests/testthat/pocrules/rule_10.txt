@@ -1,0 +1,2 @@
+# rule_10:
+any(business_id == 100 & turnover > 1e+06)

@@ -1,0 +1,2 @@
+# rule_01:
+hours_worked >= 1 & hours_worked <= 80

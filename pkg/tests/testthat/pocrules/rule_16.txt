@@ -1,0 +1,14 @@
+# def_parent:
+with_parent :=  sub("\\.?\\d+$", "", level)
+
+# def_is_parent:
+is_parent :=  level %in% with_parent
+
+# def_par_lev:
+parent_levels :=  level[is_parent]
+
+# def_childsum:
+childsum :=  tapply(weight, with_parent, sum)
+
+# rule_16:
+weight[is_parent] == childsum[parent_levels]

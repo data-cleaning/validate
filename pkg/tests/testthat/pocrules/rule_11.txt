@@ -1,0 +1,2 @@
+# rule_11:
+sum(business_id == 100 & turnover > 1e+06) == 1

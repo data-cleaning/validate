@@ -1,0 +1,3 @@
+# rule_04:
+(price_t - price_tmin1) <= 0.5 * price_tmin1 & (price_t - price_Ymin1) <= 
+    0.5 * price_Ymin1
