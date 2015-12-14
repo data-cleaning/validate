@@ -68,6 +68,15 @@ test_that("Confrontation methods with reference data",{
   cf3 <- confront(women, v2, ref=e)
   expect_equal(summary(cf1)[1:7],summary(cf2)[1:7])
   expect_equal(summary(cf2)[1:7],summary(cf3)[1:7])
+  
+  # warning when the data-carrying environment has variables with the
+  # same name as the parent.
+  
+     expect_warning(confront(
+      dat   = data.frame(test=10)
+      , x   = validator(test==test$aap)
+      , ref = list(test=data.frame(aap=7)))
+     )
 })
 
 

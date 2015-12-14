@@ -321,13 +321,25 @@ setMethod("confront", signature("data.frame","validator"), function(dat, x, key=
 })
 
 
+namecheck <- function(x){
+  n1 <- ls(x)
+  n2 <- ls(parent.env(x))
+  i <- n1 %in% n2
+  if (any(i)){
+    n <- paste(paste0("'",n1[i],"'"),collapse=", ") 
+    w <- sprintf("Possible reference ambiguity: both current data set and reference data have variables named %s.",n)
+    warning(w)
+  }
+  x
+}
+
 #' @rdname confront
 setMethod("confront",signature("data.frame","validator","environment"), function(dat, x, ref, key=NULL, ...){
   classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
   if ( !all(class(dat) == classes)  )
     stop("Class of one or more elements in 'ref' differs from 'dat'")
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
-  dat <- list2env(dat,parent=ref)  
+  dat <- namecheck(list2env(dat,parent=ref))
   confront_work(x,dat,key,class="validation",...)
 })
 
@@ -336,7 +348,7 @@ setMethod("confront",signature("data.frame","validator","data.frame"),function(d
   env <- new.env()
   env$ref <- ref
   if (!is.null(key)) match_rows(of=env, against=dat, using=key)
-  dat <- list2env(dat, parent=env)
+  dat <- namecheck(list2env(dat, parent=env))
   confront_work(x, dat, key, class="validation", ...)
 })
 
@@ -347,7 +359,7 @@ setMethod("confront",signature("data.frame","validator","list"),function(dat, x,
     stop("Class of one or more elements in 'ref' differs from 'dat'")
   env <- list2env(ref)  
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
-  dat <- list2env(dat,parent=env)  
+  dat <- namecheck(list2env(dat,parent=env))
   confront_work(x,dat,key,class="validation",...)  
 })
 
