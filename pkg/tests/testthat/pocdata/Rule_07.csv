@@ -1,4 +1,4 @@
-"product-id","price_t","price_tm1","expected"
+"product_id","price_t","price_tm1","expected"
 1,15.5,16.99,"invalid"
 2,17.3,18,"valid"
 3,12.5,20,"invalid"

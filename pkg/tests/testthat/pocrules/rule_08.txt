@@ -1,2 +1,2 @@
 # rule_08:
-person_id == person$person_id
+year_of_birth == persons$year_of_birth

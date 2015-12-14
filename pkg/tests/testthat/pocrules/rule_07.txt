@@ -1,6 +1,9 @@
-# def_ratio:
-ratio :=  abs(mean(price_t) - mean(price_tm1) + (price_tm1 - 
-    price_t)/length(price_t)/(mean(price_t) - mean(price_tm1)))
+# def_ratio
+meani := mean(price_t)  + (price_tm1 - price_t)/length(price_t)
+ratio := abs(meani-mean(price_tm1))/abs(mean(price_t)-mean(price_tm1))
 
-# rule_07:
-ratio >= 0.9 && ratio <= 1.1
+# rule_07
+ratio >= 0.9 & ratio <= 1.1
+
+
+

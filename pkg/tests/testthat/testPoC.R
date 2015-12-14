@@ -1,0 +1,73 @@
+
+context("Rules from PoC ESSnet on validation")
+
+test_that("Rule 01 poc",{
+  dat <- read.csv("pocdata/Rule_01.csv")
+  v <- validator(.file="pocrules/rule_01.txt")
+  expect_equivalent(values(confront(dat,v)),matrix(c(TRUE,FALSE,NA),nrow=3))
+})
+
+test_that("Rule 02 poc",{
+  dat <- read.csv("pocdata/Rule_02.csv")
+  v <- validator(.file="pocrules/rule_02.txt")
+  expect_equivalent(values(confront(dat,v)), matrix(c(TRUE,FALSE, TRUE,NA),nrow=4))
+})
+
+test_that("Rule 03 poc",{
+  v <- validator(.file="pocrules/rule_03.txt")
+  dat <- read.csv("pocdata/Rule_03_valid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(TRUE))
+  dat <- read.csv("pocdata/Rule_03_invalid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+  dat <- read.csv("pocdata/Rule_03_invalid_with_missings.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+})
+
+test_that("Rule 04 poc",{
+  v <- validator(.file="pocrules/rule_04.txt")
+  dat <- read.csv("pocdata/Rule_04.csv")
+  expect_equivalent(values(confront(dat,v,na.value=FALSE)),matrix(c(TRUE,FALSE,FALSE,FALSE),nrow=4))
+
+})
+
+test_that("Rule 05 poc",{
+  v <- validator(.file="pocrules/rule_05.txt")
+  dat <- read.csv("pocdata/Rule_05.csv")
+  expect_equivalent(
+    values(confront(dat,v))
+    , matrix(c(TRUE, FALSE, NA, NA, FALSE, NA),nrow=6)
+  )
+})
+
+test_that("Rule 06 poc",{
+  v <- validator(.file="pocrules/rule_06.txt")
+  dat <- read.csv("pocdata/Rule_06.csv")
+  expect_equivalent(
+    values(confront(dat,v))
+    , matrix(c(TRUE,TRUE,FALSE,FALSE,NA),nrow=5)
+  )
+})
+
+test_that("Rule 07 poc",{
+  v <- validator(.file="pocrules/rule_07.txt")
+  dat <- read.csv("pocdata/Rule_07.csv")
+  expect_equivalent(
+    values(confront(dat,v))
+    , matrix(c(FALSE,TRUE,FALSE,TRUE),nrow=4)
+  )
+})
+
+
+test_that("Rule 08 poc",{
+  v <- validator(.file="pocrules/rule_08.txt")
+  dat <- read.csv("pocdata/Rule_08HH.csv")
+  ref <- read.csv("pocdata/Rule_08PERSON.csv")
+  expect_equivalent(
+   values(confront(dat,v,ref=list(persons=ref)))
+   , matrix(c(TRUE,FALSE,TRUE,TRUE,NA,FALSE),nrow=6)
+  )
+})
+
+
+
+

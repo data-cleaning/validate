@@ -1,4 +1,4 @@
-"person-id","age","grandchild_of","expected"
+"person_id","age","grandchild_of","expected"
 1,12,3,"valid"
 2,16,3,"invalid"
 3,42,,"undecided"
