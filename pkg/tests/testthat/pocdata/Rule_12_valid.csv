@@ -1,4 +1,4 @@
-"person-id","spouse-id","relation_to_head"
+"person_id","spouse_id","relation_to_head"
 1,4,4
 2,3,4
 3,2,3

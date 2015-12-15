@@ -1,4 +1,4 @@
-"person-id","name","gender","age-group"
+"person_id","name","gender","age_group"
 1,"John","male","child"
 2,"Lucy","female","child"
 3,"Tom","male","adult"

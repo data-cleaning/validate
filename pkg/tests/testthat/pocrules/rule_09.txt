@@ -1,2 +1,2 @@
 # rule_09:
-all(age >= 0 && age <= 113)
+all(age >= 0 & age <= 113)

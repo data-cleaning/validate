@@ -2,4 +2,4 @@
 counts :=  table(gender, age_group)
 
 # rule_13:
-counts <= 1
+all(counts <= 1)

@@ -1,14 +1,13 @@
-# def_parent:
-with_parent :=  sub("\\.?\\d+$", "", level)
+# define parent:
+parents :=  sub("\\.[0-9]$","",level)
+is_parent := level %in% parents
 
-# def_is_parent:
-is_parent :=  level %in% with_parent
+# define child sums, by search for parent pattern.
+child_sums := sapply(level[is_parent], function(x){ 
+    sum(weight[grepl(paste0("^",x,".[0-9]$"),level)])
+  })
+# rule 16 
+all(weight[is_parent] == child_sums)
 
-# def_par_lev:
-parent_levels :=  level[is_parent]
 
-# def_childsum:
-childsum :=  tapply(weight, with_parent, sum)
 
-# rule_16:
-weight[is_parent] == childsum[parent_levels]

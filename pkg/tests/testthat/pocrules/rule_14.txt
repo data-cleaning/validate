@@ -1,11 +1,4 @@
-# def_counts:
-counts :=  table(gender, age_group)
-
-# rule_gender:
-gender %in% c("male", "female")
-
-# rule_ag:
-age_group %in% c("child", "adult", "senior")
-
-# rule_complete:
-counts == 1 && sum(counts) == 6
+# rule 14
+all(table(gender, age_group) >= 1) & 
+  all(c("male", "female") %in% gender) &
+  all(c("child","adult","senior") %in% age_group)

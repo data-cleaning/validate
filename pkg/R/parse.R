@@ -133,8 +133,10 @@ var_from_call <- function(x){
 # }
 
 # find a symbol in a call. Returns a list of multi-indices.
+# occurrences of variable names in a function signature are skipped.
 which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
-  if (x == what){
+  # skip signatures (=pairlist)
+  if (!is.pairlist(x) && x == what){
     e[[paste0('x',e$n)]] <- I
     e$n <- e$n + 1
   }

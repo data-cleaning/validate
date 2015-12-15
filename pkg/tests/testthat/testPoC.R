@@ -70,4 +70,109 @@ test_that("Rule 08 poc",{
 
 
 
+test_that("Rule 09 poc",{
+  v <- validator(.file="pocrules/rule_09.txt")
+  dat <- read.csv("pocdata/Rule_09_undecided.csv")
+  expect_equivalent(values(confront(dat,v)), matrix(NA))
+  dat <- read.csv("pocdata/Rule_09_valid.csv")
+  expect_equivalent(values(confront(dat,v)), matrix(TRUE))
+  dat <- read.csv("pocdata/Rule_09_invalid.csv")
+  expect_equivalent(values(confront(dat,v)), matrix(FALSE))
+})
+
+
+test_that("Rule 10 poc",{
+  v <- validator(.file="pocrules/rule_10.txt")
+  dat <- read.csv("pocdata/Rule_10_invalid1.csv")
+  expect_equivalent(values(confront(dat,v)), matrix(FALSE))
+  dat <- read.csv("pocdata/Rule_10_invalid2.csv")
+  expect_equivalent(values(confront(dat,v)), matrix(FALSE))
+  dat <- read.csv("pocdata/Rule_10_valid.csv")
+  expect_equivalent(values(confront(dat,v)), matrix(TRUE))
+})
+
+
+test_that("Rule 11 poc",{
+  v <- validator(.file="pocrules/rule_11.txt")
+  dat <- read.csv("pocdata/Rule_11_invalid1.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+
+  dat <- read.csv("pocdata/Rule_11_invalid2.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+
+  dat <- read.csv("pocdata/Rule_11_undecided.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(NA))
+ 
+  dat <- read.csv("pocdata/Rule_11_valid1.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(TRUE))
+
+  dat <- read.csv("pocdata/Rule_11_valid2.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(TRUE))
+})
+
+
+test_that("Rule 12 poc",{
+
+  v <- validator(.file="pocrules/rule_12.txt")
+  dat <- read.csv("pocdata/Rule_12_invalid1.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+
+  dat <- read.csv("pocdata/Rule_12_invalid2.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+
+  dat <- read.csv("pocdata/Rule_12_valid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(TRUE))
+
+})
+
+
+test_that("Rule 13 poc",{
+
+  v <- validator(.file="pocrules/rule_13.txt")
+  dat <- read.csv("pocdata/Rule_13_invalid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+
+  dat <- read.csv("pocdata/Rule_13_valid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(TRUE))
+
+
+})
+
+
+test_that("Rule 14 poc",{
+
+  v <- validator(.file="pocrules/rule_14.txt")
+  dat <- read.csv("pocdata/Rule_14_invalid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+
+  dat <- read.csv("pocdata/Rule_14_valid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(TRUE))
+
+})
+
+test_that("Rule 15 poc",{
+
+  v <- validator(.file="pocrules/rule_15.txt")
+  dat <- read.csv("pocdata/Rule_15.csv")
+  expect_equivalent(
+    values(confront(dat,v))
+   ,   matrix(c(TRUE,TRUE,TRUE,FALSE,TRUE),nrow=5)
+   )
+})
+
+
+
+test_that("Rule 16 poc",{
+
+  v <- validator(.file="pocrules/rule_16.txt")
+  dat <- read.csv("pocdata/Rule_16_invalid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(FALSE))
+  dat <- read.csv("pocdata/Rule_16_valid.csv")
+  expect_equivalent(values(confront(dat,v)),matrix(TRUE))
+
+})
+
+
+
+
 
