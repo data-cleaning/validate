@@ -1,5 +1,7 @@
-# def_max:
-total_members :=  household$members[match(household_id, household$household_id)]
-
-# rule18:
-person_id >= 1 && person_id <= total_members
+# define vector with T/F value for each household
+test := sapply(1:length(household_id), function(i){
+  hhid <- household_id[i]
+  all(1:members[i] %in% persons$person_id[persons$household_id == hhid])
+})
+# rule must hold for all households
+all(test)

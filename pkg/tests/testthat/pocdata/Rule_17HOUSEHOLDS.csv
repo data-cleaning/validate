@@ -1,4 +1,4 @@
-"household-id","members","expected"
+"household_id","members","expected"
 1,2,"valid"
 2,3,"invalid"
 3,2,"invalid"

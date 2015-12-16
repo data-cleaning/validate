@@ -136,6 +136,7 @@ test_that("Rule 13 poc",{
   expect_equivalent(values(confront(dat,v)),matrix(TRUE))
 
 
+
 })
 
 
@@ -173,6 +174,32 @@ test_that("Rule 16 poc",{
 })
 
 
+test_that("Rule 17 poc",{
+
+  v <- validator(.file="pocrules/rule_17.txt")
+  dat <- read.csv("pocdata/Rule_17HOUSEHOLDS.csv")
+  dat1 <- read.csv("pocdata/Rule_17PERSONS.csv")
+  expect_equivalent(
+    values( confront(dat,v,ref=list(person=dat1) ) )
+    , matrix(c(TRUE,FALSE,FALSE,TRUE,NA),nrow=5)
+  )
+})
+
+test_that("Rule 18 poc",{
+  v <- validator(.file="pocrules/rule_18.txt")
+  dat <- read.csv("pocdata/Rule_18HOUSEHOLDS.csv")
+  dat1 <- read.csv("pocdata/Rule_18PERSONS_invalid.csv")
+  expect_equivalent(
+    values(confront(dat, v, ref=list(persons=dat1)))
+    ,matrix(FALSE)
+  )
+  dat1 <- read.csv("pocdata/Rule_18PERSONS_valid.csv")
+  expect_equivalent(
+    values(confront(dat, v, ref=list(persons=dat1)))
+    , matrix(TRUE)
+  )
+
+})
 
 
 
