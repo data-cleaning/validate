@@ -3,9 +3,20 @@
 [![CRAN](http://www.r-pkg.org/badges/version/validate)](http://cran.r-project.org/package=validate/)
 [![Downloads](http://cranlogs.r-pkg.org/badges/validate)](http://www.r-pkg.org/pkg/validate) 
 
-This package is the next iteration of our [editrules](https://cran.r-project.org/web/packages/editrules/index.html) package for the R environment for statistical computing.
 
-The validate package will focus on data validation, leaving tasks like error localization to packages that are built upon it. `validate` can handle more general rules then editrules, including cross-record rules cross-dataset rules and functional dependencies. 
+Easy data validation for the masses.
+-----------------------------------
+
+The `validate` R-package makes it super-easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set. Next you can confront a dataset, or various versions thereof with the rules. Results can be summarized, plotted, and so on.
+
+To get started, please read our [Introductory vignette](https://cran.r-project.org/web/packages/validate/vignettes/intro.html).
+
+With `validate`, data validation rules are treated as first-class citizens. This means you can import, export, annotate, investigate
+and manipulate data validation rules in a meaninful way. See [this vignette](https://cran.r-project.org/web/packages/validate/vignettes/rule-files.html) for rule import/export.
+
+
+#### Installation
+
 
 The latest release can be installed from the R command-line
 ```
