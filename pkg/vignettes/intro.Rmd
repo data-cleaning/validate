@@ -8,7 +8,7 @@ output:
     theme: united
 ---
 <!--
-%\VignetteEngine{knitr}
+%\VignetteEngine{knitr::rmarkdown}
 %\VignetteIndexEntry{Introduction to validate}
 -->
 
