@@ -1,4 +1,5 @@
 version 0.1.5
+- bugfix in blocking: wrong nr of blocks in case of a single connected block.
 - exported a few functions w/ keywords internal for extensibility
 
 version 0.1.4
