@@ -123,7 +123,13 @@ setGeneric("validating",function(x,...) standardGeneric('validating'))
 
 setGeneric("linear",function(x,...) standardGeneric("linear"))
 
-# retrieve expression
+#' Get expressions
+#'
+#' @param x Object
+#' @param ... options to be passed to other functions
+#' @keywords internal
+#' @export
+#' @rdname expr
 setGeneric("expr",def=function(x,...) standardGeneric("expr"))
 
 # check for transient assignments (:=)
@@ -200,7 +206,7 @@ setGeneric("created", function(x,...) standardGeneric("created"))
 
 
 # S4 METHODS ------------------------------------------------------------------
-
+#' @rdname expr
 setMethod("expr","rule",function(x,...) x@expr)
 
 #' @describeIn variables Retrieve unique variable names

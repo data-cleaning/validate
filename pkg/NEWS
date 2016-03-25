@@ -1,3 +1,6 @@
+version 0.1.5
+- exported a few functions w/ keywords internal for extensibility
+
 version 0.1.4
 - 'confront' now emits a warining when variable name conflicts can occur.
 - Deprecated 'validate_reset', in favour of the shorter 'reset' (use 'validate::reset' in case of ambiguity)
