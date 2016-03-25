@@ -38,8 +38,6 @@ setMethod('show',signature('comparison'),function(object){
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
-#' Compare data sets
-#'
 #' @param how how to compare
 #' @param .list Optional list of data sets, will be concatenated with \code{...}.
 #' @rdname compare
@@ -91,6 +89,7 @@ setMethod('compare', 'validator',
 
 ## INTERNAL helper-outers
 
+#
 # y : object to compare against x
 # x : reference object to compare against (note the order!)
 setGeneric('compare2',def=function(y,x,...) standardGeneric('compare2'))
@@ -236,7 +235,8 @@ make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
 
 
 setClass('indicatorComparison',contains='comparison')
-#'
+
+
 #' @return For \code{indicator}: A list with the following components:
 #' \itemize{
 #' \item{\code{numeric}: An array collecting results of scalar indicator (e.g. \code{mean(x)}).}
