@@ -7,7 +7,18 @@
 Easy data validation for the masses.
 -----------------------------------
 
-The `validate` R-package makes it super-easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set. Next you can confront a dataset, or various versions thereof with the rules. Results can be summarized, plotted, and so on.
+The `validate` R-package makes it super-easy to check whether data lives up to expectations you have based on domain knowledge. It works by allowing you to define data validation rules independent of the code or data set. Next you can confront a dataset, or various versions thereof with the rules. Results can be summarized, plotted, and so on. Below is a simple example.
+
+```
+> library(validate)
+> library(magrittr)
+> iris %>% check_that(Sepal.Width < 0.5*Sepal.Length) %>% summary()
+  rule items passes fails nNA error warning                       expression
+1   V1   150     79    71   0 FALSE   FALSE Sepal.Width < 0.5 * Sepal.Length
+```
+
+
+
 
 To get started, please read our [Introductory vignette](https://cran.r-project.org/web/packages/validate/vignettes/intro.html).
 

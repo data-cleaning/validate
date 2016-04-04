@@ -4,6 +4,13 @@ version 0.1.4
 - Deprecated 'validate_options' in favour of the shorter 'voptions'
 - New option na.value with default value NA, controlling the output when a rule evaluates to NA.
 - Added rules from the ESSnet on validation (deliverable 17) to automated tests.
+- added 'grepl' to allowed validation syntax (suggested by Dusan Sovic)
+- exported a few functions w/ keywords internal for extensibility
+- 'confront' now emits a warining when variable name conflicts can occur.
+- Deprecated 'validate_reset', in favour of the shorter 'reset' (use 'validate::reset' in case of ambiguity)
+- Deprecated 'validate_options' in favour of the shorter 'voptions'
+- New option na.value with default value NA, controlling the output when a rule evaluates to NA.
+- Bugfix: blocks sometimes reported wrong nr of blocks (in case of a single connected block.)
 - Bugfix: macro expansion failed when macros were reused in other macros.
 - Bugfix: certain nonlinear relations were recognized as linear
 - Bugfix: rules that use (anonymous) function definitions raised error when printed.

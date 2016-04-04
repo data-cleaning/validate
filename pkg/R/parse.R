@@ -3,9 +3,18 @@ NULL
 
 # File parsing and functions computing on the language
 
-
-
-PKGOPT <- options_manager(
+#' Services for extending 'validate'
+#'
+#' Functions exported silently to allow for cross-package inheritance 
+#' of the \code{\link{expressionset}} object. These functions are never
+#' needed in scripts or statistical production code.
+#'
+#' @rdname validate_extend
+#' @param .__defaults toggle default options
+#' @param .__reset togle reset options 
+#' @export
+#' @keywords internal
+.PKGOPT <- settings::options_manager(
   # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
    raise = 'none'
    , lin.eq.eps = 1e-8
@@ -65,7 +74,7 @@ setGeneric('voptions',def = function(x=NULL,...) standardGeneric('voptions'))
 
 #' @rdname voptions
 setMethod('voptions','ANY',function(x=NULL,...){
-  do.call(PKGOPT,c(x,list(...)))
+  do.call(.PKGOPT,c(x,list(...)))
 })
 
 #' @rdname voptions
@@ -84,7 +93,7 @@ setGeneric('reset',def=function(x=NULL) standardGeneric('reset'))
 
 #' @rdname voptions
 setMethod('reset','ANY',function(x=NULL){
-  settings::reset(PKGOPT)
+  settings::reset(.PKGOPT)
 })
 
 
@@ -235,7 +244,7 @@ linear_call <- function(x){
 
 validating_call <- function(cl){
   pure <- c("<", "<=", "==", "!=", ">=", ">", "%in%", "identical", "~" ,"%->%"
-          , "any_missing", "any_duplicated","var_group")
+          ,"grepl" ,"any_missing", "any_duplicated","var_group")
   unary <- c("!", "(", "all", "any" )
   binary <- c("|","||","&","&&","if","xor")
 

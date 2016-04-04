@@ -16,9 +16,6 @@ done
 echo "######## Removing building information..."
 rm -rf output
 
-echo "######## Copying DESCRIPTION to pkg directory..."
-cp build/DESCRIPTION pkg
-#cp build/NAMESPACE pkg
 
 echo "######## Generate documentation..."
 ## $R -q -f document.R

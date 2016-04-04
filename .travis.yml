@@ -1,24 +1,27 @@
-language: c
+
+# travis config
+
+language: r
+sudo: false
+cache: packages
 
 before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-install:
-  - cp ./build/DESCRIPTION ./pkg
+  - R -e "install.packages(c('devtools','roxygen2'))"
+  - R -e "devtools::install_deps('./pkg')"
+  - R -e "devtools::document('./pkg')"
   - cd ./pkg
-  - ../travis-tool.sh install_deps
-  - ../travis-tool.sh install_r roxygen2
-  - R -e "roxygen2::update_collate('.');devtools::document()"
-script: 
-  - ../travis-tool.sh run_tests
-after_failure:
-  - ../travis-tool.sh dump_logs
+
+r_packages:
+  - covr
+  - rmarkdown
+
+
 after_success:
-  - ../travis-tool.sh install_r covr
   - Rscript -e 'library(covr);coveralls()'
 
 notifications:
   email:
     on_success: change
     on_failure: change
+
+

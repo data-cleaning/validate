@@ -1,7 +1,6 @@
 # parse yaml rule files
 
-
-readlines_utf8 <- function(file, encoding="unknown"){
+.readlines_utf8 <- function(file, encoding="unknown"){
   lines <- readLines(con=file, encoding=encoding)
   enc2utf8(lines)
 }
@@ -26,15 +25,18 @@ is_full_path <- function(string){
 }
 
 
-
-parse_yrf_options <- function(lines){
+# @rdname validate_extend
+# @param lines lines read from a yaml file
+# @export
+# @keywords internal
+.parse_yrf_options <- function(lines){
   option_lines <- filter_yrf_options(lines)
   L <- yaml::yaml.load(string = paste0(option_lines,collapse="\n"))
   L$options
 }
 
 parse_yrf_include <- function(file){
-  lines <- readlines_utf8(file)
+  lines <- .readlines_utf8(file)
   option_lines <- filter_yrf_options(lines)
   L <- yaml::yaml.load(string = paste0(option_lines,collapse="\n"))
   paths <- L$include

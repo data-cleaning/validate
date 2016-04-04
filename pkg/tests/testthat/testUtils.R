@@ -63,6 +63,12 @@ test_that('blocks works',{
     , u + v == w
     , u > 0)
   expect_equal(length(v$blocks()),2)
+  
+  v <- validator(x +y ==z, x+z>0)
+  expect_equal(length(v$blocks()),1)
+  
+  
+  
 })
 
 

@@ -63,10 +63,10 @@ setRefClass("indicator", contains='expressionset',
 ini_indicator <- function(obj, ..., .file){
   
   if (missing(.file)){
-    ini_expressionset_cli(obj, ..., .prefix="I")
-    obj$._options <- PKGOPT
+    .ini_expressionset_cli(obj, ..., .prefix="I")
+    obj$._options <- .PKGOPT
   } else {
-    ini_expressionset_yml(obj, file, .prefix="V")
+    .ini_expressionset_yml(obj, file, .prefix="V")
   }
   obj
 }
