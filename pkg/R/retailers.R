@@ -1,6 +1,7 @@
 #' @name retailers
-#' @title data on Dutch retailers
-#' @description Data on revenue and cost structure for 60 retailers. All currency is in thousands of guilders.
+#' @title data on retailers
+#' @description Anonymized and distorted data on revenue and cost structure for 60 retailers. 
+#' Currency is in thousands (of dollars or euros or guilders, ...)
 #'
 #' \itemize{
 #'  \item size: Size class
