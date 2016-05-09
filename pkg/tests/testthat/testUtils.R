@@ -46,8 +46,8 @@ test_that('compare works',{
   d2 <- data.frame(x=c(NA,2,NA),y=c(4,5,NA))  
   v <- validator(x>0,y<5)
   a <- array(
-    c(6,6,0,6,0,4,4,0,2,2,0
-      ,6,3,3,3,0,2,2,0,1,1,0 ),dim=c(11,2)
+    c( 6,6,0,0,0,4,4,0,2,2,0
+      ,6,3,3,0,3,2,2,0,1,1,0 ),dim=c(11,2)
   )
   expect_equivalent(unclass(compare(v,d1,d2)),a)  
 })

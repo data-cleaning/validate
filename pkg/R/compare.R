@@ -50,8 +50,8 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' \item{Number of validations that evaluate to a logical (verifiable)}
 #' \item{Number of validations that evaluate to \code{TRUE}}
 #' \item{Number of validations that evaluate to \code{FALSE}}
-#' \item{Number of extra validations that evaluate to \code{NA} (new, unverifiable)}
-#' \item{Number of validations that still evaluate to \code{NA}}
+#' \item{Number of extra validations that evaluate to \code{NA} (new unverifiable)}
+#' \item{Number of validations that still evaluate to \code{NA} (still unverifialble)}
 #' \item{Number of validations that still evaluate to \code{TRUE}}
 #' \item{Number of extra validations that evaluate to \code{TRUE} }
 #' \item{Number of validations that still evaluate to \code{FALSE}}
@@ -105,8 +105,8 @@ setMethod('compare2',signature('validation','validation'),
     validations      = rep( sum(sapply(vx, length)), 2)
     unverifiable     = c(unverifiable(vx), unverifiable(vy))
     verifiable       = validations-unverifiable
-    still_verifiable = c(verifiable[1],still_verifiable(vx,vy))
-    new_verifiable   = verifiable - still_verifiable
+    still_unverifiable = c(unverifiable[1],still_unverifiable(vx,vy))
+    new_unverifiable = unverifiable - still_unverifiable
     satisfied        = c(satisfied(vx),satisfied(vy))
     still_satisfied  = c(satisfied[1], still_satisfied(vx,vy))
     new_satisfied    = satisfied - still_satisfied
@@ -118,8 +118,8 @@ setMethod('compare2',signature('validation','validation'),
        validations           
       , verifiable         
       , unverifiable       
-      , still_verifiable   
-      , new_verifiable     
+      , still_unverifiable   
+      , new_unverifiable     
       , satisfied          
       , still_satisfied    
       , new_satisfied      
@@ -133,8 +133,8 @@ setMethod('compare2',signature('validation','validation'),
         'validations'           
       , 'verifiable'         
       , 'unverifiable'       
-      , 'still_verifiable'   
-      , 'new_verifiable'     
+      , 'still_unverifiable'   
+      , 'new_unverifiable'     
       , 'satisfied'          
       , 'still_satisfied'    
       , 'new_satisfied'      
@@ -148,6 +148,10 @@ setMethod('compare2',signature('validation','validation'),
 # v : values('validation')
 unverifiable <- function(x){
   sum(sapply(x,function(y) sum(is.na(y))))
+}
+
+still_unverifiable <- function(x,y){
+  sum(sapply(seq_along(x), function(i) sum(is.na(x[[i]]) & is.na(y[[i]]))) )
 }
 
 # y wrt x
