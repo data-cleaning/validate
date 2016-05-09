@@ -12,7 +12,7 @@ Description: Declare data validation rules and data quality indicators; confront
     data with them and analyze or visualize the results. The package supports
     rules that are per-field, in-record, cross-record or cross-dataset. Rules
     can be automatically analyzed for rule type and connectivity.
-version: 0.1.5
+Version: 0.1.5
 Depends:
     R (>= 3.2.0)
 URL: https://github.com/data-cleaning/validate
