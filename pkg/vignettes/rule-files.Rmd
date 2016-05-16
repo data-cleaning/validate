@@ -79,11 +79,6 @@ The latter remark means that this is wrong:
 rules:
 - 
   expr: !is.na(height) 
-  name: height
-  label: height positivity
-  description: |
-   According to the latest research, the average height of American women
-   must be positive. 
 ```
 
 and this is ok:
@@ -92,11 +87,6 @@ and this is ok:
 rules:
 - 
   expr: '!is.na(height)' 
-  name: height
-  label: height positivity
-  description: |
-   According to the latest research, the average height of American women
-   must be positive. 
 ```
 
 Rules exported with ```export_yaml``` are enquoted by default.
