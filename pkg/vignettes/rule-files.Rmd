@@ -60,7 +60,7 @@ rules:
 ```
 This file can be read in the same way.
 ```
-v <- validate(.file='rules.yaml')
+v <- validator(.file='rules.yaml')
 ```
 There are a few things to note here:
 
