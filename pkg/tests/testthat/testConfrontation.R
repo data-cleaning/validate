@@ -77,6 +77,10 @@ test_that("Confrontation methods with reference data",{
       , x   = validator(test==test$aap)
       , ref = list(test=data.frame(aap=7)))
      )
+     
+  # self-reference on data set.
+  expect_true(values(check_that(women,nrow(.)==15))[1,1])
+     
 })
 
 
