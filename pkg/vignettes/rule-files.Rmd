@@ -60,7 +60,7 @@ rules:
 ```
 This file can be read in the same way.
 ```
-v <- validate(.file='rules.yaml')
+v <- validator(.file='rules.yaml')
 ```
 There are a few things to note here:
 
@@ -70,6 +70,31 @@ There are a few things to note here:
 there are two spaces of indentation before a key name (`expr`, `name`, and so on). For long rules
 or pieces of text, you can add a `|` or `>` after the colon and add a multiline string. You need
 to start on a new line and add an extra indentation.
+- Any entry starting with an exclamation mark (```!```) must be enquoted since the exclamation
+mark has special meaning in YAML.
+
+The latter remark means that this is wrong:
+```
+# READING THIS FILE FAILS
+rules:
+- 
+  expr: !is.na(height) 
+```
+
+and this is ok:
+```
+# READING THIS FILE SUCCEEDS
+rules:
+- 
+  expr: '!is.na(height)' 
+```
+
+Rules exported with ```export_yaml``` are enquoted by default.
+
+
+
+
+
 
 ### Mixing free form and yaml
 This is possible. Just separate free-form sections from structured sections with
