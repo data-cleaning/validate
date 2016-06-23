@@ -1,4 +1,5 @@
 version 0.1.5
+- The '.' is now used to reference the validated data set as whole.
 - Small change in output of 'compare' to match the table in van den Broek et al. (2013)
 
 
