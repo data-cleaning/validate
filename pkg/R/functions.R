@@ -12,7 +12,7 @@
 #' @name syntax
 #'
 #' 
-#' @section Refernce the dataset as a whole
+#' @section Refernce the dataset as a whole:
 #' 
 #' Metadata such as numer of rows, columns, column names and so on can be 
 #' tested by referencing the whole data set with the '\code{.}'. For example,
