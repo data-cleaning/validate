@@ -10,7 +10,15 @@
 #' vignette("intro",package="validate")
 #'
 #' @name syntax
+#'
 #' 
+#' @section Refernce the dataset as a whole
+#' 
+#' Metadata such as numer of rows, columns, column names and so on can be 
+#' tested by referencing the whole data set with the '\code{.}'. For example,
+#' the rule \code{nrow(.) == 15} checks whether there are 15 rows in the
+#' dataset at hand.
+#'    
 #'
 #' @section Local, transient assignment:
 #' The operator `\code{:=}' can be used to set up local variables (during, for example, validation) to save
