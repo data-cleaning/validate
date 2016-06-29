@@ -25,6 +25,10 @@ To get started, please read our [Introductory vignette](https://cran.r-project.o
 With `validate`, data validation rules are treated as first-class citizens. This means you can import, export, annotate, investigate
 and manipulate data validation rules in a meaninful way. See [this vignette](https://cran.r-project.org/web/packages/validate/vignettes/rule-files.html) for rule import/export.
 
+#### Resources
+
+- The [talk](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) given at [useR2016](http://www.useR2016.org)
+
 
 #### Installation
 
