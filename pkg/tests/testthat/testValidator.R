@@ -21,5 +21,13 @@ test_that("setting properties",{
    
 })
 
+test_that("regression tests",{
+  # Issue #65 reported by Andrew R Gibson
+  # used to crash
+  v <- validator(weight<150, Fred < Jim) 
+  created(v) <- rep(as.POSIXct('2015-01-01'), length(v))
+})
+
+
  
  
