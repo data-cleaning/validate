@@ -176,12 +176,12 @@ setGeneric('sort')
 confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   opts <- x$clone_options(...)
   lin_eq_eps <- opts('lin.eq.eps')
-  calls <- x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps)
+  calls <- x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps,dat=dat)
   L <- execute(calls,dat,opts)
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))
-      , ._calls = x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps)
+      , ._calls = calls
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)
