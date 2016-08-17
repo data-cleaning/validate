@@ -1,4 +1,8 @@
 
+# an example checking metadata
+v <- validator(nrow(.) == 15, ncol(.) > 2)
+summary(confront(women, v))
+
 # An example using reference data
 v <- validator(weight == ref$weight)
 summary(confront(women, v, women))

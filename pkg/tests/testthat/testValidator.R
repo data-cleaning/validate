@@ -21,5 +21,18 @@ test_that("setting properties",{
    
 })
 
+test_that("regression tests",{
+  # Issue #65 reported by Andrew R Gibson
+  # used to crash
+  v <- validator(weight<150, Fred < Jim) 
+  created(v) <- rep(as.POSIXct('2015-01-01'), length(v))
+  
+  # Issue #67 reported by Kevin Kuo
+  dat <- data.frame(A = c("X","Y"),B=c("Y","Y"),stringsAsFactors=FALSE)
+  expect_equivalent(values(check_that(dat,A == B)),array(c(FALSE,TRUE),dim=c(2,1)))
+  
+})
+
+
  
  

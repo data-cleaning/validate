@@ -329,7 +329,7 @@ setReplaceMethod("created",c("rule","POSIXct"),function(x,value){
   if (length(value) > 1){
     stop("timestamp must be 'POSIXct' of length 1")
   }
-  x@description <- value
+  x@created <- value
   x
 })
 

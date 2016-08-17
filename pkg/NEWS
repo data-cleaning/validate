@@ -1,3 +1,8 @@
+version 0.1.6
+- Package now 'depends' on methods to allow dispatch on objects inhereting from data.frame
+- bugfix: The assignment created(<validator>) <- <POSIXct> was broken. #65, thanks to Andrew R Gibson.
+- bugfix: Simple equallity checks on character data behaved unexpectedly. #67, thanks to Kevin Kuo.
+
 version 0.1.5
 - The '.' is now used to reference the validated data set as whole.
 - Small change in output of 'compare' to match the table in van den Broek et al. (2013)

@@ -35,7 +35,7 @@ There is also a single verb, namely
 
 
 ### A quick example
-Here's an example demonstrating the typical workflow. We'll use the built-in ```women``` data set (average heights and weighs for American women aged 30-39).
+Here's an example demonstrating the typical workflow. We'll use the built-in ```women``` data set (average heights and weights for American women aged 30-39).
 ```{r }
 data(women)
 summary(women)

@@ -176,12 +176,12 @@ setGeneric('sort')
 confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   opts <- x$clone_options(...)
   lin_eq_eps <- opts('lin.eq.eps')
-  calls <- x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps)
+  calls <- x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps,dat=dat)
   L <- execute(calls,dat,opts)
   if (!is.null(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call = match.call(call=sys.call(sys.parent(2)))
-      , ._calls = x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps)
+      , ._calls = calls
       , ._value = lapply(L,"[[",1)
       , ._warn =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)
@@ -238,8 +238,9 @@ setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
 setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=NULL,...){
-  dat <- list2env(dat)
-  confront_work(x,dat,key,'indication',...)
+  data_env <- list2env(dat)
+  data_env$. <- dat
+  confront_work(x,data_env,key,'indication',...)
 })
 
 
@@ -350,8 +351,9 @@ setMethod("confront",signature("data.frame","validator","data.frame"),function(d
   env <- new.env()
   env$ref <- ref
   if (!is.null(key)) match_rows(of=env, against=dat, using=key)
-  dat <- namecheck(list2env(dat, parent=env))
-  confront_work(x, dat, key, class="validation", ...)
+  data_env <- namecheck(list2env(dat, parent=env))
+  data_env$. <- dat
+  confront_work(x, data_env, key, class="validation", ...)
 })
 
 #' @rdname confront
@@ -361,8 +363,9 @@ setMethod("confront",signature("data.frame","validator","list"),function(dat, x,
     stop("Class of one or more elements in 'ref' differs from 'dat'")
   env <- list2env(ref)  
   if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
-  dat <- namecheck(list2env(dat,parent=env))
-  confront_work(x,dat,key,class="validation",...)  
+  data_env <- namecheck(list2env(dat,parent=env))
+  data_env$. <- dat
+  confront_work(x,data_env,key,class="validation",...)  
 })
 
 
