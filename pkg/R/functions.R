@@ -1,13 +1,13 @@
 #' Syntax to define validation or indicator rules
 #'
-#' The functions mentioned in this help file should only be used in the
-#' context of defining a \code{\link{validator}} or \code{\link{indicator}} object.
+#' A concise overview of the \code{validate} syntax.
+#' 
 #'
 #' @section Note:
 #' This document only provides a short reference. Please refer to the vignette for worked
 #' examples.
 #' 
-#' vignette("intro",package="validate")
+#' \code{vignette("intro",package="validate")}
 #'
 #' @name syntax
 #'
@@ -61,14 +61,20 @@ NULL
 
 
 #### MISSINGNES COUNTERS ------------------------------------------------------
+#
+# These are currently hidden in documentation and will be deleted eventually since
+# we now have the "." to reference the dataset. Other convenience functions might take
+# their place later.
 
-# NOTE: the '*_missing' functions could probably be speeded up by writing dedicated C-implementations.
-
+#' Missingness counters (DEPRECATED)
+#'
 #' @param ... comma-separated list of variable names (not character). If no
 #'  variables are specified, the number of missings over all data is counted.
 #'  
 #' @return For \code{number_missing}, the total number of missings over all specified variables.
-#' @rdname syntax 
+#' @rdname nofun
+#' @keywords internal
+#' @export 
 number_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
   vars <- matchvars(L,parent.frame())
@@ -81,7 +87,7 @@ number_missing <- function(...){
 }
 
 
-#' @rdname syntax
+#' @rdname nofun
 #' @return For \code{fraction_missing}, the fraction of missings over all specified variables
 fraction_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
@@ -95,7 +101,7 @@ fraction_missing <- function(...){
   sum(v[1,])/sum(v[2,])
 }
 
-#' @rdname syntax
+#' @rdname nofun
 #' @return For \code{row_missing} a vector with the number of missings per (sub)record defined by \code{...}.
 row_missing <- function(...){
   L <- as.list(substitute(list(...))[-1])
@@ -107,7 +113,7 @@ row_missing <- function(...){
     ,Id))
 }
 
-#' @rdname syntax
+#' @rdname nofun
 #' @return For \code{col_missing} a vector with the number of missings per column 
 #'    defined by \code{...}.
 col_missing <- function(...){
@@ -120,7 +126,7 @@ col_missing <- function(...){
   ,Id))  
 }
 
-#' @rdname syntax
+#' @rdname nofun
 #' @return For \code{number_unique} the number of records, unique for 
 #'   the columns specified in \code{...}.
 number_unique <- function(...){
@@ -130,7 +136,7 @@ number_unique <- function(...){
   length(unique(do.call(paste0,mget(vars,parent.frame()))))
 }
 
-#' @rdname syntax
+#' @rdname nofun
 #' @return For \code{any_missing}, \code{TRUE} if any \code{NA} occur in the columns
 #'   specified in \code{...}.
 any_missing <- function(...){
@@ -143,7 +149,7 @@ any_missing <- function(...){
   a
 }
 
-#' @rdname syntax
+#' @rdname nofun
 #' @return For \code{any_duplicated}, \code{TRUE} if any (sub)records specified by
 #'  \code{...} are duplicated, \code{FALSE} otherwise. Note that \code{NA} is matched with \code{NA}.
 any_duplicated <- function(...){
