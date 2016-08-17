@@ -30,11 +30,15 @@ NULL
 #' Currently the following options are supported.
 #' 
 #' \itemize{
-#'  \item{raise ('none','error','all'; 'none') Control if the \code{\link{confront}} methods catch or raise exceptions. 
+#'  \item{\code{na.value} (\code{NA},\code{TRUE},\code{FALSE}; \code{NA}) Value
+#'  to return when a validating statement results in \code{NA}.}
+#'  \item{\code{raise} (\code{"none"},\code{"error"},\code{"all"};
+#'  \code{"none"}) Control if the \code{\link{confront}} methods catch or raise
+#'  exceptions.
 #'  The 'all' setting is useful when debugging validation scripts.}
-#'  \item{lin.eq.eps ('numeric'; 1e-8) The precision used when evaluating linear equalities. 
-#'     To be used to control for machine rounding.}
-#'  \item{'reset'} Reset to factory settings.
+#'  \item{\code{lin.eq.eps} ('numeric'; 1e-8) The precision used when evaluating
+#'  linear equalities. To be used to control for machine rounding.}
+#'  \item{\code{"reset"} Reset to factory settings.}
 #' }
 #'
 #'
