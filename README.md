@@ -27,7 +27,8 @@ and manipulate data validation rules in a meaninful way. See [this vignette](htt
 
 #### Resources
 
-- The [talk](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) given at [useR2016](http://www.useR2016.org)
+- [Slides](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) of the [useR2016](http://www.useR2016.org) talk (Stanford University, June 28 2016).
+- [Video](https://www.youtube.com/watch?v=RMCc2Iu0UIQ) of the [satRdays](https://budapest.satRdays.org) talk (Hungarian Academy of Sciences, Sept 3 2016).
 
 
 #### Installation
