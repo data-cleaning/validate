@@ -8,7 +8,7 @@ version 0.1.6
 version 0.1.5
 - The '.' is now used to reference the validated data set as whole.
 - Small change in output of 'compare' to match the table in van den Broek et al. (2013)
-
+- registered native routines as now recommended by CRAN
 
 version 0.1.4
 - 'confront' now emits a warining when variable name conflicts with name of a reference data set

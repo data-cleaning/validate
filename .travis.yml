@@ -2,8 +2,17 @@
 # travis config
 
 language: r
-sudo: false
-cache: packages
+sudo: required
+
+addons:
+  apt:
+    packages:
+      - libxml2-dev
+
+r:
+ - release
+ - oldrel
+ - devel
 
 before_install:
   - R -e "install.packages(c('devtools','roxygen2','testthat'))"

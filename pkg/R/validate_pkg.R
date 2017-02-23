@@ -34,7 +34,7 @@
 #'    
 #' @docType package
 #' @name validate
-#' @useDynLib validate
+#' @useDynLib validate, .registration=TRUE
 #' @aliases package-validate validate
 #' @import methods
 #' @importFrom graphics legend par text
