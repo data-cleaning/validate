@@ -205,6 +205,7 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
 
 #' @rdname length
 #' @aliases length,confrontation-method
+#' @export
 setMethod("length","confrontation",function(x) length(x$._value))
 
 # indicators serve a different purpose than validations.

@@ -324,6 +324,8 @@ extract_names <- function(L,prefix="V"){
 #' @example ../examples/summary.R
 setGeneric('summary')
 
+
+
 #' Get object lenght
 #' 
 #' @aliases validate-length
@@ -333,6 +335,7 @@ setGeneric('summary')
 #'  \item{\code{\link{confrontation}}}
 #' }
 #' @example ../examples/properties.R
+#' @export
 setGeneric("length")
 
 #' Export to yaml file
@@ -528,9 +531,11 @@ setMethod('summary',signature('expressionset'),function(object,...){
   )
 })
 
+
 #' @param x An R object
 #' @rdname length 
 #' @aliases length,expressionset-method 
+#' @export
 setMethod("length","expressionset",function(x) length(x$rules))
 
 

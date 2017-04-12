@@ -1,4 +1,4 @@
-version 0.1.6
+version 0.1.7
 - The missingess counters are now only internally documented and will be deprecated (the
   introduction of the '.' made them more or less obsolete).
 - Package now 'depends' on methods to allow dispatch on objects inhereting from data.frame
