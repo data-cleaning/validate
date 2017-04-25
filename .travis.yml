@@ -1,7 +1,7 @@
 
 # travis config
 
-distr: trusty
+dist: trusty
 language: r
 sudo: required
 
