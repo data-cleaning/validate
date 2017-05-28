@@ -25,7 +25,7 @@ Suggests:
     testthat,
     knitr
 VignetteBuilder: knitr
-Collate:
+Collate: 
     'rule.R'
     'sugar.R'
     'validate_pkg.R'
@@ -38,7 +38,8 @@ Collate:
     'compare.R'
     'factory.R'
     'functions.R'
+    'lumberjack.R'
     'retailers.R'
     'utils.R'
     'yaml.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

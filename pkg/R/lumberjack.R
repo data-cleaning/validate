@@ -1,13 +1,11 @@
-## Loggers for the lumberjack package.
 
-
-#' Logging object to use with the lumberjack
+#' Logging object to use with the lumberjack package
 #'
 #' @section Details: 
 #'
 #' This obeject can used with the pipe operator of the 
 #' \code{\link[lumberjack]{lumberjack}} package. The logging
-#' is based on validate's \code{\link[cells]} function. The output
+#' is based on validate's \code{\link{cells}} function. The output
 #' is written to a \code{csv} file wich contains the following columns.
 #' \tabular{lll}{
 #' \code{step}           \tab\code{integer}  \tab Step number  \cr
@@ -28,11 +26,14 @@
 #' of the dataset.
 #'
 #' @usage 
-#' lumberjack::start_log(data, log=cell_counts())
 #' lumberjack::start_log(data, log=cell_counts(verbose=TRUE))
-#' lumberjack::dump()
-#' lumberjack::dump(file="FILE",...)
+#' lumberjack::dump(data, file="cells.csv",...)
 #' 
+#' @param data A \code{data.frame}
+#' @param log A logging object
+#' @param verbose Toggle logger verbosity
+#' @param file Filename to dump the log to
+#' @param ... Parameters passed to \code{\link{write.csv}}
 #'
 #' @docType class
 #' @format A reference class object
