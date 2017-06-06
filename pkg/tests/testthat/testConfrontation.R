@@ -112,5 +112,14 @@ test_that("Confrontations with slack on linear equalities",{
   expect_false(values(confront(d,u,lin.eq.eps=2)))
 })
 
+test_that("Confrontations with slack on linear inequalities",{
+  v <- validator(x >= 0)
+  d <- data.frame(x = -1e-14)
+  expect_true( all(values(confront(d,v))) )
+  v <- validator(x <= 0)
+  d <- data.frame(x=1e-14)
+  expect_true( all(values(confront(d,v))) )
+})
+
 
 
