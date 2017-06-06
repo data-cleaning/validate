@@ -276,6 +276,7 @@ extract_names <- function(L,prefix="V"){
     , vectorize=TRUE
     , replace_dollar=TRUE
     , lin_eq_eps = x$options('lin.eq.eps')
+    , lin_ineq_eps = x$options('lin.ineq.eps')
     , dat=NULL
 ){
   exprs <- setNames(lapply(x$rules, expr ),names(x))
@@ -283,7 +284,9 @@ extract_names <- function(L,prefix="V"){
   if ( expand_groups ) exprs <- expand_groups(exprs)
   if ( vectorize ) exprs <- lapply(exprs, vectorize)
   if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
-  if (lin_eq_eps > 0) exprs <- lapply(exprs, replace_linear_equality, eps=lin_eq_eps, dat=dat)
+  if (lin_eq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op="==")
+  if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op="<=")
+  if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op=">=")
   exprs
 }
 

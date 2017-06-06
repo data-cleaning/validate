@@ -1,3 +1,6 @@
+version 0.1.8
+- Tolerance for checking (non-strict) linear inequalities is now controlled by voptions(lin.ineq.opts).
+
 version 0.1.7
 - The missingess counters are now only internally documented and will be deprecated (the
   introduction of the '.' made them more or less obsolete).
