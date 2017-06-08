@@ -224,7 +224,7 @@ get_filestack_yml <- function(file){
   lab <- paste0(nam,ifelse(nchar(lab)>0,paste0(" [",lab,"]"),lab))
   n <- max(nchar(lab))
   lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE
-                                                , lin_eq_eps=0), call2text))
+                                                , lin_eq_eps=0, lin_ineq_eps=0), call2text))
   cat(noquote(paste(lab,collapse="\n")))
   opt <- ""
   if (!identical(obj$._options,.PKGOPT)){
