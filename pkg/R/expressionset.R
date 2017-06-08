@@ -224,7 +224,7 @@ get_filestack_yml <- function(file){
   lab <- paste0(nam,ifelse(nchar(lab)>0,paste0(" [",lab,"]"),lab))
   n <- max(nchar(lab))
   lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE
-                                                , lin_eq_eps=0), call2text))
+                                                , lin_eq_eps=0, lin_ineq_eps=0), call2text))
   cat(noquote(paste(lab,collapse="\n")))
   opt <- ""
   if (!identical(obj$._options,.PKGOPT)){
@@ -276,6 +276,7 @@ extract_names <- function(L,prefix="V"){
     , vectorize=TRUE
     , replace_dollar=TRUE
     , lin_eq_eps = x$options('lin.eq.eps')
+    , lin_ineq_eps = x$options('lin.ineq.eps')
     , dat=NULL
 ){
   exprs <- setNames(lapply(x$rules, expr ),names(x))
@@ -283,7 +284,9 @@ extract_names <- function(L,prefix="V"){
   if ( expand_groups ) exprs <- expand_groups(exprs)
   if ( vectorize ) exprs <- lapply(exprs, vectorize)
   if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
-  if (lin_eq_eps > 0) exprs <- lapply(exprs, replace_linear_equality, eps=lin_eq_eps, dat=dat)
+  if (lin_eq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op="==")
+  if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op="<=")
+  if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op=">=")
   exprs
 }
 
@@ -324,19 +327,6 @@ extract_names <- function(L,prefix="V"){
 #' @example ../examples/summary.R
 setGeneric('summary')
 
-
-
-#' Get object lenght
-#' 
-#' @aliases validate-length
-#' @seealso 
-#' \itemize{
-#'  \item{\code{\link{expressionset}}}
-#'  \item{\code{\link{confrontation}}}
-#' }
-#' @example ../examples/properties.R
-#' @export
-setGeneric("length")
 
 #' Export to yaml file
 #'
@@ -531,7 +521,8 @@ setMethod('summary',signature('expressionset'),function(object,...){
   )
 })
 
-
+#' Determine the number of elements in an object.
+#' 
 #' @param x An R object
 #' @rdname length 
 #' @aliases length,expressionset-method 

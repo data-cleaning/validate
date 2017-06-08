@@ -18,6 +18,7 @@ NULL
   # all: warnings and errors are raised. 'errors': raise errors. 'none': warnings and errors are caught.
    raise = 'none'
    , lin.eq.eps = 1e-8
+   , lin.ineq.eps= 1e-8
    , na.value = NA
    , sequential = TRUE    # option for the 'dcmodify' package
    , na.condition = FALSE # option for the 'dcmodify' package
@@ -163,14 +164,23 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 
 
 # 
-replace_linear_equality <- function(x,eps,dat){
-    repl <- function(x,eps){
+replace_linear_restriction <- function(x,eps,dat, op="=="){
+    repl <- function(x,eps,op){
       # by replacing nodes in the call tree
-      # we need not conern about brackets
-      if (x[[1]] != '==' ) return(x)
+      # we need not concern about brackets
+      if (x[[1]] != op ) return(x)
       m <- expression(e1-e2)[[1]]
-      a <- expression(abs(x))[[1]]
-      lt <- expression(e1 < e2)[[1]]
+      a <- switch(op
+        , "==" = expression(abs(x))[[1]]
+        , "<=" = expression((x))[[1]]
+        , ">=" = expression((x))[[1]] 
+      )
+      lt <- switch(op
+        , "==" =  expression(e1 < e2)[[1]]
+        , "<=" = expression(e1 <= e2)[[1]]
+        , ">=" = expression(e1 >= e2)[[1]]
+      )
+      if (op == ">=") eps <- -eps 
       m[[2]] <- left(x)
       m[[3]] <- right(x)
       a[[2]] <- m
@@ -180,10 +190,10 @@ replace_linear_equality <- function(x,eps,dat){
     }
 
     if (length(x) == 3 && linear_call(x) && all_numeric(x,dat)){
-      return(repl(x,eps))
+      return(repl(x,eps,op))
     } else if (length(x) > 1) {
       for ( i in 2:length(x) ){
-        x[[i]] <- replace_linear_equality(x[[i]],eps,dat)
+        x[[i]] <- replace_linear_restriction(x[[i]],eps,dat)
       }
     } 
     x
