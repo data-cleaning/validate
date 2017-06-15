@@ -24,6 +24,7 @@ Imports:
 Suggests:
     testthat,
     knitr
+Enhances: lumberjack
 VignetteBuilder: knitr
 Collate: 
     'rule.R'

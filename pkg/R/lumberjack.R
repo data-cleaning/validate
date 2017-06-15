@@ -3,10 +3,10 @@
 #'
 #' @section Details: 
 #'
-#' This obeject can used with the pipe operator of the 
-#' \code{\link[lumberjack]{lumberjack}} package. The logging
-#' is based on validate's \code{\link{cells}} function. The output
-#' is written to a \code{csv} file wich contains the following columns.
+#' This obeject can used with the function composition ('pipe') operator of the 
+#' \code{\link[lumberjack]{lumberjack}} package. The logging is based on
+#' validate's \code{\link{cells}} function. The output is written to a
+#' \code{csv} file wich contains the following columns.
 #' \tabular{lll}{
 #' \code{step}           \tab\code{integer}  \tab Step number  \cr
 #' \code{time}           \tab\code{POSIXct}  \tab Timestamp    \cr
@@ -27,11 +27,11 @@
 #'
 #' @docType class
 #' @format A reference class object
+#' @family loggers
 #'
-#'
-#' @export cell_counts
-#' @exportClass cell_counts
-cell_counts <- setRefClass("cell_counts"
+#' @export lbj_cells
+#' @exportClass lbj_cells
+lbj_cells <- setRefClass("lbj_cells"
     , fields = list(
         cells = "array"
         , n     = "numeric"
@@ -40,17 +40,18 @@ cell_counts <- setRefClass("cell_counts"
         , verbose = "logical"
         )
     , methods = list(
-      initialize = function(..., verbose=FALSE){
+      initialize = function(..., verbose=TRUE){
         "Create object. Optionally toggle verbosity."
         .self$n <- 0
         .self$t <- .POSIXct(numeric(0))
         .self$verbose = verbose
-        a <- data.frame(g=0)
-        m <- cells(a=a, b=a)
-        .self$cells <- m[, 0, drop=FALSE]
       }
       , add = function(meta, input, output){
         "Add logging info based on in- and output"
+        if (!identical(dim(input),dim(output))){
+          warnf("dimensions changed, not logging %s",meta$src)
+          return()
+        }
         cl <- cells(from = input, to = output)
         tm <- as.POSIXct(Sys.time())
         if ( .self$n == 0 ){
@@ -83,7 +84,7 @@ cell_counts <- setRefClass("cell_counts"
     }
     , show = function(){
       "Print method"
-      cat("Logging object of class cell_counts\n")
+      cat("Logging object of class lbj_cells with the following logging info\n")
       print(.self$log_data())
     }
     , fmsg = function(fmt,...){
@@ -94,4 +95,74 @@ cell_counts <- setRefClass("cell_counts"
     )
 )
 
+#' Logging object to use with the lumberjack package
+#'
+#' @family loggers
+#' @export lbj_rules
+#' @exportClass lbj_rules
+lbj_rules <- setRefClass("lbj_rules",
+  fields = list(
+    compare = "array"
+    , rules = "validator"
+    , n = "numeric"
+    , t = "POSIXct"
+    , expr = "character"
+    , verbose = "logical"
+  )
+  , methods = list(
+    initialize = function(rules, verbose=TRUE){
+      "Create object. Optionally toggle verbosity."
+      .self$n        <- 0
+      .self$t        <- .POSIXct(numeric(0))
+      .self$verbose  <- verbose
+      .self$rules    <- rules$copy()
+      v              <- validator(x>0)
+    }
+    , add = function(meta, input, output){
+      if (!identical(dim(input),dim(output))){
+        warnf("dimensions changed, not logging %s",meta$src)
+        return()
+      }
+      tm <- as.POSIXct(Sys.time())
+        comp <- cbind(compare(.self$rules, input, output))
+        if ( .self$n == 0 ){
+          .self$compare <- comp[,1,drop=FALSE]
+          .self$t <- c(.self$t,tm)
+          .self$expr <- ""
+        }
+        .self$n <- .self$n+1
+        .self$t <- c(.self$t, tm)
+        .self$expr <- c(.self$expr, meta$src)
+        .self$compare <- cbind(.self$compare, comp[,2,drop=FALSE])
+    }
+    , dump = function(file="lbj_rules.csv",...){
+      "Dump logging info to csv file. 
+       All arguments in '...' except row.names are passed to 'write.csv'"
+      out <- .self$log_data()
+      write.csv(out, file=file, row.names=FALSE,...)
+      .self$fmsg("Dumped a log at %s", normalizePath(file))
+    }
+    ,  log_data = function(){
+      "Return logged data as a data.frame"
+      out <- data.frame(
+        step = if(.self$n > 0 ) 0:.self$n else integer(0)
+        , time = .self$t
+        , expr = .self$expr
+      )
+      cm <- t(.self$compare)
+      row.names(cm) <- NULL
+      cbind(out, cm)
+    }
+    , show = function(){
+      "Print method"
+      cat("Logging object of class lbj_rules with the following logging info\n")
+      print(.self$log_data())
+    }
+    , fmsg = function(fmt,...){
+      if (.self$verbose){
+        message(sprintf(fmt,...))
+      }
+    }
+    )
+)
 
