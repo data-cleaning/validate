@@ -1,6 +1,7 @@
 version 0.1.8
 - Added loggers for the 'lumberjack' package: lbj_cells and lbj_rules
 - Tolerance for checking (non-strict) linear inequalities is now controlled by voptions(lin.ineq.opts).
+- Macro assignments through `:=` are no longer put in brackets.
 
 version 0.1.7
 - The missingess counters are now only internally documented and will be deprecated (the

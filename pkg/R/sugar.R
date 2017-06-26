@@ -78,8 +78,8 @@ expand_assignments <- function(calls){
 
 substitute_assignments <- function(call,assignments){
   for ( lhs in ls(assignments) ){
-    i <- which.call(call,lhs)
-    for ( j in i){ 
+    i <- which.call(call, lhs)
+    for ( j in i ){ 
       call[[j]] <- assignments[[lhs]]
     }
   }
@@ -89,9 +89,7 @@ substitute_assignments <- function(call,assignments){
 # add named assignment to environment
 # - rhs is 'embraced' for substitution
 add_assignment <- function(assignment, e){
-  rhs <- expression((.))[[1]]
-  rhs[[2]] <- right(assignment)
-  e[[as.character(left(assignment))]] <- rhs
+  e[[as.character(left(assignment))]] <- right(assignment) 
   assignment
 }
 
