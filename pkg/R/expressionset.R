@@ -229,8 +229,8 @@ get_filestack_yml <- function(file){
   opt <- ""
   if (!identical(obj$._options,.PKGOPT)){
     opt <- unlist(obj$options())
-    opt <- paste0(sprintf("%s: %s",names(opt),paste0(opt)),collapse="; ")
-    opt <- paste0("\nOptions:\n",opt)
+    opt <- paste0(sprintf("%s: %s",names(opt),paste0(opt)),collapse="\n ")
+    opt <- paste0("\nOptions:\n ",opt)
   }
   cat(sprintf("%s\n",opt))
 }

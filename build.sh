@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if hash aspell 2>/dev/null; then
+  export _R_CHECK_CRAN_INCOMING_USE_ASPELL_=TRUE
+else
+  echo "!!!!!! aspell not found. Spelling will not be checked with --as-cran"
+fi
 R=R
 CHECKARG=""
 while [ $# -gt 0 ] ; do

@@ -76,7 +76,7 @@ lbj_cells <- setRefClass("lbj_cells"
       out <- data.frame(
         step = if(.self$n > 0 ) 0:.self$n else integer(0)
         , time = .self$t
-        , expr = .self$expr
+        , expression = .self$expr
       )
       cl <- t(.self$cells)
       row.names(cl) <- NULL
@@ -147,7 +147,7 @@ lbj_rules <- setRefClass("lbj_rules",
       out <- data.frame(
         step = if(.self$n > 0 ) 0:.self$n else integer(0)
         , time = .self$t
-        , expr = .self$expr
+        , expression = .self$expr
       )
       cm <- t(.self$compare)
       row.names(cm) <- NULL
