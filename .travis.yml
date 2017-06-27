@@ -12,8 +12,6 @@ addons:
 
 r:
  - release
- - oldrel
- - devel
 
 before_install:
   - R -e "install.packages(c('settings','devtools','roxygen2','testthat','knitr'))"
