@@ -35,7 +35,6 @@ test_that("indication object contents",{
   expect_equal(names(summary(cf)),
     c("indicator"  
       ,"items"
-      ,"class"      
       ,"min"
       ,"mean" 
       ,"max"
@@ -44,7 +43,9 @@ test_that("indication object contents",{
       ,"warning"
       ,"expression")
   )  
-  expect_equal(dim(summary(cf)),c(3,10))
+  expect_equal(dim(summary(cf)),c(3,9))
+  ind <- indicator(x={"A"}) # returns character value
+  expect_true(has_warning(confront(women,ind)))
 })
 
 

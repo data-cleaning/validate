@@ -9,7 +9,7 @@ output:
 ---
 <!--
 %\VignetteEngine{rmarkdown}
-%\VignetteIndexEntry{Introduction to validate}
+%\VignetteIndexEntry{01_Introduction}
 -->
 
 
@@ -20,18 +20,24 @@ and reproducible. The package allows you to
 - Test your data set(s) against predefined rules, either in- or cross-data set
 - Import and export rule sets from structured or free-format files
 - Investigate and visualize the results of a data validation step
-- Do basic rule maintenance tasks
+- Perform basic rule maintenance tasks
+- Define and maintain data quality indicators separately from the data
+
 
 There are a few nouns related to the infrastructure offered by validate,
 
 - data set: your data
 - `validator` an object representing a set of rules your data must satisfy
-- `confrontation` an object representing the results of confronting data with rules
+- `indicator` an object representing a set of numerical quality indicators
+- `confrontation` an object representing the results of confronting data with rules or
+  quality indicators.
 
 There is also a single verb, namely
 
-- `confront`: evaluate the validation rules in the context of one or more data sets.
+- `confront`: evaluate the validation rules or quality indicator in the context of one or more data sets.
 
+This vignette demonstrates how to apply validation rules. A [second
+vignette](indicators.html) introduces quality indicator rules.
 
 
 ### A quick example

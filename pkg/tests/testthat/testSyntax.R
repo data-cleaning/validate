@@ -15,7 +15,7 @@ test_that('Exception handling can be switched',{
   
   voptions(raise='none')
   expect_equal(factory(function()stop('aap'), voptions)()$err, 'aap')
-  expect_equal(factory(function()warning('aap'), voptions)()$warn, 'aap')
+  expect_equal(factory(function(){ warning('aap');7}, voptions)()$warn, 'aap')
   
   voptions(raise='errors')
   expect_error(factory(function() stop(), voptions)())

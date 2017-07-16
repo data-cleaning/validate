@@ -4,10 +4,8 @@
 #' 
 #'
 #' @section Note:
-#' This document only provides a short reference. Please refer to the vignette for worked
-#' examples.
-#' 
-#' \code{vignette("intro",package="validate")}
+#' This document only provides a short reference. Please refer to the vignette
+#' for worked examples: \href{../doc/03_Rule_files.html}{Rules in text files}
 #'
 #' @name syntax
 #'

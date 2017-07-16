@@ -1,10 +1,11 @@
 # factory function. Evaluate expressions, catch errors and warnings silently (per option).
 factory <- function(fun,opts){
+  
   switch(opts('raise')
     , 'none' = function(...) { # both errors and warnings are caught
       warn <- err <- NULL
       res <- withCallingHandlers(
-        tryCatch(fun(...), error=function(e) {
+        tryCatch(outcheck(fun)(...), error=function(e) {
           err <<- conditionMessage(e)
           NULL
         }), warning=function(w) {
@@ -15,7 +16,7 @@ factory <- function(fun,opts){
     }
     , 'errors' = function(...) { # warnings are caught; errors are raised.
       warn <- err <- NULL
-      res <- withCallingHandlers( fun(...)
+      res <- withCallingHandlers( outcheck(fun)(...)
         , warning=function(w) {
           warn <<- append(warn, conditionMessage(w))
           #invokeRestart("muffleWarning")
@@ -24,10 +25,23 @@ factory <- function(fun,opts){
     }
     , 'all' = function(...){
       warn <- err <- NULL
-      res <- fun(...) # errors and warnings are raised.
+      res <- outcheck(fun)(...) # errors and warnings are raised.
       list(res,warn=warn,err=err)
     }
   )
+}
+
+outcheck <- function(fun){
+  function(...){
+    out <- fun(...)
+    if (!(is.numeric(out) | is.logical(out))){
+      warning("Expression did not evaluate to numeric or logical, returning NULL"
+              , call.=FALSE)
+      return(NULL)
+    } else {
+      return(out)
+    }
+  }
 }
 
 Id <- function(x) x

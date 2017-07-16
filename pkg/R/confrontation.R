@@ -63,7 +63,7 @@ setRefClass("confrontation"
   cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
-  cat(sprintf('With fails    : %d\n', failed_confrontations(.self)))
+#  cat(sprintf('With fails    : %d\n', failed_confrontations(.self)))
   cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))
   cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
 }
@@ -188,6 +188,7 @@ confront_work <- function(x,dat,key=NULL,class='confrontation',...){
   )
 }
 
+
 #' @rdname select
 #' @aliases [,confrontation-method
 #' @export 
@@ -241,7 +242,7 @@ setRefClass("indication", contains = "confrontation")
 setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=NULL,...){
   data_env <- list2env(dat)
   data_env$. <- dat
-  confront_work(x,data_env,key,'indication',...)
+  confront_work(x, data_env, key, class = "indication",...)
 })
 
 
@@ -261,7 +262,6 @@ setMethod('summary',signature('indication'), function(object,...){
   data.frame(
     indicator = names(object$._value)
     , items = sapply(object$._value,length)
-    , class = get_stat(object,class)
     , min = get_stat(object,min,na.rm=TRUE)
     , mean  = get_stat(object,mean,na.rm=TRUE)
     , max = get_stat(object,max,na.rm=TRUE)
@@ -277,7 +277,7 @@ setMethod('summary',signature('indication'), function(object,...){
 # helper function: x is a confrontation object
 get_stat <- function(x,what,...){
   out <- rep(NA,length(x$._value))
-  i <- !has_error(x)
+  i <- !is_null(x)
   out[i] <- tryCatch(
     sapply(x$._value[i],what,...)
     , error = function(e) NA
@@ -314,6 +314,19 @@ get_stat <- function(x,what,...){
 #' }
 #' @aliases validation  
 setRefClass("validation", contains = "confrontation")
+
+
+setMethod("show","validation",function(object){
+   cat(sprintf("Object of class '%s'\n",class(object)))
+   cat(sprintf("Call:\n    ")); print(object$._call); cat('\n')
+   cat(sprintf('Confrontations: %d\n', length(object$._calls)))
+   cat(sprintf('With fails    : %d\n', failed_confrontations(object)))
+   cat(sprintf('Warnings      : %d\n',sum(sapply(object$._warn,function(w)!is.null(w)))))
+   cat(sprintf('Errors        : %d\n',sum(sapply(object$._error,function(w)!is.null(w)))))
+})
+
+
+
 
 #' @rdname confront
 #' @param key (optional) name of identifying variable in x.
@@ -398,18 +411,19 @@ add_names <- function(L,x,y,key){
 # - Assignments are stored in a separate environment and forgotten afterwards.
 # - Failed assignments yield a warning.
 execute <- function(calls,env,opts){
-  lapply(calls, function(g) 
-    if ( g[[1]] == ":=" ){ 
-      var <- as.character(left(g))
-      if ( var %in% variables(env) ) 
-        warning(sprintf("Locally overwriting variable '%s'",var))
-        assign(var, tryCatch( eval(right(g), env), error=warning), envir=env)
-    } else { 
-      val <- factory(eval,opts)(g, env)
-      if ( !is.na(opts('na.value')) ){
-        val[[1]] <- ifelse(is.na(val[[1]]), opts('na.value'), val[[1]])
+  lapply(calls, function(g){
+      if ( g[[1]] == ":=" ){ 
+        var <- as.character(left(g))
+        if ( var %in% variables(env) ) 
+          warning(sprintf("Locally overwriting variable '%s'",var))
+          assign(var, tryCatch( eval(right(g), env), error=warning), envir=env)
+      } else { 
+        val <- factory(eval,opts)(g, env)
+        if ( !is.na(opts('na.value')) ){
+          val[[1]] <- ifelse(is.na(val[[1]]), opts('na.value'), val[[1]])
+        }
+        val
       }
-      val
     }
   )[!is.assignment(calls)]
 }
@@ -418,6 +432,7 @@ execute <- function(calls,env,opts){
 has_error <- function(x) !sapply(x$._error,is.null)
 has_warning <- function(x) !sapply(x$._warn, is.null)
 has_value <- function(x) sapply(x$._value, function(a) !is.null(a))
+is_null <- function(x) sapply(x$._value, is.null)
 
 passes <- function(x){
   sapply(x$._value, function(a) 
@@ -487,7 +502,7 @@ setMethod('values',signature('indication'),function(x,simplify=TRUE,drop=TRUE,..
 
 int_values <- function(x,simplify,drop,...){
   out <- if ( simplify ){
-    simplify_list(x$._value[!has_error(x)])
+    simplify_list(x$._value[!is_null(x)])
   } else {
     getMethod(values,signature='confrontation')(x,...)
   }

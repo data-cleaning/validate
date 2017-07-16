@@ -1,4 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
+pkg/man/*
+output/*
+*.o
+*.so
+*.dll
 validate.Rproj

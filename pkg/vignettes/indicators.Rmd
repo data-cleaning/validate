@@ -1,0 +1,62 @@
+---
+title: "Data quality indicators with the validate package"
+author: "Mark van der Loo and Edwin de Jonge"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{02_Indicators}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r,echo=FALSE}
+library(validate)
+```
+
+
+We assume that the reader went through the first couple of sections
+of the [introductory vignette](introduction.html).
+
+### Workflow
+
+In the validate package, an 'indicator' is a rule or function that takes as
+input a data set and outputs a number. Indicators are usually
+designed to be easily interpretable by domain experts and therefore
+depend strongly on the application. In `validate` users are completely free
+to define their own indicators. Here is an example of the workflow.
+
+```{r}
+i <- indicator(
+    mh  = mean(height)
+  , mw  = mean(weight)
+  , BMI = (weight/2.2046)/(height*0.0254)^2 )
+ind <- confront(women, i)
+```
+In the first statement we define an `indicator` object storing indicator expressions.
+Next, we confront a dataset with these indicators. The result is an object of
+class `indication`. It prints as follows.
+```{r}
+ind
+```
+To study the results, the object can be summarized.
+```{r}
+summary(ind)
+```
+Observe that the first two indicators result in a single value (`mh`, `mw`) and 
+the third one results in 15 values (`BMI`). The columns `error` and `warning`
+indicate wether calculation of the indicators was problematic. 
+
+A specific problem that may occur is when the result of an indicator is non-numeric.
+```{r}
+i <- indicator(mh = mean(height), a = {"A"})
+```
+here, the second 'indicator' is an expression that always yields a constant (the character string `"A"`).
+```{r}
+cf <- confront(women, i)
+cf
+warnings(cf)
+```
+
+
+### Workflow
+
