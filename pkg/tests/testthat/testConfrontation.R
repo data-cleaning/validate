@@ -81,7 +81,21 @@ test_that("Confrontation methods with reference data",{
      
   # self-reference on data set.
   expect_true(values(check_that(women,nrow(.)==15))[1,1])
-     
+
+  # indicators with reference data
+  ref <- mean(women$height)/mean(iris$Sepal.Length)
+  e <- new.env()
+  e$ir <- iris
+  i <- indicator( mean(height)/mean(ir$Sepal.Length) )
+  expect_equivalent(values(confront(women,i,ref=e))[1],ref)
+
+  L <- as.list(e)
+  expect_equivalent(values(confront(women,i,ref=e))[1],ref)
+  
+  i <- indicator( mean(height)/mean(ref$Sepal.Length) )
+  expect_equivalent(values(confront(women,i, ref=iris))[1], ref)
+  
+  
 })
 
 

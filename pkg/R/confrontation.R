@@ -245,6 +245,42 @@ setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=
   confront_work(x, data_env, key, class = "indication",...)
 })
 
+#' @rdname confront
+setMethod("confront",signature("data.frame","indicator","environment"), function(dat, x, ref, key=NULL, ...){
+  classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
+  if ( !all(class(dat) == classes)  )
+    stop("Class of one or more elements in 'ref' differs from 'dat'")
+  if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
+  data_env <- namecheck(list2env(dat,parent=ref))
+  data_env$. <- dat
+  confront_work(x,data_env,key,class="indication",...)
+})
+
+#' @rdname confront
+setMethod("confront",signature("data.frame","indicator","data.frame"),function(dat, x,ref, key=NULL,...){
+  env <- new.env()
+  env$ref <- ref
+  if (!is.null(key)) match_rows(of=env, against=dat, using=key)
+  data_env <- namecheck(list2env(dat, parent=env))
+  data_env$. <- dat
+  confront_work(x, data_env, key, class="indication", ...)
+})
+
+#' @rdname confront
+setMethod("confront",signature("data.frame","indicatior","list"),function(dat, x,ref,key=NULL,...){
+  classes <- sapply(ref,class)
+  if ( !all(class(dat) == classes)  )
+    stop("Class of one or more elements in 'ref' differs from 'dat'")
+  env <- list2env(ref)
+  if (!is.null(key)) match_rows(of=ref, against=dat, using=key)
+  data_env <- namecheck(list2env(dat,parent=env))
+  data_env$. <- dat
+  confront_work(x,data_env,key,class="indication",...)
+})
+
+
+
+
 
 #' @rdname validate-summary
 #' @param object An R object
