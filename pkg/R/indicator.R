@@ -61,9 +61,8 @@ ini_indicator <- function(obj, ..., .file){
     .ini_expressionset_cli(obj, ..., .prefix="I")
     obj$._options <- .PKGOPT
   } else {
-    .ini_expressionset_yml(obj, file, .prefix="V")
+    .ini_expressionset_yml(obj, .file, .prefix="I")
   }
-  obj
 }
 
 

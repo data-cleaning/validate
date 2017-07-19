@@ -80,8 +80,7 @@ expressionset <- setRefClass("expressionset"
 #' @export
 #' @rdname validate_extend
 #' @keywords internal
-.ini_expressionset_cli <- function(obj, ..., .prefix="R"){  
-
+.ini_expressionset_cli <- function(obj, ..., .prefix="R"){
   L <- as.list(substitute(list(...))[-1])
   nm <- extract_names(L, prefix = .prefix)
   cr <- Sys.time()
@@ -109,7 +108,7 @@ expressionset <- setRefClass("expressionset"
   S <- get_filestack_yml(file)
   R <- list()
   for ( fl in S )
-    R <- c(R, rules_from_yrf_file(fl))
+    R <- c(R, rules_from_yrf_file(fl,prefix=.prefix))
   obj$rules <- R
   obj$._options <- .PKGOPT
   # options only from the 'including' file (not from included)
