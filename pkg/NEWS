@@ -1,3 +1,6 @@
+version 0.2.0
+- New object of class 'indicator'
+
 version 0.1.8
 - Added loggers for the 'lumberjack' package: lbj_cells and lbj_rules
 - Tolerance for checking (non-strict) linear inequalities is now controlled by voptions(lin.ineq.opts).

@@ -267,7 +267,7 @@ setMethod("confront",signature("data.frame","indicator","data.frame"),function(d
 })
 
 #' @rdname confront
-setMethod("confront",signature("data.frame","indicatior","list"),function(dat, x,ref,key=NULL,...){
+setMethod("confront",signature("data.frame","indicator","list"),function(dat, x,ref,key=NULL,...){
   classes <- sapply(ref,class)
   if ( !all(class(dat) == classes)  )
     stop("Class of one or more elements in 'ref' differs from 'dat'")
