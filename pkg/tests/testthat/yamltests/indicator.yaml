@@ -1,0 +1,8 @@
+
+
+# First indicator 
+mean(height)
+
+# Second indicator
+sd(weight)
+

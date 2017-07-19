@@ -329,7 +329,10 @@ setGeneric('summary')
 
 #' Export to yaml file
 #'
-#' Translate a \pkg{validate} object to yaml format and write to file.
+#' Translate an object to yaml format and write to file.
+#'
+#' Both \code{\link{validator}} and \code{\link{indicator}} objects can be
+#' exported.
 #'
 #' @param x An R object
 #' @param file A file location or connection (passed to \code{base::\link[base]{write}}).

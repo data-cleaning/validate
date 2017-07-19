@@ -90,7 +90,7 @@ test_that("Confrontation methods with reference data",{
   expect_equivalent(values(confront(women,i,ref=e))[1],ref)
 
   L <- as.list(e)
-  expect_equivalent(values(confront(women,i,ref=e))[1],ref)
+  expect_equivalent(values(confront(women,i,ref=L))[1],ref)
   
   i <- indicator( mean(height)/mean(ref$Sepal.Length) )
   expect_equivalent(values(confront(women,i, ref=iris))[1], ref)

@@ -1,0 +1,14 @@
+rules:
+- expr: mean(weight)
+  name: average
+  label: 'mean weight'
+  description: ''
+  created: 2017-07-19 09:32:25
+  origin: indicate.txt
+- expr: sd(height)
+  name: I2
+  label: ''
+  description: ''
+  created: 2017-07-19 09:32:25
+  origin: indicate.txt
+

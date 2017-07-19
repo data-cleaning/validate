@@ -6,4 +6,6 @@ output/*
 *.o
 *.so
 *.dll
+*.html
+*.HTML
 validate.Rproj

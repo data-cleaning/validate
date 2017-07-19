@@ -19,6 +19,7 @@ test_that("file paths are interpreted correctly",{
 test_that("Parsing freeform", {
   expect_equal( length( validator(.file="yamltests/freeform.yaml") ) , 2,info="freeform")
   expect_equal( length( indicator(.file="yamltests/indicator.yaml") ) , 2,info="freeform")
+  expect_equal( length( indicator(.file="yamltests/indicator2.yaml") ) , 2,info="freeform")
 })
 
 test_that("Parsing yrf format", {
