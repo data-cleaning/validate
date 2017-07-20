@@ -234,7 +234,13 @@ defines_var_group <- function(x){
 
 
 # functions to vectorize validation calls ----
-not <- function(x) parse(text=paste0("!(",deparse(x),")"))[[1]]
+not <- function(x){ 
+  f <- expression(!(dummy))[[1]]
+  f[[2]][[2]] <- x
+  f
+}
+# old version.
+#parse(text=paste0("!(",deparse(x),")"))[[1]]
 
 `%or%` <- function(x,y){
   parse(text=paste(call2text(x),'|',call2text(y)))[[1]]
