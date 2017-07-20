@@ -130,10 +130,16 @@ test_that("vectorizing if-statmentes",{
   expect_identical(a,b)
 
   # nested if's. For some reasons, identical gives FALSE
-  # even t
   a <- vectorize(expression( if (P) Q | if(A) B )[[1]])
   b <- expression( !(P) | (Q | (!(A) | (B))) )[[1]]
   expect_true(a == b)
+  
+  e <- expression( if (P) Q else R)[[1]]
+  a <- vectorize(e)
+  b <- expression(
+    (!(P)|(Q)) & ((P)|(R))
+  )[[1]]
+  expect_identical(a,b)
 })
 
 

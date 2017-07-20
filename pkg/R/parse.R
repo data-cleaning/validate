@@ -163,7 +163,7 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 }
 
 
-# 
+  # 
 replace_linear_restriction <- function(x,eps,dat, op="=="){
     repl <- function(x,eps,op){
       # by replacing nodes in the call tree
@@ -246,13 +246,41 @@ not <- function(x){
   f[[3]][[2]] <- y
   f
 }
+ 
+# replace_if  <- function(x){
+#   f <- expression(!(P) | (Q) )[[1]]
+#   f[[c(2,2,2)]] <- x[[2]]
+#   f[[c(3,2)]] <- x[[3]]
+#   f
+# }
 
+
+# logical implication if (P) Q 
+# P -> Q ==> !(P) | (Q)
+# 
+# if-then-else (length 4)
+# if (P) Q else R
+# (P -> Q) & (!P -> R)
+# 
 replace_if  <- function(x){
-  f <- expression(!(P) | (Q) )[[1]]
-  f[[c(2,2,2)]] <- x[[2]]
-  f[[c(3,2)]] <- x[[3]]
-  f
+  if ( length(x) == 3 ){
+    f <- expression(!(P) | (Q) )[[1]]
+    f[[c(2,2,2)]] <- x[[2]]
+    f[[c(3,2)]] <- x[[3]]
+    f
+  } else { # length (x) == 4 (there is an 'else')
+    f <- expression( (!(P) | (Q)) & ((P) | (R)) )[[1]]
+    P <- which.call(f,"P")
+    f[[P[[1]]]] <- x[[2]]
+    f[[P[[2]]]] <- x[[2]]
+    Q <- which.call(f,"Q")
+    f[[Q[[1]]]] <- x[[3]]
+    R <- which.call(f,"R")
+    f[[R[[1]]]] <- x[[4]]
+    f
+  }
 }
+
 
 vectorize <- function(x){
   # we are at an end, or we enter a function, which we will not
