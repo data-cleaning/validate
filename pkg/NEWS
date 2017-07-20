@@ -1,5 +1,6 @@
 version 0.2.0
 - New object of class 'indicator'
+- validaton rules may now contain embedded if-statements, e.g. A | (if (B) C)
 - Safer expression manipulation under the hood.
 
 

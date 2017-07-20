@@ -27,7 +27,7 @@ Suggests:
     rmarkdown
 Enhances: lumberjack
 VignetteBuilder: knitr
-Collate:
+Collate: 
     'rule.R'
     'sugar.R'
     'validate_pkg.R'

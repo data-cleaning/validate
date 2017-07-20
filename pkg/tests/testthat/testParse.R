@@ -107,3 +107,37 @@ test_that("validating_call",{
   
 })
 
+test_that("vectorizing if-statmentes",{
+
+  a <- vectorize( expression( if (P) Q )[[1]]  )
+  b <- expression(!(P) |(Q))[[1]]
+  expect_identical(a,b)
+
+  a <- vectorize( expression( (if (P) Q) )[[1]]  )
+  b <- expression( (!(P)|(Q)) )[[1]]  
+  expect_identical(a,b)
+
+  a <- vectorize( expression( (if (P) Q) | Z   )[[1]]  )
+  b <- expression((!(P)|(Q)) | Z)[[1]]
+  expect_identical(a,b)
+
+  a <- expression(sapply(x,function(y) 2*y))[[1]]
+  b <- a
+  expect_identical(vectorize(a),b)
+
+  a <- vectorize( expression( (if (P) Q) | (if(A) B)   )[[1]]  )
+  b <- expression((!(P)|(Q))|(!(A)|(B)))[[1]]
+  expect_identical(a,b)
+
+  # nested if's. For some reasons, identical gives FALSE
+  # even t
+  a <- vectorize(expression( if (P) Q | if(A) B )[[1]])
+  b <- expression( !(P) | (Q | (!(A) | (B))) )[[1]]
+  expect_true(a == b)
+})
+
+
+
+
+
+

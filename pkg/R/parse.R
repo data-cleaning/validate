@@ -247,9 +247,31 @@ not <- function(x){
   f
 }
 
+replace_if  <- function(x){
+  f <- expression(!(P) | (Q) )[[1]]
+  f[[c(2,2,2)]] <- x[[2]]
+  f[[c(3,2)]] <- x[[3]]
+  f
+}
+
+vectorize <- function(x){
+  # we are at an end, or we enter a function, which we will not
+  # modify.
+  if ( length(x) == 1 || x[[1]] == "function") return(x)
+  for ( i in seq_along(x) ){
+    if ( x[[i]] == "if" ){
+      return(vectorize(replace_if(x)))
+    } else {
+      x[[i]] <- vectorize(x[[i]])
+    }
+  }
+  x
+}
+
+
 
 # x: a validation call
-vectorize <- function(x) if ( x[[1]] == 'if' ) not(x[[2]]) %or% x[[3]] else  x
+#vectorize <- function(x) if ( x[[1]] == 'if' ) not(x[[2]]) %or% x[[3]] else  x
 
 
 # Determine wether a call object represents a linear operation. ----
