@@ -239,12 +239,14 @@ not <- function(x){
   f[[2]][[2]] <- x
   f
 }
-# old version.
-#parse(text=paste0("!(",deparse(x),")"))[[1]]
 
 `%or%` <- function(x,y){
-  parse(text=paste(call2text(x),'|',call2text(y)))[[1]]
+  f <- expression((A)|(B))[[1]]
+  f[[2]][[2]] <- x
+  f[[3]][[2]] <- y
+  f
 }
+
 
 # x: a validation call
 vectorize <- function(x) if ( x[[1]] == 'if' ) not(x[[2]]) %or% x[[3]] else  x

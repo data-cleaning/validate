@@ -1,5 +1,7 @@
 version 0.2.0
 - New object of class 'indicator'
+- Safer expression manipulation under the hood.
+
 
 version 0.1.8
 - Added loggers for the 'lumberjack' package: lbj_cells and lbj_rules
