@@ -30,7 +30,7 @@ test_that("regression tests",{
   # Issue #67 reported by Kevin Kuo
   dat <- data.frame(A = c("X","Y"),B=c("Y","Y"),stringsAsFactors=FALSE)
   expect_equivalent(values(check_that(dat,A == B)),array(c(FALSE,TRUE),dim=c(2,1)))
-  
+   
 })
 
 

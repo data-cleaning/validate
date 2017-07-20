@@ -55,10 +55,24 @@ test_that("Parsing included files",{
     )
 })
 
+test_that("validation from data.frames",{
+  
+  d <- data.frame(
+  rule = c("x>0", "a + b == c")
+    , name = c("foo", "bar")
+    , description = c("hello world","Ola, mundo")
+    , stringsAsFactors=FALSE
+  )
+  expect_equal(length(validator(.data=d)),2)
+  expect_equal(length( validator(.data=d[-3]) ),2)
+  expect_error(validator(.data=d[-1]))
+  d$rule[2] <- "a+b"
+  expect_warning(validator(.data=d))
+  
+})
+
 
 context("Computing on language")
-
-
 # 
 test_that("var_from_call",{
   

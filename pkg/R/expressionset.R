@@ -58,10 +58,10 @@ expressionset <- setRefClass("expressionset"
       , ._options = "function"
   )
   , methods= list(
-        show = function() .show_expressionset(.self)
-      , exprs      = function(...) .get_exprs(.self,...)
-      , blocks     = function() .blocks_expressionset(.self)
-      , options = function(...) .self$._options(...)
+        show          = function() .show_expressionset(.self)
+      , exprs         = function(...) .get_exprs(.self,...)
+      , blocks        = function() .blocks_expressionset(.self)
+      , options       = function(...) .self$._options(...)
       , clone_options = function(...) settings::clone_and_merge(.self$._options,...)
   )
 )
@@ -84,7 +84,9 @@ expressionset <- setRefClass("expressionset"
   L <- as.list(substitute(list(...))[-1])
   nm <- extract_names(L, prefix = .prefix)
   cr <- Sys.time()
-  R <- vector(length(L), mode='list')
+  R <- vector(length(L), mode="list")
+  # note: we cannot set the description when constructing
+  # from the commandline.
   for ( i in seq_along(L) ){
     R[[i]] <- rule(
         expr = L[[i]]
@@ -92,6 +94,41 @@ expressionset <- setRefClass("expressionset"
       , origin="command-line"
       , created = cr
       )
+  }
+  obj$rules <- R
+}
+
+#' @param obj An expressionset object (or an object inheriting from expressionset).
+#' @param dat a data.frame 
+#' 
+#' @rdname validate_extend
+#' @keywords internal
+.ini_expressionset_df <- function(obj, dat, .prefix="R"){
+  n <- nrow(dat)
+  R <- vector(n, mode="list")
+  cr = Sys.time()
+  if ( is.null(dat[["name"]]) ){
+    npos <- npos(nrow(dat))
+    fmt <- paste0("%s%",npos,"d")
+    dat$name <- sprintf(fmt, .prefix, seq_len(nrow(dat)))
+  }
+  if (is.null(dat[["description"]])){
+    dat$description <- ""
+  }
+  if (is.null(dat[["rule"]])){
+    stop("No column called 'rule' found")
+  }
+  dat$name <- as.character(dat$name)
+  dat$rule <- as.character(dat$rule)
+  dat$description <- as.character(dat$description)
+  for ( i in seq_len(n)){
+    R[[i]] <- rule(
+      expr = parse(text=dat$rule[i])[[1]]
+      , name = dat$name[i]
+      , origin = "data.frame"
+      , description = dat$description[i]
+      , created = cr
+    )
   }
   obj$rules <- R
 }
@@ -116,7 +153,6 @@ expressionset <- setRefClass("expressionset"
   if ( length(local_opt) > 0 )
     do.call(obj$options, local_opt)
 }
-
 
 
 rules_from_block <- function(block, origin){
@@ -244,9 +280,11 @@ call2text <- function(x){
   gsub("[[:blank:]]+"," ",paste(deparse(x),collapse=" "))
 }
 
+npos <- function(n) max(1,ceiling(log10(n+1)))
+
 # get names from a list, replacing empty names values with numbers
 extract_names <- function(L,prefix="V"){
-  npos <- max(1,ceiling(log10(length(L)+1)))
+  npos <- npos(length(L)) 
   fmt <- paste0("%s%0",npos,"d")
   generic <- sprintf(fmt,prefix,seq_along(L))
   given <- names(L)

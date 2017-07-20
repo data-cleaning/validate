@@ -9,7 +9,10 @@ NULL
 #' the expression is described in \code{\link{syntax}}. 
 #' 
 #' @param ... A comma-separated list of validating expressions
-#' @param .file A character vector of file locations (see also the section on file parsing in the 
+#' @param .file (optional) A character vector of file locations (see also the
+#'   section on file parsing in the
+#' @param .data (optional) A \code{data.frame} with columns \code{"rule"},
+#'   \code{"name"}, and \code{"description"}
 #' \code{\link{syntax}} help file).
 #'
 #' @section Validating expressions:
@@ -30,7 +33,8 @@ NULL
 #'
 #' @example ../examples/validator.R
 #' @export
-validator <- function(..., .file) new('validator',..., .file = .file)
+validator <- function(..., .file, .data) new('validator',...
+            , .file = .file, .data=.data)
 
 #### VALIDATOR CLASS ----------------------------------------------------------
 
@@ -58,16 +62,16 @@ validator <- function(..., .file) new('validator',..., .file = .file)
 setRefClass("validator"
   , contains = 'expressionset'
   , methods = list(
-    initialize = function(..., .file)  ini_validator(.self,...,.file=.file)
+    initialize = function(..., .file, .data)  ini_validator(.self,...,.file=.file, .data=.data)
     , is_linear = function() linear(.self)
       # extra argument: normalize=TRUE
     , linear_coefficients = function(...) get_linear_coefficients(.self, ...) 
   )
 )
 
-ini_validator <- function(obj, ..., .file){
+ini_validator <- function(obj, ..., .file, .data){
   check_primitives()
-  if (missing(.file)){
+  if (missing(.file) && missing(.data) ){
     .ini_expressionset_cli(obj, ..., .prefix="V")
     obj$._options <- .PKGOPT
     i <- validating(obj) | is_tran_assign(obj)
@@ -80,8 +84,17 @@ ini_validator <- function(obj, ..., .file){
         ))
       obj$rules <- obj$rules[i]
     } 
-  } else {
+  } else if (!missing(.file)) {
     .ini_expressionset_yml(obj, file=.file, .prefix="V")
+  } else if (!missing(.data)){
+    .ini_expressionset_df(obj, dat=.data, .prefix="V")
+    i <- validating(obj) | is_tran_assign(obj)
+    if (!all(i)){
+      r <- paste(which(!i),collapse=", ")
+      warning("Invalid syntax detected, ignoring rows ",r)
+      obj$rules <- obj$rules[i]
+    }
+    obj$._options <- .PKGOPT
   }
   # do options check.
 }

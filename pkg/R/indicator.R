@@ -19,7 +19,7 @@ NULL
 #' @export
 #' @keywords internal
 #' @example ../examples/indicator.R
-indicator <- function(..., .file) new('indicator',..., .file=.file)
+indicator <- function(..., .file, .data) new('indicator',..., .file=.file, .data=.data)
 
 
 
@@ -51,17 +51,20 @@ indicator <- function(..., .file) new('indicator',..., .file=.file)
 #' 
 setRefClass("indicator", contains='expressionset',
   methods = list(
-    initialize = function(..., .file) ini_indicator(.self, ..., .file = .file)
+    initialize = function(..., .file, .data) ini_indicator(.self
+      , ..., .file = .file, .data=.data)
   )                       
 )
 
-ini_indicator <- function(obj, ..., .file){
+ini_indicator <- function(obj, ..., .file, .data){
   
-  if (missing(.file)){
+  if (missing(.file) && missing(.data)){
     .ini_expressionset_cli(obj, ..., .prefix="I")
     obj$._options <- .PKGOPT
-  } else {
+  } else if (!missing(.file)) {
     .ini_expressionset_yml(obj, .file, .prefix="I")
+  } else if (!missing(.data)){
+    .ini_expressionset_df(obj, dat=.data, .prefix="I")
   }
 }
 
