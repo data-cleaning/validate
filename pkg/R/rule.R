@@ -246,17 +246,17 @@ setMethod("linear","rule",function(x,...){
 
 #' @rdname origin
 setMethod("origin","rule",function(x,...){
-  x@origin
+  setNames(x@origin, x@name)
 })
 
 #' @rdname label
-setMethod("label","rule",function(x,...) paste0("",x@label) )
+setMethod("label","rule",function(x,...) setNames(paste0("",x@label),x@name) )
 
 #' @rdname description
-setMethod("description", "rule", function(x,...) paste0("",x@description) )
+setMethod("description", "rule", function(x,...) setNames( paste0("",x@description), x@name) )
 
 #' @rdname created
-setMethod("created", "rule", function(x,...) x@created)
+setMethod("created", "rule", function(x,...) setNames( x@created,x@name) )
 
 setMethod("is_tran_assign","rule", function(x){
   x@expr[[1]] == ":="
