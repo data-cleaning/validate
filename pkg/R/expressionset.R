@@ -116,7 +116,7 @@ expressionset <- setRefClass("expressionset"
     dat$description <- ""
   }
   if (is.null(dat[["label"]])){
-    dat$description <- ""
+    dat$label <- ""
   }
   if (is.null(dat[["rule"]])){
     stop("No column called 'rule' found")

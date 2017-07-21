@@ -27,9 +27,9 @@ test_that("Parsing yrf format", {
   v <- validator(.file="yamltests/yamlrules.yaml")
   expect_equal(length(v),2)
   expect_equal(names(v),c("sumrule","conditional"))
-  expect_equal(origin(v),c("yamltests/yamlrules.yaml","yamltests/yamlrules.yaml"))
-  expect_equal(label(v),c("sum of x and y","if x positive then y also"))
-  expect_equal(description(v),c("a looong description here","a looong description here\n"))
+  expect_equivalent(origin(v),c("yamltests/yamlrules.yaml","yamltests/yamlrules.yaml"))
+  expect_equivalent(label(v),c("sum of x and y","if x positive then y also"))
+  expect_equivalent(description(v),c("a looong description here","a looong description here\n"))
   expect_true(all(created(v)-now < 10))
   expect_warning(validator(.file="yamltests/invalid.yaml"))
   out <- capture.output(expect_warning(validator(.file="yamltests/invalidR.yaml")))
@@ -44,7 +44,7 @@ test_that("Parsing options",{
 test_that("Parsing included files",{
   v <- validator(.file="yamltests/top.yaml")
   expect_equal(length(v),6)
-  expect_equal(origin(v)
+  expect_equivalent(origin(v)
     , c(  "yamltests/child1.yaml"
         , "yamltests/child1.yaml"
         , "yamltests/child3.yaml"

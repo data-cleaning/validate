@@ -7,11 +7,11 @@ test_that("setting properties",{
   names(v)[1] <- "foo"
   expect_equal(names(v),c("foo","V2"))
   origin(v)[1] <- "faa"
-  expect_equal(origin(v),c("faa","command-line"))
+  expect_equivalent(origin(v),c("faa","command-line"))
   label(v)[1] <- "fee"
-  expect_equal(label(v),c("fee",""))
+  expect_equivalent(label(v),c("fee",""))
   description(v)[1] <- "foobar"
-  expect_equal(description(v),c("foobar",""))
+  expect_equivalent(description(v),c("foobar",""))
 
   # a name, label, origin or description should be a single 'character' element 
   expect_warning(origin(v)[1] <- c("fu","bar"))
