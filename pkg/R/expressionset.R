@@ -651,4 +651,31 @@ as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
 # r <- expressionset(rules=L,._options=options_manager())
 
 
+#' @export
+#' @rdname as.data.frame.expressionset
+as.data.frame <- function(x,...) UseMethod('as.data.frame')
+
+#' Translate to data.frame
+#' 
+#' 
+#' @param x an R object
+#' @param expand_assignments Toggle substitution of `:=` assignments.
+#' @param ... passed throught to internal methods.
+#' 
+#' @export
+as.data.frame.expressionset <- function(x,expand_assignments=TRUE,...){
+  rules <- sapply(x$exprs(expand_assignments=expand_assignments,...),call2text)
+  x <- x[names(rules)]
+  data.frame(
+   rule = rules
+   , name = names(x)
+   , label = label(x)
+   , origin = origin(x)
+   , description = description(x)
+   , created = created(x)
+   , row.names=NULL
+  )
+}
+
+
 
