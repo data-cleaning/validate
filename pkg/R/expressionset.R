@@ -115,10 +115,14 @@ expressionset <- setRefClass("expressionset"
   if (is.null(dat[["description"]])){
     dat$description <- ""
   }
+  if (is.null(dat[["label"]])){
+    dat$description <- ""
+  }
   if (is.null(dat[["rule"]])){
     stop("No column called 'rule' found")
   }
   dat$name <- as.character(dat$name)
+  dat$label <- as.character(dat$label)
   dat$rule <- as.character(dat$rule)
   dat$description <- as.character(dat$description)
   for ( i in seq_len(n)){
@@ -126,6 +130,7 @@ expressionset <- setRefClass("expressionset"
       expr = parse(text=dat$rule[i])[[1]]
       , name = dat$name[i]
       , origin = "data.frame"
+      , label = dat$label[i]
       , description = dat$description[i]
       , created = cr
     )
