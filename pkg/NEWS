@@ -4,7 +4,8 @@ version 0.2.0
 - validaton rules can now contain embedded if-statements, e.g. A | (if (B) C)
 - results of getter functions (e.g. 'labels') are now named.
 - less verbose printng of options for expressionset objects (validator, indicator)
-- Safer expression manipulation under the hood.
+- expressionset objects (validator, indicator) can now be coerced with as.data.frame.
+- safer expression manipulation under the hood.
 
 
 version 0.1.8

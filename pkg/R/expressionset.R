@@ -637,27 +637,25 @@ as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
     rules = lapply(x$rules, as.list.rule, expr_as_text = expr_as_text, ...)
   )
 }
-# demonstruction
-# L <- list(
-#   rule(expr = expression(x + y == z)[[1]],  name="aap")
-#  , rule(expr = expression(p + q == z)[[1]], name="noot")
-#  , rule(expr = expression(a*b == c)[[1]],   name="mies")
-# )
-# # 
-# r <- expressionset(rules=L,._options=options_manager())
 
 
 #' @export
 #' @rdname as.data.frame.expressionset
 as.data.frame <- function(x,...) UseMethod('as.data.frame')
 
-#' Translate to data.frame
+#' Translate an expressionset to data.frame
 #' 
-#' 
+#' Expressions are deparsed and combined in a \code{data.frame} with (some
+#' of) their metadata. Observe that some information may be lost (e.g. options
+#' local to the object).
+#'
+#'
 #' @param x an R object
 #' @param expand_assignments Toggle substitution of `:=` assignments.
 #' @param ... passed throught to internal methods.
 #' 
+#' @return A \code{data.frame} with elements \code{rule}, \code{name},
+#'  \code{label}, \code{origin}, \code{description}, and \code{created}.
 #' @export
 as.data.frame.expressionset <- function(x,expand_assignments=TRUE,...){
   rules <- sapply(x$exprs(expand_assignments=expand_assignments,...),call2text)
@@ -670,6 +668,7 @@ as.data.frame.expressionset <- function(x,expand_assignments=TRUE,...){
    , description = description(x)
    , created = created(x)
    , row.names=NULL
+   , stringsAsFactors=FALSE
   )
 }
 

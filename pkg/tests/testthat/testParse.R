@@ -157,7 +157,12 @@ test_that("vectorizing if-statmentes",{
 })
 
 
-
+test_that("translation of rules to data.frame",{
+  v <- validator(x > y, 2*y-1==z)
+  expect_equal(nrow(as.data.frame(v)),2)
+  i <- indicator(mean(x), sd(y))
+  expect_equal(nrow(as.data.frame(i)),2)
+})
 
 
 
