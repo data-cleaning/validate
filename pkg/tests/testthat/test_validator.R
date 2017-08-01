@@ -21,6 +21,10 @@ test_that("setting properties",{
    
 })
 
+test_that("adding validators",{
+  expect_equal(length(validator(x>0) + validator(x<1)),2)
+})
+
 test_that("regression tests",{
   # Issue #65 reported by Andrew R Gibson
   # used to crash

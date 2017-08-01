@@ -2,6 +2,7 @@ version 0.2.0
 - new object of class 'indicator'
 - validation rules now support if-then-else syntax.
 - validaton rules can now contain embedded if-statements, e.g. A | (if (B) C)
+- expressionset objects (validator, indicator) can be combined using '+'
 - results of getter functions (e.g. 'labels') are now named.
 - less verbose printng of options for expressionset objects (validator, indicator)
 - expressionset objects (validator, indicator) can now be coerced to as.data.frame.

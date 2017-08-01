@@ -156,7 +156,24 @@ get_linear_coefficients <- function(x, normalize=TRUE,...){
 }
 
 
-
+#' Combine two validator objects
+#'
+#' Combine two \code{\link{validator}} objects by addition. A new \code{validator} 
+#' object is created with default (global) option values. Previously set options
+#' are ignored.
+#'
+#' @param e1 a \code{\link{validator}}
+#' @param e2 a \code{\link{validator}}
+#'
+#'
+#' @examples
+#' validator(x>0) + validator(x<=1)
+#'
+#' @export
+setMethod("+", c("validator","validator"), function(e1, e2){
+  d <- rbind(as.data.frame(e1), as.data.frame(e2))
+  validator(.data=d)
+})
 
 
 

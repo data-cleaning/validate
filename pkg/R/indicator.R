@@ -69,6 +69,24 @@ ini_indicator <- function(obj, ..., .file, .data){
 }
 
 
+#' Combine two indicator objects
+#'
+#' Combine two \code{\link{indicator}} objects by addition. A new \code{indicator} 
+#' object is created with default (global) option values. Previously set options
+#' are ignored.
+#'
+#' @param e1 a \code{\link{validator}}
+#' @param e2 a \code{\link{validator}}
+#'
+#'
+#' @examples
+#' indicator(mean(x)) + indicator(x/median(x))
+#'
+#' @export
+setMethod("+", c("indicator","indicator"), function(e1, e2){
+  d <- rbind(as.data.frame(e1), as.data.frame(e2))
+  indicator(.data=d)
+})
 
 
 
