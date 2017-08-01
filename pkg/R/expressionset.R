@@ -85,7 +85,7 @@ expressionset <- setRefClass("expressionset"
   nm <- extract_names(L, prefix = .prefix)
   cr <- Sys.time()
   R <- vector(length(L), mode="list")
-  # note: we cannot set the description when constructing
+  # note: we cannot set the description or the label when constructing
   # from the commandline.
   for ( i in seq_along(L) ){
     R[[i]] <- rule(
@@ -266,13 +266,9 @@ get_filestack_yml <- function(file){
   lab <- paste0(" ",format(lab,width=n),": ",sapply(obj$exprs(expand_groups=FALSE
                                                 , lin_eq_eps=0, lin_ineq_eps=0), call2text))
   cat(noquote(paste(lab,collapse="\n")))
-  opt <- ""
-  if (!identical(obj$._options,.PKGOPT)){
-    opt <- unlist(obj$options())
-    opt <- paste0(sprintf("%s: %s",names(opt),paste0(opt)),collapse="\n ")
-    opt <- paste0("\nOptions:\n ",opt)
-  }
-  cat(sprintf("%s\n",opt))
+  cat("\n")
+  optstr <- "Rules are evaluated using locally defined options\n"
+  cat(optstr[!identical(obj$._options,.PKGOPT)])
 }
 
 

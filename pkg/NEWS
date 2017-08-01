@@ -3,6 +3,7 @@ version 0.2.0
 - validation rules now support if-then-else syntax.
 - validaton rules can now contain embedded if-statements, e.g. A | (if (B) C)
 - results of getter functions (e.g. 'labels') are now named.
+- less verbose printng of options for expressionset objects (validator, indicator)
 - Safer expression manipulation under the hood.
 
 
