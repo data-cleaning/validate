@@ -639,12 +639,14 @@ as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
 }
 
 
-#' @export
-#' @rdname as.data.frame.expressionset
-as.data.frame <- function(x,...) UseMethod('as.data.frame')
 
 #' Coerce to \code{data.frame}
-#' 
+#'
+#' @param x Object to coerce
+#' @param ... arguments passed to other methods
+#' @param optional ignored
+#' @param row.names ignored
+#'
 #' @export
 setGeneric("as.data.frame")
 
@@ -656,9 +658,9 @@ setGeneric("as.data.frame")
 #' local to the object).
 #'
 #'
-#' @param x an R object
+#' @inheritParams as.data.frame
 #' @param expand_assignments Toggle substitution of `:=` assignments.
-#' @param ... passed throught to internal methods.
+#' 
 #' 
 #' @return A \code{data.frame} with elements \code{rule}, \code{name},
 #'  \code{label}, \code{origin}, \code{description}, and \code{created}.

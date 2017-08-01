@@ -696,11 +696,10 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
   L
 })
 
-#' Confrontation object to data.frame
+#' Confrontation object to data frame
 #'
-#' @param x A \code{confrontation} object
-#' @param ... Currently not implemented
 #' 
+#' @inheritParams as.data.frame
 #'
 #' @return A \code{data.frame} with columns
 #' \itemize{
@@ -709,6 +708,8 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
 #'   \item{\code{value} Value after evaluation}
 #'   \item{\code{expression} evaluated expression}
 #' }
+#'
+#' @example ../examples/as.data.frame.R
 #'
 #' @export
 setMethod("as.data.frame","confrontation", function(x,...){
