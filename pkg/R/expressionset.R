@@ -643,6 +643,12 @@ as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
 #' @rdname as.data.frame.expressionset
 as.data.frame <- function(x,...) UseMethod('as.data.frame')
 
+#' Coerce to \code{data.frame}
+#' 
+#' @export
+setGeneric("as.data.frame")
+
+
 #' Translate an expressionset to data.frame
 #' 
 #' Expressions are deparsed and combined in a \code{data.frame} with (some
@@ -657,7 +663,7 @@ as.data.frame <- function(x,...) UseMethod('as.data.frame')
 #' @return A \code{data.frame} with elements \code{rule}, \code{name},
 #'  \code{label}, \code{origin}, \code{description}, and \code{created}.
 #' @export
-as.data.frame.expressionset <- function(x,expand_assignments=TRUE,...){
+setMethod("as.data.frame","expressionset", function(x, expand_assignments=TRUE, ...){
   rules <- sapply(x$exprs(expand_assignments=expand_assignments,...),call2text)
   x <- x[names(rules)]
   data.frame(
@@ -670,7 +676,7 @@ as.data.frame.expressionset <- function(x,expand_assignments=TRUE,...){
    , row.names=NULL
    , stringsAsFactors=FALSE
   )
-}
+})
 
 
 

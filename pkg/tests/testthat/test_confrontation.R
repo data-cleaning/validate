@@ -136,5 +136,20 @@ test_that("Confrontations with slack on linear inequalities",{
   expect_true( all(values(confront(d,v))) )
 })
 
+test_that("coerce confrontations to data.frame",{
+  i <- indicator(mean(height),sd(weight))
+  v <- validator(height > 0, sd(weight)>0)
+  women$id <- letters[1:15]
+  expect_equal(nrow(as.data.frame(confront(women,i))),2)
+  expect_equal(ncol(as.data.frame(confront(women,i))),3)
+  expect_equal(ncol(as.data.frame(confront(women,i,key="id"))),4)
+
+  expect_equal(nrow(as.data.frame(confront(women,v))),16)
+  expect_equal(ncol(as.data.frame(confront(women,v))),3)
+  expect_equal(ncol(as.data.frame(confront(women,v,key="id"))),4)
+})
+
+
+
 
 
