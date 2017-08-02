@@ -19,13 +19,18 @@ library(validate)
 We assume that the reader went through the first couple of sections
 of the [introductory vignette](introduction.html).
 
-### Workflow
-
 In the validate package, an 'indicator' is a rule or function that takes as
 input a data set and outputs a number. Indicators are usually
 designed to be easily interpretable by domain experts and therefore
-depend strongly on the application. In `validate` users are completely free
-to define their own indicators. Here is an example of the workflow.
+depend strongly on the application. In 'validate' users are free
+to specify indicator. By specifing them separate from the programming
+workflow, they can be treated as first-class objects: indicator specs can
+be maintained, version-controlled, and documented in separate files (just like
+validation rules.)
+
+### Workflow
+
+Here is a simple example of the workflow.
 
 ```{r}
 i <- indicator(
