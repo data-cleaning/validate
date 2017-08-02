@@ -147,6 +147,12 @@ test_that("coerce confrontations to data.frame",{
   expect_equal(nrow(as.data.frame(confront(women,v))),16)
   expect_equal(ncol(as.data.frame(confront(women,v))),3)
   expect_equal(ncol(as.data.frame(confront(women,v,key="id"))),4)
+  
+  v <- validator(hite>0,weight>0)
+  d <- confront(women,v)
+  expect_warning(as.data.frame(d))
+  i <- indicator(mean(hite))
+  expect_warning(as.data.frame(confront(women,i)))
 })
 
 

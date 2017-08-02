@@ -200,6 +200,7 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
     , ._value = x$._value[i]
     , ._warn = x$._warn[i]
     , ._error  = x$._error[i]
+    , ._key = x$._key
   )
 })
 
@@ -713,10 +714,16 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
 #'
 #' @export
 setMethod("as.data.frame","confrontation", function(x,...){
+  ew <- has_error(x) | has_warning(x)
+  if (any(ew)){
+    warning(paste(
+      "Encountered warnings and/or erors in confrontation object: " 
+      ,"skipped at coercion"))
+    x <- x[!ew]
+  }
   v <- values(x, simplify=FALSE, drop=FALSE)
   expr <- sapply(x$._calls, call2text)
   nam  <- names(v)
-
   do.call("rbind",
     lapply(seq_along(v), function(i){
       d <- data.frame(key=getkey(v[[i]])
