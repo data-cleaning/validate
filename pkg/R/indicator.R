@@ -65,6 +65,7 @@ ini_indicator <- function(obj, ..., .file, .data){
     .ini_expressionset_yml(obj, .file, .prefix="I")
   } else if (!missing(.data)){
     .ini_expressionset_df(obj, dat=.data, .prefix="I")
+    obj$._options <- .PKGOPT
   }
 }
 

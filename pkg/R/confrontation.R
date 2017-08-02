@@ -297,7 +297,7 @@ setMethod("confront",signature("data.frame","indicator","list"),function(dat, x,
 #' @export 
 setMethod('summary',signature('indication'), function(object,...){
   data.frame(
-    indicator = names(object$._value)
+    name = names(object$._value)
     , items = sapply(object$._value,length)
     , min = get_stat(object,min,na.rm=TRUE)
     , mean  = get_stat(object,mean,na.rm=TRUE)
@@ -503,7 +503,7 @@ nas <- function(x){
 #' 
 setMethod('summary',signature('validation'),function(object,...){
   data.frame(
-    rule = names(object$._value)
+    name = names(object$._value)
     , items = sapply(object$._value,length)
     , passes = passes(object)
     , fails  = fails(object)

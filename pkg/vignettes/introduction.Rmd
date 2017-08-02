@@ -3,9 +3,8 @@ title: "Introduction to Validate"
 author: "Mark van der Loo and Edwin de Jonge"
 date: "August 27, 2015"
 output: 
-  html_document:
+  rmarkdown::html_vignette:
     toc: true
-    theme: united
 ---
 <!--
 %\VignetteEngine{rmarkdown}
@@ -121,6 +120,33 @@ cf <- confront(women,v)
 summary(cf)
 ```
 Observe that the expressions for validation are now manipulated: everywhere where `BMI` was used, it was replaced with the computation defined before.
+
+### Conversion from and to `data.frames`
+
+Validator objects can be read from and converted to `data.frames`. To create
+a validator object, at least a character column named `rule` is necessary.
+```{r}
+df <- data.frame(
+  rule = c("height>0","weight>0","height/weight>0.5")
+  , label = c("height positive","weight positive","ratio limit")
+)
+v <- validator(.data=df)
+v
+```
+Now confront with the data and merge back with rule metadata. 
+```{r}
+cf <- confront(women, v)
+quality <- as.data.frame(cf)
+measure <- as.data.frame(v)
+head( merge(quality, measure) )
+```
+
+Or, merge with the summarized results. The result of `summary` is just a `data.frame` (tidy, isn't it?).
+```{r}
+merge(summary(cf),measure)
+```
+
+
 
 ### Confrontation objects
 The outcome of confronting a validator object with a data set is an object of class

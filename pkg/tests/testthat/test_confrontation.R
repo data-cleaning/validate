@@ -6,7 +6,7 @@ context("confrontation")
 test_that("validation object contents",{
   cf <- check_that(women, height > 0, ape > 0,weight / height > 2 )  
   expect_equal(length(cf),3)
-  expect_equal(names(summary(cf)),c("rule","items","passes","fails","nNA","error","warning","expression"))
+  expect_equal(names(summary(cf)),c("name","items","passes","fails","nNA","error","warning","expression"))
   vl <- rep(TRUE,30)
   vl[16:18] <- FALSE
   expect_equivalent(values(cf), array(vl,dim=c(15,2)))
@@ -33,7 +33,7 @@ test_that("indication object contents",{
   expect_equivalent(round(values(cf),3),array(c(65,15.499),dim=c(1,2)))  
   expect_equal(errors(cf)[[1]],"object 'foo' not found")
   expect_equal(names(summary(cf)),
-    c("indicator"  
+    c("name"  
       ,"items"
       ,"min"
       ,"mean" 

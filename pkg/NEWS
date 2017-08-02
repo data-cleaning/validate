@@ -8,6 +8,7 @@ version 0.2.0
 - expressionset objects (validator, indicator) can now be coerced to as.data.frame.
 - confrontation objects (validation, indication) can now be coerced to data.frame.
 - safer expression manipulation under the hood.
+- breaking: 'rule' column now called 'name' in summary of 'confrontation' objects.
 - bugfix: character indexing with multiple elements of expressionset objects would crash.
 - bugfix: proper recycling for replace methods in expressionset.
 

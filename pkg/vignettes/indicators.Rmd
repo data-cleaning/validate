@@ -2,7 +2,9 @@
 title: "Data quality indicators with the validate package"
 author: "Mark van der Loo and Edwin de Jonge"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{02_Indicators}
   %\VignetteEngine{knitr::rmarkdown}
@@ -48,15 +50,62 @@ indicate wether calculation of the indicators was problematic.
 
 A specific problem that may occur is when the result of an indicator is non-numeric.
 ```{r}
-i <- indicator(mh = mean(height), a = {"A"})
+jj <- indicator(mh = mean(height), a = {"A"})
 ```
 here, the second 'indicator' is an expression that always yields a constant (the character string `"A"`).
 ```{r}
-cf <- confront(women, i)
+cf <- confront(women, jj)
 cf
 warnings(cf)
 ```
 
 
-### Workflow
+### Getting the values
+
+Values can be obtained with the `values` function, or by converting to a `data.frame`.
+
+We add a unique identifier (this is optional) to make it easier to connect results
+with the data.
+```{r}
+women$id <- letters[1:15]
+```
+Compute indicators and convert to `data.frame`.
+```{r}
+ind <- confront(women, i,key="id")
+(out <- as.data.frame(ind))
+```
+Observe that there is no key for indicators `mh` and `mw` since these are
+constructed from multiple records.
+
+
+### Indicators and data.frames
+
+Indicators can be constructed from and coerced to data.frames. To define an indicator you
+need to create a data.frame that _at least_ has a character column called `rule`. All
+other columns are optional.
+
+```{r}
+idf <- data.frame(
+  rule = c("mean(height)","sd(height)")
+  , label = c("average height", "std.dev height")
+  , description = c("basic statistic","fancy statistic")
+)
+i <- indicator(.data=idf)
+i
+```
+
+Now, confront with data and merge the results back with rule metadata.
+```{r}
+quality <- as.data.frame(confront(women, i))
+measures <- as.data.frame(i)
+merge(quality, measures)
+```
+
+
+
+
+
+
+
+
 
