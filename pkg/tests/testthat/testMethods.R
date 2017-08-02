@@ -11,10 +11,16 @@ test_that("Expressionset extraction",{
   expect_equal(length(v[1]),1)
   expect_equal(length(v[1:2]),2)
   expect_equal(length(v["V1"]),1)
+  expect_equal(length(v[c("V1","V2")]),2)
   expect_equivalent(class(summary(v)),"data.frame")
   expect_true(all(c("block","nvar","rules") %in% names(summary(v))) )
 })
 
+test_that("name setter",{
+  v <- validator(x>0,y>0,z>0)
+  expect_warning(names(v) <- c("A","B"))
+  expect_true(!any(duplicated(names(v))))
+})
 
 test_that("Variables can be retrieved",{
   expect_equal( variables(validator(x > 0)),'x')

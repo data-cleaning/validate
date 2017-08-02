@@ -21,8 +21,10 @@ test_that("setting properties",{
    
 })
 
-test_that("adding validators",{
-  expect_equal(length(validator(x>0) + validator(x<1)),2)
+test_that("composing validators",{
+  v <- validator(x>0) + validator(x<1)
+  expect_equal(length(v),2)
+  expect_true(!any(duplicated(names(v))))
 })
 
 test_that("regression tests",{
@@ -34,7 +36,7 @@ test_that("regression tests",{
   # Issue #67 reported by Kevin Kuo
   dat <- data.frame(A = c("X","Y"),B=c("Y","Y"),stringsAsFactors=FALSE)
   expect_equivalent(values(check_that(dat,A == B)),array(c(FALSE,TRUE),dim=c(2,1)))
-   
+  v <- validator(x>0) + validator(y>0)
 })
 
 

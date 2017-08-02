@@ -84,8 +84,10 @@ ini_indicator <- function(obj, ..., .file, .data){
 #'
 #' @export
 setMethod("+", c("indicator","indicator"), function(e1, e2){
-  d <- rbind(as.data.frame(e1), as.data.frame(e2))
-  indicator(.data=d)
+  ii <- indicator()
+  ii$rules <- c(e1$rules, e2$rules)
+  names(ii) <- make.names(names(ii),unique=TRUE)
+  ii
 })
 
 

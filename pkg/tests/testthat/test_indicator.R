@@ -10,5 +10,7 @@ test_that("indicators work as expected",{
   expect_warning(confront(women,i))
 
   expect_equal(length(indicator(mean(x)) + indicator(mean(x)/sd(x))),2)
+  ii <- indicator(mean(x)) + indicator(mean(y))
+  expect_true(!any(duplicated(names(ii))))
 })
 

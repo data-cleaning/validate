@@ -8,7 +8,8 @@ version 0.2.0
 - expressionset objects (validator, indicator) can now be coerced to as.data.frame.
 - confrontation objects (validation, indication) can now be coerced to data.frame.
 - safer expression manipulation under the hood.
-
+- bugfix: character indexing with multiple elements of expressionset objects would crash.
+- bugfix: proper recycling for replace methods in expressionset.
 
 version 0.1.8
 - Added loggers for the 'lumberjack' package: lbj_cells and lbj_rules

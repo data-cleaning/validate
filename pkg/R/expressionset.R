@@ -118,6 +118,9 @@ expressionset <- setRefClass("expressionset"
   if (is.null(dat[["label"]])){
     dat$label <- ""
   }
+  if (is.null(dat[["origin"]])){
+    dat$origin <- ""
+  }
   if (is.null(dat[["rule"]])){
     stop("No column called 'rule' found")
   }
@@ -129,7 +132,7 @@ expressionset <- setRefClass("expressionset"
     R[[i]] <- rule(
       expr = parse(text=dat$rule[i])[[1]]
       , name = dat$name[i]
-      , origin = "data.frame"
+      , origin = dat$origin[i]
       , label = dat$label[i]
       , description = dat$description[i]
       , created = cr
@@ -465,13 +468,30 @@ setMethod("names","expressionset",function(x){
   sapply(x$rules, function(rule) rule@name)
 })
 
+# recycle x over y
+recycle <- function(x,y){
+  m <- length(x)
+  n <- length(y)
+  remainder <- n %% m
+  times <- n %/% m
+  if (remainder > 0){
+    warning(gettext("longer object length is not a multiple of shorter object length"))
+    times <- times + 1
+  }
+  rep(x,times=times)[seq_len(n)]
+}
+
+
 #' Set names
+#'
+#' Names are recycled and made unique with \code{\link{make.names}}
 #'
 #' @param x Object
 #' @param value Value to set
 #' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("names",c("expressionset","character"),function(x,value){
+  value <- make.names(recycle(value,x),unique=TRUE)
   for ( i in seq_len(length(x))){
     names(x$rules[[i]]) <- value[i]
   }
@@ -485,6 +505,7 @@ setReplaceMethod("names",c("expressionset","character"),function(x,value){
 #' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("origin",c("expressionset","character"), function(x,value){
+  value <- recycle(value, x)
   for ( i in seq_len(length(x))){
     origin(x$rules[[i]]) <- value[i]
   }
@@ -498,6 +519,7 @@ setReplaceMethod("origin",c("expressionset","character"), function(x,value){
 #' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("label",c("expressionset","character"),function(x,value){
+  value <- recycle(value,x)
   for ( i in seq_len(length(x))){
     label(x$rules[[i]]) <- value[i]
   }
@@ -512,6 +534,7 @@ setReplaceMethod("label",c("expressionset","character"),function(x,value){
 #' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("description",c("expressionset","character"),function(x,value){
+  value <- recycle(value,x)
   for ( i in seq_len(length(x))){
     description(x$rules[[i]]) <- value[i]
   }
@@ -525,6 +548,7 @@ setReplaceMethod("description",c("expressionset","character"),function(x,value){
 #' @example ../examples/properties.R
 #' @export 
 setReplaceMethod("created",c("expressionset","POSIXct"),function(x,value){
+  value <- recycle(value, x)
   for ( i in seq_len(length(x))){
     created(x$rules[[i]]) <- value[i]
   }
@@ -589,7 +613,7 @@ setMethod("length","expressionset",function(x) length(x$rules))
 #' @export
 setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   if (is.character(i)){
-    i <- i == names(x)
+    i <- match(i,names(x))
   }
   out <- new(class(x))
   out$rules <- x$rules[i]
