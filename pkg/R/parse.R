@@ -225,6 +225,30 @@ replace_dollar <- function(x){
   x
 }
 
+# replace occurrences of  'x %in% y' with match(x,y,nomatch=NA,incomparables=NA)
+replace_in <- function(x){
+  L <- which.call(x,"%in%")
+   for ( k in L ){
+    m <- expression(e1 %vin% e2)[[1]]
+    if (length(k) == 1){
+      m[[2]] <- left(x)
+      m[[3]] <- right(x)
+      x <- m
+    } else {
+      i <- k[-length(k)]
+      e <- x[[i]]
+      m[[2]] <- left(e)
+      m[[3]] <- right(e)
+      x[[i]] <- m
+    }
+  }
+  x
+}
+
+
+
+
+
 
 # test if a call defines a variable group
 defines_var_group <- function(x){

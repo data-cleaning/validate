@@ -9,8 +9,12 @@
 #'
 #' @name syntax
 #'
+#' @section The \code{\%in\%} operator:
+#' When executing a validating statement, the \code{\%in\%} operator is 
+#' replaced with \code{\link[validate:vin]{\%vin\%}}.
+#'
 #' 
-#' @section Refernce the dataset as a whole:
+#' @section Reference the dataset as a whole:
 #' 
 #' Metadata such as numer of rows, columns, column names and so on can be 
 #' tested by referencing the whole data set with the '\code{.}'. For example,
@@ -58,7 +62,7 @@
 NULL
 
 
-#### MISSINGNES COUNTERS ------------------------------------------------------
+#### MISSINGNES COUNTERS (DEPRECATED) ------------------------------------------
 #
 # These are currently hidden in documentation and will be deleted eventually since
 # we now have the "." to reference the dataset. Other convenience functions might take
@@ -170,6 +174,43 @@ VARFUN <- c(
   , "any_missing"
   , "any_duplicated"
 )
+
+### CONSISTENT SET MEMBERSHIP --------------------------------------------------
+
+#' A consistent set membership operator
+#' 
+#' A membership operator like \code{\link[base:match]{\%in\%}} that handles
+#' \code{NA} more consistently with R's other logical comparison operators.
+#'
+#' @param x vector or \code{NULL}: the values to be matched
+#' @param table vector or \code{NULL}: the values to be matched against.
+#'
+#' @note
+#' R's basic comparison operators (almost) always return \code{NA} when one 
+#' of the operands is \code{NA}. The \code{\%in\%} operator is an exception.
+#' Compare for example \code{NA \%in\% NA} with \code{NA == NA}. 
+#' 
+#' @examples 
+#' # we cannot be sure about the first element:
+#' c(NA, "a") %vin% c("a","b")
+#' 
+#' # we cannot be sure about the 2nd and 3rd element (but note that they
+#' # cannot both be TRUE):
+#' c("a","b","c") %vin% c("a",NA)
+#' 
+#' # we can be sure about all elements:
+#' c("a","b") %in% character(0)
+#' 
+#' @rdname vin
+#' @export
+"%vin%" <- function(x, table){
+  out <- match(x, table, nomatch=0) > 0
+  if (anyNA(table)){
+    out[!out] <- NA
+  }
+  out[is.na(x)] <- NA
+  out
+}
 
 
 

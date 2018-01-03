@@ -165,4 +165,14 @@ test_that("translation of rules to data.frame",{
 })
 
 
-
+test_that("replacing %in% operator",{
+  e <- expression( x %in% y)[[1]]
+  expect_identical(replace_in(e)
+    , expression(x %vin% y)[[1]])
+  
+  e <- expression( x %in% y | x %in% z)[[1]]
+  expect_identical(replace_in(e)
+    , expression(x %vin% y | x %vin% z)[[1]])
+                   
+  
+})

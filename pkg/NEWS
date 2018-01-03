@@ -1,3 +1,7 @@
+version 0.2.1
+- Set membership operator %in% is now replaced with %vin% (solves issue #80)
+- New set membership operator "%vin%", behaving consistently with "=="
+
 version 0.2.0
 - new object of class 'indicator'
 - validation rules now support if-then-else syntax.

@@ -67,9 +67,37 @@ test_that('blocks works',{
   v <- validator(x +y ==z, x+z>0)
   expect_equal(length(v$blocks()),1)
   
-  
-  
 })
+
+test_that("%vin%",{
+  expect_identical(
+    c("a","b") %vin% integer(0)
+    , logical(2)
+  )
+  expect_identical(
+    c("a","b") %vin% c("a","c","d")
+    , c(TRUE, FALSE)
+  )
+  expect_identical(
+    c("a",NA) %vin% c("a","c","d")
+    , c(TRUE, NA)
+  )
+  expect_identical(
+    c(NA,"b") %vin% c("a","c","d")
+    , c(NA,FALSE)
+  )
+  expect_identical(
+    c("a","b") %vin% c(NA,"c","d")
+    , c(NA,NA)
+  )
+  expect_identical(
+    c("a","b") %vin% c("a",NA,"d")
+    , c(TRUE,NA))
+})
+
+
+
+
 
 
 
