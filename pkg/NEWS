@@ -1,6 +1,9 @@
 version 0.2.1
-- Set membership operator %in% is now replaced with %vin% (solves issue #80)
+- Set membership operator %in% is now replaced with %vin% (#80).
 - New set membership operator "%vin%", behaving consistently with "=="
+- Added `[[<-` and `[<-` methods for validator objects.
+- Validation rules can now be endowed with user-defined metadata, see ?meta (#59).
+
 
 version 0.2.0
 - new object of class 'indicator'
