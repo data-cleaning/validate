@@ -4,10 +4,11 @@
 #' A rich expression
 #' 
 #' @section Details:
-#' Technically, \code{rule} is a \code{call} object endowed with extra attributes such
-#' as a name, a label and a description description, creation time and a reference to its origin.
-#' Rule objects are not for direct use by users of the package, but may be of interest for
-#' developers of this package, or packages depending on it.
+#' Technically, \code{rule} is a \code{call} object endowed with extra
+#' attributes such as a name, a label and a description description, creation
+#' time and a reference to its origin. Rule objects are not for direct use by
+#' users of the package, but may be of interest for developers of this package,
+#' or packages depending on it.
 #' 
 #' @section Exported S4 methods for \code{rule}:
 #' \itemize{
@@ -34,20 +35,22 @@
 #' @keywords internal
 rule <- setClass("rule",
   slots = c(
-   expr         = "language"  # MUST be a 'call'[*]
-   , name       = "character"
-   , label      = "character" # label description
-   , description       = "character" # description description
-   , origin     = "character" 
-   , created    = "POSIXct"
+   expr          = "language"  # MUST be a 'call'[*]
+   , name        = "character"
+   , label       = "character" # label description
+   , description = "character" # description description
+   , origin      = "character" 
+   , created     = "POSIXct"
+   , meta        = "list"
   )
   , prototype = list(
    expr         = NULL
-   , name       = character(0)
-   , label      = character(0)
-   , description       = character(0)
-   , origin     = character(0)
-   , created    = as.POSIXct(NA)
+   , name        = character(0)
+   , label       = character(0)
+   , description = character(0)
+   , origin      = character(0)
+   , created     = as.POSIXct(NA)
+   , meta        = vector(mode = "list", length = 0)
   )
 )
 
@@ -70,6 +73,39 @@ rule <- setClass("rule",
 
 # S4 GENERICS -----------------------------------------------------------------
 
+#' Get or set rule metadata
+#' 
+#' Rule metadata are key-value pairs where the value is a simple (atomic)
+#' string or number.
+#' 
+#' @param x an R object
+#' @param ... Arguments to be passed to other methods
+#' 
+#' @name meta
+#' @export
+#' 
+#' @examples 
+#' 
+#' v <- validator(x > 0, y > 0)
+#' 
+#' # metadata is recycled over rules
+#' meta(v,"foo") <- "bar" 
+#' 
+#' # assign metadata to a selection of rules
+#' meta(v[1],"fu") <- 2
+#' 
+#' # retrieve metadata as data.frame
+#' meta(v)
+#' 
+#' # retrieve metadata as list
+#' meta(v,simplify=TRUE)
+#' 
+setGeneric("meta",function(x,...) standardGeneric("meta"))
+
+
+
+
+
 #' Extract variable names
 #'
 #' @param x An R object
@@ -83,6 +119,15 @@ rule <- setClass("rule",
 #' @name variables
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
+
+
+#' @param name  \code{[character]} metadata key
+#' @param value Value to set
+#' @rdname meta
+#' @export
+setGeneric("meta<-", function(x, name, value) standardGeneric("meta<-"))
+
+
 
 
 #' Set origin
@@ -206,6 +251,12 @@ setGeneric("created", function(x,...) standardGeneric("created"))
 
 
 # S4 METHODS ------------------------------------------------------------------
+
+#' @rdname meta 
+setMethod("meta","rule", function(x,...){
+  x@meta
+})
+
 #' @rdname expr
 setMethod("expr","rule",function(x,...) x@expr)
 
@@ -230,9 +281,15 @@ setMethod("show", "rule", function(object){
   cat(sprintf("\nObject of class %s.",class(object)))
   nm <- slotNames(object)
   n <- max(nchar(nm))
+  nm <- nm[nm != "meta"]
   vl <- sapply(nm,function(x) paste0("",format(slot(object,x))))
   fmt <- paste0("\n %-",n,"s: %s")
   cat(sprintf(fmt,nm,vl))
+  # meta names and abbreviated type.
+  tp <- abbreviate(sapply(meta(object),class),3)
+  nm <- names(meta(object))
+  meta_str <- paste(sprintf("%s<%s>",nm,tp), collapse=", ")
+  cat(sprintf(fmt,"meta",meta_str))
 })
 
 setMethod("validating","rule", function(x,...){
@@ -260,6 +317,15 @@ setMethod("created", "rule", function(x,...) setNames( x@created,x@name) )
 
 setMethod("is_tran_assign","rule", function(x){
   x@expr[[1]] == ":="
+})
+
+
+
+#' Set metadata
+#' @rdname meta
+setReplaceMethod("meta", c("rule","character"), function(x, name, value){
+  x@meta[[name]] <- value
+  x
 })
 
 

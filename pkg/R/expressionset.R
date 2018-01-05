@@ -451,6 +451,38 @@ setMethod("label","expressionset",function(x,...) unlist(sapply(x$rules, label))
 #' @describeIn description description description of every rule in \code{x}
 setMethod("description", "expressionset", function(x,...) unlist(sapply(x$rules, description)))
 
+#' @rdname meta
+#' @param simplify Gather all metadata into a dataframe?
+setMethod("meta","expressionset", function(x, simplify=TRUE,...){
+  L <- lapply(x$rules, function(r){
+    list(name=r@name
+       , label = label(r)
+       , description=description(r)
+       , origin = origin(r)
+       , created = created(r)
+       , meta = meta(r)
+    )
+  })
+  if (!simplify){ 
+    L
+  } else {
+    K <- lapply(L, function(m){
+      c(m[1:5], m[[6]])
+    })
+    
+    cols <- Reduce(union, lapply(K,names))
+    U <- matrix(NA,nrow=length(K),ncol=length(cols),dimnames=list(NULL,cols))
+    U <- as.data.frame(U)
+
+    for (i in seq_along(K)){
+      k <- K[[i]]
+      U[i,names(k)] <- k
+    }
+    U$created <- .POSIXct(U$created)
+    U
+  }
+})
+
 
 #' @describeIn created Creation time of every rule in \code{x}
 setMethod("created", "expressionset", function(x,...){ 
@@ -487,6 +519,20 @@ recycle <- function(x,y){
   }
   rep(x,times=times)[seq_len(n)]
 }
+
+
+
+#' @rdname meta
+setReplaceMethod("meta",c("expressionset","character"),function(x,name,value){
+  for ( i in seq_along(x$rules)){
+    rule <- x[[i]]
+    meta(rule, name) <- value
+    x$rules[[i]] <- rule
+  }
+  x
+})
+
+
 
 
 #' Set names
@@ -618,6 +664,7 @@ setMethod("length","expressionset",function(x) length(x$rules))
 #' @aliases [,expressionset-method
 #' 
 #' @export
+#' @keywords internal
 setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   if (is.character(i)){
     i <- match(i,names(x))
@@ -628,9 +675,43 @@ setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
   out
 })
 
+
+#' Replace a rule in a ruleseta
+#' 
+#' @param x an R object
+#' @param i index of length 1
+#' @param value object of class \code{\link{rule}}
+#' @export
+#' @keywords internal
+setMethod("[[<-",signature("expressionset"),function(x,i,value){
+  stopifnot(inherits(value,"rule"))
+  stopifnot(length(i)==1)
+  x$rules[[i]] <- value
+  x
+})
+
+#' Replace a subset of an expressionset with another expressionset
+#' 
+#' @param x an R object inheriting from \code{expressionset}
+#' @param i a \code{logical}, \code{character}, or \code{numeric} index
+#' @param value an R object of the same class as \code{x}
+#' @export
+#' @keywords internal
+setMethod("[<-",signature("expressionset"),function(x,i,value){
+  stopifnot(inherits(value,class(x)))
+  if (is.character(i)){
+    i <- match(i,names(x),nomatch=0)
+  }
+  x$rules[i] <- value$rules
+  x
+})
+
+
+
 #' @param exact Not implemented
 #' @rdname select
 #' @aliases [[,expressionset-method
+#' @keywords internal
 setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
   if ( is.character(i) ){
     i <- which(i %in% names(x))
@@ -697,18 +778,8 @@ setGeneric("as.data.frame")
 #'  \code{label}, \code{origin}, \code{description}, and \code{created}.
 #' @export
 setMethod("as.data.frame","expressionset", function(x, expand_assignments=TRUE, ...){
-  rules <- sapply(x$exprs(expand_assignments=expand_assignments,...),call2text)
-  x <- x[names(rules)]
-  data.frame(
-   rule = rules
-   , name = names(x)
-   , label = label(x)
-   , origin = origin(x)
-   , description = description(x)
-   , created = created(x)
-   , row.names=NULL
-   , stringsAsFactors=FALSE
-  )
+  rules <- sapply(x$exprs(expand_assignments=expand_assignments,...), call2text)
+  cbind(meta(x,simplify=TRUE),rule=rules)
 })
 
 
