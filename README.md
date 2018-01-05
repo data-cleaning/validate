@@ -41,8 +41,8 @@ install.packages("validate")
 
 _Beta_ versions of the package can be installed through our [drat repository](https://github.com/data-cleaning/drat). 
 ```
-install.packages("validate"
- , contriburl="https://data-cleaning.github.io/drat/src/contrib")
-
+drat::addRepo("data-cleaning")
+install.packages("validate")
 ```
+
 Note that the beta version likely contain bugs (please report them!) and interfaces that may not be stable.
