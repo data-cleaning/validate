@@ -414,7 +414,8 @@ as.list.rule <- function(x, expr_as_text = TRUE, ...){
     label = x@label,
     description = x@description, 
     created = x@created,
-    origin = x@origin
+    origin = x@origin,
+    meta = x@meta
   )
 }
 
