@@ -44,7 +44,9 @@ vignette](indicators.html) introduces quality indicator rules.
 
 
 ### A quick example
-Here's an example demonstrating the typical workflow. We'll use the built-in ```women``` data set (average heights and weights for American women aged 30-39).
+Here's an example demonstrating the typical workflow. We'll use the built-in
+```women``` data set (average heights and weights for American women aged
+30-39).
 ```{r }
 data(women)
 summary(women)
@@ -85,7 +87,9 @@ Validator objects are used to store, investigate and manipulate rule sets.
 v <- validator(height > 0, weight > 0, height/weight > 0)
 v
 ```
-The validator object has stored the rule and assigned names to them for future reference.  To check this, we confront the data set with the validation rules we've just defined:
+The validator object has stored the rule and assigned names to them for future
+reference.  To check this, we confront the data set with the validation rules
+we've just defined:
 ```{r}
 cf <- confront(women,v)
 cf
@@ -206,7 +210,7 @@ Linear equalities form an important class of validation rules. To prevent equali
 
 
 
-### Investigating validator objects
+### Metadata and investigating validator objects
 Validator objects store a set of rules, optionally with some metadata per rule.
 Currently, the following functions can be used to get or set metadata:
 
@@ -215,8 +219,9 @@ Currently, the following functions can be used to get or set metadata:
 - `created` : when were the rules created?
 - `label` : Short description of the rule
 - `description`: Long description of the rule
+- `meta`: Set or get generic metadata
 
-Names can be set from the command line when defining a validator object.
+For example, names can be set from the command line when defining a validator object.
 ```{r}
 v <- validator(rat = height/weight > 0.5, htest=height>0, wtest=weight > 0)
 names(v)
@@ -225,6 +230,23 @@ Also try
 ```{r}
 names(v)[1] <- "ratio"
 v
+```
+
+It is also possible to add generic key-value pairs as metadata. Getting and setting follows the usual
+recycling rules of R.
+```{r}
+# add 'foo' to the first rule:
+meta(v[1],"foo") <- 1
+# Add 'bar' to all rules
+meta(v,"bar") <- "baz"
+```
+Metadata can be made visible by selecting a single rule:
+```{r}
+v[[1]]
+```
+Or by extracting it to a `data.frame`
+```{r}
+meta(v)
 ```
 
 
