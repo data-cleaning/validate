@@ -525,9 +525,10 @@ recycle <- function(x,y){
 
 #' @rdname meta
 setReplaceMethod("meta",c("expressionset","character"),function(x,name,value){
+  values <- rep(value, times = (length(x) %/% length(value)+1))[seq_along(x)]
   for ( i in seq_along(x$rules)){
     rule <- x[[i]]
-    meta(rule, name) <- value
+    meta(rule, name) <- values[i]
     x$rules[[i]] <- rule
   }
   x

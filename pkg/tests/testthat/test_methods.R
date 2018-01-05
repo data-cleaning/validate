@@ -58,6 +58,9 @@ test_that("metadata",{
   expect_equal(meta(v)$foo,c(1,1))
   meta(v[2],"bar") <- "bla"
   expect_equal(meta(v)$bar,c(NA,"bla"))
+  
+  meta(v,"baz") <- 1:2
+  expect_equal(meta(v)$baz, 1:2)
 })
 
 
