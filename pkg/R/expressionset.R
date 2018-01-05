@@ -182,7 +182,7 @@ rules_from_block <- function(block, origin){
         , description = as.character(x$description)
         , origin = origin
         , created = now
-        , meta = x$meta
+        , meta = as.list(x$meta)
       )  
     })
   }

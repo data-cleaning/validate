@@ -41,6 +41,12 @@ test_that("Parsing options",{
   expect_equal(length(v),1)
 })
 
+test_that("Parsing metadata",{
+  v <- validator(.file="yamltests/yaml_with_meta.yaml")
+  expect_equal(meta(v)$foo,c("1",NA))
+  expect_equal(meta(v)$bar,c(NA,"2"))
+})
+
 test_that("Parsing included files",{
   v <- validator(.file="yamltests/top.yaml")
   expect_equal(length(v),6)

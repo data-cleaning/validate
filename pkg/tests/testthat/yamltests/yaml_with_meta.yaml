@@ -1,0 +1,18 @@
+rules:
+- expr: x > 0
+  name: V1
+  label: ''
+  description: ''
+  created: 2018-01-05 11:29:50
+  origin: command-line
+  meta:
+    foo: '1'
+- expr: y > 0
+  name: V2
+  label: ''
+  description: ''
+  created: 2018-01-05 11:29:50
+  origin: command-line
+  meta:
+    bar: '2'
+
