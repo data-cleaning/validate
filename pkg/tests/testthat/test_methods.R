@@ -52,6 +52,14 @@ test_that("Variables can be retrieved",{
   
 })
 
+test_that("metadata",{
+  v <- validator(x>0,y>0)
+  meta(v,"foo") <-1
+  expect_equal(meta(v)$foo,c(1,1))
+  meta(v[2],"bar") <- "bla"
+  expect_equal(meta(v)$bar,c(NA,"bla"))
+})
+
 
 
 context("Methods for classes (inheriting from) confrontation")
