@@ -39,13 +39,10 @@ The latest release can be installed from the R command-line
 install.packages("validate")
 ```
 
-_Beta_ versions of the package can be installed through our [drat repository](https://github.com/data-cleaning/drat). If it is not yet installed on your system, first install [Dirk Eddelbuettel](http://dirk.eddelbuettel.com/)'s [drat](http://www.r-pkg.org/pkg/drat) package.
+_Beta_ versions of the package can be installed through our [drat repository](https://github.com/data-cleaning/drat). 
 ```
-install.packages("drat")
+install.packages("validate"
+ , contriburl="https://data-cleaning.github.io/drat/src/contrib")
+
 ```
-Next, install `validate` as follows.
-```
-drat::addRepo("data-cleaning")
-install.packages("validate")
-```
-Note that the beta version can contain bugs and interfaces that may not be stable..
+Note that the beta version likely contain bugs (please report them!) and interfaces that may not be stable.
