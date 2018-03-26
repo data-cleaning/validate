@@ -668,7 +668,9 @@ setMethod("length","expressionset",function(x) length(x$rules))
 #' @export
 #' @keywords internal
 setMethod("[",signature("expressionset"), function(x,i,j,...,drop=TRUE){
-  if (is.character(i)){
+  if (missing(i)){
+    i <- seq_len(length(x))
+  } else if (is.character(i)){
     i <- match(i,names(x))
   }
   out <- new(class(x))
