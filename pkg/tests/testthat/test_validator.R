@@ -37,11 +37,18 @@ test_that("regression tests",{
   dat <- data.frame(A = c("X","Y"),B=c("Y","Y"),stringsAsFactors=FALSE)
   expect_equivalent(values(check_that(dat,A == B)),array(c(FALSE,TRUE),dim=c(2,1)))
   v <- validator(x>0) + validator(y>0)
-  
+
+  # Issue #82 reported by Masafumi Okada
+  df <- data.frame(x=c("a","b"))
+  # used to crash 'which.call' because of bad comparison (using == crashes)
+  out <-  check_that(df, x %in% c("a","b",NA))
+    
   # Issue #83 reported by Anne Petersen
   v1 <- validator(sex == "Male")
   # this should create a new copy but gave an error.
   v2 <- v1[]
+  
+  
 })
 
 
