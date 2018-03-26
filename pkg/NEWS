@@ -1,3 +1,6 @@
+version 0.2.2
+- Fixed (harmless) compiler warning (thanks to Brian Ripley)
+
 version 0.2.1
 - Set membership operator %in% is now replaced with %vin% (#80).
 - New set membership operator "%vin%", behaving consistently with "=="

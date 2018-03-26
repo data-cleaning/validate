@@ -43,7 +43,7 @@ SEXP R_fdcheck(SEXP x, SEXP y){
   PROTECT(x);
   PROTECT(y);
   
-  int k, hashfac = 11;
+  const int hashfac = 11;
   
   R_xlen_t n = xlength(x)
     , nh = hashfac*n
@@ -55,7 +55,7 @@ SEXP R_fdcheck(SEXP x, SEXP y){
   uint32_t *H = (uint32_t *) calloc(nh, sizeof(uint32_t));
   R_xlen_t *E = (R_xlen_t *) malloc(nh * sizeof(R_xlen_t));
   
-  if (H == NULL | E == NULL){
+  if ( H == NULL || E == NULL){
     free(H); free(E);
     error("Could not allocate enough memory");
   }
