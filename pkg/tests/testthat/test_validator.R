@@ -48,6 +48,8 @@ test_that("regression tests",{
   # this should create a new copy but gave an error.
   v2 <- v1[]
   
+  # Issue #82 reported by Anne Petersen
+  out <- capture.output(str(v1))
   
 })
 

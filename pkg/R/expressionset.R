@@ -719,6 +719,8 @@ setMethod("[<-",signature("expressionset"),function(x,i,value){
 setMethod("[[",signature("expressionset"), function(x,i,j,...,exact=TRUE){
   if ( is.character(i) ){
     i <- which(i %in% names(x))
+    # workaround so default 'str' doesnt crash (see comments in issue #82)
+    if (length(i)==0) return(NULL)
   }
     x$rules[[i]]
 })
