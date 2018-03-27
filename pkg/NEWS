@@ -1,13 +1,11 @@
-version 0.2.2
+version 0.2.3
+- New set membership operator "%vin%", behaving consistently with "=="
+- Set membership operator %in% is now replaced with %vin% (#80).
+- Added `[[<-` and `[<-` methods for validator objects.
+- Validation rules can now be endowed with user-defined metadata, see ?meta (#59).
 - fixed (harmless) compiler warning (thanks to Brian Ripley)
 - bugfix: empty [] selection on expressionset crashed (thanks to Anne Petersen)
 - bugfix: NA in validating expression would crash parser (thanks to Masafumi Okada)
-
-version 0.2.1
-- Set membership operator %in% is now replaced with %vin% (#80).
-- New set membership operator "%vin%", behaving consistently with "=="
-- Added `[[<-` and `[<-` methods for validator objects.
-- Validation rules can now be endowed with user-defined metadata, see ?meta (#59).
 
 
 version 0.2.0

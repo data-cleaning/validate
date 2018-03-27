@@ -345,7 +345,7 @@ linear_call <- function(x){
 
 
 validating_call <- function(cl){
-  pure <- c("<", "<=", "==", "!=", ">=", ">", "%in%", "identical", "~" ,"%->%"
+  pure <- c("<", "<=", "==", "!=", ">=", ">", "%in%", "%vin%", "identical", "~" ,"%->%"
           ,"grepl" ,"any_missing", "any_duplicated","var_group")
   unary <- c("!", "(", "all", "any" )
   binary <- c("|","||","&","&&","if","xor")
