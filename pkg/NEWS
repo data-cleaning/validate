@@ -1,4 +1,4 @@
-version 0.2.3
+version 0.2.4
 - New set membership operator "%vin%", behaving consistently with "=="
 - Set membership operator %in% is now replaced with %vin% (#80).
 - Added `[[<-` and `[<-` methods for validator objects.
