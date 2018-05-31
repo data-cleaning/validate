@@ -1,3 +1,8 @@
+version 0.2.5
+- bugfix: the 'call' object in a 'confrontation' object was created incorrectly.
+  This only affects printing.
+
+
 version 0.2.4
 - New set membership operator "%vin%", behaving consistently with "=="
 - Set membership operator %in% is now replaced with %vin% (#80).

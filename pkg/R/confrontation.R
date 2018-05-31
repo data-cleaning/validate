@@ -180,7 +180,7 @@ confront_work <- function(x, dat, key=NA_character_, class='confrontation', ...)
   L <- execute(calls,dat,opts)
   if (!is.na(key)) L <- add_names(L,x,dat,key)
   new(class,
-      ._call    = match.call(call=sys.call(sys.parent(2)))
+      ._call    = match.call(definition=confront,call=sys.call(sys.parent(2)))
       , ._calls = calls
       , ._value = lapply(L,"[[",1)
       , ._warn  =  lapply(L,"[[",2)
