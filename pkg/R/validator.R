@@ -81,7 +81,7 @@ ini_validator <- function(obj, ..., .file, .data){
       warning(paste0(
         "Invalid syntax detected, the following expressions have been ignored:"
         , paste0(wrn,collapse="")
-        ))
+        ), call.=FALSE)
       obj$rules <- obj$rules[i]
     } 
   } else if (!missing(.file)) {
