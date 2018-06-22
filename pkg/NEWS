@@ -1,5 +1,8 @@
 version 0.2.5
-- bugfix: the 'call' object in a 'confrontation' object was created incorrectly.
+- Documentation updates (Thanks to Matthias Gomolka)
+- Removed deprecated functions 'number_missing', 'fraction_missing', 
+  'row_missing', 'number_unique', 'any_dunplicated', 'any_missing'.
+- Bugfix: the 'call' object in a 'confrontation' object was created incorrectly.
   This only affects printing.
 
 
