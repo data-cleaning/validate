@@ -88,17 +88,6 @@ test_that("var_from_call",{
     , c("x","y")
   )
   
-  # case of referencing all variables
-  expect_equal(
-    var_from_call( expression(number_missing() == 0)[[1]])
-  , character(0)
-  )
-  
-  # case of 'all' variables (but undefined which they are)
-  expect_equal(
-    var_from_call( expression(x + number_missing() > 0)[[1]])
-    , character(0)
-  )
   
   # case of no variables at all
   expect_equal(

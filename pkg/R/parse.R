@@ -107,44 +107,17 @@ setMethod('reset','ANY',function(x=NULL){
 # output:
 # - character vector with variable names
 # - NULL         : call contains no variables (e.g. 1 == 1)
-# - character(0) : call contains _all_ variables (e.g. number_missing())
 var_from_call <- function(x){
   vars <- all.vars(x)
-  nms  <- all.names(x)
-  varfun <- nms %in% VARFUN
-  
+
   # Statement containing only literals
-  if ( identical(vars, character(0)) && !any(varfun) ){
+  if ( identical(vars, character(0)) ){
     return(NULL)
+  } else {
+    vars
   }
 
-  M <- unique(nms[varfun])
-  varfun_locations <- unlist(lapply(M, function(m) which.call(x,m)),recursive=FALSE)
-  # grab subcall of VARFUNS and check for literally defined variables.
-  has_all_vars <- sapply(varfun_locations, function(u){
-    nu <- length(u)
-    length(x[[u[-nu]]]) == 1
-  })
-  if (any(has_all_vars)) vars <- character(0)
-
-  vars
 }
-
-# demonstruction
-# var_from_call(expression(x > 0)[[1]])
-# var_from_call(expression(1 == 1)[[1]])
-# var_from_call( expression(number_missing(x,y) < number_missing())[[1]] )
-
-# Extract variable names from a call object
-# var_from_call <- function( x, vars=character(0) ){
-#   
-#   if ( length(x)==1 && is.symbol(x) ) return(deparse(x) )
-#   
-#   if (length(x) > 1){
-#     for ( i in 2:length(x) ) vars <- c(vars,var_from_call(x[[i]]))
-#   }
-#   unique(vars)
-# }
 
 # find a symbol in a call. Returns a list of multi-indices.
 # occurrences of variable names in a function signature are skipped.
