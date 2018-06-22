@@ -7,7 +7,7 @@ output:
     toc: true
     theme: united
 vignette: >
-  %\VignetteIndexEntry{Rules in text files}
+  %\VignetteIndexEntry{02_Rules_in_text_files}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

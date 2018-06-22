@@ -154,6 +154,33 @@ Or, merge with the summarized results. The result of `summary` is just a `data.f
 merge(summary(cf),measure)
 ```
 
+### Validation rule syntax
+
+Conceptually, any R statement that will evaluate to a `logical` is considered a
+validating statement. The validate package checks this when the user defines a
+rule set, so for example calling `validator( mean(height) )` will result in a
+warning since just computing `mean(x)` does not validate anything.
+
+You will find a concise description of the syntax in the `syntax` help file.
+```{r,eval=FALSE}
+?syntax
+```
+Examples of various types of rules can also be found [here](https://github.com/data-cleaning/ValidatPoC).
+
+In short, you can use
+
+- Type checks: any function starting with `is.`.
+- Binary comparisons: `<, <=, ==, !=, >=, >` and `%in%`.
+- Unary logical operators: `!, all(), any()`.
+- Binary logical operators: `&, &&, |, ||` and logical implication, e.g. `if (staff > 0) staff.costs > 0`.
+- Text search: `grepl`
+- [Functional dependency](https://en.wikipedia.org/wiki/Functional_dependency): $X\to Y + Z$ is represented by `X ~ Y + Z`.
+
+There are some convenience functions.
+
+- Inspect the whole data set using `.`, e.g. `validator( nrow(.) > 10)`.
+- Reuse a variable using `:=`, e.g. `validator(m := mean(x), x < 2*mean(x) )`.
+- Apply the same rule to multiple groups with `var_group`, e.g. `validator(G:=var_group(x,y), G > 0)`.
 
 
 ### Confrontation objects

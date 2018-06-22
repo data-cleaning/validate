@@ -2,17 +2,46 @@
 #'
 #' A concise overview of the \code{validate} syntax.
 #' 
-#'
-#' @section Note:
-#' This document only provides a short reference. Please refer to the vignette
-#' for worked examples: \href{../doc/03_Rule_files.html}{Rules in text files}
-#'
 #' @name syntax
 #'
-#' @section The \code{\%in\%} operator:
-#' When executing a validating statement, the \code{\%in\%} operator is 
-#' replaced with \code{\link[validate:vin]{\%vin\%}}.
-#'
+#' @section Basic syntax:
+#' 
+#' The basic rule is that an R-statement that evaluates to a \code{logical} is a
+#' validating statement. This is established by static code inspection when
+#' \code{validator} reads a (set of) user-defined validation rule(s).
+#' 
+#' @section Comparisons:
+#' 
+#' All basic comparisons, including \code{>, >=, ==, !=, <=, <}, \code{\%in\%}
+#' are validating statements. When executing a validating statement, the
+#' \code{\%in\%} operator is replaced with \code{\link[validate:vin]{\%vin\%}}.
+#' 
+#' @section Logical operations:
+#' 
+#' Unary logical operators `\code{!}', \code{all()} and \code{any} define
+#' validating statements. Binary logical operations including \code{&, &&, |,
+#' ||}, are validating when \code{P} and \code{Q} in e.g. \code{P & Q} are
+#' validating. (note that the short-circuits \code{&&} and \code{&} onnly return
+#' the first logical value, in cases where for \code{P && Q}, \code{P} and/or
+#' \code{Q are vectors. Binary logical implication \eqn{P\Rightarrow Q} (P
+#' implies Q) is implemented as \code{if ( P ) Q}. The latter is interpreted as
+#' \code{!(P) | Q}.
+#' 
+#' @section Type checking:
+#' 
+#' Any function starting with \code{is.} (e.g. \code{is.numeric}) is a validating expression.
+#' 
+#' @section Text search:
+#' 
+#' \code{grepl} is a validating expression.
+#' 
+#' @section Functional dependencies.
+#' 
+#' Armstrong's functional dependencies, of the form \eqn{A + B \to C + D} are
+#' represented using the \code{~}, e.g. \code{A + B ~ C + D}. For example
+#' \code{postcode ~ city} means, that when two records have the same value for
+#' \code{postcode}, they must have the same value for \code{city}.
+#' 
 #' 
 #' @section Reference the dataset as a whole:
 #' 
