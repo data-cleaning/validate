@@ -194,15 +194,15 @@ errcheck <- function(x,y){
 setMethod('compare2',signature('data.frame','data.frame'),function(y,x,...){
   stopifnot(dim(x)==dim(y))
   n <- rep(prod(dim(x)),2)
-  available       <- c(sum(!is.na(x)),sum(!is.na(y)))
+  available       <- c(sum(!is.na(y)),sum(!is.na(x)))
   still_available <- c(available[1], sum(!is.na(x)&!is.na(y)) )
   unadapted       <- c(still_available[1], sum(x == y,na.rm=TRUE))
   adapted         <- still_available - unadapted
-  imputed         <- c(0,sum(is.na(x)&!is.na(y)))
+  imputed         <- c(0,sum(is.na(y)&!is.na(x)))
   missing         <- n - available
-  new_missing     <- c(0,sum(!is.na(x) & is.na(y)))
-  still_missing   <- c(missing,missing - new_missing)
-
+  new_missing     <- c(0,sum(!is.na(y) & is.na(x)))
+  still_missing   <- c(sum(is.na(y) & is.na(x)),missing)
+print(available)
   array(c(
       n
     , available
