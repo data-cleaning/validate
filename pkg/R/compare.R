@@ -81,7 +81,7 @@ setMethod('compare', 'validator',
     names(dimnames(out)) <- c('Status','Version')
     new('validatorComparison',
         provideDimnames(out,base=sprintf("D%04d",1:ncol(out)))
-        ,call=sys.call(1L)
+        ,call = match.call(definition=compare,sys.call(sys.parent(1L)))
     )
 })
 
@@ -337,7 +337,7 @@ cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
         colnames(v) <- names(L)
         v
       }
-    , call=sys.call()
+    , call = match.call(definition=cells,sys.call(sys.parent(1L)))
   )
 }
 
