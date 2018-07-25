@@ -81,7 +81,6 @@ setMethod("compare", "validator",
           , FUN.VALUE = numeric(11) )
       )
     }
-browser()
     colnames(out) <- names(L)
     names(dimnames(out)) <- c("Status","Version")
     new('validatorComparison'
