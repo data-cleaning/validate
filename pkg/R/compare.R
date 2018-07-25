@@ -190,45 +190,6 @@ errcheck <- function(x,y){
   which(!hex & !hey)
 }
 
-# See table 4 in Van den Broek, Van der Loo and Pannekoek
-setMethod('compare2',signature('data.frame','data.frame'),function(y,x,...){
-  stopifnot(dim(x)==dim(y))
-  n <- rep(prod(dim(x)),2)
-  available       <- c(sum(!is.na(y)),sum(!is.na(x)))
-  still_available <- c(available[1], sum(!is.na(x)&!is.na(y)) )
-  unadapted       <- c(still_available[1], sum(x == y,na.rm=TRUE))
-  adapted         <- still_available - unadapted
-  imputed         <- c(0,sum(is.na(y)&!is.na(x)))
-  missing         <- n - available
-  new_missing     <- c(0,sum(!is.na(y) & is.na(x)))
-  still_missing   <- c(sum(is.na(y) & is.na(x)),missing)
-print(available)
-  array(c(
-      n
-    , available
-    , missing
-    , still_available
-    , unadapted
-    , adapted
-    , imputed
-    , new_missing
-    , still_missing
-  )
-  , dim = c(2,9)
-  , dimnames=list(NULL,
-   status = c(
-     'cells'
-     ,'available'
-     ,'missing'
-     ,'still_available'
-     ,'unadapted'
-     ,'adapted'
-     ,'imputed'
-     ,'new_missing'
-     ,'still_missing'
-     ))
-  )[2,]
-})
 
 make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
   nm <- names(L)
@@ -318,28 +279,70 @@ setClass('cellComparison',contains='comparison')
 #' }
 #' @example ../examples/cells.R
 #' @export 
-cells <- function(...,.list=NULL, compare=c('to_first','sequential')){
-  L <- c( list(...), .list)
-  if ( length(L) < 2 ) stop('you need at least two datasets')
+cells <- function(..., .list = NULL, compare=c("to_first","sequential")){
+
   how <- match.arg(compare)
+  L <- c( list(...), .list )
   names(L) <- make_listnames(L)
-    
-  new('cellComparison',
-      if ( how == 'to_first'){
-        vapply(L,FUN=compare2,FUN.VALUE=numeric(9),x=L[[1]])
-      } else { 
-        v <- vapply(seq_along(L)
-              , FUN = function(i){
-                j = ifelse(i==1,1,i-1)     
-                compare2(L[[j]],L[[i]])
-                }, FUN.VALUE=numeric(9)
-        )
-        colnames(v) <- names(L)
-        v
-      }
-    , call = match.call(definition=cells,sys.call(sys.parent(1L)))
+
+  out <- if ( how == "to_first" ){
+    cbind(  
+      cell_diff(L[[1]])
+      , vapply( seq_len(length(L)-1)
+          , function(i) cell_diff(L[[i+1]], L[[1]])
+          , FUN.VALUE = numeric(9))
+    )
+  } else {
+    cbind(
+      cell_diff( L[[1]] )
+    , vapply( seq_len(length(L)-1)
+        , function(i) cell_diff(L[[i+1]], L[[i]])
+        , FUN.VALUE = numeric(9) )
+    )
+  }
+
+  colnames(out) <- names(L)
+  new("cellComparison"
+   , out
+   , call = match.call( definition=cells, sys.call(sys.parent(1L)) )
   )
 }
+
+cell_diff <- function(new, old=NULL){
+
+  n_cells <- prod(dim(new))
+  n_avail <- sum(!is.na(new))
+  n_miss  <- sum( is.na(new))
+  
+  if (is.null(old)){
+    c(
+        cells           = n_cells
+      , available       = n_avail
+      , missing         = n_miss
+      , still_available = sum(!is.na(new))
+      , unadapted       = sum(!is.na(new))
+      , adapted         = 0
+      , imputed         = 0
+      , new_missing     = 0
+      , still_missing   = sum(is.na(new))
+    )
+  } else {
+    c(
+        cells           = n_cells
+      , available       = n_avail
+      , missing         = n_miss
+      , still_available = sum(!is.na(new) & !is.na(old) )
+      , unadapted       = sum( old == new, na.rm=TRUE   )
+      , adapted         = sum( old != new, na.rm=TRUE   )
+      , imputed         = sum( is.na(old) & !is.na(new) )
+      , new_missing     = sum(!is.na(old) &  is.na(new) )
+      , still_missing   = sum( is.na(old) &  is.na(new) )
+    )
+  }
+}
+
+
+
 
 #' Create matching subsets of a sequence of data
 #'
