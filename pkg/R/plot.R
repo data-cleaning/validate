@@ -11,10 +11,11 @@
 #' @param use_blocks \code{logical} if \code{TRUE} the matrix is sorted
 #' according to the connected sub sets of variables (aka blocks).
 #' @param col \code{character} with color codes for plotting variables. 
+#' @param cex size of the variables plotted.
 #' @param ... passed to image
 #' @return (invisible) the matrix
 #' @seealso \code{\link{variables}}, \code{x$blocks()}e
-#' @examples ../examples/plot.R
+#' @example ../examples/plot.R
 plot.validator <- function( x
                           , y
                           , use_blocks = TRUE
@@ -87,7 +88,7 @@ plot.validator <- function( x
 #' @param y not used
 #' @param ... passed to \code{barplot}
 #' @export
-#' @examples ../examples/plot.R
+#' @example ../examples/plot.R
 plot.confrontation <- function(x, y, ...){
   barplot(x, ...)
 }
