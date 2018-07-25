@@ -40,6 +40,7 @@ Collate:
     'factory.R'
     'functions.R'
     'lumberjack.R'
+    'plot.R'
     'retailers.R'
     'utils.R'
     'yaml.R'
