@@ -1,4 +1,5 @@
 version 0.2.6
+- New methods 'all' and 'any' for 'validation' objects
 - New plot method for 'confrontation' objects.
 - New plot method for 'validator' objects.
 - New 'as.data.frame' methods for 'validatorComparison' and 'cellComparison' 
@@ -9,6 +10,7 @@ version 0.2.6
 - The row order of output in 'cells' has changed to be more consistent with 
   row order in the output of 'compare'.
 - The row 'new_missing' is renamed 'removed'.
+- Improved cross-references in reference manual
 
 
 version 0.2.5
