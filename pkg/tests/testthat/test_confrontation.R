@@ -26,6 +26,21 @@ test_that("validation object contents",{
   expect_equal(length(cf[1]),1)
 })
 
+
+test_that("validation logical quantifiers",{
+  expect_false(all(confront(women, validator(height < 60, weight>0))))
+  expect_true(all(confront(women, validator(height > 0, weight>0))))
+  w <- women
+  w[1,1] <- NA
+  # there is at least one FALSE aready, so the conlcusion is that not
+  # all are TRUE.
+  expect_false(all(confront(w, validator(height < 60, weight>0))))
+  expect_true(is.na(
+    all(confront(w, validator(height>height[1], weight>0)))
+  ))
+
+})
+
 test_that("validation objects can be plotted",{
    v <- validator(x>0,y>0,if(x >0 ) y> 0)
    L <- plot(v)

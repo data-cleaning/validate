@@ -76,7 +76,8 @@ setRefClass("confrontation"
 #' @param dat An R object carrying data
 #' @param x An R object carrying \code{\link{rule}}s.
 #' @param ref Optionally, an R object carrying reference data. See examples for usage.
-#' @param ... Options used at execution time (especially \code{'raise'}). See \code{\link{voptions}}.
+#' @param ... Options used at execution time (especially \code{'raise'}). 
+#'    See \code{\link{voptions}}.
 #' 
 #' 
 #' @section Using reference data:
@@ -91,16 +92,12 @@ setRefClass("confrontation"
 #' Technically, reference data will be stored in an environment that is the parent of a (created) environment that
 #' contains the columns of \code{dat}.
 #' 
+#' @seealso \code{\link{voptions}} 
 #' 
-#' @seealso
-#' \itemize{
-#'  \item{\code{\link{voptions}}}
-#'  \item{\code{\link{summary,validation-method}}, \code{\link{aggregate,validation-method}}, \code{\link{sort,validation-method}}}
-#'  \item{\code{\link{summary,indication-method}}}
-#'  \item{\code{\link{indicator}}, \code{\link{indicator-class}}}
-#'  \item{\code{\link{validator}}, \code{\link{validator-class}}}
-#' }
-#' 
+#' @family confrontation-methods
+#' @family validation-methods
+#' @family indication-methods
+#'
 #' @example ../examples/confront.R
 #' @export 
 setGeneric("confront",
@@ -121,6 +118,7 @@ setGeneric("confront",
 #' 
 #' @return An object of class \code{\link{validation}}
 #' @example ../examples/check_that.R   
+#' @family validation-methods
 #' @export
 check_that <- function(dat,...){
   cf <- confront(dat,validator(...))
@@ -146,11 +144,8 @@ setGeneric('values',def=function(x,...) standardGeneric('values'))
 #' @param ... Arguments to be passed to other methods.
 #' 
 #' 
-#' @seealso
-#' \itemize{
-#'  \item{\code{\link{confront}}}
-#' }
 #' @example ../examples/exceptions.R
+#' @family confrontation-methods
 #' @export 
 setGeneric("errors",def = function(x,...) standardGeneric("errors"))
 
@@ -192,6 +187,7 @@ confront_work <- function(x, dat, key=NA_character_, class='confrontation', ...)
 
 #' @rdname select
 #' @aliases [,confrontation-method
+#' @family confrontation-methods
 #' @export 
 setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
   new(class(x)
@@ -208,6 +204,7 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
 
 #' @rdname length
 #' @aliases length,confrontation-method
+#' @family confrontation-methods
 #' @export
 setMethod("length","confrontation",function(x) length(x$._value))
 
@@ -238,6 +235,7 @@ setMethod("length","confrontation",function(x) length(x$._value))
 #' \item{\code{\link{validation-class}}}
 #' }
 #' @aliases indication 
+#' @family indication-methods
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
@@ -294,7 +292,7 @@ setMethod("confront",signature("data.frame","indicator","list"),function(dat, x,
 #' indicator was applied, the output \code{class}, some statistics (min, max, mean , number of NA)
 #' and wether an exception occurred (warnings or errors). The evaluated expression is reported as well.
 #' 
-#' 
+#' @family indication-methods
 #' @export 
 setMethod('summary',signature('indication'), function(object,...){
   data.frame(
@@ -351,6 +349,7 @@ get_stat <- function(x,what,...){
 #' \item{\code{\link{validator}}}
 #' }
 #' @aliases validation  
+#' @family validaiton-methods
 setRefClass("validation", contains = "confrontation")
 
 
@@ -501,7 +500,7 @@ nas <- function(x){
 #' Some basic information per evaluated validation rule is reported: the number of items to which the 
 #' rule was applied, the output \code{class}, some statistics (passes, fails, number of NA)
 #' and wether an exception occurred (warnings or errors). The evaluated expression is reported as well.
-#' 
+#' @family validation-methods
 setMethod('summary',signature('validation'),function(object,...){
   data.frame(
     name = names(object$._value)
@@ -528,12 +527,14 @@ setMethod('values',signature('confrontation'),function(x,...){
 #' @aliases values,validation-method
 #' @param simplify Combine results with similar dimension structure into arrays?
 #' @param drop if a single vector or array results, drop 'list' attribute?
+#' @family confrontation-methods
 setMethod('values',signature('validation'),function(x,simplify=TRUE,drop=TRUE,...){
   int_values(x,simplify,drop,...)
 })
 
 #' @rdname values
 #' @aliases  values,indication-method
+#' @family validation-methods
 setMethod('values',signature('indication'),function(x,simplify=TRUE,drop=TRUE,...){
   int_values(x,simplify,drop,...)
 })
@@ -599,13 +600,7 @@ setMethod("warnings","confrontation",function(x,...){
 #' When \code{by='record'} and not all validation results have the same dimension structure,
 #' a list of \code{data.frames} is returned.
 #' 
-#' @seealso 
-#' \itemize{
-#'  \item{\code{\link{summary,validation-method}}}
-#'  \item{\code{\link{barplot,validation-method}}}
-#'  \item{\code{\link{sort,validation-method}}}
-#'  \item{\code{\link{validation}}}
-#' }
+#' @family validation-methods
 #' @aliases aggregate,validation-method
 #' @example ../examples/aggregate.R
 #' @export
@@ -661,16 +656,10 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
 #' When \code{by='record'} and not all validation results have the same dimension structure,
 #' a list of \code{data.frames} is returned.
 #'
-#' @seealso 
-#' \itemize{
-#'  \item{\code{\link{summary,validation-method}}}
-#'  \item{\code{\link{aggregate,validation-method}}}
-#'  \item{\code{\link{barplot,validation-method}}}
-#'  \item{\code{\link{validation}}}
-#' }
+#' @family validation-methods
 #' @aliases sort,validation-method
 #' @example ../examples/aggregate.R
-#' @export 
+#' @export
 setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rule','record'), drop=TRUE,...){
   v <- values(x, drop=FALSE)
   by <- match.arg(by)
@@ -713,6 +702,7 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
 #' @example ../examples/as.data.frame.R
 #'
 #' @export
+#' @family confrontation-methods
 setMethod("as.data.frame","confrontation", function(x,...){
   ew <- has_error(x) | has_warning(x)
   if (any(ew)){
@@ -739,5 +729,39 @@ getkey <- function(x){
   k <- names(x)
   if (is.null(k)) NA_character_ else k
 }
+
+#' Test if all validations resulted in TRUE
+#'
+#' @param x \code{validation} object (see \code{confront}).
+#' @param ... ignored
+#' @param na.rm [\code{logical}] If \code{TRUE}, \code{NA} values
+#'    are removed before the result is computed.
+#' @family validation-methods
+#' @export
+#'
+#' @examples
+#' val <- check_that(women, height>60, weight>0)
+#' all(val)
+setMethod("all","validation",function(x,...,na.rm=FALSE){
+  all(sapply(values(x,drop=FALSE), all, na.rm=na.rm), na.rm=na.rm)
+})
+
+#' Test if any validation resulted in TRUE
+#'
+#' @param x \code{validation} object (see \code{confront}).
+#' @param ... ignored
+#' @param na.rm [\code{logical}] If \code{TRUE}, \code{NA} values
+#'    are removed before the result is computed.
+#'
+#' @family validation-methods
+#' @export
+#'
+#' @examples
+#' val <- check_that(women, height>60, weight>0)
+#' any(val)
+setMethod("any","validation",function(x,...,na.rm=FALSE){
+  any(sapply(values(x,drop=FALSE), any, na.rm=na.rm), na.rm=na.rm)
+})
+
 
 
