@@ -1,5 +1,15 @@
 version 0.2.6
-- Fixes in 'cells' and 'compare' (complete rewrite).
+- New plot method for 'confrontation' objects.
+- New plot method for 'validator' objects.
+- New 'as.data.frame' methods for 'validatorComparison' and 'cellComparison' 
+  objects. See '?cells' and '?compare'.
+- New plot method for 'validatorComparison' and 'cellComparison' objects. See
+  '?cells' and '?compare'. 
+- Bugfixes in 'cells' and 'compare'.
+- The row order of output in 'cells' has changed to be more consistent with 
+  row order in the output of 'compare'.
+- The row 'new_missing' is renamed 'removed'.
+
 
 version 0.2.5
 - Documentation updates (Thanks to Matthias Gomolka)

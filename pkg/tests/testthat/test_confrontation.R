@@ -26,6 +26,14 @@ test_that("validation object contents",{
   expect_equal(length(cf[1]),1)
 })
 
+test_that("validation objects can be plotted",{
+   v <- validator(x>0,y>0,if(x >0 ) y> 0)
+   L <- plot(v)
+   expect_equal(ncol(L$Z), length(v))
+   expect_equal(nrow(L$Z), length(variables(v)))
+})
+
+
 test_that("indication object contents",{
   ind <- indicator(mean(height),sd(weight), sum(foo))
   cf <- confront(women, ind)

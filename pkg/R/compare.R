@@ -5,6 +5,10 @@ NULL
 
 setClassUnion('callOrNull',list('call','NULL'))
 
+
+### COMPARE ----
+
+
 # Mark an array as comparison so we can overload the 'show' and plot' function.
 setClass('comparison', contains='array' 
   , slots=list(call = 'callOrNull')
@@ -26,7 +30,8 @@ setMethod('show',signature('comparison'),function(object){
 #' indicators. Results are simplified in a sensible way.
 #'
 #' @param x An R object
-#' @param ... (named) data sets (\emph{e.g.} data.frames) 
+#' @param ... data frames, comma separated. Names become column names in
+#'   the output. 
 #' @seealso 
 #' \itemize{
 #'  \item{\code{\link{cells}}}
@@ -42,8 +47,8 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' @param .list Optional list of data sets, will be concatenated with \code{...}.
 #' @rdname compare
 #' 
-#' @return For \code{validator}: An array where each column represents one dataset. The rows count the following
-#' attributes:
+#' @return For \code{validator}: An array where each column represents 
+#'  one dataset. The rows count the following attributes:
 #' \itemize{
 #' \item{Number of validations performed}
 #' \item{Number of validations that evaluate to \code{NA} (unverifiable)}
@@ -177,6 +182,82 @@ make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
   nm
 }
 
+#' @inheritParams as.data.frame
+#' 
+#' @rdname compare
+#' @export
+setMethod("as.data.frame","validatorComparison", function(x,...){
+  x <- x[,]
+  class(x) <- "table"
+  setNames(as.data.frame(x,...),c("status","version","count"))
+})
+
+
+#' @param y ignored
+#' @rdname compare
+#' @export
+setMethod("plot", "validatorComparison", function(x,...){
+  oldpar <- par(mar=c(3,3,3,8),cex=1)
+  on.exit(par(oldpar))
+
+  status <- rownames(x)
+  version <- colnames(x)
+  dat <- as.data.frame(x)
+
+  # set color palettes, line style and line width mappings
+  cl_map <- lw_map <- lt_map <- setNames(vector(11,mode = "integer"), status)
+  lt_map[1:11] <- 1 
+  lt_map[grepl("new",names(lt_map))] <- 2
+  
+  lw_map[1:11] <- 1
+  lw_map[!grepl("(new)|(still)",names(lw_map))] <- 2
+  
+  
+  # Colors taken from brewer.pal(6,"Paired")
+  cl_map[1:11]                                 <- "black"
+  cl_map[grepl("unverifiable", names(cl_map))] <- "#A6CEE3"
+  cl_map[grepl("satisfied", names(cl_map))]    <- "#33A02C"
+  cl_map[grepl("violated", names(cl_map))]     <- "#E31A1C"
+  cl_map["verifiable"]                         <- "#1F78B4"
+  
+  # setup plot
+  n <- length(version)
+  plot(0,0
+   , col      = 'white'
+   , xlim    = c(1,length(version))
+   , ylim    = c(0,max(x))
+   , las     = 2
+   , xaxt    = 'n'
+   , xlab    = ""
+   , ylab    = ""
+   , cex.axis=0.8
+   , ...)
+  # vertical grid
+  abline(v = seq_along(version), col = "grey", lty = 3)
+  # graph the main lines
+  for (stat in status){
+    d <- dat[dat$status == stat, ]
+    lines( as.integer(d$version), d$count
+       , type='b', col=cl_map[stat]
+       , lw=lw_map[stat], lt=lt_map[stat], pch=16)  
+  }
+  axis(side=1, labels=version, at=seq_along(version)
+      , las=1, padj=c(0,1)
+      , cex.axis=0.8)
+  # add legend
+  oldpar <- c(oldpar,par(xpd=TRUE))
+  legend(x=1.04*n,y=max(x)
+    , legend = gsub("_"," ",status)
+    , lwd = lw_map[status]
+    , lty = lt_map[status]
+    , col = cl_map[status]
+    , cex=0.8
+    , bty="n"
+  )
+  invisible(NULL)
+})
+
+
 
 setClass('indicatorComparison',contains='comparison')
 
@@ -229,7 +310,7 @@ matches <- function(x,y,id=NULL){
 }
 
 
-
+### CELLS ----
 
 
 setClass('cellComparison',contains='comparison')
@@ -241,8 +322,11 @@ setClass('cellComparison',contains='comparison')
 #' rows and columns are ordered similarly.
 #' 
 #' 
-#' @param ... A (named) sequence of R objects carrying data (\emph{e.g.} \code{data.frame}s)
-#' @param .list A list of R objects carrying data; will be concatenated with objects in \code{...}
+#' @param ... For \code{cells}: data frames, comma separated. Names will become
+#'    column names in the output. For \code{plot}: graphical parameters
+#'    (see \code{\link[graphics]{par}}).
+#' @param .list A \code{list} of data frames; will be concatenated with 
+#'    objects in \code{...}
 #' @param compare How to compare the datasets.
 #' 
 #' 
@@ -297,38 +381,29 @@ cell_diff <- function(new, old=NULL){
     c(
         cells           = n_cells
       , available       = n_avail
-      , missing         = n_miss
       , still_available = sum(!is.na(new))
       , unadapted       = sum(!is.na(new))
       , adapted         = 0
       , imputed         = 0
-      , new_missing     = 0
+      , missing         = n_miss
       , still_missing   = sum(is.na(new))
+      , removed         = 0
     )
   } else {
     c(
         cells           = n_cells
       , available       = n_avail
-      , missing         = n_miss
       , still_available = sum(!is.na(new) & !is.na(old) )
       , unadapted       = sum( old == new, na.rm=TRUE   )
       , adapted         = sum( old != new, na.rm=TRUE   )
       , imputed         = sum( is.na(old) & !is.na(new) )
-      , new_missing     = sum(!is.na(old) &  is.na(new) )
+      , missing         = n_miss
       , still_missing   = sum( is.na(old) &  is.na(new) )
+      , removed         = sum(!is.na(old) &  is.na(new) )
     )
   }
 }
 
-#' @inheritParams as.data.frame
-#' 
-#' @rdname compare
-#' @export
-setMethod("as.data.frame","validatorComparison", function(x,...){
-  x <- x[,]
-  class(x) <- "table"
-  setNames(as.data.frame(x,...),c("status","version","count"))
-})
 
 #' @inheritParams as.data.frame
 #'  
@@ -339,6 +414,72 @@ setMethod("as.data.frame","cellComparison", function(x,...){
   class(x) <- "table"
   setNames(as.data.frame(x,...),c("status","version","count"))
 })
+
+
+
+#' @param x a \code{cellComparison} object.
+#' @param y ignored
+#'
+#' @rdname cells
+#' @export
+setMethod("plot","cellComparison", function(x,...){
+  oldpar <- par(mar=c(3,3,3,8))
+  on.exit(par(oldpar))
+  
+  status <- rownames(x)
+  version <- colnames(x)
+  dat <- as.data.frame(x)
+  
+  cl_map <- lw_map <- lt_map <- setNames(rep(1,9), rownames(x))
+  lt_map[c("adapted","imputed","removed")] <- 2
+  
+  
+  lw_map[1:9] <- 1
+  lw_map[c("cells","available","missing","imputed")] <- 2
+  
+  # Colors taken from RColorBrewer::brewer.pal(8,"Paired")
+  cl_map["cells"] <- "black"
+  cl_map[c("available","still_available")]    <- "#1F78B4" # dark blue
+  cl_map[c("unadapted","adapted","imputed")]  <- "#A6CEE3" # light blue 
+  cl_map["missing"] <- "#FF7F00"                           # dark yellow
+  cl_map[c("removed","still_missing")] <- "#FDBF6F"        # light yellow
+  
+  n <- length(version)
+  plot(0,0,col='white'
+       , xlim=c(1,length(version))
+       , ylim=c(0,max(x))
+       , las=2
+       , xaxt='n'
+       , xlab=""
+       , ylab=""
+       , cex.axis=0.8,...)
+  abline(v=seq_along(version),col="grey",lt=3)
+  for (stat in status){
+    d <- dat[dat$status == stat, ]
+    lines( as.integer(d$version), d$count, type='b', col=cl_map[stat]
+        ,lw = lw_map[stat], lty = lt_map[stat], pch = 16)  
+  }
+  axis(side=1,labels=version,at=seq_along(version),
+       las=1,padj=rep(c(0,1),times=n),cex.axis=0.8)
+  oldpar <- c(oldpar,par(xpd=TRUE))
+  legend(x=1.04*n,y=max(x)
+         , legend = gsub("_"," ",status)
+         , lwd = lw_map[status]
+         , lty = lt_map[status]
+         , col = cl_map[status]
+         , cex=0.8
+         , bty="n"
+         , title="Count"
+  )
+  invisible(NULL)
+})
+
+
+
+
+
+
+
 
 #' Create matching subsets of a sequence of data
 #'
@@ -368,66 +509,3 @@ match_cells <- function(...,.list=NULL,id=NULL){
 }
 
 
-#' @param y ignored
-#' @rdname compare
-#' @export
-setMethod("plot", "validatorComparison", function(x,...){
-  oldpar <- par(mar=c(3,3,3,8),cex=1)
-  on.exit(par(oldpar))
-
-  status <- rownames(x)
-  version <- colnames(x)
-  dat <- as.data.frame(x)
-
-  # set color palettes, line style and line width mappings
-  cl_map <- lw_map <- lt_map <- setNames(vector(11,mode = "integer"), status)
-  lt_map[1:11] <- 1 
-  lt_map[grepl("new",names(lt_map))] <- 2
-  
-  lw_map[1:11] <- 1
-  lw_map[!grepl("(new)|(still)",names(lw_map))] <- 2
-  
-  
-  # Colors taken from brewer.pal(6,"Paired")
-  cl_map[1:11]                                 <- "black"
-  cl_map[grepl("unverifiable", names(cl_map))] <- "#A6CEE3"
-  cl_map[grepl("satisfied", names(cl_map))]    <- "#33A02C"
-  cl_map[grepl("violated", names(cl_map))]     <- "#E31A1C"
-  cl_map["verifiable"]                         <- "#1F78B4"
-  
-  # setup plot
-  n <- length(version)
-  plot(0,0
-   , col      = 'white'
-   , xlim    = c(1,length(version))
-   , ylim    = c(0,max(x))
-   , las     = 2
-   , xaxt    = 'n'
-   , xlab    = ""
-   , ylab    = ""
-   , cex.axis=0.8
-   , ...)
-  # vertical grid
-  abline(v = seq_along(version), col = "grey", lty = 3)
-  # graph the main lines
-  for (stat in status){
-    d <- dat[dat$Status == stat, ]
-    lines( as.integer(d$Version), d$Freq
-       , type='b', col=cl_map[stat]
-       , lw=lw_map[stat], lt=lt_map[stat], pch=16)  
-  }
-  axis(side=1, labels=version, at=seq_along(version)
-      , las=1, padj=c(0,1)
-      , cex.axis=0.8)
-  # add legend
-  oldpar <- c(oldpar,par(xpd=TRUE))
-  legend(x=1.04*n,y=max(x)
-    , legend = gsub("_"," ",status)
-    , lwd = lw_map[status]
-    , lty = lt_map[status]
-    , col = cl_map[status]
-    , cex=0.8
-    , bty="n"
-  )
-
-})

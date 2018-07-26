@@ -18,6 +18,9 @@ cells(raw = step0, imputed = step1, flipped = step2)
 out <- cells(raw = step0, imputed = step1, flipped = step2, compare="sequential")
 out
 
+# Graphical overview of the changes
+plot(out)
+
 # transform data to data.frame (easy for use with ggplot)
 as.data.frame(out)
 

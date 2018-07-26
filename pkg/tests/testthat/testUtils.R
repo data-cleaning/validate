@@ -57,10 +57,21 @@ test_that('compare works',{
       ,6,3,3,0,3,2,2,0,1,1,0 ),dim=c(11,2)
   )
   expect_equivalent(unclass(compare(v,d1,d2)),a)
+
   d <- as.data.frame(compare(v,d1,d2))
   expect_true(inherits(d,"data.frame"))
   expect_equal(ncol(d),3)
   expect_equal(nrow(d),11*2)
+  
+})
+
+test_that("comparison objects can be plotted",{
+  d1 <- data.frame(x=1:3,y=4:6)
+  d2 <- data.frame(x=c(NA,2,NA),y=c(4,5,NA))  
+  rules <- validator(x>0,y<5)
+  expect_null(plot(compare(rules, d1,d2)))
+  expect_null(plot(cells(d1,d2)))
+
 })
 
 test_that('blocks works',{
