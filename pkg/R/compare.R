@@ -327,7 +327,7 @@ cell_diff <- function(new, old=NULL){
 setMethod("as.data.frame","validatorComparison", function(x,...){
   x <- x[,]
   class(x) <- "table"
-  as.data.frame(x,...)
+  setNames(as.data.frame(x,...),c("status","version","count"))
 })
 
 #' @inheritParams as.data.frame
@@ -337,7 +337,7 @@ setMethod("as.data.frame","validatorComparison", function(x,...){
 setMethod("as.data.frame","cellComparison", function(x,...){
   x <- x[,]
   class(x) <- "table"
-  as.data.frame(x,...)
+  setNames(as.data.frame(x,...),c("status","version","count"))
 })
 
 #' Create matching subsets of a sequence of data
