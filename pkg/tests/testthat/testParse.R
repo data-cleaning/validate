@@ -33,6 +33,7 @@ test_that("Parsing yrf format", {
   expect_true(all(created(v)-now < 10))
   expect_warning(validator(.file="yamltests/invalid.yaml"))
   out <- capture.output(expect_warning(validator(.file="yamltests/invalidR.yaml")))
+  expect_true(any(nchar(out)>0))
 })
 
 test_that("Parsing options",{

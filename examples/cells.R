@@ -15,5 +15,10 @@ step2$other.rev <- abs(step2$other.rev)
 cells(raw = step0, imputed = step1, flipped = step2)
 
 # create an overview of differences, comparing to the previous step
-cells(raw = step0, imputed = step1, flipped = step2, compare="sequential")
+out <- cells(raw = step0, imputed = step1, flipped = step2, compare="sequential")
+out
+
+# transform data to data.frame (easy for use with ggplot)
+as.data.frame(out)
+
 

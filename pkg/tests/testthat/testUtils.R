@@ -30,7 +30,14 @@ test_that('validating/indicating expressions can be named',{
   expect_equal(names(indicator(fiets=mean(x))),'fiets')    
 })
 
-
+test_that("cells works",{
+  cls <- cells(women, women)
+  expect_equivalent(cls[,1], cls[,2])
+  d <- as.data.frame(cls)
+  expect_true(inherits(d, "data.frame"))
+  expect_equal(nrow(d), 9*2)
+  expect_equal(ncol(d), 3)
+})
 
 
 # code for these methods in confrontation.R
@@ -49,7 +56,11 @@ test_that('compare works',{
     c( 6,6,0,0,0,4,4,0,2,2,0
       ,6,3,3,0,3,2,2,0,1,1,0 ),dim=c(11,2)
   )
-  expect_equivalent(unclass(compare(v,d1,d2)),a)  
+  expect_equivalent(unclass(compare(v,d1,d2)),a)
+  d <- as.data.frame(compare(v,d1,d2))
+  expect_true(inherits(d,"data.frame"))
+  expect_equal(ncol(d),3)
+  expect_equal(nrow(d),11*2)
 })
 
 test_that('blocks works',{
