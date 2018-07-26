@@ -1,3 +1,6 @@
+version 0.2.6
+- Fixes in 'cells' and 'compare' (complete rewrite).
+
 version 0.2.5
 - Documentation updates (Thanks to Matthias Gomolka)
 - Removed deprecated functions 'number_missing', 'fraction_missing', 

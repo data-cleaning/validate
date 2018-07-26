@@ -59,136 +59,115 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' }
 #' 
 #' @export 
-setMethod('compare', 'validator', 
-  function(x, ..., .list=NULL, how=c('to_first','sequential') ){
-    L <- c( list(...), .list)
-    if ( length(L) < 2 ) stop('you need at least two datasets')
-    how <- match.arg(how)
+setMethod("compare", "validator",
+  function(x,... , .list=list(), how=c("to_first","sequential")){
+    L <- c(list(...),.list)  
     names(L) <- make_listnames(L)
+    how <- match.arg(how)
     
-    out <- if (how == 'to_first'){
-        ref <- confront(L[[1]],x)
-        vapply(L, function(y) compare2(confront(y, x), ref)
-               ,FUN.VALUE=numeric(11))
-      } else {
-        ref <- NULL
-        vapply(seq_along(L), function(i){
-          j <- ifelse(i==1,1,i-1)
-          compare2( confront(L[[i]],x),confront(L[[j]],x) )
-        }
-        , FUN.VALUE = numeric(11) )
+    out <- if (how == "to_first"){
+      cbind(
+        rules_diff(x, L[[1]])
+      , vapply( seq_len( length(L) - 1 )
+          , function(i) rules_diff(x, L[[i+1]], L[[1]])
+          , FUN.VALUE = numeric(11) )
+      )
+
+    } else {
+      cbind(
+        rules_diff(x, L[[1]])
+      , vapply( seq_len( length(L) - 1 )
+          , function(i) rules_diff(x, L[[i+1]], L[[i]])
+          , FUN.VALUE = numeric(11) )
+      )
     }
-    names(dimnames(out)) <- c('Status','Version')
-    new('validatorComparison',
-        provideDimnames(out,base=sprintf("D%04d",1:ncol(out)))
-        ,call = match.call(definition=compare,sys.call(sys.parent(1L)))
+    colnames(out) <- names(L)
+    names(dimnames(out)) <- c("Status","Version")
+    new('validatorComparison'
+      , out 
+      , call = match.call(definition=compare, sys.call(sys.parent(1L)))
     )
 })
 
 
 
-## INTERNAL helper-outers
+rules_diff <- function(rules, new, old=NULL){
+  cf_new <- values(confront(new,rules),simplify=FALSE)
 
-#
-# y : object to compare against x
-# x : reference object to compare against (note the order!)
-setGeneric('compare2',def=function(y,x,...) standardGeneric('compare2'))
+  validations  = sum( sapply(cf_new, length) )
+  verifiable   = sum( sapply(cf_new, function(x) sum(!is.na(x))) )
+  unverifiable = sum( sapply(cf_new, function(x) sum( is.na(x))) )
+  violated     = sum(sapply(cf_new, function(x) sum(!x, na.rm=TRUE)))
+  satisfied    = sum( sapply(cf_new, sum, na.rm=TRUE) )
 
-setMethod('compare2',signature('validation','validation'),
-  function(y,x,...){
-    vx <- values(x,drop=FALSE)
-    vy <- values(y,drop=FALSE)
-    rules <- errcheck(x,y)
-    vx <- lapply(vx, function(x) x[,rules,drop=FALSE])
-    vy <- lapply(vy, function(x) x[,rules,drop=FALSE])    
-    
-    validations      = rep( sum(sapply(vx, length)), 2)
-    unverifiable     = c(unverifiable(vx), unverifiable(vy))
-    verifiable       = validations-unverifiable
-    still_unverifiable = c(unverifiable[1],still_unverifiable(vx,vy))
-    new_unverifiable = unverifiable - still_unverifiable
-    satisfied        = c(satisfied(vx),satisfied(vy))
-    still_satisfied  = c(satisfied[1], still_satisfied(vx,vy))
-    new_satisfied    = satisfied - still_satisfied
-    violated         = verifiable - satisfied
-    still_violated   = c(violated[1],still_violated(vx,vy))
-    new_violated     = violated - still_violated
+  if ( is.null(old) ){
+    still_unverifiable = unverifiable
+    new_unverifiable   = 0
+    still_satisfied    = satisfied
+    new_satisfied      = 0
+    still_violated     = violated
+    new_violated       = 0
+  } else {
+    cf_old <- values(confront(old,rules),simplify=FALSE)
+    still_unverifiable = local({
+      s <- 0
+      for ( i in seq_len(length(cf_new)) ) {
+        s <- s + sum( is.na(cf_new[[i]]) & is.na(cf_old[[i]]) )
+      }
+      s
+     })
+    new_unverifiable   = local({
+      s <- 0
+      for ( i in seq_len(length(cf_new)) ){
+        s <- s + sum(!is.na(cf_old[[i]]) & is.na(cf_new[[i]]))
+      }
+      s
+     })
+    still_satisfied  = local({
+      s <- 0
+      for ( i in seq_len(length(cf_new)) ){
+        s <- s + sum(cf_old[[i]] & cf_new[[i]], na.rm=TRUE)
+      }
+      s
+    })
+    new_satisfied    = local({
+      s <- 0
+      for ( i in seq_len(length(cf_new)) ){
+        s <- s + sum(!cf_old[[i]] & cf_new[[i]], na.rm=TRUE)
+      }
+      s
+    })
+    still_violated   = local({
+      s <- 0
+      for ( i in seq_len(length(cf_new)) ){
+        s <- s + sum(!cf_old[[i]] & !cf_new[[i]], na.rm=TRUE)
+      }
+      s
+    })
+    new_violated     = local({
+      s <- 0
+      for ( i in seq_len(length(cf_new)) ){
+        s <- s + sum(cf_old[[i]] & !cf_new[[i]], na.rm=TRUE)
+      }
+      s
+    })
+  } # end else
 
-    array(c(
-       validations           
-      , verifiable         
-      , unverifiable       
-      , still_unverifiable   
-      , new_unverifiable     
-      , satisfied          
-      , still_satisfied    
-      , new_satisfied      
-      , violated           
-      , still_violated     
-      , new_violated       
-    ) , dim=c(2,11)
-      , dimnames=list(
-          NULL
-        , status = c(
-        'validations'           
-      , 'verifiable'         
-      , 'unverifiable'       
-      , 'still_unverifiable'   
-      , 'new_unverifiable'     
-      , 'satisfied'          
-      , 'still_satisfied'    
-      , 'new_satisfied'      
-      , 'violated'           
-      , 'still_violated'     
-      , 'new_violated'       
-      ))
-    )[2,]
-})
+  # output
+  c(validations         = validations
+  , verifiable          = verifiable
+  , unverifiable        = unverifiable
+  ,  still_unverifiable = still_unverifiable
+  ,  new_unverifiable   = new_unverifiable
+  , satisfied           = satisfied
+  ,  still_satisfied    = still_satisfied
+  ,  new_satisfied      = new_satisfied
+  , violated            = violated
+  ,  still_violated     = still_violated
+  ,  new_violated       = new_violated)
 
-# v : values('validation')
-unverifiable <- function(x){
-  sum(sapply(x,function(y) sum(is.na(y))))
 }
 
-still_unverifiable <- function(x,y){
-  sum(sapply(seq_along(x), function(i) sum(is.na(x[[i]]) & is.na(y[[i]]))) )
-}
-
-# y wrt x
-still_verifiable <- function(x,y){
-  sum(sapply(seq_along(x), function(i) sum(!is.na(x[[i]]) & !is.na(y[[i]]))))
-}
-
-new_verifiable <- function(x,y){
-   sum(sapply(seq_along(x),function(i) sum(is.na(x[[i]]& !is.na(y[[i]])))))
-}
-
-satisfied <- function(x){
-  sum(sapply(x,sum,na.rm=TRUE))
-}
-
-still_satisfied <- function(x,y){
-  sum(sapply(seq_along(x), function(i) sum(x[[i]] & y[[i]],na.rm=TRUE)))
-}
-
-still_violated <- function(x,y){
-  sapply(seq_along(x), function(i) sum(!x[[i]] & !y[[i]],na.rm=TRUE))
-}
-
-errcheck <- function(x,y){
-  hex <- has_error(x)
-  hey <- has_error(y)
-  if (!all(hex == hey)){
-    xnoty <- paste(names(hex & !hey),collapse=", ")
-    ynotx <- paste(names(!hex & hey),collapse=", ")
-    warning(
-      sprintf(
-        'Not every call could be evaluated in both datasets:\n x not y :%s\n y not x%s\n'
-        , xnoty, ynotx)
-      )
-  }
-  which(!hex & !hey)
-}
 
 
 make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
