@@ -34,7 +34,7 @@ setMethod('show',signature('comparison'),function(object){
 #'  \item{\code{\link{indicator}}, \code{\link{indicator-class}}}
 #' }
 #' 
-#' 
+#' @example ../examples/compare.R
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
@@ -368,3 +368,66 @@ match_cells <- function(...,.list=NULL,id=NULL){
 }
 
 
+#' @param y ignored
+#' @rdname compare
+#' @export
+setMethod("plot", "validatorComparison", function(x,...){
+  oldpar <- par(mar=c(3,3,3,8),cex=1)
+  on.exit(par(oldpar))
+
+  status <- rownames(x)
+  version <- colnames(x)
+  dat <- as.data.frame(x)
+
+  # set color palettes, line style and line width mappings
+  cl_map <- lw_map <- lt_map <- setNames(vector(11,mode = "integer"), status)
+  lt_map[1:11] <- 1 
+  lt_map[grepl("new",names(lt_map))] <- 2
+  
+  lw_map[1:11] <- 1
+  lw_map[!grepl("(new)|(still)",names(lw_map))] <- 2
+  
+  
+  # Colors taken from brewer.pal(6,"Paired")
+  cl_map[1:11]                                 <- "black"
+  cl_map[grepl("unverifiable", names(cl_map))] <- "#A6CEE3"
+  cl_map[grepl("satisfied", names(cl_map))]    <- "#33A02C"
+  cl_map[grepl("violated", names(cl_map))]     <- "#E31A1C"
+  cl_map["verifiable"]                         <- "#1F78B4"
+  
+  # setup plot
+  n <- length(version)
+  plot(0,0
+   , col      = 'white'
+   , xlim    = c(1,length(version))
+   , ylim    = c(0,max(x))
+   , las     = 2
+   , xaxt    = 'n'
+   , xlab    = ""
+   , ylab    = ""
+   , cex.axis=0.8
+   , ...)
+  # vertical grid
+  abline(v = seq_along(version), col = "grey", lty = 3)
+  # graph the main lines
+  for (stat in status){
+    d <- dat[dat$Status == stat, ]
+    lines( as.integer(d$Version), d$Freq
+       , type='b', col=cl_map[stat]
+       , lw=lw_map[stat], lt=lt_map[stat], pch=16)  
+  }
+  axis(side=1, labels=version, at=seq_along(version)
+      , las=1, padj=c(0,1)
+      , cex.axis=0.8)
+  # add legend
+  oldpar <- c(oldpar,par(xpd=TRUE))
+  legend(x=1.04*n,y=max(x)
+    , legend = gsub("_"," ",status)
+    , lwd = lw_map[status]
+    , lty = lt_map[status]
+    , col = cl_map[status]
+    , cex=0.8
+    , bty="n"
+  )
+
+})

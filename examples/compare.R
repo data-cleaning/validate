@@ -1,6 +1,6 @@
 data(retailers)
 
-rules <- validator(turnover >=0 0, staff>=0,other.rev>=0)
+rules <- validator(turnover >=0, staff>=0, other.rev>=0)
 
 # start with raw data
 step0 <- retailers
@@ -14,10 +14,10 @@ step2 <- step1
 step2$other.rev <- abs(step2$other.rev)
   
 # create an overview of differences compared to raw data
-compare(raw = step0, imputed = step1, flipped = step2)
+compare(rules, raw = step0, imputed = step1, flipped = step2)
 
 # create an overview of differences, comparing to the previous step
-out <- compare(raw = step0, imputed = step1, flipped = step2, compare="sequential")
+out <- compare(rules, raw = step0, imputed = step1, flipped = step2, how="sequential")
 out
 
 # transform data to data.frame (easy for use with ggplot)
