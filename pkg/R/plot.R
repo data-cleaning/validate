@@ -16,13 +16,14 @@
 #' @return (invisible) the matrix
 #' @seealso \code{\link{variables}}, \code{x$blocks()}e
 #' @example ../examples/plot.R
-plot.validator <- function( x
-                          , y
-                          , use_blocks = TRUE
-                          , col = c("#33CC33", "#5555CC")
-                          , cex = 1
-                          , ...
-                          ){
+setMethod("plot","validator"
+  , function( x
+    , y
+    , use_blocks = TRUE
+    , col = c("#33CC33", "#5555CC")
+    , cex = 1
+    , ...
+    ){
   use_blocks <- isTRUE(use_blocks)
   
   blocks <- if (use_blocks){
@@ -78,7 +79,7 @@ plot.validator <- function( x
           , col="gray")
   }
   invisible(list(Z = Z))
-}
+})
 
 #' Plot a confrontation object
 #' 
@@ -89,6 +90,6 @@ plot.validator <- function( x
 #' @param ... passed to \code{barplot}
 #' @export
 #' @example ../examples/plot.R
-plot.confrontation <- function(x, y, ...){
+setMethod("plot","confrontation", function(x, y, ...){
   barplot(x, ...)
-}
+})
