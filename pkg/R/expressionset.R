@@ -352,7 +352,7 @@ extract_names <- function(L,prefix="V"){
   V <- variables(x,as="matrix")
   # all connections 
   A <- V %*% t(V) > 0
-  L <- lapply(1:nrow(A),function(i) which(A[i,]))
+  L <- lapply(seq_len(nrow(A)),function(i) which(A[i,]))
   
   blocks <- new.env()
   b <- 0
