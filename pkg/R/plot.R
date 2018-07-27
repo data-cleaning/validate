@@ -87,17 +87,17 @@ setMethod("plot","validator"
   
   if (use_blocks){
     h <- sapply(x$blocks(), length)
-    h <- cumsum(h)
-#    h <- head(h, -1) # neglect last line
+    h <- c(0,cumsum(h)) + 0.5
     v <- lapply(blocks, function(b){variables(x[b])})
     v <- sapply(v, length)
-    v <- cumsum(v)
-    v <- utils::head(v, -1) # remove last line
-    
-    graphics::abline( h = 0.5 + h
-          , v = 0.5 + v
-          , lty = 2
-          , col="gray30")
+    v <- c(0,cumsum(v)) + 0.5
+
+    graphics::rect( xleft = utils::head(v, -1)
+                  , xright = utils::tail(v, -1)
+                  , ybottom = utils::head(h, -1)
+                  , ytop = utils::tail(h, -1)
+                  , lty = 2
+                  , border ="gray30")
   }
   
   if (show_legend){
