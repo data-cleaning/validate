@@ -26,9 +26,13 @@ setMethod("plot","validator"
     , show_legend = TRUE
     , ...
     ){
-    
   use_blocks <- isTRUE(use_blocks)
   show_legend <- isTRUE(show_legend)
+  
+  if (length(x) < 1){
+    message("No rules to be plotted")
+    return(invisible())
+  }
   
   blocks <- if (use_blocks){
     x$blocks()
@@ -47,7 +51,7 @@ setMethod("plot","validator"
     rule_order <- unlist(blocks)
     
     var_order <- unlist(lapply(blocks, function(b){variables(x[b])}))
-    Z <- Z[rule_order, var_order]
+    Z <- Z[rule_order, var_order, drop = FALSE]
   }
   Z <- t(Z)
   
@@ -66,9 +70,9 @@ setMethod("plot","validator"
        , ylim= ylim
        , xaxt = "n"
        , yaxt = "n"
-       , ...
+  #     , ...
        )
-  
+  # label the y-axis with rule names
   axis(2, at=seq_len(ncol(Z)), labels = colnames(Z), las=1)
   
   var_text <- which(Z > 0, arr.ind = TRUE)
@@ -88,7 +92,8 @@ setMethod("plot","validator"
     v <- lapply(blocks, function(b){variables(x[b])})
     v <- sapply(v, length)
     v <- cumsum(v)
-    v <- head(v, -1) # remove last line
+    v <- utils::head(v, -1) # remove last line
+    
     graphics::abline( h = 0.5 + h
           , v = 0.5 + v
           , lty = 2

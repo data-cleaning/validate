@@ -43,11 +43,10 @@ test_that("validation logical quantifiers",{
 
 test_that("validation objects can be plotted",{
    v <- validator(x>0,y>0,if(x >0 ) y> 0)
-   L <- plot(v)
-   expect_equal(ncol(L$Z), length(v))
-   expect_equal(nrow(L$Z), length(variables(v)))
+   Z <- plot(v)
+   expect_equal(ncol(Z), length(v))
+   expect_equal(nrow(Z), length(variables(v)))
 })
-
 
 test_that("indication object contents",{
   ind <- indicator(mean(height),sd(weight), sum(foo))
