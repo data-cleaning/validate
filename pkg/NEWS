@@ -9,7 +9,7 @@ version 0.2.6
 - Bugfixes in 'cells' and 'compare'.
 - The row order of output in 'cells' has changed to be more consistent with 
   row order in the output of 'compare'.
-- The row 'new_missing' is renamed 'removed'.
+- The row 'new_missing' is renamed 'removed' in 'cellComparison' objects.
 - Improved cross-references in reference manual
 
 
