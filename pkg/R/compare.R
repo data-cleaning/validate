@@ -323,7 +323,7 @@ setClass('cellComparison',contains='comparison')
 #' 
 #' 
 #' @param ... For \code{cells}: data frames, comma separated. Names will become
-#'    column names in the output. For \code{plot}: graphical parameters
+#'    column names in the output. For \code{plot} or \code{barplot}: graphical parameters
 #'    (see \code{\link[graphics]{par}}).
 #' @param .list A \code{list} of data frames; will be concatenated with 
 #'    objects in \code{...}
@@ -335,11 +335,7 @@ setClass('cellComparison',contains='comparison')
 #'   missings, the number of altered values and changes therein as compared to 
 #'   the reference defined in \code{how}.
 #'
-#' @seealso 
-#' \itemize{
-#'  \item{\code{\link{compare}}} 
-#'  \item{\code{\link{match_cells}}}
-#' }
+#' @family comparing
 #' @example ../examples/cells.R
 #' @export 
 cells <- function(..., .list = NULL, compare=c("to_first","sequential")){
@@ -407,7 +403,7 @@ cell_diff <- function(new, old=NULL){
 
 #' @inheritParams as.data.frame
 #'  
-#' @rdname cells
+#' @family comparing
 #' @export
 setMethod("as.data.frame","cellComparison", function(x,...){
   x <- x[,]
@@ -419,8 +415,9 @@ setMethod("as.data.frame","cellComparison", function(x,...){
 
 #' @param x a \code{cellComparison} object.
 #' @param y ignored
+#' @param ... Graphical parameters passed on to \code{plot}. See \code{\link[graphics]{par}}
 #'
-#' @rdname cells
+#' @family comparing
 #' @export
 setMethod("plot","cellComparison", function(x,...){
   oldpar <- par(mar=c(3,3,3,8))
@@ -475,6 +472,94 @@ setMethod("plot","cellComparison", function(x,...){
 })
 
 
+#' Barplot of cellComparison object
+#'
+#' @param height  object of class \code{cellComparison}
+#' @param las [\code{numeric}] in \code{{0,1,2,3}} determining axis label rotation
+#' @param cex.axis [\code{numeric}] Magnification with respect to the current
+#'   setting of \code{cex} for axis annotation.
+#' @param cex.legend [\code{numeric}] Magnification with respect to the current
+#'   setting of \code{cex} for legend annotation and title.
+#' @param wrap [\code{logical}] Toggle wrapping of x-axis labels when their width
+#'  exceeds the width of the column.
+#' @param ... Graphical parameters passed to \code{\link[graphics]{barplot.default}}.
+#'
+#' @note Before plotting, underscores (\code{_}) and dots (\code{.}) are replaced
+#'  with spaces.
+#' 
+#' @family comparing
+#' @export
+setMethod("barplot", "cellComparison", function(height
+    , las = 1
+    , cex.axis = 0.8
+    , cex.legend = cex.axis
+    , wrap = TRUE
+    , ...){
+
+  oldpar <- par(mar=c(3,3,3,8), xpd=TRUE)
+  on.exit(par(oldpar))
+  # turn into array
+  a <- height[,]
+  a <- a[c("unadapted","adapted","imputed","still_missing","removed"),,drop=FALSE]
+
+  # Colors taken from RColorBrewer::brewer.pal(8,"Paired")
+  cl_map <- c(
+   unadapted       = "#4575B4" # dark blue
+   , adapted       = "#91BFDB" # blue
+   , imputed       = "#E0F3F8" # light blue
+   , still_missing = "#FC8D59" # orange
+   , removed       = "#FEE090" # yellow
+  )
+
+  x <- barplot(a
+      , col=cl_map[rownames(a)]
+      , las=las
+      , xaxt="n"
+      , cex.axis=cex.axis
+      , ...
+  )
+  # replace punctuation with spaces
+  xlabs <- trimws(gsub("[_.]+"," ", colnames(a)))
+  # simple wrapping heuristic
+  if ( isTRUE(wrap) ){
+    barwidth <- if ( length(x) == 1) 1.0 else x[length(x)] - x[length(x)-1] - 0.2
+    i <- strwidth(xlabs) > barwidth
+    ncol <- ceiling(barwidth/strwidth("m"))
+    # wrap and fold
+    xlabs[i] <- sapply(xlabs[i]
+      , function(s) paste(strwrap(s, width=ncol),collapse="\n") 
+    )
+    
+  }
+  axis(side=1, labels=xlabs, at=x, cex.axis=cex.axis,lwd=0)
+
+  # compute legend position
+  leg_pos <- bp_leg_pos(x)
+
+  legend(x = leg_pos, y = sum(a[,1])
+       , legend= rev(sub("_"," ", rownames(a)))
+       , fill=rev(cl_map[rownames(a)]),bty="n"
+       , title="Count", cex=0.8)
+  invisible(x)  
+})
+
+# helper function: compute reasonable location of
+# legend in barplot.
+bp_leg_pos <- function(x){
+  n <- length(x)
+  # the factor 1.04 is the default location of the
+  # box after the end of the scale.
+  leg_pos <- if (n ==1){
+      # 1.2 is default width for n==1
+      1.04 * 1.2
+  } else {
+      # bar width + 0.2 (default) separation
+   1.04 * (x[n] + (x[n] - x[n-1]-0.2)/2)
+  }
+
+}
+
+
 
 
 
@@ -489,10 +574,7 @@ setMethod("plot","cellComparison", function(x,...){
 #'
 #' @return A list of \code{data.frames}, subsetted and sorted so that all cells correspond.
 #' @export
-#' @seealso
-#' \itemize{
-#'  \item{\code{\link{cells}}}
-#' }
+#' @family comparing
 match_cells <- function(...,.list=NULL,id=NULL){
   L <- c(list(...), .list)
   

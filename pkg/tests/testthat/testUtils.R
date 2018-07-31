@@ -71,6 +71,7 @@ test_that("comparison objects can be plotted",{
   rules <- validator(x>0,y<5)
   expect_null(plot(compare(rules, d1,d2)))
   expect_null(plot(cells(d1,d2)))
+  expect_equal(length(barplot(cells(d1,d2))),2)
 
 })
 

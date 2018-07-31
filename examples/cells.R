@@ -20,6 +20,7 @@ out
 
 # Graphical overview of the changes
 plot(out)
+barplot(out)
 
 # transform data to data.frame (easy for use with ggplot)
 as.data.frame(out)

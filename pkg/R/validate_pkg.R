@@ -34,7 +34,7 @@
 #' @useDynLib validate, .registration=TRUE
 #' @aliases package-validate validate
 #' @import methods
-#' @importFrom graphics legend par text axis abline lines
+#' @importFrom graphics legend par text axis abline lines strwidth
 #' @importFrom utils getFromNamespace
 #' @import settings
 #' @import yaml
