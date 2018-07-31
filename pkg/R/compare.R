@@ -199,12 +199,25 @@ setMethod("as.data.frame","validatorComparison", function(x,...){
 #' Line graph of validatorComparison object
 #' 
 #' @param x Object of class \code{validatorComparison}.
-#' @param y Ignored.
+#' @param xlab [\code{character}] label for x axis (default none)
+#' @param ylab [\code{character}] label for y axis (default none)
+#' @param las [\code{numeric}] in \code{{0,1,2,3}} determining axis label rotation
+#' @param cex.axis [\code{numeric}] Magnification with respect to the current
+#'   setting of \code{cex} for axis annotation.
+#' @param cex.legend [\code{numeric}] Magnification with respect to the current
+#'   setting of \code{cex} for legend annotation and title.
 #' @param ... Graphical parameters, passed to \code{plot}. See \code{\link[graphics]{par}}.
 #'
 #' @family comparing
 #' @export
-setMethod("plot", "validatorComparison", function(x,...){
+setMethod("plot", "validatorComparison"
+ , function(x
+    , xlab=""
+    , ylab=""
+    , las=2
+    , cex.axis=0.8
+    , cex.legend=0.8,...){
+
   oldpar <- par(mar=c(3,3,3,8),cex=1)
   on.exit(par(oldpar))
 
@@ -234,11 +247,11 @@ setMethod("plot", "validatorComparison", function(x,...){
    , col      = 'white'
    , xlim    = c(1,length(version))
    , ylim    = c(0,max(x))
-   , las     = 2
+   , las     = las
    , xaxt    = 'n'
-   , xlab    = ""
-   , ylab    = ""
-   , cex.axis=0.8
+   , xlab    = xlab
+   , ylab    = ylab
+   , cex.axis= cex.axis
    , ...)
   # vertical grid
   abline(v = seq_along(version), col = "grey", lty = 3)
@@ -251,7 +264,7 @@ setMethod("plot", "validatorComparison", function(x,...){
   }
   axis(side=1, labels=version, at=seq_along(version)
       , las=1, padj=c(0,1)
-      , cex.axis=0.8)
+      , cex.axis=cex.axis)
   # add legend
   oldpar <- c(oldpar,par(xpd=TRUE))
   legend(x=1.04*n,y=max(x)
@@ -259,8 +272,8 @@ setMethod("plot", "validatorComparison", function(x,...){
     , lwd = lw_map[status]
     , lty = lt_map[status]
     , col = cl_map[status]
-    , cex=0.8
-    , bty="n"
+    , cex = cex.legend
+    , bty = "n"
     , title = "Count"
   )
   invisible(NULL)
@@ -519,12 +532,19 @@ setMethod("as.data.frame","cellComparison", function(x,...){
 #'
 #'
 #' @param x a \code{cellComparison} object.
-#' @param y ignored
-#' @param ... Graphical parameters passed on to \code{plot}. See \code{\link[graphics]{par}}
-#'
+#' @inheritParams plot,validatorComparison-method
 #' @family comparing
 #' @export
-setMethod("plot","cellComparison", function(x,...){
+setMethod("plot","cellComparison"
+  , function(x
+    , xlab=""
+    , ylab=""
+    , las=2
+    , cex.axis=0.8
+    , cex.legend=0.8,...){
+
+
+
   oldpar <- par(mar=c(3,3,3,8))
   on.exit(par(oldpar))
   
@@ -550,11 +570,11 @@ setMethod("plot","cellComparison", function(x,...){
   plot(0,0,col='white'
        , xlim=c(1,length(version))
        , ylim=c(0,max(x))
-       , las=2
+       , las=las
        , xaxt='n'
-       , xlab=""
-       , ylab=""
-       , cex.axis=0.8,...)
+       , xlab=xlab
+       , ylab=ylab
+       , cex.axis=cex.axis,...)
   abline(v=seq_along(version),col="grey",lt=3)
   for (stat in status){
     d <- dat[dat$status == stat, ]
@@ -562,15 +582,15 @@ setMethod("plot","cellComparison", function(x,...){
         ,lw = lw_map[stat], lty = lt_map[stat], pch = 16)  
   }
   axis(side=1,labels=version,at=seq_along(version),
-       las=1,padj=rep(c(0,1),times=n),cex.axis=0.8)
+       las=1,padj=rep(c(0,1),times=n),cex.axis=cex.axis)
   oldpar <- c(oldpar,par(xpd=TRUE))
   legend(x=1.04*n,y=max(x)
          , legend = gsub("_"," ",status)
          , lwd = lw_map[status]
          , lty = lt_map[status]
          , col = cl_map[status]
-         , cex=0.8
-         , bty="n"
+         , cex = cex.legend
+         , bty = "n"
          , title="Count"
   )
   invisible(NULL)
