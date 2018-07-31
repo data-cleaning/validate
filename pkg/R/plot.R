@@ -12,6 +12,7 @@
 #' according to the connected sub sets of variables (aka blocks).
 #' @param col \code{character} with color codes for plotting variables. 
 #' @param cex size of the variables plotted.
+#' @param show_legend should a legend explaining the colors be drawn?
 #' @param ... passed to image
 #' @return (invisible) the matrix
 #' @seealso \code{\link{variables}}, \code{x$blocks()}e
@@ -20,11 +21,18 @@ setMethod("plot","validator"
   , function( x
     , y
     , use_blocks = TRUE
-    , col = c("#33CC33", "#5555CC")
+    , col = c("#b2df8a", "#a6cee3") # Colorbrewer "Paired"
     , cex = 1
+    , show_legend = TRUE
     , ...
     ){
   use_blocks <- isTRUE(use_blocks)
+  show_legend <- isTRUE(show_legend)
+  
+  if (length(x) < 1){
+    message("No rules to be plotted")
+    return(invisible())
+  }
   
   blocks <- if (use_blocks){
     x$blocks()
@@ -33,8 +41,9 @@ setMethod("plot","validator"
   A <- variables(x, as = "matrix")
   
   Z <- A
-  Z[A] <- 1
-  Z[A & x$is_linear()] <- 2
+  Z[A] <- 2
+  Z[A & x$is_linear()] <- 1
+  
   is.na(Z) <- Z == 0
   
   if (use_blocks){
@@ -42,9 +51,14 @@ setMethod("plot","validator"
     rule_order <- unlist(blocks)
     
     var_order <- unlist(lapply(blocks, function(b){variables(x[b])}))
-    Z <- Z[rule_order, var_order]
+    Z <- Z[rule_order, var_order, drop = FALSE]
   }
   Z <- t(Z)
+  
+  ylim <- c(1, ncol(Z)) + c(-0.5, 0.5)
+  if (show_legend){
+    ylim[2] <- ylim[2] +  1 # needs extra space for legend
+  }
   
   graphics::image( x = seq_len(nrow(Z))
        , y = seq_len(ncol(Z))
@@ -53,14 +67,18 @@ setMethod("plot","validator"
        , las = 1
        , xlab = "variables"
        , ylab= "rules"
+       , ylim= ylim
        , xaxt = "n"
        , yaxt = "n"
-       , ...
+  #     , ...
        )
+  # label the y-axis with rule names
+  axis(2, at=seq_len(ncol(Z)), labels = colnames(Z), las=1)
   
   var_text <- which(Z > 0, arr.ind = TRUE)
   var_text <- data.frame(var_text)
   var_text$labels <- colnames(A)[var_text$variable]
+  # variables
   text( x = var_text$variable
       , y = var_text$rule
       , labels = var_text$labels
@@ -69,16 +87,28 @@ setMethod("plot","validator"
   
   if (use_blocks){
     h <- sapply(x$blocks(), length)
-    h <- cumsum(h)
+    h <- c(0,cumsum(h)) + 0.5
     v <- lapply(blocks, function(b){variables(x[b])})
     v <- sapply(v, length)
-    v <- cumsum(v)
-    graphics::abline( h = 0.5 + h
-          , v = 0.5 + v
-          , lty = 2
-          , col="gray")
+    v <- c(0,cumsum(v)) + 0.5
+
+    graphics::rect( xleft = utils::head(v, -1)
+                  , xright = utils::tail(v, -1)
+                  , ybottom = utils::head(h, -1)
+                  , ytop = utils::tail(h, -1)
+                  , lty = 2
+                  , border ="gray30")
   }
-  invisible(list(Z = Z))
+  
+  if (show_legend){
+    legend("topright", legend = c("linear rule", "other"), fill=col)
+  }
+  
+  F <- factor(Z, levels=c(1,2), labels = c("linear", "other"))
+  dim(F) <- dim(Z)
+  dimnames(F) <- dimnames(Z)
+  
+  invisible(F)
 })
 
 #' Plot a confrontation object

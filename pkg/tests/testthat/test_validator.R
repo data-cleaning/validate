@@ -54,5 +54,13 @@ test_that("regression tests",{
 })
 
 
- 
- 
+test_that("plot validator works",{
+  v <- validator(x > 1, y + x > 1)
+  F <- plot(v)
+  
+  v <- validator()
+  expect_message(plot(v),"No rules to be plotted")
+  
+  v <- validator(x + y > 0)
+  F <- plot(v)
+})
