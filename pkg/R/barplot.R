@@ -30,8 +30,13 @@ setMethod('barplot',signature('validation'),
   function(height, ..., order_by = c("fails","passes","nNA")
            , stack_by = c("fails","passes","nNA")
            , topn=Inf, add_legend=TRUE, add_exprs=TRUE
-           , colors=c(fails = "#FC8D59",passes = "#91CF60", nNA = "#FFFFBF")
+           , colors=c(fails = "#FB9A99",passes = "#B2DF8A", nNA = "#FDBF6F")
            ){
+ 
+    add_legend <- isTRUE(add_legend)
+    add_exprs   <- isTRUE(add_exprs)
+
+
     order_by <- match.arg(order_by)
     stopifnot(topn>0,is.character(order_by),is.logical(add_legend),is.logical(add_exprs))
     
@@ -46,11 +51,17 @@ setMethod('barplot',signature('validation'),
     # defaults for some optional parameters
     args <- list(...)
     argn <- names(args)
-    if ( !'xlab' %in% argn ) args$xlab <- 'Items'
-    if ( !'main' %in% argn ) args$main <- deparse(height$._call[[3]])
+    xlab <- args$xlab
+    if (is.null(xlab)) xlab <- "Items"
+    args <- args[argn != "xlab"]
+
+    if ( !'main' %in% argn ) args$main <- deparse(height$._call)
     
     # values with different dimensionality are plotted in different row.
-    par(mfrow=c(length(val),1))
+    # we turn xpd off so the legend can be placed outside
+    # narrow the margins for more efficient use of plotting region.
+    oldpar <- par(mar=c(4,4.1,3,1),xpd=TRUE, mfrow=c(length(val),1))
+    on.exit(par(oldpar))
     
     # create plots, one row for each dimension structure
     out <- lapply(seq_along(val), function(i){
@@ -73,32 +84,36 @@ setMethod('barplot',signature('validation'),
         count <- count[I,,drop=FALSE]
         labels <- calls[[i]][I]
       }
-      # one extra, spurious horizontal bar is plotted so the legend can be put inside the plot.
-      # This is admittedly ugly, but it make sure that the legend position scales when the
-      # plot is printed to other devices (without the hassle of doing everything in 'grid')
-      if ( !'names.arg' %in% argn ) args$names.arg <- c(abbreviate(rownames(count)),"")
+
+      if ( !'names.arg' %in% argn ) args$names.arg <- abbreviate(rownames(count))
       arglist <- list(
-        height=t(rbind(count[,stack_by],x=0))
+        height = t(count[,stack_by,drop=FALSE])
         , horiz=TRUE
         , border=NA
         , las=1
-        , col=c(colors,'#FFFFFF')
+        , col=c(colors)
+        , xlab=""
       )
+
       # actual plot
       p = do.call(barplot,c(arglist,args))[seq_along(labels)]
       
       # Add labels & legend
       if (add_exprs) text(0.1,p,labels,pos=4)
 
+      n <- length(labels)
+      bw <- if ( n > 1) (p[n]-p[n-1] - 0.2) else 0.2
+      ht <- if ( n > 1) p[n]+0.5*bw else 1.197
+      m <-  sum(arglist$height[,1])
+
+      text(m-strwidth(xlab)/2, 0.2-0.16*ht,xlab)
       if(add_legend){ 
-       legend('topright'
+        legend(x=-0.04*m, y=0.2-0.12*ht
           , legend = stack_by
           , fill=colors
           , border='black'
           , bty='n'
           , horiz=TRUE
-#          , inset=c(0,-0.1)
-#          , xpd = TRUE
        )
       }
       p

@@ -9,3 +9,4 @@ output/*
 *.html
 *.HTML
 validate.Rproj
+*.swp

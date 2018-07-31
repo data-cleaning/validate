@@ -6,6 +6,7 @@ version 0.2.6
   objects.
 - New 'plot' method for 'validatorComparison' and 'cellComparison' objects.
 - New 'barplot' method for 'validatorComparison' and 'cellComparison' objects.
+- Improved 'plot'/'barplot' method for objects of class 'validator'.
 - Bugfixes in 'cells' and 'compare'.
 - The row order of output in 'cells' has changed to be more consistent with 
   row order in the output of 'compare'.

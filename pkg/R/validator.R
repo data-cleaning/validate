@@ -297,12 +297,6 @@ setMethod("plot","validator"
   }
   
   if (show_legend){
-    # legend( x = 1.04 * (nrow(Z)+.5)
-    #       , y = ncol(Z) + 0.5
-    #       , legend = c("linear rule", "other")
-    #       , fill=col
-    #       , bty="n"
-    #       )
     legend( x = 0.5
           , y = 0.2
           , legend = c("linear rule", "other")
