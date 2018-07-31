@@ -1,11 +1,11 @@
 version 0.2.6
 - New methods 'all' and 'any' for 'validation' objects
-- New plot method for 'confrontation' objects.
-- New plot method for 'validator' objects.
+- New 'plot' method for 'validator' objects.
+- New 'plot' method for 'validation' objects.
 - New 'as.data.frame' methods for 'validatorComparison' and 'cellComparison' 
-  objects. See '?cells' and '?compare'.
-- New plot method for 'validatorComparison' and 'cellComparison' objects. See
-  '?cells' and '?compare'. 
+  objects.
+- New 'plot' method for 'validatorComparison' and 'cellComparison' objects.
+- New 'barplot' method for 'validatorComparison' and 'cellComparison' objects.
 - Bugfixes in 'cells' and 'compare'.
 - The row order of output in 'cells' has changed to be more consistent with 
   row order in the output of 'compare'.

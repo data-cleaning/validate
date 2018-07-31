@@ -72,6 +72,7 @@ test_that("comparison objects can be plotted",{
   expect_null(plot(compare(rules, d1,d2)))
   expect_null(plot(cells(d1,d2)))
   expect_equal(length(barplot(cells(d1,d2))),2)
+  expect_equal(length(barplot(compare(rules, d1,d2))),2)
 
 })
 

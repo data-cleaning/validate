@@ -20,8 +20,11 @@ compare(rules, raw = step0, imputed = step1, flipped = step2)
 out <- compare(rules, raw = step0, imputed = step1, flipped = step2, how="sequential")
 out
 
+# graphical overview
+plot(out)
+barplot(out)
+
 # transform data to data.frame (easy for use with ggplot)
 as.data.frame(out)
 
-plot(out)
 

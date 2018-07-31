@@ -267,6 +267,99 @@ setMethod("plot", "validatorComparison", function(x,...){
 })
 
 
+#' Barplot of validatorComparison object
+#'
+#' @param height  object of class \code{validatorComparison}
+#' @param las [\code{numeric}] in \code{{0,1,2,3}} determining axis label rotation
+#' @param cex.axis [\code{numeric}] Magnification with respect to the current
+#'   setting of \code{cex} for axis annotation.
+#' @param cex.legend [\code{numeric}] Magnification with respect to the current
+#'   setting of \code{cex} for legend annotation and title.
+#' @param wrap [\code{logical}] Toggle wrapping of x-axis labels when their width
+#'  exceeds the width of the column.
+#' @param ... Graphical parameters passed to \code{\link[graphics]{barplot.default}}.
+#'
+#' @note Before plotting, underscores (\code{_}) and dots (\code{.}) are replaced
+#'  with spaces.
+#' 
+#' @example ../examples/compare.R
+#' @family comparing
+#' @export
+setMethod("barplot", "validatorComparison", function(height
+    , las = 1
+    , cex.axis = 0.8
+    , cex.legend = cex.axis
+    , wrap = TRUE
+    , ...){
+
+  oldpar <- par(mar=c(3,3,3,8), xpd=TRUE)
+  on.exit(par(oldpar))
+  # turn into array
+  a <- height[,,drop=FALSE]
+
+  # Colors taken from RColorBrewer::brewer.pal(8,"Paired")
+  cl_map <- c(
+      "still_satisfied"    = "#33A02C" # dark green
+    , "new_satisfied"      = "#B2DF8A" # light green
+    , "still_unverifiable" = "#FF7F00" # dark yellow/orange
+    , "new_unverifiable"   = "#FDBF6F" # light yellow
+    , "still_violated"     = "#E31A1C" # dark red
+    , "new_violated"       = "#FB9A99" # light red
+  )
+
+
+  a <- a[names(cl_map),,drop=FALSE]
+  x <- barplot(a
+      , col=cl_map
+      , las=las
+      , xaxt="n"
+      , cex.axis=cex.axis
+      , ...
+  )
+  xlabs <- colnames(a)
+  # simple wrapping heuristic
+  if (wrap){
+    # replace punctuation with spaces
+    xlabs <- trimws(gsub("[_.]"," ", colnames(a)))
+    # determine column width
+    colw <- if ( length(x) == 1) 1.0 else x[length(x)] - x[length(x)-1] - 0.2
+    i <- strwidth(xlabs) > colw
+    ncol <- ceiling(colw/strwidth("m"))
+    # wrap and fold
+    xlabs[i] <- sapply(xlabs[i]
+      , function(s) paste(strwrap(s, width=ncol),collapse="\n") 
+    )
+    
+  }
+  axis(side=1, labels=xlabs, at=x, cex.axis=cex.axis,lwd=0)
+
+  # compute legend position
+  leg_pos <- bp_leg_pos(x)
+
+  legend(x = leg_pos, y = sum(a[,1])
+       , legend= rev(sub("_"," ", names(cl_map)))
+       , fill=rev(cl_map),bty="n"
+       , title="Count", cex=cex.legend)
+  invisible(x)  
+})
+
+bp_leg_pos <- function(x){
+  n <- length(x)
+  # the factor 1.04 is the default location of the
+  # box after the end of the scale.
+  leg_pos <- if (n ==1){
+      # 1.2 is default width for n==1
+      1.04 * 1.2
+  } else {
+      # bar width + 0.2 (default) separation
+   1.04 * (x[n] + (x[n] - x[n-1]-0.2)/2)
+  }
+
+}
+
+
+
+
 
 setClass('indicatorComparison',contains='comparison')
 
