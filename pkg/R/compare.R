@@ -138,7 +138,7 @@ rules_diff <- function(rules, new, old=NULL){
     new_satisfied    = local({
       s <- 0
       for ( i in seq_len(length(cf_new)) ){
-        s <- s + sum(!cf_old[[i]] & cf_new[[i]], na.rm=TRUE)
+        s <- s + sum((!cf_old[[i]]|is.na(cf_old[[i]])) & cf_new[[i]], na.rm=TRUE)
       }
       s
     })
@@ -152,7 +152,7 @@ rules_diff <- function(rules, new, old=NULL){
     new_violated     = local({
       s <- 0
       for ( i in seq_len(length(cf_new)) ){
-        s <- s + sum(cf_old[[i]] & !cf_new[[i]], na.rm=TRUE)
+        s <- s + sum((cf_old[[i]]|is.na(old)) & !cf_new[[i]], na.rm=TRUE)
       }
       s
     })
@@ -499,7 +499,7 @@ setMethod("barplot", "cellComparison", function(height
   oldpar <- par(mar=c(3,3,3,8), xpd=TRUE)
   on.exit(par(oldpar))
   # turn into array
-  a <- height[,]
+  a <- height[,,drop=FALSE]
   a <- a[c("unadapted","adapted","imputed","still_missing","removed"),,drop=FALSE]
 
   # Colors taken from RColorBrewer::brewer.pal(8,"Paired")
