@@ -63,6 +63,7 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' \item{Number of extra validations that evaluate to \code{FALSE}}
 #' }
 #' 
+#' @family comparing
 #' @export 
 setMethod("compare", "validator",
   function(x,... , .list=list(), how=c("to_first","sequential")){
@@ -182,9 +183,11 @@ make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
   nm
 }
 
+#' Translate a validatorComparison object to data frame
+#'
 #' @inheritParams as.data.frame
 #' 
-#' @rdname compare
+#' @family comparing
 #' @export
 setMethod("as.data.frame","validatorComparison", function(x,...){
   x <- x[,]
@@ -193,8 +196,13 @@ setMethod("as.data.frame","validatorComparison", function(x,...){
 })
 
 
-#' @param y ignored
-#' @rdname compare
+#' Line graph of validatorComparison object
+#' 
+#' @param x Object of class \code{validatorComparison}.
+#' @param y Ignored.
+#' @param ... Graphical parameters, passed to \code{plot}. See \code{\link[graphics]{par}}.
+#'
+#' @family comparing
 #' @export
 setMethod("plot", "validatorComparison", function(x,...){
   oldpar <- par(mar=c(3,3,3,8),cex=1)
@@ -400,7 +408,8 @@ cell_diff <- function(new, old=NULL){
   }
 }
 
-
+#' Translate cellComparison objects to data frame
+#'
 #' @inheritParams as.data.frame
 #'  
 #' @family comparing
@@ -412,7 +421,9 @@ setMethod("as.data.frame","cellComparison", function(x,...){
 })
 
 
-
+#' Line graph of a cellComparison object.
+#'
+#'
 #' @param x a \code{cellComparison} object.
 #' @param y ignored
 #' @param ... Graphical parameters passed on to \code{plot}. See \code{\link[graphics]{par}}
