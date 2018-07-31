@@ -153,7 +153,7 @@ rules_diff <- function(rules, new, old=NULL){
     new_violated     = local({
       s <- 0
       for ( i in seq_len(length(cf_new)) ){
-        s <- s + sum((cf_old[[i]]|is.na(old)) & !cf_new[[i]], na.rm=TRUE)
+        s <- s + sum((cf_old[[i]]|is.na(cf_old[[i]])) & !cf_new[[i]], na.rm=TRUE)
       }
       s
     })
