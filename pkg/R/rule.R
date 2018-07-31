@@ -83,7 +83,6 @@ rule <- setClass("rule",
 #' 
 #' @name meta
 #' @export
-#' 
 #' @examples 
 #' 
 #' v <- validator(x > 0, y > 0)
@@ -111,57 +110,11 @@ setGeneric("meta",function(x,...) standardGeneric("meta"))
 #' @param x An R object
 #' @param ... Arguments to be passed to other methods.
 #' 
-#' @seealso 
-#' \itemize{
-#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{created}}, \code{\link{origin}}}
-#' }
+#' @family expressionset-methods
 #' @name variables
 #' @export
 setGeneric("variables", function(x,...) standardGeneric("variables"))
 
-
-#' @param name  \code{[character]} metadata key
-#' @param value Value to set
-#' @rdname meta
-#' @export
-setGeneric("meta<-", function(x, name, value) standardGeneric("meta<-"))
-
-
-
-
-#' Set origin
-#'
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @export 
-setGeneric("origin<-",function(x,value) standardGeneric("origin<-"))
-
-#' Set label
-#'
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @export 
-setGeneric("label<-",function(x,value) standardGeneric("label<-"))
-
-#' Set description
-#'
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @export 
-setGeneric("description<-",function(x,value) standardGeneric("description<-"))
-
-
-#' Set creation timestamp
-#'
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @export 
-setGeneric("created<-",function(x,value) standardGeneric("created<-"))
 
 
 setGeneric("validating",function(x,...) standardGeneric('validating'))
@@ -184,49 +137,37 @@ setGeneric("is_tran_assign", function(x,...) standardGeneric("is_tran_assign"))
 
 #' Origin of rules
 #'
+#' A slot to store where the rule originated, e.g. a filename
+#' or \code{"command-line"} for interactively defined rules.
+#' 
+#'
 #'
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
-#'
-#' @seealso 
-#' \itemize{
-#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{created}}, \code{\link{variables}}}
-#' }
-#'  
 #' @example ../examples/properties.R
 #' @export
 setGeneric("origin",def=function(x,...) standardGeneric("origin"))
 
-#' label description of rules
+#' Rule label
+#'
+#' A short (typically two or three word) description of a rule.
 #' 
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
-#' 
-#' @seealso 
-#' \itemize{
-#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{description}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
-#' }
 #' @example ../examples/properties.R
 #' @export
 setGeneric("label", function(x,...) standardGeneric("label"))
 
 
-#' description description
+#' Rule description
 #'
+#' A longer (typically one-paragraph) description of a rule.
 #'
 #' @param x and R object
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{character} vector.
-#' 
-#' @seealso 
-#' \itemize{
-#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{label}}, \code{\link{created}}, \code{\link{origin}}, \code{\link{variables}}}
-#' }
 #' @example ../examples/properties.R
 #' @export
 setGeneric("description", function(x,...) standardGeneric("description"))
@@ -239,14 +180,43 @@ setGeneric("description", function(x,...) standardGeneric("description"))
 #' @param ... Arguments to be passed to other methods
 #' @return A \code{POSIXct} vector.
 #' 
-#' @seealso 
-#' \itemize{
-#' \item{\code{\link{names,expressionset-method}}, \code{\link{length,expressionset-method}}}
-#' \item{\code{\link{description}}, \code{\link{label}}, \code{\link{origin}} \code{\link{variables}}}
-#' }
 #' @example ../examples/properties.R
 #' @export
 setGeneric("created", function(x,...) standardGeneric("created"))
+
+#' @rdname meta
+#' @param name  \code{[character]} metadata key
+#' @param value Value to set
+#' @export
+setGeneric("meta<-", function(x, name, value) standardGeneric("meta<-"))
+
+
+
+
+#' @rdname origin
+#' @param value Value to set
+#' @example ../examples/properties.R
+#' @export 
+setGeneric("origin<-",function(x,value) standardGeneric("origin<-"))
+
+#' @rdname label
+#' @param value Value to set
+#' @example ../examples/properties.R
+#' @export 
+setGeneric("label<-",function(x,value) standardGeneric("label<-"))
+
+#' @rdname description
+#' @param value Value to set
+#' @example ../examples/properties.R
+#' @export 
+setGeneric("description<-",function(x,value) standardGeneric("description<-"))
+
+
+#' @rdname created
+#' @param value Value to set
+#' @example ../examples/properties.R
+#' @export 
+setGeneric("created<-",function(x,value) standardGeneric("created<-"))
 
 
 
@@ -321,20 +291,16 @@ setMethod("is_tran_assign","rule", function(x){
 
 
 
-#' Set metadata
 #' @rdname meta
+#' @export 
 setReplaceMethod("meta", c("rule","character"), function(x, name, value){
   x@meta[[name]] <- value
   x
 })
 
 
-#' Set names
-#'
-#' @param x Object
-#' @param value Value to set
+#' @rdname names
 #' @export 
-#' @keywords internal
 setReplaceMethod("names",c("rule","character"),function(x,value){
   if (length(value) > 1){
     stop("name must be 'character' of length 1")
@@ -343,12 +309,11 @@ setReplaceMethod("names",c("rule","character"),function(x,value){
   x
 })
 
-#' Set origin
-#'
-#' @param x Object
-#' @param value Value to set
+
+
+
+#' @rdname origin
 #' @export 
-#' @keywords internal
 setReplaceMethod("origin",c("rule","character"),function(x,value){
   if (length(value) > 1){
     stop("origin must be 'character' of length 1")
@@ -357,12 +322,9 @@ setReplaceMethod("origin",c("rule","character"),function(x,value){
   x
 })
 
-#' Set label
-#'
-#' @param x Object
-#' @param value Value to set
+
+#' @rdname label
 #' @export 
-#' @keywords internal
 setReplaceMethod("label",c("rule","character"),function(x,value){
   if (length(value) > 1){
     stop("label must be 'character' of length 1")
@@ -371,12 +333,8 @@ setReplaceMethod("label",c("rule","character"),function(x,value){
   x
 })
 
-#' Set description
-#'
-#' @param x Object
-#' @param value Value to set
+#' @rdname description
 #' @export 
-#' @keywords internal
 setReplaceMethod("description",c("rule","character"),function(x,value){
   if (length(value) > 1){
     stop("description must be 'character' of length 1")
@@ -385,12 +343,8 @@ setReplaceMethod("description",c("rule","character"),function(x,value){
   x
 })
 
-#' Set creation timestamp
-#'
-#' @param x Object
-#' @param value Value to set
+#' @rdname created
 #' @export 
-#' @keywords internal
 setReplaceMethod("created",c("rule","POSIXct"),function(x,value){
   if (length(value) > 1){
     stop("timestamp must be 'POSIXct' of length 1")

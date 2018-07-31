@@ -1,10 +1,11 @@
 #' @name retailers
-#' @title data on retailers
-#' @description Anonymized and distorted data on revenue and cost structure for 60 retailers. 
-#' Currency is in thousands (of dollars or euros or guilders, ...)
+#' @title data on Dutch supermarkets
+#' @description Anonymized and distorted data on revenue and cost structure for
+#'   60 retailers. 
+#' Currency is in thousands of Euros.
 #'
 #' \itemize{
-#'  \item size: Size class
+#'  \item size: Size class (0=undetermined)
 #'  \item incl.prob: Probability of inclusion in the sample
 #'  \item staff: Number of staff
 #'  \item turnover: Amount of turnover

@@ -32,12 +32,6 @@ setMethod('show',signature('comparison'),function(object){
 #' @param x An R object
 #' @param ... data frames, comma separated. Names become column names in
 #'   the output. 
-#' @seealso 
-#' \itemize{
-#'  \item{\code{\link{cells}}}
-#'  \item{\code{\link{validator}}, \code{\link{validator-class}}}
-#'  \item{\code{\link{indicator}}, \code{\link{indicator-class}}}
-#' }
 #' 
 #' @example ../examples/compare.R
 #' @export
@@ -63,6 +57,7 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' \item{Number of extra validations that evaluate to \code{FALSE}}
 #' }
 #' 
+#' @family validation-methods
 #' @family comparing
 #' @export 
 setMethod("compare", "validator",
@@ -185,8 +180,21 @@ make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
 
 #' Translate a validatorComparison object to data frame
 #'
+#' Versions of a data set can be compared against a rule set
+#' using \code{\link{compare}}. The result is a \code{validatorComparison}
+#' object, which can usefully be translated into a data frame.
+#'
 #' @inheritParams as.data.frame
 #' 
+#' @return A data frame with the following columns.
+#' \itemize{
+#'  \item{\code{status}: Row names of the \code{validatorComparison} object.}
+#'  \item{\code{version}: Column names of the \code{validatorComparison} object.}
+#'  \item{\code{count}: Contents of the \code{validatorComparison} object.}
+#' }
+#' 
+#' 
+#' @example ../examples/compare.R
 #' @family comparing
 #' @export
 setMethod("as.data.frame","validatorComparison", function(x,...){
@@ -198,6 +206,14 @@ setMethod("as.data.frame","validatorComparison", function(x,...){
 
 #' Line graph of validatorComparison object
 #' 
+#' Versions of a data set can be compared against a rule set
+#' using \code{\link{compare}}. The result is a \code{validatorComparison}
+#' object. This method creates a line-graph, thus suggesting an
+#' that an ordered sequence of data sets have been compared.
+#' See also \code{\link{barplot,validatorComparison-method}} for an
+#' unordered version.
+#'
+#'
 #' @param x Object of class \code{validatorComparison}.
 #' @param xlab [\code{character}] label for x axis (default none)
 #' @param ylab [\code{character}] label for y axis (default none)
@@ -517,8 +533,20 @@ cell_diff <- function(new, old=NULL){
 
 #' Translate cellComparison objects to data frame
 #'
+#' Versions of a data set can be cellwise compared using
+#' \code{\link{cells}}. The result is a \code{cellComparison} object, 
+#' which can usefully be translated into a data frame.
+#'
 #' @inheritParams as.data.frame
+#'
+#' @return A data frame with the following columns.
+#' \itemize{
+#'  \item{\code{status}: Row names of the \code{cellComparison} object.}
+#'  \item{\code{version}: Column names of the \code{cellComparison} object.}
+#'  \item{\code{count}: Contents of the \code{cellComparison} object.}
+#' }
 #'  
+#' @example ../examples/cells.R
 #' @family comparing
 #' @export
 setMethod("as.data.frame","cellComparison", function(x,...){

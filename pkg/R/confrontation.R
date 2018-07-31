@@ -73,6 +73,15 @@ setRefClass("confrontation"
 
 #' Confront data with a (set of) expressionset(s)
 #'
+#' An expressionset is a general class storing rich expressions (basically
+#' expressions and some meta data) which we call 'rules'. Examples of
+#' expressionset implementations are \code{\link{validator}} objects, storing
+#' validation rules and \code{\link{indicator}} objects, storing data quality
+#' indicators. The \code{confront} function evaluates the expressions one by one
+#' on a dataset while recording some process meta data. All results are stored in
+#' a (subclass of a) \code{confrontation} object.  
+#'
+#'
 #' @param dat An R object carrying data
 #' @param x An R object carrying \code{\link{rule}}s.
 #' @param ref Optionally, an R object carrying reference data. See examples for usage.
@@ -82,15 +91,17 @@ setRefClass("confrontation"
 #' 
 #' @section Using reference data:
 #' When reference data sets are given, it is assumed that rows in the reference data
-#' are ordered corresponding to the rows of \code{dat}, except when a \code{key} is specified.
-#' In that case, all reference datasets are matched against the rows of \code{dat} using \code{key}
-#' Nonmatching records are removed from datasets in \code{ref}. If there are records in \code{dat} 
-#' that are not in \code{ref}, then datasets in \code{ref} are extended with records containing only \code{NA}.
-#' In particular, this means that wen reference data is passed in an environment, those reference data sets
-#' may altered by the call to \code{confront}.
+#' are ordered corresponding to the rows of \code{dat}, except when a \code{key}
+#' is specified.  In that case, all reference datasets are matched against the
+#' rows of \code{dat} using \code{key} Nonmatching records are removed from
+#' datasets in \code{ref}. If there are records in \code{dat} that are not in
+#' \code{ref}, then datasets in \code{ref} are extended with records containing
+#' only \code{NA}.  In particular, this means that wen reference data is passed in
+#' an environment, those reference data sets may altered by the call to
+#' \code{confront}.
 #'
-#' Technically, reference data will be stored in an environment that is the parent of a (created) environment that
-#' contains the columns of \code{dat}.
+#' Technically, reference data will be stored in an environment that is the
+#' parent of a (created) environment that contains the columns of \code{dat}.
 #' 
 #' @seealso \code{\link{voptions}} 
 #' 
@@ -686,14 +697,18 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
   L
 })
 
-#' Confrontation object to data frame
+#' Coerce a confrontation object to data frame
 #'
-#' 
+#' Results of confronting data with validation rules or indicators
+#' are created by a \code{\link{confront}}ation. The result is an
+#' object (inheriting from) \code{confrontation}. 
+#'
 #' @inheritParams as.data.frame
 #'
 #' @return A \code{data.frame} with columns
 #' \itemize{
-#'   \item{\code{key} Where relevant, and only if \code{key} was specified in the call to \code{\link{confront}}}
+#'   \item{\code{key} Where relevant, and only if \code{key} was specified 
+#'    in the call to \code{\link{confront}}}
 #'   \item{\code{name} Name of the rule}
 #'   \item{\code{value} Value after evaluation}
 #'   \item{\code{expression} evaluated expression}

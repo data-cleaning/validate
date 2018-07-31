@@ -80,9 +80,9 @@ ini_indicator <- function(obj, ..., .file, .data){
 #' @param e2 a \code{\link{validator}}
 #'
 #'
+#' @family indicator-methods
 #' @examples
 #' indicator(mean(x)) + indicator(x/median(x))
-#'
 #' @export
 setMethod("+", c("indicator","indicator"), function(e1, e2){
   ii <- indicator()

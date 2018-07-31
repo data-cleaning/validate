@@ -444,16 +444,17 @@ setMethod('reset','expressionset',function(x=NULL){
   settings::reset(x$._options)
 })
 
-#' @describeIn origin Origin of every rule in \code{x}
+#' @rdname origin
 #' @family expressionset-methods
 setMethod("origin", "expressionset", function(x,...) sapply(x$rules,origin))
 
 
-#' @describeIn  label label description of every rule in \code{x}
+#' @rdname label
 #' @family expressionset-methods
 setMethod("label","expressionset",function(x,...) unlist(sapply(x$rules, label)))
 
-#' @describeIn description description description of every rule in \code{x}
+#' @rdname description
+#' @family expressionset-methods
 setMethod("description", "expressionset", function(x,...) unlist(sapply(x$rules, description)))
 
 #' @rdname meta
@@ -490,7 +491,7 @@ setMethod("meta","expressionset", function(x, simplify=TRUE,...){
 })
 
 
-#' @describeIn created Creation time of every rule in \code{x}
+#' @rdname created
 #' @family expressionset-methods
 setMethod("created", "expressionset", function(x,...){ 
   # obj. of class POSIXct; sapply strips the POSIXct class attribute
@@ -503,11 +504,12 @@ setMethod("created", "expressionset", function(x,...){
 
 
 
-#' Extract names
+#' Extract or set names
 #' 
 #' @param x An R object
 #'
-#' @return A \code{character} with names of rules occurring in \code{x}
+#' @return A \code{character} vector
+#' @rdname names
 #' @family expressionset-methods
 #' @export
 #' @example ../examples/properties.R
@@ -544,15 +546,15 @@ setReplaceMethod("meta",c("expressionset","character"),function(x,name,value){
 
 
 
-#' Set names
+#' 
 #'
-#' Names are recycled and made unique with \code{\link{make.names}}
+#' When setting names, \code{value}s are recycled and made unique with
+#' \code{\link{make.names}}
 #'
-#' @param x Object
+#' @rdname names
 #' @param value Value to set
 #' @example ../examples/properties.R
 #' @export 
-#' @family expressionset-methods
 setReplaceMethod("names",c("expressionset","character"),function(x,value){
   value <- make.names(recycle(value,x),unique=TRUE)
   for ( i in seq_len(length(x))){
@@ -561,13 +563,7 @@ setReplaceMethod("names",c("expressionset","character"),function(x,value){
   x
 })
 
-#' Set origins
-#'
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @family expressionset-methods
-#' @export 
+#' @rdname origin
 setReplaceMethod("origin",c("expressionset","character"), function(x,value){
   value <- recycle(value, x)
   for ( i in seq_len(length(x))){
@@ -576,12 +572,7 @@ setReplaceMethod("origin",c("expressionset","character"), function(x,value){
   x
 })
 
-#' Set labels
-#'
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @family expressionset-methods
+#' @rdname label
 #' @export 
 setReplaceMethod("label",c("expressionset","character"),function(x,value){
   value <- recycle(value,x)
@@ -591,13 +582,7 @@ setReplaceMethod("label",c("expressionset","character"),function(x,value){
   x
 })
 
-#' Set descriptions
-#' 
-#' 
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @family expressionset-methods
+#' @rdname description
 #' @export 
 setReplaceMethod("description",c("expressionset","character"),function(x,value){
   value <- recycle(value,x)
@@ -607,13 +592,8 @@ setReplaceMethod("description",c("expressionset","character"),function(x,value){
   x
 })
 
-#' Set timestamps
-#'
-#' @param x Object
-#' @param value Value to set
-#' @example ../examples/properties.R
-#' @family expressionset-methods
-#' @export 
+#' @rdname created
+#' @export
 setReplaceMethod("created",c("expressionset","POSIXct"),function(x,value){
   value <- recycle(value, x)
   for ( i in seq_len(length(x))){
@@ -780,6 +760,7 @@ as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
 #'
 #' @export
 #' @family expressionset-methods
+#' @keywords internal
 setGeneric("as.data.frame")
 
 

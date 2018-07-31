@@ -1,4 +1,11 @@
 
+# a basic validation example
+v <- validator(height/weight < 0.5, mean(height) >= 0)
+cf <- confront(women, v)
+summary(cf)
+plot(cf)
+as.data.frame(cf)
+
 # an example checking metadata
 v <- validator(nrow(.) == 15, ncol(.) > 2)
 summary(confront(women, v))
