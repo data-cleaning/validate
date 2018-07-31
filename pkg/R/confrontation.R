@@ -585,6 +585,20 @@ setMethod("warnings","confrontation",function(x,...){
   x$._warn[i]
 })
 
+#' Plot a confrontation object
+#' 
+#' The plot function for the confrontation object is identical to the \code{\link{barplot}} 
+#' method.
+#' @param x a confrontation object.
+#' @param y not used
+#' @param ... passed to \code{barplot}
+#' @export
+#' @example ../examples/plot.R
+setMethod("plot","confrontation", function(x, y, ...){
+  barplot(x, ...)
+})
+
+
 
 #' Aggregate validation results
 #' 

@@ -216,6 +216,13 @@ setMethod("plot","validator"
     , show_legend = TRUE
     , ...
     ){
+  
+  if (show_legend){  
+    oldpar <- par(xpd=TRUE, mar=c(7,4,3,3))
+    on.exit(par(oldpar))
+  }
+  
+  
   use_blocks <- isTRUE(use_blocks)
   show_legend <- isTRUE(show_legend)
   
@@ -246,9 +253,9 @@ setMethod("plot","validator"
   Z <- t(Z)
   
   ylim <- c(1, ncol(Z)) + c(-0.5, 0.5)
-  if (show_legend){
-    ylim[2] <- ylim[2] +  1 # needs extra space for legend
-  }
+  # if (show_legend){
+  #   ylim[2] <- ylim[2] +  1 # needs extra space for legend
+  # }
   
   graphics::image( x = seq_len(nrow(Z))
        , y = seq_len(ncol(Z))
@@ -257,7 +264,6 @@ setMethod("plot","validator"
        , las = 1
        , xlab = "variables"
        , ylab= "rules"
-       , ylim= ylim
        , xaxt = "n"
        , yaxt = "n"
   #     , ...
@@ -291,7 +297,18 @@ setMethod("plot","validator"
   }
   
   if (show_legend){
-    legend("topright", legend = c("linear rule", "other"), fill=col)
+    # legend( x = 1.04 * (nrow(Z)+.5)
+    #       , y = ncol(Z) + 0.5
+    #       , legend = c("linear rule", "other")
+    #       , fill=col
+    #       , bty="n"
+    #       )
+    legend( x = 0.5
+          , y = 0.2
+          , legend = c("linear rule", "other")
+          , fill=col
+          , bty="n"
+    )
   }
   
   F <- factor(Z, levels=c(1,2), labels = c("linear", "other"))
@@ -301,15 +318,3 @@ setMethod("plot","validator"
   invisible(F)
 })
 
-#' Plot a confrontation object
-#' 
-#' The plot function for the confrontation object is identical to the \code{\link{barplot}} 
-#' method.
-#' @param x a confrontation object.
-#' @param y not used
-#' @param ... passed to \code{barplot}
-#' @export
-#' @example ../examples/plot.R
-setMethod("plot","confrontation", function(x, y, ...){
-  barplot(x, ...)
-})
