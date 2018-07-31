@@ -261,6 +261,7 @@ setMethod("plot", "validatorComparison", function(x,...){
     , col = cl_map[status]
     , cex=0.8
     , bty="n"
+    , title = "Count"
   )
   invisible(NULL)
 })
