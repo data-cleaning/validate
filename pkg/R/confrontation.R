@@ -20,29 +20,7 @@ NULL
 #' this object directly, as we may change or remove them without notice. Use
 #' the exported methods listed below in stead.
 #' 
-#' @section Exported S4 methods for \code{confrontation}:
-#' 
-#' \itemize{
-#'  \item{\code{show}}
-#'  \item{\code{\link{values}}}
-#'  \item{\code{\link{warnings,confrontation-method}}}
-#'  \item{\code{\link{errors}}}
-#'  \item{\code{\link{aggregate}}}
-#'  \item{\code{\link{sort}}}
-#'  \item{\code{\link{length,confrontation-method}}}
-#'  \item{\code{\link{[,confrontation-method}}}
-#' }
-#'
-#' @section Private S4 methods for \code{confrontation}:
-#' 
-#' Currently N/A
-#' 
-#' @section See also:
-#' \itemize{
-#'  \item{\code{\link{validation}}}
-#'  \item{\code{\link{indication}}}
-#'  \item{\code{\link{expressionset}}}
-#' }
+#' @family confrontation-methods
 #' 
 #' @aliases confrontation
 #' @keywords internal
@@ -299,9 +277,11 @@ setMethod("confront",signature("data.frame","indicator","list"),function(dat, x,
 #'
 #' @aliases validate-summary summary,indication-method
 #' @section Indication:
-#' Some basic information per evaluated indicator is reported: the number of items to which the 
-#' indicator was applied, the output \code{class}, some statistics (min, max, mean , number of NA)
-#' and wether an exception occurred (warnings or errors). The evaluated expression is reported as well.
+#' Some basic information per evaluated indicator is reported: the number 
+#' of items to which the indicator was applied, the output \code{class}, 
+#' some statistics (min, max, mean , number of NA)
+#' and wether an exception occurred (warnings or errors). The evaluated 
+#' expression is reported as well.
 #' 
 #' @family indication-methods
 #' @export 
@@ -343,24 +323,8 @@ get_stat <- function(x,what,...){
 #' metadata.
 #' 
 #' 
-#' @section Exported S4 methods for \code{validation}:
-#' \itemize{
-#'  \item{Methods exported for objects of class \code{\link{confrontation}}}
-#'  \item{\code{\link{summary,validation-method}}}
-#'  \item{\code{\link{values,validation-method}}}
-#'  \item{\code{\link{barplot,validation-method}}}
-#'  \item{\code{\link{aggregate,validation-method}}}
-#'  \item{\code{\link{sort,validation-method}}}
-#' }
-#' 
-#' 
-#' @section See also:
-#' \itemize{
-#' \item{\code{\link{confront}}}
-#' \item{\code{\link{validator}}}
-#' }
 #' @aliases validation  
-#' @family validaiton-methods
+#' @family validation-methods
 setRefClass("validation", contains = "confrontation")
 
 
@@ -508,9 +472,10 @@ nas <- function(x){
 
 #' @rdname validate-summary
 #' @section Validation:
-#' Some basic information per evaluated validation rule is reported: the number of items to which the 
-#' rule was applied, the output \code{class}, some statistics (passes, fails, number of NA)
-#' and wether an exception occurred (warnings or errors). The evaluated expression is reported as well.
+#' Some basic information per evaluated validation rule is reported: the number of
+#' items to which the rule was applied, the output \code{class}, some statistics
+#' (passes, fails, number of NA) and wether an exception occurred (warnings or
+#' errors). The evaluated expression is reported as well.
 #' @family validation-methods
 setMethod('summary',signature('validation'),function(object,...){
   data.frame(
@@ -585,7 +550,7 @@ setMethod("warnings","confrontation",function(x,...){
   x$._warn[i]
 })
 
-#' Plot a confrontation object
+#' Plot a validation object
 #' 
 #' The plot function for the confrontation object is identical to the \code{\link{barplot}} 
 #' method.
@@ -593,8 +558,9 @@ setMethod("warnings","confrontation",function(x,...){
 #' @param y not used
 #' @param ... passed to \code{barplot}
 #' @export
+#' @family validation-methods
 #' @example ../examples/plot.R
-setMethod("plot","confrontation", function(x, y, ...){
+setMethod("plot","validation", function(x, y, ...){
   barplot(x, ...)
 })
 

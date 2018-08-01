@@ -616,12 +616,13 @@ setMethod("linear","expressionset", function(x,...){
 
 #' @section Validator and indicator objects:
 #' For these objects, the ruleset is split into subsets (blocks) that are disjunct in the
-#' sense that they do not share any variables. For each bloch the number of variables, the number 
-#' of rules and the number of rules that are linear are reported.
+#' sense that they do not share any variables. For each block the number of variables, 
+#' the number of rules and the number of rules that are linear are reported.
 #' 
 #' @return A \code{data.frame} with the information mentioned below is returned.
 #' 
 #' @rdname validate-summary
+#' @seealso \code{\link{plot,validator-method}}
 #' @family expressionset-methods
 setMethod('summary',signature('expressionset'),function(object,...){
   b <- object$blocks()

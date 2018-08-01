@@ -26,8 +26,11 @@ setMethod('show',signature('comparison'),function(object){
 
 #' Compare similar data sets
 #'
-#' Compare different versions of the same dataset with respect to predifined
-#' indicators. Results are simplified in a sensible way.
+#' Compare versions of a data set by comparing their performance against a
+#' set of rules or other quality indicators. This function takes two or
+#' more data sets and compares the perfomance of data set \eqn{2,3,\ldots}
+#' against that of the first data set (default) or to the previous one
+#' (by setting \code{how='sequential'}).
 #'
 #' @param x An R object
 #' @param ... data frames, comma separated. Names become column names in
@@ -37,12 +40,33 @@ setMethod('show',signature('comparison'),function(object){
 #' @export
 setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 
+
+
+#' @section Comparing datasets by performance against validator objects:
+#'
+#' Suppose we have a current and a previous version of a data set. Both
+#' can be inspected by \code{\link{confront}}ing them with a rule set.
+#' The status changes in rule violations can be partitioned as shown in the 
+#' following figure.
+#' \if{html}{\figure{rulesplit.png}{options: width=80\% alt="cellwise splitting"}}
+#' \if{latex}{\figure{rulesplit.pdf}{options: width=13cm}}
+#' This function computes the partition for two or more
+#' datasets, comparing the current set to the first (default) or to the 
+#' previous (by setting \code{compare='sequential'}).
+#'
+#' @references
+#' The figure is reproduced from MPJ van der Loo and E. De Jonge (2018)
+#' \emph{Statistical Data Cleaning with applications in R} (John Wiley & Sons).
+#'
 #' @param how how to compare
 #' @param .list Optional list of data sets, will be concatenated with \code{...}.
 #' @rdname compare
 #' 
-#' @return For \code{validator}: An array where each column represents 
-#'  one dataset. The rows count the following attributes:
+#'
+#' @return 
+#' For \code{validator}: An array where each column represents 
+#' one dataset. 
+#' The rows count the following attributes:
 #' \itemize{
 #' \item{Number of validations performed}
 #' \item{Number of validations that evaluate to \code{NA} (unverifiable)}
@@ -180,9 +204,10 @@ make_listnames <- function( L, base=sprintf("D%04d",seq_along(L)) ){
 
 #' Translate a validatorComparison object to data frame
 #'
-#' Versions of a data set can be compared against a rule set
-#' using \code{\link{compare}}. The result is a \code{validatorComparison}
-#' object, which can usefully be translated into a data frame.
+#' The performance of versions of a data set with regard to rule-based quality
+#' requirements can be compared using using \code{\link{compare}}. The result is a
+#' \code{validatorComparison} object, which can usefully be translated into a data
+#' frame.
 #'
 #' @inheritParams as.data.frame
 #' 
@@ -206,13 +231,12 @@ setMethod("as.data.frame","validatorComparison", function(x,...){
 
 #' Line graph of validatorComparison object
 #' 
-#' Versions of a data set can be compared against a rule set
-#' using \code{\link{compare}}. The result is a \code{validatorComparison}
-#' object. This method creates a line-graph, thus suggesting an
-#' that an ordered sequence of data sets have been compared.
-#' See also \code{\link{barplot,validatorComparison-method}} for an
-#' unordered version.
-#'
+#' The performance of versions of a data set with regard to rule-based quality
+#' requirements can be compared using using \code{\link{compare}}. The result is a
+#' \code{validatorComparison} object. This method creates a line-graph, thus
+#' suggesting an that an ordered sequence of data sets have been compared.  See
+#' also \code{\link{barplot,validatorComparison-method}} for an unordered version.
+#' 
 #'
 #' @param x Object of class \code{validatorComparison}.
 #' @param xlab [\code{character}] label for x axis (default none)
@@ -298,6 +322,12 @@ setMethod("plot", "validatorComparison"
 
 #' Barplot of validatorComparison object
 #'
+#' The performance of versions of a data set with regard to rule-based quality
+#' requirements can be compared using using \code{\link{compare}}. The result is a
+#' \code{validatorComparison} object. This method creates a stacked bar plot of
+#' the results.  See also \code{\link{plot,validatorComparison-method}} for a line
+#' chart.
+#'
 #' @param height  object of class \code{validatorComparison}
 #' @param las [\code{numeric}] in \code{{0,1,2,3}} determining axis label rotation
 #' @param cex.axis [\code{numeric}] Magnification with respect to the current
@@ -308,8 +338,8 @@ setMethod("plot", "validatorComparison"
 #'  exceeds the width of the column.
 #' @param ... Graphical parameters passed to \code{\link[graphics]{barplot.default}}.
 #'
-#' @note Before plotting, underscores (\code{_}) and dots (\code{.}) are replaced
-#'  with spaces.
+#' @note Before plotting, underscores (\code{_}) and dots (\code{.}) in x-axis labels
+#' are replaced with spaces.
 #' 
 #' @example ../examples/compare.R
 #' @family comparing
@@ -448,11 +478,26 @@ setClass('cellComparison',contains='comparison')
 
 #' Cell counts and differences for a series of datasets
 #'
+#' @section Comparing datasets cell by cell:
+#'
+#' When comparing the contents of two data sets, the total number of cells
+#' in the current data set can be partitioned as in the following figure.
+#'
+#' \if{html}{\figure{cellsplit.png}{options: width=80\% alt="rulewise splitting"}}
+#' \if{latex}{\figure{cellsplit.pdf}{options: width=13cm}}
+#'
+#' This function computes the partition for two or more
+#' datasets, comparing the current set to the first (default) or to the 
+#' previous (by setting \code{compare='sequential'}).
+#'
 #' @section Details:
 #' This function assumes that the datasets have the same dimensions and that both
 #' rows and columns are ordered similarly.
 #' 
-#' 
+#' @references
+#' The figure is reproduced from MPJ van der Loo and E. De Jonge (2018)
+#' \emph{Statistical Data Cleaning with applications in R} (John Wiley & Sons).
+#'
 #' @param ... For \code{cells}: data frames, comma separated. Names will become
 #'    column names in the output. For \code{plot} or \code{barplot}: graphical parameters
 #'    (see \code{\link[graphics]{par}}).
@@ -462,7 +507,7 @@ setClass('cellComparison',contains='comparison')
 #' 
 #' 
 #' @return An object of class \code{cellComparison}, which is really an array 
-#'   with a few attributes. It counts the total number of cells, the number of 
+#'   with a few extra attributes. It counts the total number of cells, the number of 
 #'   missings, the number of altered values and changes therein as compared to 
 #'   the reference defined in \code{how}.
 #'
@@ -558,6 +603,12 @@ setMethod("as.data.frame","cellComparison", function(x,...){
 
 #' Line graph of a cellComparison object.
 #'
+#' Versions of a data set can be compared cell by cell
+#' using \code{\link{cells}}. The result is a \code{cellComparison}
+#' object. This method creates a line-graph, thus suggesting an
+#' that an ordered sequence of data sets have been compared.
+#' See also \code{\link{barplot,cellComparison-method}} for an
+#' unordered version.
 #'
 #' @param x a \code{cellComparison} object.
 #' @inheritParams plot,validatorComparison-method
@@ -627,6 +678,11 @@ setMethod("plot","cellComparison"
 
 #' Barplot of cellComparison object
 #'
+#' Versions of a data set can be compared cell by cell using \code{\link{cells}}.
+#' The result is a \code{cellComparison} object. This method creates a stacked bar
+#' plot of the results.  See also \code{\link{plot,cellComparison-method}} for a
+#' line chart.
+#'
 #' @param height  object of class \code{cellComparison}
 #' @param las [\code{numeric}] in \code{{0,1,2,3}} determining axis label rotation
 #' @param cex.axis [\code{numeric}] Magnification with respect to the current
@@ -637,8 +693,8 @@ setMethod("plot","cellComparison"
 #'  exceeds the width of the column.
 #' @param ... Graphical parameters passed to \code{\link[graphics]{barplot.default}}.
 #'
-#' @note Before plotting, underscores (\code{_}) and dots (\code{.}) are replaced
-#'  with spaces.
+#' @note Before plotting, underscores (\code{_}) and dots (\code{.}) in x-axis 
+#' labels are replaced with spaces.
 #' 
 #' @family comparing
 #' @export

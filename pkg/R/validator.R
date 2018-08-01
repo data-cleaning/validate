@@ -15,20 +15,9 @@ NULL
 #'   \code{"name"}, and \code{"description"}
 #' \code{\link{syntax}} help file).
 #'
-#' @section Validating expressions:
-#' A \emph{validating expression} is an expression whose evaluation 
-#' results in \code{TRUE}, \code{FALSE}
-#' or \code{NA}. 
 #' 
 #'  
-#'
-#' @seealso 
-#' \itemize{
-#'  \item{\code{\link{syntax}}} 
-#'  \item{\code{\link{confront}}}, \code{\link{check_that}}
-#'  \item{\code{\link{summary,expressionset-method}}}
-#'  \item{\code{\link{validator-class}}}
-#' }
+#' @family validator-methods
 #' @return An object of class \code{validator} (see \code{\link{validator-class}}).
 #' 
 #'

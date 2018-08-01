@@ -105,7 +105,11 @@ setGeneric("meta",function(x,...) standardGeneric("meta"))
 
 
 
-#' Extract variable names
+#' Get variable names
+#'
+#' Generic function that extracts names of variables ocurring
+#' in R objects.
+#'
 #'
 #' @param x An R object
 #' @param ... Arguments to be passed to other methods.

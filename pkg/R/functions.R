@@ -29,7 +29,8 @@
 #' 
 #' @section Type checking:
 #' 
-#' Any function starting with \code{is.} (e.g. \code{is.numeric}) is a validating expression.
+#' Any function starting with \code{is.} (e.g. \code{is.numeric}) is a
+#' validating expression.
 #' 
 #' @section Text search:
 #' 
@@ -52,17 +53,18 @@
 #'    
 #'
 #' @section Local, transient assignment:
-#' The operator `\code{:=}' can be used to set up local variables (during, for example, validation) to save
-#' time (the rhs of an assignment is computed only once) or to make your validation code more maintainable. 
-#' Assignments work more or less like common R assignments: they are only valid for statements coming after 
-#' the assignment and they may be overwritten. The result of computing the rhs is not part of a 
-#' \code{\link{confront}}ation with data.
+#' The operator `\code{:=}' can be used to set up local variables (during, for
+#' example, validation) to save time (the rhs of an assignment is computed only
+#' once) or to make your validation code more maintainable.  Assignments work more
+#' or less like common R assignments: they are only valid for statements coming
+#' after the assignment and they may be overwritten. The result of computing the
+#' rhs is not part of a \code{\link{confront}}ation with data.
 #'   
 #'   
 #' @section Groups:
 #' Often the same constraints/rules are valid for groups of variables. 
-#' \code{validate} allows for compact notation. Variable groups can be used in-statement
-#' or by defining them with the \code{:=} operator.
+#' \code{validate} allows for compact notation. Variable groups can be used
+#' in-statement or by defining them with the \code{:=} operator.
 #' 
 #' \code{validator( var_group(a,b) > 0 )}
 #' 
@@ -96,16 +98,28 @@ NULL
 
 #' A consistent set membership operator
 #' 
-#' A membership operator like \code{\link[base:match]{\%in\%}} that handles
+#' A set membership operator like \code{\link[base:match]{\%in\%}} that handles
 #' \code{NA} more consistently with R's other logical comparison operators.
+#'
+#'
+#' @details
+#' R's basic comparison operators (almost) always return \code{NA} when one 
+#' of the operands is \code{NA}. The \code{\%in\%} operator is an exception.
+#' Compare for example \code{NA \%in\% NA} with \code{NA == NA}: the first
+#' results in \code{TRUE}, while the latter results in \code{NA} as expected.
+#' The \code{\%vin\%} operator acts consistent with operators such as \code{==}.
+#' Specifically, \code{NA} results in the following cases.
+#' \itemize{
+#'  \item{For each position where \code{x} is \code{NA}, the result is \code{NA}.}
+#'  \item{When \code{table} contains an \code{NA}, each non-matched value in 
+#'  \code{x} results in \code{NA}.}
+#' }
+#'
+#'
 #'
 #' @param x vector or \code{NULL}: the values to be matched
 #' @param table vector or \code{NULL}: the values to be matched against.
 #'
-#' @note
-#' R's basic comparison operators (almost) always return \code{NA} when one 
-#' of the operands is \code{NA}. The \code{\%in\%} operator is an exception.
-#' Compare for example \code{NA \%in\% NA} with \code{NA == NA}. 
 #' 
 #' @examples 
 #' # we cannot be sure about the first element:
