@@ -220,7 +220,7 @@ summary(cf[c(1,3)])
 ### Confrontation options
 By default, all errors and warnings are caught when validation rules are confronted with data. This can be switched off by setting the `raise` option to `"errors"` or `"all"`, e.g. here, the error is caught,
 ```{r}
-v <- validator(hite > 0, weight>0)
+v <- validator(height > 0, weight>0)
 summary(confront(women, v))
 ```
 while here it is raised immediately.
