@@ -218,14 +218,17 @@ summary(cf[c(1,3)])
 
 
 ### Confrontation options
-By default, all errors and warnings are caught when validation rules are confronted with data. This can be switched off by setting the `raise` option to `"errors"` or `"all"`, e.g. here, the error is caught,
+By default, all errors and warnings are caught when validation rules are confronted with data. This can be switched off by setting the `raise` option to `"errors"` or `"all"`. The following 
+example contains a specification error: `hite` should be `height` and therefore the rule errors
+on the `women` data.frame because it does not contain a column `hite`. The error is caught
+(not resulting in a R error) and shown in the summary,
 ```{r}
 v <- validator(hite > 0, weight>0)
 summary(confront(women, v))
 ```
-while here it is raised immediately.
+Setting `raise` to `all` results in a R error:
 
-```{r eval=FALSE}
+```{r eval=TRUE, error=TRUE}
 # this gives an error
 confront(women, v, raise='all')
 ```
