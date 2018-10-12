@@ -158,6 +158,16 @@ lbj_rules <- setRefClass("lbj_rules",
       cat("Logging object of class lbj_rules with the following logging info\n")
       print(.self$log_data())
     }
+    , plot = function(){
+      "plot rule comparisons"
+       pl <- getMethod("plot","validatorComparison")
+       log <- .self$log_data()
+       cmp <- t(log[-(1:3)])
+       class(cmp) <- c("validatorComparison", "array")
+       x <- gsub("\\(.*","",log$expression)
+       colnames(cmp) <- x
+       pl(cmp)
+    }
     , fmsg = function(fmt,...){
       if (.self$verbose){
         message(sprintf(fmt,...))
