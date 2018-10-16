@@ -1,0 +1,450 @@
+rules:
+- expr: staff.costs <= total.costs
+  name: Rule01
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: staff.costs >= 0
+  name: Rule02
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: total.costs >= 0
+  name: Rule03
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: other.rev <= total.rev
+  name: Rule04
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: staff >= 0
+  name: Rule05
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: abs(profit) <= 0.6 * turnover
+  name: Rule06
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: inc.prob >= 0
+  name: Rule07
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: inc.prob <= 1
+  name: Rule08
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: nrow(.) == 60
+  name: Rule09
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: turnover > 0
+  name: Rule10
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Datamanagement II-2 Assignment 3.txt
+  meta: []
+- expr: turnover >= 0
+  name: Rule11
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: other.rev >= 0
+  name: Rule12
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: total.costs >= 0
+  name: Rule13
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: staff > 0
+  name: Rule14
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: if (turnover > 0) vat > 0
+  name: Rule15
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: vat == turnover
+  name: Rule16
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: if (!is.na(staff) && staff > 0) staff.costs > 0
+  name: Rule17
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: turnover + other.rev == total.rev
+  name: Rule18
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: total.rev - total.costs == profit
+  name: Rule19
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: staff.costs <= total.costs
+  name: Rule20
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/DataManagementII-validationrules.txt
+  meta: []
+- expr: incl.prob > 0
+  name: Rule21
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: staff > 0
+  name: Rule22
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: turnover >= 0
+  name: Rule23
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: other.rev >= 0
+  name: Rule24
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: abs(profit) < 0.6 * turnover
+  name: Rule25
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: turnover + other.rev == total.rev
+  name: Rule26
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: if (staff >= 1) staff.costs >= 1
+  name: Rule27
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: if (staff > 0) staff.costs > 0
+  name: Rule28
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/eg.txt
+  meta: []
+- expr: staff < 1e+06
+  name: Rule29
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: staff.costs < staff * 1e+07
+  name: Rule30
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: total.costs >= staff.costs
+  name: Rule31
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: profit == total.costs - total.rev
+  name: Rule32
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: incl.prob > 0
+  name: Rule33
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: incl.prob <= 1
+  name: Rule34
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: profit < 3e+08
+  name: Rule35
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: vat < 0.4 * turnover
+  name: Rule36
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels_1.txt
+  meta: []
+- expr: staff.costs/staff > 1
+  name: Rule37
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: total.rev - total.costs > 0
+  name: Rule38
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: turnover > vat
+  name: Rule39
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: turnover >= 0
+  name: Rule40
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: other.rev >= 0
+  name: Rule41
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: turnover + other.rev == total.rev
+  name: Rule42
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: staff >= 0
+  name: Rule43
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: total.costs >= 0
+  name: Rule44
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: staff.costs >= 0
+  name: Rule45
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: staff.costs <= total.costs
+  name: Rule46
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/regels.txt
+  meta: []
+- expr: turnover > 0
+  name: Rule47
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: other.rev > 0
+  name: Rule48
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: total.rev == turnover + other.rev
+  name: Rule49
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: total.rev - total.costs == profit
+  name: Rule50
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: staff.costs < total.costs
+  name: Rule51
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: 0.95 < turnover/vat
+  name: Rule52
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: turnover/vat < 1.05
+  name: Rule53
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: if (staff > 0) staff.costs > 0
+  name: Rule54
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: 0 <= incl.prob
+  name: Rule55
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: incl.prob <= 1
+  name: Rule56
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: total.costs >= 0
+  name: Rule57
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: staff.costs >= 0
+  name: Rule58
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/rules_retailers.txt
+  meta: []
+- expr: total.rev > 0
+  name: Rule59
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Rulez.txt
+  meta: []
+- expr: turnover > 0
+  name: Rule60
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Rulez.txt
+  meta: []
+- expr: sc0 == TRUE & turnover < 3030
+  name: Rule61
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Rulez.txt
+  meta: []
+- expr: profit == total.rev - total.costs
+  name: Rule62
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Rulez.txt
+  meta: []
+- expr: turnover >= 3030 & vat >= 1258.5
+  name: Rule63
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Rulez.txt
+  meta: []
+- expr: staff >= 11.75 & total.rev >= 1696
+  name: Rule64
+  label: ''
+  description: ''
+  created: 2018-10-16 10:43:22
+  origin: 2018/day2/rulesets/Rulez.txt
+  meta: []
+
