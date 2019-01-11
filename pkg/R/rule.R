@@ -97,7 +97,7 @@ rule <- setClass("rule",
 #' meta(v)
 #' 
 #' # retrieve metadata as list
-#' meta(v,simplify=TRUE)
+#' meta(v,simplify=FALSE)
 #' 
 setGeneric("meta",function(x,...) standardGeneric("meta"))
 
