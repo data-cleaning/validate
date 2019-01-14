@@ -33,7 +33,10 @@ validator <- function(..., .file, .data) new('validator',...
 #' @section Details:
 #' A validator stores a set of validatin rules. It is a child class of 
 #' \code{\link{expressionset}} and
-#' can be constructed with  \code{\link{validator}}.
+#' can be constructed with  \code{\link{validator}}. \code{validator} contains
+#' an extra slot \code{"language"} stating the language in which the validation
+#' rule is expressed. The default, and currently only supported language is
+#' the \code{validate} language implemented by this package.
 #'
 #' @section Exported S4 methods for \code{validator}:
 #'   \itemize{
@@ -51,9 +54,12 @@ validator <- function(..., .file, .data) new('validator',...
 #' @keywords internal
 #' 
 setRefClass("validator"
-  , contains = 'expressionset'
+  , fields = list(._language = "character")
+  , contains = "expressionset"
   , methods = list(
-    initialize = function(..., .file, .data)  ini_validator(.self,...,.file=.file, .data=.data)
+    initialize = function(..., .file, .data){
+      ini_validator(.self,...,.file=.file, .data=.data)
+    }
     , is_linear = function() linear(.self)
       # extra argument: normalize=TRUE
     , linear_coefficients = function(...) get_linear_coefficients(.self, ...) 
@@ -87,7 +93,14 @@ ini_validator <- function(obj, ..., .file, .data){
     }
     obj$._options <- .PKGOPT
   }
-  # do options check.
+  for ( r in seq_along(obj)){
+    if ( is.null( meta(obj[[r]])$language ) ) { 
+      meta(obj[[r]],"language") <- paste("validate",utils::packageVersion("validate"))
+    }
+    if (is.null( meta(obj[[r]])$severity)) {
+      meta(obj[[r]],"severity") <- "error"
+    }
+  }
 }
 
 # note: for some reason this function is not testable from devtools::test('pkg')

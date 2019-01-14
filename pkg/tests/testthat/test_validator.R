@@ -18,7 +18,13 @@ test_that("setting properties",{
   expect_warning(names(v)[1] <- c("fu","bar"))
   expect_warning(label(v)[1] <- c("fu","bar"))
   expect_warning(description(v)[1] <- c("fu","bar"))
-   
+  
+  expect_true(
+    all(
+      c("language","severity") %in% names( meta(validator(x>0)) )
+      ) 
+  )
+  
 })
 
 test_that("composing validators",{
