@@ -117,7 +117,7 @@ setGeneric("confront",
 #' @examples
 #' data(retailers)
 #' rules <- validator(turnover >= 0, staff >=0)
-#' cf <- confront(retailers, data)
+#' cf <- confront(retailers, rules)
 #' event(cf)
 #' 
 #' # adapt event information
