@@ -24,6 +24,14 @@ test_that("validation object contents",{
   expect_equal(sort(cf),agg[2:1,])
   expect_equivalent(class(cf[1]),"validation")  
   expect_equal(length(cf[1]),1)
+  expect_equal(length(event(cf)),4)
+  expect_true(is.character(event(cf)))
+  
+  u <- event(cf)
+  u["trigger"] <- "divine intervention"
+  event(cf) <- u
+  expect_equal(event(cf)[4],u[4])
+  
 })
 
 

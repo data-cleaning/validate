@@ -32,6 +32,7 @@ setRefClass("confrontation"
     , ._warn  = "list"      # list of 'warning' objects
     , ._error = "list"      # list of 'error' objects
     , ._key   = "character" # identifying variable in confronted dataset.
+    , ._event = "character" # Metadata identifying the confrontation event.
   )
   , methods=list(
     show = function() .show_confrontation(.self)
@@ -93,6 +94,47 @@ setGeneric("confront",
   def = function(dat, x, ref, ...) standardGeneric("confront")
 )
 
+#' Get or set event information metadata from a 'confrontation' object.
+#' 
+#' The purpose of event information is to store information that allows for
+#' identification of the confronting event.
+#' 
+#' 
+#' @param x an object of class \code{confrontation}
+#' 
+#' @return  A a character vector with elements
+#'   \code{"agent"}, which defaults to the R version and platform returned by
+#'   \code{R.version}, a timestamp (\code{"time"})  in ISO 8601 format and a
+#'   \code{"actor"} which is the user name returned by \code{Sys.info()}. The
+#'   last element is called \code{"trigger"} (default \code{NA_character_}), which
+#'   can be used to administrate the event that triggered the confrontation.
+#'
+#' @references 
+#' Mark van der Loo and Olav ten Bosch (2017) 
+#' \href{https://goo.gl/hEGdbo}{Design of a generic machine-readable validation report structure}, 
+#' version 1.0.0. 
+#' 
+#' @examples
+#' data(retailers)
+#' rules <- validator(turnover >= 0, staff >=0)
+#' cf <- confront(retailers, data)
+#' event(cf)
+#' 
+#' # adapt event information
+#' u <- event(cf)
+#' u["trigger"] <- "spontaneous validation"
+#' event(cf) <- u
+#' event(cf)
+#' 
+#' @family confrontation-methods
+#' @family validation-methods
+#' @family indication-methods
+#' 
+#' @export
+setGeneric("event", def = function(x) standardGeneric("event"))
+
+#' @rdname event
+setGeneric("event<-", def=function(x, value) standardGeneric("event<-"))
 
 ## syntactic sugar function
 
@@ -170,6 +212,14 @@ confront_work <- function(x, dat, key=NA_character_, class='confrontation', ...)
       , ._warn  =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)
       , ._key   = key
+      , ._event = c(
+             agent = sprintf("%s > %s %s.%s > validate %s"
+                        , R.version[["platform"]]        
+                        , R.version[["language"]], R.version[["major"]], R.version[["minor"]]
+                        , utils::packageVersion("validate") )
+           , time    = format(Sys.time(),"%Y%m%dT%H%M%S%z")
+           , actor   = Sys.info()[["user"]]
+           , trigger = NA_character_ )
   )
 }
 
@@ -187,6 +237,23 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
     , ._error  = x$._error[i]
     , ._key = x$._key
   )
+})
+
+
+#' @rdname event
+#' @export
+setMethod("event", signature = "confrontation", definition = function(x){
+  x$._event
+})
+
+#' @rdname event
+#' @param value \code{[character]} vector of length 4 with event identifiers.
+#' @export
+setMethod("event<-","confrontation", function(x, value){
+  stopifnot(is.character(value))
+  stopifnot(all( names(value) == c("agent","time","actor","trigger") ) )
+  x$._event <- value
+  invisible(x)
 })
 
 

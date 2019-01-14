@@ -78,6 +78,8 @@ test_that("barplot doesn't crash",{
     pdf(NULL)
     on.exit(dev.off())
     barplot(check_that(women, height>0, weight/height > 2),...)
+    # force testthat to run the code
+    expect_true(TRUE)
   }
   nullplot()
   nullplot(add_exprs=TRUE)

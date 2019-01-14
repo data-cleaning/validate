@@ -6,5 +6,7 @@ test_that("issue #91 is solved",{
   cf <- confront(data, rule)
   plot(rule)
   plot(cf)
+  # add expectation so testthat won's skip this code.
+  expect_true(TRUE)
 })
 
