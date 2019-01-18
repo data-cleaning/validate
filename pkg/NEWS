@@ -1,5 +1,6 @@
 version 0.2.7
-- lbj_logger object now has an (experimental) $plot() method.
+- NEW: lbj_logger object now has an (experimental) $plot() method.
+- FIX: printing confront(data.frame(), validator()) would crash (thanks to Daniel Pritchard)
 
 version 0.2.6
 - New methods 'all' and 'any' for 'validation' objects

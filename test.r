@@ -12,8 +12,9 @@ snitch Report lines not covered.
 
 opt <- docopt(doc)
 
-if(!require(devtools)) stop('devtools not installed first')
-devtools::test('pkg')
+if(!require(testthat)) stop('testthat not installed')
+pkgload::load_all("pkg")
+testthat::test_dir('pkg/tests')
 
 if (!opt$nocovr){
   if(require(covr)){ 
