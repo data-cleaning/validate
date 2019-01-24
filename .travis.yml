@@ -9,7 +9,6 @@ addons:
   apt:
     packages:
       - libxml2-dev
-      - libv8-3.14-dev
 
 r:
  - release

@@ -413,7 +413,7 @@ setGeneric("as_yaml", function(x,...) standardGeneric("as_yaml"))
 #' @example ../examples/variables.R
 setMethod("variables", "expressionset",  function(x, as=c('vector','matrix','list'), dummy=FALSE, ...){ 
   as <- match.arg(as)
-  vars <- lapply(x$exprs(expand_assignments=!dummy),var_from_call)
+  vars <- lapply(x$exprs(replace_dollar=FALSE, expand_assignments=!dummy),var_from_call)
   u <- unique(unlist(vars))
   
   switch(as

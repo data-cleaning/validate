@@ -24,7 +24,7 @@ rm -rf output
 
 echo "######## Generate documentation..."
 ## $R -q -f document.R
-$R -e "roxygen2::update_collate('pkg');devtools::document('pkg')"
+$R -e "pkgload::load_all('pkg');roxygen2::update_collate('pkg');devtools::document('pkg')"
 
 
 echo "######## Building package in output..."
