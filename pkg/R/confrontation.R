@@ -775,7 +775,7 @@ setMethod("as.data.frame","confrontation", function(x,...){
   }
   v <- values(x, simplify=FALSE, drop=FALSE)
   expr <- sapply(x$._calls, call2text)
-  nam  <- names(v)
+  nam  <- names(x$._calls)
   do.call("rbind",
     lapply(seq_along(v), function(i){
       d <- data.frame(key=getkey(v[[i]])

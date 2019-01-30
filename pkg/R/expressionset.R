@@ -782,7 +782,10 @@ setGeneric("as.data.frame")
 #' @family expressionset-methods
 setMethod("as.data.frame","expressionset", function(x, expand_assignments=TRUE, ...){
   rules <- sapply(x$exprs(expand_assignments=expand_assignments,...), call2text)
-  cbind(meta(x,simplify=TRUE),rule=rules)
+  dat <- cbind(meta(x,simplify=TRUE),rule=rules)
+  # expanding assignments may add numbering to expressions
+  dat$name <- names(rules)
+  dat
 })
 
 
