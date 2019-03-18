@@ -43,4 +43,4 @@ Collate:
     'retailers.R'
     'utils.R'
     'yaml.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

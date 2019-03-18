@@ -179,6 +179,13 @@ test_that("coerce confrontations to data.frame",{
 })
 
 
+test_that("Printing a confrontation against an empty validator does not cause an error", {
+    d <- confront(data.frame("A" = 1:5), validator())
+    expect_output(d$show(), "Warnings\\s+:\\s+0")
+    expect_output(d$show(), "Errors\\s+:\\s+0")
+    expect_output(print(d), "Warnings\\s+:\\s+0")
+    expect_output(print(d), "Errors\\s+:\\s+0")
+})
 
 
 
