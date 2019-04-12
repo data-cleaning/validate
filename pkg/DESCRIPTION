@@ -41,6 +41,7 @@ Collate:
     'functions.R'
     'lumberjack.R'
     'retailers.R'
+    'run_validation.R'
     'utils.R'
     'yaml.R'
 RoxygenNote: 6.1.1
