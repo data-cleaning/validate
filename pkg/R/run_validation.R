@@ -53,6 +53,20 @@ capture <- function(fun, env, call){
 }
 
 ## TODO. Make S4 class out of 'confrontations'
+
+#' Run a file with confrontations. Capture results
+#'
+#' A validation script is a regular R script, intersperced with \code{confront}
+#' or \code{check_that} statements. This function will run the script file 
+#' and capture all output from calls to these functions.
+#'
+#'
+#' @param file \code{[character]} location of an R file.
+#'
+#' @return an object of class \code{validations}
+#'
+#' @family validations
+#' @export
 run_validation <- function(file){
   dir <- dirname(file)
   oldwd <- getwd()
@@ -74,11 +88,12 @@ run_validation <- function(file){
     o$expr <- expr
     out <- eval(expr, envir=o)
   }
-  structure(o$gimme(), class="confrontations")
+  structure(o$gimme(), class="validations")
 }
 
 
 # one-line summary of confrontation
+## TODO: width of nr of items should adapt to nr of actual items.
 cf_one_liner <- function(x){
   filestr <- attr(x,"file")
   filestr <- if (nchar(filestr)<=16) sprintf("%16s",filestr)
@@ -102,9 +117,15 @@ cf_one_liner <- function(x){
 
 }
 
-
-print.confrontations <- function(x, ...){
-   top <- sprintf("Object of class 'confrontations' with %d elements"
+#' print a 'confrontations' object
+#'
+#' @param x \code{[confrontations]} object
+#' @param ... currently unused
+#'
+#' @family validations 
+#' @export
+print.validations <- function(x, ...){
+   top <- sprintf("Object of class 'validations' with %d elements"
       , length(x))
    str <- sapply(x, cf_one_liner)
    cat(top,"\n")
@@ -112,8 +133,14 @@ print.confrontations <- function(x, ...){
   
 }
 
-
-summary.confrontations <- function(object,...){
+#' Summarize a 'confrontations' object
+#'
+#' @param object An object of class \code{confrontations}
+#' @param ... currently unused
+#'
+#' @family validations
+#' @export
+summary.validations <- function(object,...){
   L <- lapply(object, function(x){ 
       s <- summary(x)
       lines <- attr(x,"lines")
