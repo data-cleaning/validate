@@ -19,7 +19,9 @@ output <- function(){
 # retrieve first occurrence of a call from an expression
 get_call <- function(expr, call){
   ii <- rev(which.call(expr, call))[[1]]
-  if (length(ii)==1) 
+  if ( identical(ii, 1) ){
+    return(expr)
+  } else if (length(ii)==1) 
     return(expr[[1]])
   else expr[[ ii[-length(ii)] ]]
 }
@@ -27,7 +29,9 @@ get_call <- function(expr, call){
 # replace first occurrence of a call in an expression with NULL
 rm_call <- function(expr, call){
   ii <- rev(which.call(expr, call))[[1]]
-  if ( length(ii) == 1 ){
+  if ( identical(ii, 1) ){
+    return( NULL )
+  } else  if ( length(ii) == 1 ){
     expr[[ii]] <- NULL
   } else {
     expr[[ ii[-length(ii)] ]] <- NULL
