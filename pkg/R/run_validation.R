@@ -78,7 +78,8 @@ run_validation <- function(file){
  
   # environment to capture confrontations 
   o <- output()
-  o$confront <- capture(confront, o, call="confront")
+  e <- new.env()
+  e$confront <- capture(confront, o, call="confront")
 
   fname  <- basename(file)
   parsed <- parse(fname, keep.source=TRUE)
@@ -90,7 +91,7 @@ run_validation <- function(file){
     o$fst <- src[[i]][1]
     o$lst <- src[[i]][3]
     o$expr <- expr
-    out <- eval(expr, envir=o)
+    out <- eval(expr, envir=e)
   }
   structure(o$gimme(), class="validations")
 }
@@ -121,6 +122,10 @@ cf_one_liner <- function(x){
 
 }
 
+cf_legend <- function(){
+"Legend: file.R<line_start:line_end>|call|(rules/items)[\033[0;32mPASSES\033[0m|\033[0;33mMISSING\033[0m|\033[0;31mFAILS\033[0m]"
+}
+
 #' print a 'confrontations' object
 #'
 #' @param x \code{[confrontations]} object
@@ -134,10 +139,10 @@ print.validations <- function(x, ...){
    str <- sapply(x, cf_one_liner)
    cat(top,"\n")
    cat( paste0(sub("^ +"," ",str),collapse="\n"),"\n" )
-  
+   cat(cf_legend(),"\n")
 }
 
-#' Summarize a 'confrontations' object
+#' Summarize a 'validations' object
 #'
 #' @param object An object of class \code{confrontations}
 #' @param ... currently unused

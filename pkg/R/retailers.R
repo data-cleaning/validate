@@ -1,5 +1,5 @@
 #' @name retailers
-#' @alias SBS2000
+#' @aliases SBS2000
 #' @title data on Dutch supermarkets
 #' @description 
 #'   Anonymized and distorted data on revenue and cost structure for
