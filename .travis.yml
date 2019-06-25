@@ -14,8 +14,8 @@ r:
  - release
 
 before_install:
-  - R -e "install.packages(c('settings','pkgload','roxygen2','testthat','knitr'))"
-  - R -e "pkgload::load_all('./pkg'); roxygen2::roxygenize('./pkg')"
+  - R -e "install.packages(c('settings','pkgload','roxygen2','tinytest','knitr'))"
+  - make doc
   - cd ./pkg
 
 r_packages:
