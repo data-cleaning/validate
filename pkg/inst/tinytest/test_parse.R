@@ -1,28 +1,26 @@
-context("Parsing files")
 
-test_that("file paths are interpreted correctly",{
-  expect_true(is_full_path("C:/hello"))
-  expect_true(is_full_path("//server/hello"))
-  expect_true(is_full_path("~/hello"))
-  expect_true(is_full_path("http://hello"))
-  expect_false(is_full_path("./hello"))
-  expect_false(is_full_path("reldir/hello"))
+
+## file paths are interpreted correctly ----
+  expect_true(validate:::is_full_path("C:/hello"))
+  expect_true(validate:::is_full_path("//server/hello"))
+  expect_true(validate:::is_full_path("~/hello"))
+  expect_true(validate:::is_full_path("http://hello"))
+  expect_false(validate:::is_full_path("./hello"))
+  expect_false(validate:::is_full_path("reldir/hello"))
   # windoze flavor
-  expect_true(is_full_path("C:\\hello"))
-  expect_true(is_full_path("\\\\server\\hello"))
-  expect_true(is_full_path("~\\hello"))
-  expect_false(is_full_path("reldir\\hello"))
-})
+  expect_true(validate:::is_full_path("C:\\hello"))
+  expect_true(validate:::is_full_path("\\\\server\\hello"))
+  expect_true(validate:::is_full_path("~\\hello"))
+  expect_false(validate:::is_full_path("reldir\\hello"))
 
 # TODO: add file parsing tests
 #setwd("pkg/tests/testthat/")
-test_that("Parsing freeform", {
+## Parsing freeform ----
   expect_equal( length( validator(.file="yamltests/freeform.yaml") ) , 2,info="freeform")
   expect_equal( length( indicator(.file="yamltests/indicator.yaml") ) , 2,info="freeform")
   expect_equal( length( indicator(.file="yamltests/indicator2.yaml") ) , 2,info="freeform")
-})
 
-test_that("Parsing yrf format", {
+## Parsing yrf format ----
   now <- Sys.time()
   v <- validator(.file="yamltests/yamlrules.yaml")
   expect_equal(length(v),2)
@@ -34,21 +32,19 @@ test_that("Parsing yrf format", {
   expect_warning(validator(.file="yamltests/invalid.yaml"))
   out <- capture.output(expect_warning(validator(.file="yamltests/invalidR.yaml")))
   expect_true(any(nchar(out)>0))
-})
 
-test_that("Parsing options",{
+
+## Parsing options ----
   v <- validator(.file="yamltests/yamloptions.yaml") 
   expect_equal(voptions(v,"raise"),"all")
   expect_equal(length(v),1)
-})
 
-test_that("Parsing metadata",{
+##Parsing metadata ----
   v <- validator(.file="yamltests/yaml_with_meta.yaml")
   expect_equal(meta(v)$foo,c("1",NA))
   expect_equal(meta(v)$bar,c(NA,"2"))
-})
 
-test_that("Parsing included files",{
+## Parsing included files ----
   v <- validator(.file="yamltests/top.yaml")
   expect_equal(length(v),6)
   expect_equivalent(origin(v)
@@ -60,9 +56,8 @@ test_that("Parsing included files",{
         , "yamltests/top.yaml")
     , info = "file inclusion order"
     )
-})
 
-test_that("validation from data.frames",{
+## validation from data.frames ----
   
   d <- data.frame(
   rule = c("x>0", "a + b == c")
@@ -76,99 +71,92 @@ test_that("validation from data.frames",{
   d$rule[2] <- "a+b"
   expect_warning(validator(.data=d))
   
-})
 
 
-context("Computing on language")
+
 # 
-test_that("var_from_call",{
+##  var_from_call ----
   
   # regular case, concering two variables
   expect_equal(
-    var_from_call(expression(x > y)[[1]])
+    validate:::var_from_call(expression(x > y)[[1]])
     , c("x","y")
   )
   
   
   # case of no variables at all
   expect_equal(
-    var_from_call(expression(1 > 0)[[1]])
+    validate:::var_from_call(expression(1 > 0)[[1]])
     , NULL
   )
-})
 
-test_that("validating_call",{
-  expect_true(validating_call(expression(x > y)[[1]]))
-  expect_true(validating_call(expression(x >= y)[[1]]))
-  expect_true(validating_call(expression(x == y)[[1]]))
-  expect_true(validating_call(expression(x != y)[[1]]))
-  expect_true(validating_call(expression(x <= y)[[1]]))
-  expect_true(validating_call(expression(x < y)[[1]]))
-  expect_true(validating_call(expression(identical(x,y))[[1]]))
+## validating_call ----
+  expect_true(validate:::validating_call(expression(x > y)[[1]]))
+  expect_true(validate:::validating_call(expression(x >= y)[[1]]))
+  expect_true(validate:::validating_call(expression(x == y)[[1]]))
+  expect_true(validate:::validating_call(expression(x != y)[[1]]))
+  expect_true(validate:::validating_call(expression(x <= y)[[1]]))
+  expect_true(validate:::validating_call(expression(x < y)[[1]]))
+  expect_true(validate:::validating_call(expression(identical(x,y))[[1]]))
 
-  expect_true(validating_call(expression(!(x > y))[[1]]))
-  expect_true(validating_call(expression(all(x > y))[[1]]))
-  expect_true(validating_call(expression(any(x > y))[[1]]))
-  expect_true(validating_call(expression(grepl('hello',x))[[1]]))
+  expect_true(validate:::validating_call(expression(!(x > y))[[1]]))
+  expect_true(validate:::validating_call(expression(all(x > y))[[1]]))
+  expect_true(validate:::validating_call(expression(any(x > y))[[1]]))
+  expect_true(validate:::validating_call(expression(grepl('hello',x))[[1]]))
 
-  expect_true(validating_call(expression(if(x == 1) y == 1)[[1]]))
-  expect_true(validating_call(expression(xor(x == 1, y == 1))[[1]]))
-  expect_false(validating_call(expression(x)[[1]]))
+  expect_true(validate:::validating_call(expression(if(x == 1) y == 1)[[1]]))
+  expect_true(validate:::validating_call(expression(xor(x == 1, y == 1))[[1]]))
+  expect_false(validate:::validating_call(expression(x)[[1]]))
   
-})
 
-test_that("vectorizing if-statmentes",{
+## vectorizing if-statmentes ----
 
-  a <- vectorize( expression( if (P) Q )[[1]]  )
+  a <- validate:::vectorize( expression( if (P) Q )[[1]]  )
   b <- expression(!(P) |(Q))[[1]]
   expect_identical(a,b)
 
-  a <- vectorize( expression( (if (P) Q) )[[1]]  )
+  a <- validate:::vectorize( expression( (if (P) Q) )[[1]]  )
   b <- expression( (!(P)|(Q)) )[[1]]  
   expect_identical(a,b)
 
-  a <- vectorize( expression( (if (P) Q) | Z   )[[1]]  )
+  a <- validate:::vectorize( expression( (if (P) Q) | Z   )[[1]]  )
   b <- expression((!(P)|(Q)) | Z)[[1]]
   expect_identical(a,b)
 
   a <- expression(sapply(x,function(y) 2*y))[[1]]
   b <- a
-  expect_identical(vectorize(a),b)
+  expect_identical(validate:::vectorize(a),b)
 
-  a <- vectorize( expression( (if (P) Q) | (if(A) B)   )[[1]]  )
+  a <- validate:::vectorize( expression( (if (P) Q) | (if(A) B)   )[[1]]  )
   b <- expression((!(P)|(Q))|(!(A)|(B)))[[1]]
   expect_identical(a,b)
 
   # nested if's. For some reasons, identical gives FALSE
-  a <- vectorize(expression( if (P) Q | if(A) B )[[1]])
+  a <- validate:::vectorize(expression( if (P) Q | if(A) B )[[1]])
   b <- expression( !(P) | (Q | (!(A) | (B))) )[[1]]
   expect_true(a == b)
   
   e <- expression( if (P) Q else R)[[1]]
-  a <- vectorize(e)
+  a <- validate:::vectorize(e)
   b <- expression(
     (!(P)|(Q)) & ((P)|(R))
   )[[1]]
   expect_identical(a,b)
-})
 
 
-test_that("translation of rules to data.frame",{
+## translation of rules to data.frame ----
   v <- validator(x > y, 2*y-1==z)
   expect_equal(nrow(as.data.frame(v)),2)
   i <- indicator(mean(x), sd(y))
   expect_equal(nrow(as.data.frame(i)),2)
-})
 
 
-test_that("replacing %in% operator",{
+## replacing %in% operator ----
   e <- expression( x %in% y)[[1]]
-  expect_identical(replace_in(e)
+  expect_identical(validate:::replace_in(e)
     , expression(x %vin% y)[[1]])
   
   e <- expression( x %in% y | x %in% z)[[1]]
-  expect_identical(replace_in(e)
+  expect_identical(validate:::replace_in(e)
     , expression(x %vin% y | x %vin% z)[[1]])
-                   
   
-})

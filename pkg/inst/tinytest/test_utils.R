@@ -1,7 +1,6 @@
 
-context("Utilities")
 
-test_that('Options can be set',{
+## Options can be set
   # warning on nonexistent option 
   expect_warning(voptions(fiets=3))
   # invalid 'raise' value -- not implemented yet
@@ -9,10 +8,10 @@ test_that('Options can be set',{
   # this should run without problems
   reset(voptions)
   expect_equal(voptions('raise')[[1]],'none')
-})
 
 
-test_that("match_cells",{
+
+## match_cells",{
   d1 <- data.frame(id=paste(1:3),x=1:3,y=4:6)
   d2 <- data.frame(id=paste(4:1),y=4:7,x=1:4)
   expect_equal(
@@ -23,32 +22,32 @@ test_that("match_cells",{
     as.character(match_cells(d1,d2,id='id')[[1]][,'id'])
     , as.character(match_cells(d1,d2,id='id')[[2]][,'id'])
   )  
-})
 
-test_that('validating/indicating expressions can be named',{
+
+## validating/indicating expressions can be named
   expect_equal(names(validator(aap=x>3)),'aap')
   expect_equal(names(indicator(fiets=mean(x))),'fiets')    
-})
 
-test_that("cells works",{
+
+## cells works",{
   cls <- cells(women, women)
   expect_equivalent(cls[,1], cls[,2])
   d <- as.data.frame(cls)
   expect_true(inherits(d, "data.frame"))
   expect_equal(nrow(d), 9*2)
   expect_equal(ncol(d), 3)
-})
+
 
 
 # code for these methods in confrontation.R
-test_that("other methods for 'variables'",{
+## other methods for 'variables
   expect_equal(variables(women),c("height","weight"))  
   expect_equal(variables(as.list(women)),c("height","weight"))
   expect_equal(variables(as.environment(women)),c("height","weight"))
-})
 
 
-test_that('compare works',{
+
+## compare works
   d1 <- data.frame(x=1:3,y=4:6)
   d2 <- data.frame(x=c(NA,2,NA),y=c(4,5,NA))  
   v <- validator(x>0,y<5)
@@ -63,20 +62,20 @@ test_that('compare works',{
   expect_equal(ncol(d),3)
   expect_equal(nrow(d),11*2)
   
-})
 
-test_that("comparison objects can be plotted",{
+
+## comparison objects can be plotted
   d1 <- data.frame(x=1:3,y=4:6)
   d2 <- data.frame(x=c(NA,2,NA),y=c(4,5,NA))  
   rules <- validator(x>0,y<5)
-  expect_null(plot(compare(rules, d1,d2)))
-  expect_null(plot(cells(d1,d2)))
+  expect_silent(plot(compare(rules, d1,d2)))
+  expect_silent(plot(cells(d1,d2)))
   expect_equal(length(barplot(cells(d1,d2))),2)
   expect_equal(length(barplot(compare(rules, d1,d2))),2)
 
-})
 
-test_that('blocks works',{
+
+## blocks works
   v <- validator(x + y > z, q > 0, z + x == 3)
   expect_equivalent(v$blocks()[[1]],c(1,3))
   expect_equivalent(v$blocks()[[2]],2)
@@ -91,9 +90,9 @@ test_that('blocks works',{
   v <- validator(x +y ==z, x+z>0)
   expect_equal(length(v$blocks()),1)
   
-})
 
-test_that("%vin%",{
+
+## %vin% ----
   expect_identical(
     c("a","b") %vin% integer(0)
     , logical(2)
@@ -116,8 +115,9 @@ test_that("%vin%",{
   )
   expect_identical(
     c("a","b") %vin% c("a",NA,"d")
-    , c(TRUE,NA))
-})
+    , c(TRUE,NA)
+  )
+
 
 
 
