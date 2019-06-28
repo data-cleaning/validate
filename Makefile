@@ -14,7 +14,9 @@ cran: doc
 	R CMD build pkg
 	R CMD check --as-cran *.tar.gz
 
-install: pkg
+install: doc
+	rm *.tar.gz
+	R CMD build pkg
 	R CMD INSTALL *.tar.gz
 
 test: doc
@@ -23,7 +25,9 @@ test: doc
 manual: doc
 	R CMD Rd2pdf --force -o manual.pdf ./pkg
 
-revdep: pkg
+revdep: doc
+	rm -rf *.tar.gz
+	R CMD build pkg
 	rm -rf revcheck
 	mkdir revcheck
 	mv *.tar.gz revcheck

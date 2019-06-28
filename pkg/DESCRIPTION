@@ -19,7 +19,7 @@ Depends: R (>= 3.1.3), methods
 URL: https://github.com/data-cleaning/validate
 BugReports: https://github.com/data-cleaning/validate/issues
 Imports: graphics, settings, yaml
-Suggests: tinytest (> 0.9.4), knitr, rmarkdown
+Suggests: tinytest (>= 0.9.6), knitr, rmarkdown
 Enhances: lumberjack
 VignetteBuilder: knitr
 Collate: 
