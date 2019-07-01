@@ -14,7 +14,7 @@ r:
  - release
 
 before_install:
-  - R -e "install.packages(c('settings','pkgload','roxygen2','tinytest','knitr'))"
+  - R -e "install.packages(c('settings','pkgload','roxygen2','tinytest','knitr','lumberjack'))"
   - make doc
   - cd ./pkg
 
