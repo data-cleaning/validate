@@ -39,12 +39,16 @@ setRefClass("confrontation"
   )
 )
 
+
+confrontation_nwarn <- function(x) sum(vapply(x$._warn, function(w)!is.null(w), FUN.VALUE = logical(1)))
+confrontation_nerrs <- function(x) sum(vapply(x$._error, function(w)!is.null(w), FUN.VALUE = logical(1)))
+
 .show_confrontation <- function(.self){
   cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
-  cat(sprintf('Warnings      : %d\n',sum(vapply(.self$._warn, function(w)!is.null(w), FUN.VALUE = logical(1)))))
-  cat(sprintf('Errors        : %d\n',sum(vapply(.self$._error, function(w)!is.null(w), FUN.VALUE = logical(1)))))
+  cat(sprintf('Warnings      : %d\n', confrontation_nwarn(.self) ))
+  cat(sprintf('Errors        : %d\n', confrontation_nerrs(.self) ))
 }
 
 
