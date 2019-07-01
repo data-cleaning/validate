@@ -3,6 +3,8 @@ version 0.2.7
 - Objects inheriting from 'confrontation' now store event metadata. See ?event.
 - Objects of class 'validator' now store (default) metadata on expression 
   language and rule severity.
+- switched to 'tinytest' testing framework
+
 
 version 0.2.6
 - New methods 'all' and 'any' for 'validation' objects

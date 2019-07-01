@@ -10,10 +10,9 @@ NULL
 #' 
 #' @param ... A comma-separated list of validating expressions
 #' @param .file (optional) A character vector of file locations (see also the
-#'   section on file parsing in the
+#'   section on file parsing in the \code{\link{syntax}} help file).
 #' @param .data (optional) A \code{data.frame} with columns \code{"rule"},
 #'   \code{"name"}, and \code{"description"}
-#' \code{\link{syntax}} help file).
 #'
 #' 
 #'  

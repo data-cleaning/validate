@@ -1,8 +1,5 @@
 
-
-context("validator object")
-
-test_that("setting properties",{
+## setting properties ----
   v <- validator(x>0,y+x==1)
   names(v)[1] <- "foo"
   expect_equal(names(v),c("foo","V2"))
@@ -25,15 +22,15 @@ test_that("setting properties",{
       ) 
   )
   
-})
 
-test_that("composing validators",{
+
+## composing validators ----
   v <- validator(x>0) + validator(x<1)
   expect_equal(length(v),2)
   expect_true(!any(duplicated(names(v))))
-})
 
-test_that("regression tests",{
+
+## regression tests ----
   # Issue #65 reported by Andrew R Gibson
   # used to crash
   v <- validator(weight<150, Fred < Jim) 
@@ -57,10 +54,10 @@ test_that("regression tests",{
   # Issue #82 reported by Anne Petersen
   out <- capture.output(str(v1))
   
-})
 
 
-test_that("plot validator works",{
+
+## plot validator works ----
   v <- validator(x > 1, y + x > 1)
   F <- plot(v)
   
@@ -69,4 +66,4 @@ test_that("plot validator works",{
   
   v <- validator(x + y > 0)
   F <- plot(v)
-})
+

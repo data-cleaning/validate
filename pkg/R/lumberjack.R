@@ -64,7 +64,7 @@ lbj_cells <- setRefClass("lbj_cells"
         .self$expr <- c(.self$expr, meta$src)
         .self$cells <- cbind(.self$cells, cl[,2,drop=FALSE])
       }
-    , dump = function(file="cells.csv",...){
+    , dump = function(file="cells.csv",verbose=TRUE,...){
       "Dump logging info to csv file. 
        All arguments in '...' except row.names are passed to 'write.csv'"
       out <- .self$log_data()

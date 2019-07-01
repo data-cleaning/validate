@@ -43,8 +43,8 @@ setRefClass("confrontation"
   cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
   cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
-  cat(sprintf('Warnings      : %d\n',sum(sapply(.self$._warn,function(w)!is.null(w)))))
-  cat(sprintf('Errors        : %d\n',sum(sapply(.self$._error,function(w)!is.null(w)))))
+  cat(sprintf('Warnings      : %d\n',sum(vapply(.self$._warn, function(w)!is.null(w), FUN.VALUE = logical(1)))))
+  cat(sprintf('Errors        : %d\n',sum(vapply(.self$._error, function(w)!is.null(w), FUN.VALUE = logical(1)))))
 }
 
 
@@ -400,8 +400,8 @@ setMethod("show","validation",function(object){
    cat(sprintf("Call:\n    ")); print(object$._call); cat('\n')
    cat(sprintf('Confrontations: %d\n', length(object$._calls)))
    cat(sprintf('With fails    : %d\n', failed_confrontations(object)))
-   cat(sprintf('Warnings      : %d\n',sum(sapply(object$._warn,function(w)!is.null(w)))))
-   cat(sprintf('Errors        : %d\n',sum(sapply(object$._error,function(w)!is.null(w)))))
+   cat(sprintf('Warnings      : %d\n',sum(vapply(object$._warn, function(w)!is.null(w), FUN.VALUE = logical(1)))))
+   cat(sprintf('Errors        : %d\n',sum(vapply(object$._error, function(w)!is.null(w), FUN.VALUE = logical(1)))))
 })
 
 
