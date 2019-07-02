@@ -16,9 +16,9 @@
 # TODO: add file parsing tests
 #setwd("pkg/tests/testthat/")
 ## Parsing freeform ----
-  expect_equal( length( validator(.file="yamltests/freeform.yaml") ) , 2,info="freeform")
-  expect_equal( length( indicator(.file="yamltests/indicator.yaml") ) , 2,info="freeform")
-  expect_equal( length( indicator(.file="yamltests/indicator2.yaml") ) , 2,info="freeform")
+  expect_equal( length( validator(.file="yamltests/freeform.yaml") ) , 2)
+  expect_equal( length( indicator(.file="yamltests/indicator.yaml") ) , 2)
+  expect_equal( length( indicator(.file="yamltests/indicator2.yaml") ) , 2)
 
 ## Parsing yrf format ----
   now <- Sys.time()
@@ -103,6 +103,10 @@
   expect_true(validate:::validating_call(expression(all(x > y))[[1]]))
   expect_true(validate:::validating_call(expression(any(x > y))[[1]]))
   expect_true(validate:::validating_call(expression(grepl('hello',x))[[1]]))
+
+  ## this is a validating call, but _not_ a validation rule because
+  ## it does not contain any variables.
+  expect_true(validate:::validating_call(expression(exists("hihi")==TRUE)[[1]]))
 
   expect_true(validate:::validating_call(expression(if(x == 1) y == 1)[[1]]))
   expect_true(validate:::validating_call(expression(xor(x == 1, y == 1))[[1]]))
