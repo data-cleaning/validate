@@ -81,7 +81,7 @@ capture <- function(fun, env){
 #' 
 #' @return an object of class \code{validations}
 #'
-#' @family validations
+#' @family validations validation-files
 #' @export
 run_validation_file <- function(file, verbose=TRUE){
 
@@ -120,16 +120,42 @@ run_validation_file <- function(file, verbose=TRUE){
     if (o$nfail == 0 & o$nNA == 0){ 
       postfix <- "OK"
     } else { 
-      if (o$nfail > 0) postfix <- sprintf("%3d FAILS", o$nfail)
-      if (o$nNA   > 0) postfix <- sprintf("%s %3d NA", postfix, o$nNA)
-      if (o$nerrs > 0) postfix <- sprintf("%s %3d ERRORS",postfix, o$nerrs)
-      if (o$nwarn > 0) postfix <- sprintf("%s %3d WARNINGS",postfix, o$nwarn)
+      if (o$nfail > 0) postfix <- sprintf("%d FAILS", o$nfail)
+      if (o$nNA   > 0) postfix <- sprintf("%s %d NA", postfix, o$nNA)
+      if (o$nerrs > 0) postfix <- sprintf("%s %d ERRORS",postfix, o$nerrs)
+      if (o$nwarn > 0) postfix <- sprintf("%s %d WARNINGS",postfix, o$nwarn)
     }
     catf("%s %s",prefix,postfix)
   }
   catf("\n")
-  structure(o$gimme(), class="validations")
+  o$gimme()
 }
+
+#' Run al validation files in a directory. 
+#'
+#' @param dir     \code{[character]} path to directory.
+#' @param pattern \code{[characer]} regular expression that selects validation files to run.
+#' @param verbose \code{[logical]} Toggle verbose output.
+#' 
+#' 
+#' 
+#' 
+#' @export
+#' @family validation validation-files
+run_validation_dir <- function(dir="./", pattern="^validate.+[rR]", verbose=TRUE){
+  if (!dir.exists(dir)) stop(sprintf("%s\nnot found or is not a directory"))
+
+  files <- dir(path=dir, pattern=pattern, full.names=TRUE)
+  
+  L <- list()
+  for ( f in files ){
+    out <- c(L, run_validation_file(f))
+  }
+
+  out
+}
+
+
 
 
 # one-line summary of confrontation
@@ -161,40 +187,40 @@ cf_legend <- function(){
 "Legend: file.R<line_start:line_end>|call|(rules/items)[\033[0;32mPASSES\033[0m|\033[0;33mMISSING\033[0m|\033[0;31mFAILS\033[0m]"
 }
 
-#' print a 'confrontations' object
-#'
-#' @param x \code{[confrontations]} object
-#' @param ... currently unused
-#'
-#' @family validations 
-#' @export
-print.validations <- function(x, ...){
-   top <- sprintf("Object of class 'validations' with %d elements"
-      , length(x))
-   str <- sapply(x, cf_one_liner)
-   cat(top,"\n")
-   cat( paste0(sub("^ +"," ",str),collapse="\n"),"\n" )
-   cat(cf_legend(),"\n")
-}
-
-#' Summarize a 'validations' object
-#'
-#' @param object An object of class \code{confrontations}
-#' @param ... currently unused
-#'
-#' @family validations
-#' @export
-summary.validations <- function(object,...){
-  L <- lapply(object, function(x){ 
-      s <- summary(x)
-      lines <- attr(x,"lines")
-      cbind(file=attr(x,"file"), fst=lines[1], lst=lines[2]
-          ,call=deparse(x$._call), s, row.names=NULL)
-    })
-  out <- do.call("rbind",L)
- # rownames(out) <- NULL
-  out
-}
+##' print a 'confrontations' object
+##'
+##' @param x \code{[confrontations]} object
+##' @param ... currently unused
+##'
+##' @family validations 
+##' 
+#print.validations <- function(x, ...){
+#   top <- sprintf("Object of class 'validations' with %d elements"
+#      , length(x))
+#   str <- sapply(x, cf_one_liner)
+#   cat(top,"\n")
+#   cat( paste0(sub("^ +"," ",str),collapse="\n"),"\n" )
+#   cat(cf_legend(),"\n")
+#}
+#
+##' Summarize a 'validations' object
+##'
+##' @param object An object of class \code{confrontations}
+##' @param ... currently unused
+##'
+##' @family validations
+##' 
+#summary.validations <- function(object,...){
+#  L <- lapply(object, function(x){ 
+#      s <- summary(x)
+#      lines <- attr(x,"lines")
+#      cbind(file=attr(x,"file"), fst=lines[1], lst=lines[2]
+#          ,call=deparse(x$._call), s, row.names=NULL)
+#    })
+#  out <- do.call("rbind",L)
+# # rownames(out) <- NULL
+#  out
+#}
 
 
 
