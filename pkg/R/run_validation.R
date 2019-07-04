@@ -31,28 +31,6 @@ output <- function(){
 }
 
 
-# retrieve first occurrence of a call from an expression
-get_call <- function(expr, call){
-  ii <- rev(which.call(expr, call))[[1]]
-  if ( identical(ii, 1) ){
-    return(expr)
-  } else if (length(ii)==1) 
-    return(expr[[1]])
-  else expr[[ ii[-length(ii)] ]]
-}
-
-# replace first occurrence of a call in an expression with NULL
-rm_call <- function(expr, call){
-  ii <- rev(which.call(expr, call))[[1]]
-  if ( identical(ii, 1) ){
-    return( NULL )
-  } else  if ( length(ii) == 1 ){
-    expr[[ii]] <- NULL
-  } else {
-    expr[[ ii[-length(ii)] ]] <- NULL
-  }
-  expr
-}
 
 capture <- function(fun, env){
   function(...){
@@ -128,7 +106,11 @@ run_validation_file <- function(file, verbose=TRUE){
     catf("%s %s",prefix,postfix)
   }
   catf("\n")
-  o$gimme()
+  
+  structure(o$gimme()
+    , class=c("validations", "list")
+    , call=match.call()
+  )
 }
 
 #' Run al validation files in a directory. 
@@ -152,40 +134,58 @@ run_validation_dir <- function(dir="./", pattern="^validate.+[rR]", verbose=TRUE
     out <- c(L, run_validation_file(f))
   }
 
-  out
+  structure(out
+      , class=c("validations", "list")
+      , call=match.call()
+  )
 }
 
+#' print a 'validations' obect
+#' 
+#'
+#' @param x an object
+#' @param ... unused
+#' @export
+print.validations <- function(x,...){
+  cat(sprintf("Object of class 'validations'\nCall:\n    "))
+  print(attr(x,"call"))
+  cat("\n")
+  cat(sprintf("Confrontations: %d\n",sum(sapply(x,length))))
+  cat(sprintf("With fails    : %d\n",sum(sapply(x, failed_confrontations)) ))
+  cat(sprintf("Warnings      : %d\n", sum(sapply(x, function(y) length(warnings(y))  ))  ))
+  cat(sprintf("Errors        : %d\n", sum(sapply(x, function(y) length(errors(y))  ))  ))
+}
 
 
 
 # one-line summary of confrontation
 ## TODO: width of nr of items should adapt to nr of actual items.
-cf_one_liner <- function(x){
-  filestr <- attr(x,"file")
-  filestr <- if (nchar(filestr)<=16) sprintf("%16s",filestr)
-             else paste0("..", substr(attr(x,"file"), 3,16))
-
-  lines <- attr(x,"lines")
-  linestr <- sprintf("<%03d:%03d>",lines[1],lines[2])
-
-  callstr <- deparse(x$._call)
-  callstr <- gsub(" +", " ", paste(callstr, collapse=" "))
-  callstr <- if (nchar(callstr) <= 30) sprintf("%30s",callstr)
-             else paste0(substr(callstr,1,28),"..")
-
-  s <- summary(x)
-  
-  nfpstr <- sprintf("(%02d/%02d|\033[0;32m%02d\033[0m|\033[0;33m%02d\033[0m|\033[0;31m%02d\033[0m)"
-                  ,nrow(s), sum(s$items), sum(s$passes),sum(s$nNA) ,sum(s$fails))
-  nwestr <- sprintf("[W%02d|E%02d]",sum(s$warning), sum(s$error))
-
-  paste0(filestr, linestr,"|",callstr,"|",nfpstr,nwestr)
-
-}
-
-cf_legend <- function(){
-"Legend: file.R<line_start:line_end>|call|(rules/items)[\033[0;32mPASSES\033[0m|\033[0;33mMISSING\033[0m|\033[0;31mFAILS\033[0m]"
-}
+#cf_one_liner <- function(x){
+#  filestr <- attr(x,"file")
+#  filestr <- if (nchar(filestr)<=16) sprintf("%16s",filestr)
+#             else paste0("..", substr(attr(x,"file"), 3,16))
+#
+#  lines <- attr(x,"lines")
+#  linestr <- sprintf("<%03d:%03d>",lines[1],lines[2])
+#
+#  callstr <- deparse(x$._call)
+#  callstr <- gsub(" +", " ", paste(callstr, collapse=" "))
+#  callstr <- if (nchar(callstr) <= 30) sprintf("%30s",callstr)
+#             else paste0(substr(callstr,1,28),"..")
+#
+#  s <- summary(x)
+#  
+#  nfpstr <- sprintf("(%02d/%02d|\033[0;32m%02d\033[0m|\033[0;33m%02d\033[0m|\033[0;31m%02d\033[0m)"
+#                  ,nrow(s), sum(s$items), sum(s$passes),sum(s$nNA) ,sum(s$fails))
+#  nwestr <- sprintf("[W%02d|E%02d]",sum(s$warning), sum(s$error))
+#
+#  paste0(filestr, linestr,"|",callstr,"|",nfpstr,nwestr)
+#
+#}
+#
+#cf_legend <- function(){
+#"Legend: file.R<line_start:line_end>|call|(rules/items)[\033[0;32mPASSES\033[0m|\033[0;33mMISSING\033[0m|\033[0;31mFAILS\033[0m]"
+#}
 
 ##' print a 'confrontations' object
 ##'
