@@ -57,7 +57,8 @@ capture <- function(fun, env){
 #' @param file \code{[character]} location of an R file.
 #' @param verbose \code{[logical]} toggle verbose output.
 #' 
-#' @return an object of class \code{validations}
+#' @return \code{run_validation_file}: An object of class \code{validations}. This is 
+#'   a \code{list} of objects of class \code{\link{validation}}.
 #'
 #' @family validations validation-files
 #' @export
@@ -121,7 +122,9 @@ run_validation_file <- function(file, verbose=TRUE){
 #' 
 #' 
 #' 
-#' 
+#' @rdname run_validation_file
+#' @return \code{run_validation_dir}: An object of class \code{validations}. This is 
+#'   a \code{list} of objects of class \code{\link{validation}}.
 #' @export
 #' @family validation validation-files
 run_validation_dir <- function(dir="./", pattern="^validate.+[rR]", verbose=TRUE){
@@ -143,9 +146,11 @@ run_validation_dir <- function(dir="./", pattern="^validate.+[rR]", verbose=TRUE
 #' print a 'validations' obect
 #' 
 #'
-#' @param x an object
-#' @param ... unused
+#' @param x An R object
+#' @param ... Unused
 #' @export
+#' @return \code{print}: \code{NULL}, invisibly.
+#' @rdname run_validation_file
 print.validations <- function(x,...){
   cat(sprintf("Object of class 'validations'\nCall:\n    "))
   print(attr(x,"call"))
@@ -154,73 +159,33 @@ print.validations <- function(x,...){
   cat(sprintf("With fails    : %d\n",sum(sapply(x, failed_confrontations)) ))
   cat(sprintf("Warnings      : %d\n", sum(sapply(x, function(y) length(warnings(y))  ))  ))
   cat(sprintf("Errors        : %d\n", sum(sapply(x, function(y) length(errors(y))  ))  ))
+  invisible(NULL)
+}
+
+#' Summarize a 'validations' object
+#'
+#'
+#'
+#' 
+#' @rdname run_validation_file
+#' @param object An R object
+#' @return \code{summary}: A data frame similar to the data frame returned
+#'   when summarizing a \code{\link{validation}} object. There are extra columns listing
+#'   each call, file and first and last line where the code occurred.
+#' @export
+summary.validations <- function(object, ...){
+  L <- lapply(object, function(x){
+    s <- summary(x)
+    s$call <- capture.output(print(x$._call))
+    s$file <- attr(x,"file")
+    s$fst  <- attr(x,"lines")[1]
+    s$lst <- attr(x, "lines")[2]
+    s
+  }) 
+  do.call(rbind,L)
 }
 
 
-
-# one-line summary of confrontation
-## TODO: width of nr of items should adapt to nr of actual items.
-#cf_one_liner <- function(x){
-#  filestr <- attr(x,"file")
-#  filestr <- if (nchar(filestr)<=16) sprintf("%16s",filestr)
-#             else paste0("..", substr(attr(x,"file"), 3,16))
-#
-#  lines <- attr(x,"lines")
-#  linestr <- sprintf("<%03d:%03d>",lines[1],lines[2])
-#
-#  callstr <- deparse(x$._call)
-#  callstr <- gsub(" +", " ", paste(callstr, collapse=" "))
-#  callstr <- if (nchar(callstr) <= 30) sprintf("%30s",callstr)
-#             else paste0(substr(callstr,1,28),"..")
-#
-#  s <- summary(x)
-#  
-#  nfpstr <- sprintf("(%02d/%02d|\033[0;32m%02d\033[0m|\033[0;33m%02d\033[0m|\033[0;31m%02d\033[0m)"
-#                  ,nrow(s), sum(s$items), sum(s$passes),sum(s$nNA) ,sum(s$fails))
-#  nwestr <- sprintf("[W%02d|E%02d]",sum(s$warning), sum(s$error))
-#
-#  paste0(filestr, linestr,"|",callstr,"|",nfpstr,nwestr)
-#
-#}
-#
-#cf_legend <- function(){
-#"Legend: file.R<line_start:line_end>|call|(rules/items)[\033[0;32mPASSES\033[0m|\033[0;33mMISSING\033[0m|\033[0;31mFAILS\033[0m]"
-#}
-
-##' print a 'confrontations' object
-##'
-##' @param x \code{[confrontations]} object
-##' @param ... currently unused
-##'
-##' @family validations 
-##' 
-#print.validations <- function(x, ...){
-#   top <- sprintf("Object of class 'validations' with %d elements"
-#      , length(x))
-#   str <- sapply(x, cf_one_liner)
-#   cat(top,"\n")
-#   cat( paste0(sub("^ +"," ",str),collapse="\n"),"\n" )
-#   cat(cf_legend(),"\n")
-#}
-#
-##' Summarize a 'validations' object
-##'
-##' @param object An object of class \code{confrontations}
-##' @param ... currently unused
-##'
-##' @family validations
-##' 
-#summary.validations <- function(object,...){
-#  L <- lapply(object, function(x){ 
-#      s <- summary(x)
-#      lines <- attr(x,"lines")
-#      cbind(file=attr(x,"file"), fst=lines[1], lst=lines[2]
-#          ,call=deparse(x$._call), s, row.names=NULL)
-#    })
-#  out <- do.call("rbind",L)
-# # rownames(out) <- NULL
-#  out
-#}
 
 
 

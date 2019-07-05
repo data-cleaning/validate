@@ -408,27 +408,6 @@ setMethod("show","validation",function(object){
    cat(sprintf('Errors        : %d\n',sum(vapply(object$._error, function(w)!is.null(w), FUN.VALUE = logical(1)))))
 })
 
-#' Store multiple 'validation' objects
-#' 
-#' @slot ._call Call that created the object
-#' @slot ._validations a list of 'validation' objects
-#' 
-#' @exportClass validations
-#' @aliases validation
-#' @family validation-methods
-validations <- setClass("validations", slots = list(
-    ._call         = "call" # call that created this object
-    ,._validations = "list" # a list of 'validation' objects
-))
-
-
-#' @rdname confront
-setMethod("show", "validations", function(object){
-  cat("Object of class 'validations':\n")
-  cat(as.character(object@._call),"\n")
-  cat(sprintf("%d validations",length(object@._validations)))
- 
-})
 
 
 #' @rdname confront
