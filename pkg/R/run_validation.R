@@ -45,7 +45,6 @@ capture <- function(fun, env){
   }
 }
 
-## TODO. Make S4 class out of 'confrontations'
 
 #' Run a file with confrontations. Capture results
 #'
@@ -114,8 +113,6 @@ run_validation_file <- function(file, verbose=TRUE){
   )
 }
 
-#' Run al validation files in a directory. 
-#'
 #' @param dir     \code{[character]} path to directory.
 #' @param pattern \code{[characer]} regular expression that selects validation files to run.
 #' @param verbose \code{[logical]} Toggle verbose output.
@@ -143,9 +140,6 @@ run_validation_dir <- function(dir="./", pattern="^validate.+[rR]", verbose=TRUE
   )
 }
 
-#' print a 'validations' obect
-#' 
-#'
 #' @param x An R object
 #' @param ... Unused
 #' @export
@@ -162,11 +156,6 @@ print.validations <- function(x,...){
   invisible(NULL)
 }
 
-#' Summarize a 'validations' object
-#'
-#'
-#'
-#' 
 #' @rdname run_validation_file
 #' @param object An R object
 #' @return \code{summary}: A data frame similar to the data frame returned
@@ -184,7 +173,6 @@ summary.validations <- function(object, ...){
   }) 
   do.call(rbind,L)
 }
-
 
 
 
