@@ -54,7 +54,13 @@
 #' tested by referencing the whole data set with the '\code{.}'. For example,
 #' the rule \code{nrow(.) == 15} checks whether there are 15 rows in the
 #' dataset at hand.
-#'    
+#' 
+#' @section Uniqueness, completeness:
+#'
+#' These can be tested in principle with the 'dot' syntax. However, there are
+#' some convenience functions: \code{\link{is_complete}}, \code{\link{all_complete}}
+#' \code{\link{is_unique}}, \code{\link{all_unique}}.
+#'
 #'
 #' @section Local, transient assignment:
 #' The operator `\code{:=}' can be used to set up local variables (during, for
