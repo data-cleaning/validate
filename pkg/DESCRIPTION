@@ -36,7 +36,6 @@ Collate:
     'factory.R'
     'functions.R'
     'lumberjack.R'
-    'prtmp.R'
     'retailers.R'
     'run_validation.R'
     'utils.R'
