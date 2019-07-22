@@ -50,6 +50,31 @@
   expect_equal(length(validate:::expand_groups(L)),4)
 
 
+## Testing for uniqueness and completeness
+
+expect_equal(is_unique(x=1:3), rep(TRUE,3))
+expect_equal(is_unique(x=rep(1,3),y=rep(1,3)), rep(FALSE,3))
+expect_true(all_unique(x=1:3))
+
+expect_equal(is_complete(women$height, women$weight),rep(TRUE,15))
+expect_true(all_complete(women$height, women$weight))
+
+w1 <- women
+w1[1,1] <- NA
+expect_equal(is_complete(w1$height, w1$weight), c(FALSE, rep(TRUE, 14)) )
+
+# make sure these functions are recognized as validating syntax
+expect_silent( v <- validator(
+  is_unique(x,y), all_unique(x,y), is_complete(x,y), all_complete(x,y)
+))
+expect_equal(length(v), 4)
+
+
+
+
+
+
+
 
 
 
