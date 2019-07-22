@@ -1,3 +1,6 @@
+#' @importFrom utils capture.output
+{}
+
 # create reference object to store or ignore output
 # of validation functions
 output <- function(){
@@ -115,7 +118,6 @@ run_validation_file <- function(file, verbose=TRUE){
 
 #' @param dir     \code{[character]} path to directory.
 #' @param pattern \code{[characer]} regular expression that selects validation files to run.
-#' @param verbose \code{[logical]} Toggle verbose output.
 #' 
 #' 
 #' 
@@ -161,6 +163,8 @@ print.validations <- function(x,...){
 #' @return \code{summary}: A data frame similar to the data frame returned
 #'   when summarizing a \code{\link{validation}} object. There are extra columns listing
 #'   each call, file and first and last line where the code occurred.
+#'
+#' @method summary validations
 #' @export
 summary.validations <- function(object, ...){
   L <- lapply(object, function(x){
