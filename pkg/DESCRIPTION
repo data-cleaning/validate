@@ -18,7 +18,7 @@ Version: 0.2.6
 Depends: R (>= 3.1.3), methods
 URL: https://github.com/data-cleaning/validate
 BugReports: https://github.com/data-cleaning/validate/issues
-Imports: graphics, settings, yaml
+Imports: stats, graphics, settings, yaml
 Suggests: tinytest (>= 0.9.6), knitr, rmarkdown
 Enhances: lumberjack
 VignetteBuilder: knitr
@@ -34,9 +34,9 @@ Collate:
     'barplot.R'
     'compare.R'
     'factory.R'
-    'functions.R'
     'lumberjack.R'
     'retailers.R'
+    'syntax.R'
     'utils.R'
     'yaml.R'
 RoxygenNote: 6.1.1

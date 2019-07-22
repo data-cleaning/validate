@@ -1,3 +1,7 @@
+#' @importFrom stats complete.cases
+{}
+
+
 #' Syntax to define validation or indicator rules
 #'
 #' A concise overview of the \code{validate} syntax.
@@ -178,6 +182,69 @@ matchvars <- function(L,env){
 }
 
 
+#### UNIQUENESS ---------------------------------------------------------------
 
+#' Test for uniquenes of records
+#' 
+#' Utility function to make common tests easier.
+#'
+#' @param ... When used in a validation rule: a bare (unquoted) list of variable names.
+#'     When used directly, a comma-separated list of vectors of equal length.
+#'
+#'
+#' @return 
+#'   For \code{is_unique} A logical vector that is \code{FALSE} for each record
+#'   that has a duplicate.
+#'
+#' @examples
+#' # check that height-weight combinations are unique
+#' d <- data.frame(X = c('a','b','c','b'), Y = c('banana','apple','banana','apple'), Z=1:4)
+#' v <- validator(is_unique(X, Y))
+#' values(confront(d, v))
+#' 
+#' @export
+is_unique <- function(...){
+  d <- data.frame(...)
+  !duplicated(d) & !duplicated(d, fromLast=TRUE)
+}
+
+
+#' @rdname is_unique
+#' @return For \code{all_unique} a single \code{TRUE} or \code{FALSE}.
+#' @export
+all_unique <- function(...){
+  !anyDuplicated(data.frame(...))
+}
+
+
+#### MISSING DATA -------------------------------------------------------------
+
+#' Test for completeness of records
+#'
+#' Utility function to make common tests easier.
+#'
+#' @inheritParams is_unique
+#' @return 
+#'   For \code{is_complete} A logical vector that is \code{FALSE} for each record
+#'   that has a duplicate.
+#'
+#' @examples
+#' d <- data.frame(X = c('a','b',NA,'b'), Y = c(NA,'apple','banana','apple'), Z=1:4)
+#' v <- validator(is_complete(X, Y))
+#' values(confront(d, v))
+#'
+#' @export
+is_complete <- function(...){
+  stats::complete.cases(data.frame(...))
+}
+
+
+
+#' @rdname is_complete
+#' @return For \code{all_unique} a single \code{TRUE} or \code{FALSE}.
+#' @export 
+all_complete <- function(...){
+  all(stats::complete.cases(data.frame(...)))
+}
 
 
