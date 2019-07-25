@@ -26,13 +26,13 @@ NULL
 #' @keywords internal
 setRefClass("confrontation"
   ,fields = list(
-      ._call  = "call"      # (user's) call that generated the object
-    , ._value = "list"      # results of confrontation 
-    , ._calls = "list"      # calls executed during confrontation
-    , ._warn  = "list"      # list of 'warning' objects
-    , ._error = "list"      # list of 'error' objects
-    , ._key   = "character" # identifying variable in confronted dataset.
-    , ._event = "character" # Metadata identifying the confrontation event.
+      ._call  = "call"       # (user's) call that generated the object
+    , ._value = "list"       # results of confrontation 
+    , ._calls = "list"       # calls executed during confrontation
+    , ._warn  = "list"       # list of 'warning' objects
+    , ._error = "list"       # list of 'error' objects
+    , ._keys  = "list"       # list with at least 'keyset': an object containing the identifying variables in dat.
+    , ._event = "character"  # Metadata identifying the confrontation event.
   )
   , methods=list(
     show = function() .show_confrontation(.self)
@@ -195,19 +195,18 @@ setGeneric('sort')
 ## dat an environment
 ## key a character indicating a key.
 ##
-confront_work <- function(x, dat, key=NA_character_, class='confrontation', ...){
+confront_work <- function(x, dat, key=NULL, class='confrontation', ...){
   opts <- x$clone_options(...)
   lin_eq_eps <- opts('lin.eq.eps')
   calls <- x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps,dat=dat)
   L <- execute(calls,dat,opts)
-  if (!is.na(key)) L <- add_names(L,x,dat,key)
   new(class,
       ._call    = match.call(definition=confront,call=sys.call(sys.parent(2)))
       , ._calls = calls
       , ._value = lapply(L,"[[",1)
       , ._warn  =  lapply(L,"[[",2)
       , ._error = lapply(L,"[[",3)
-      , ._key   = key
+      , ._keys  = list(keyset = key)
       , ._event = c(
              agent = sprintf("%s > %s %s.%s > validate %s"
                         , R.version[["platform"]]        
@@ -231,7 +230,7 @@ setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
     , ._value = x$._value[i]
     , ._warn = x$._warn[i]
     , ._error  = x$._error[i]
-    , ._key = x$._key
+    , ._keys = x$._keys
   )
 })
 
@@ -291,34 +290,34 @@ setMethod("length","confrontation",function(x) length(x$._value))
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=NA_character_,...){
+setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=NULL,...){
   data_env <- list2env(dat)
   data_env$. <- dat
-  confront_work(x, data_env, key, class = "indication",...)
+  confront_work(x, data_env, dat[key], class = "indication",...)
 })
 
 #' @rdname confront
-setMethod("confront",signature("data.frame","indicator","environment"), function(dat, x, ref, key=NA_character_, ...){
+setMethod("confront",signature("data.frame","indicator","environment"), function(dat, x, ref, key=NULL, ...){
   data_env <- namecheck(list2env(dat,parent=ref))
   data_env$. <- dat
-  confront_work(x,data_env,key,class="indication",...)
+  confront_work(x,data_env, dat[key], class="indication",...)
 })
 
 #' @rdname confront
-setMethod("confront",signature("data.frame","indicator","data.frame"),function(dat, x,ref, key=NA_character_,...){
+setMethod("confront",signature("data.frame","indicator","data.frame"),function(dat, x,ref, key=NULL,...){
   env <- new.env()
   env$ref <- ref
   data_env <- namecheck(list2env(dat, parent=env))
   data_env$. <- dat
-  confront_work(x, data_env, key, class="indication", ...)
+  confront_work(x, data_env, dat[key], class="indication", ...)
 })
 
 #' @rdname confront
-setMethod("confront",signature("data.frame","indicator","list"),function(dat, x,ref,key=NA_character_,...){
+setMethod("confront",signature("data.frame","indicator","list"),function(dat, x,ref,key=NULL,...){
   env <- list2env(ref)
   data_env <- namecheck(list2env(dat,parent=env))
   data_env$. <- dat
-  confront_work(x,data_env,key,class="indication",...)
+  confront_work(x, data_env, dat[key], class="indication",...)
 })
 
 
@@ -395,10 +394,10 @@ setMethod("show","validation",function(object){
 
 #' @rdname confront
 #' @param key (optional) name of identifying variable in x.
-setMethod("confront", signature("data.frame","validator"), function(dat, x, key=NA_character_, ...){
+setMethod("confront", signature("data.frame","validator"), function(dat, x, key=NULL, ...){
   data_env <- list2env(dat)
   data_env$. <- dat
-  confront_work(x,data_env,key,'validation',...)
+  confront_work(x, data_env, dat[key],'validation',...)
 })
 
 
@@ -415,27 +414,27 @@ namecheck <- function(x){
 }
 
 #' @rdname confront
-setMethod("confront",signature("data.frame","validator","environment"), function(dat, x, ref, key=NA_character_, ...){
+setMethod("confront",signature("data.frame","validator","environment"), function(dat, x, ref, key=NULL, ...){
   data_env <- namecheck(list2env(dat,parent=ref))
   data_env$. <- dat
-  confront_work(x,data_env,key,class="validation",...)
+  confront_work(x, data_env, dat[key], class="validation",...)
 })
 
 #' @rdname confront
-setMethod("confront",signature("data.frame","validator","data.frame"),function(dat, x,ref, key=NA_character_,...){
+setMethod("confront",signature("data.frame","validator","data.frame"),function(dat, x,ref, key=NULL,...){
   env <- new.env()
   env$ref <- ref
   data_env <- namecheck(list2env(dat, parent=env))
   data_env$. <- dat
-  confront_work(x, data_env, key, class="validation", ...)
+  confront_work(x, data_env, dat[key], class="validation", ...)
 })
 
 #' @rdname confront
-setMethod("confront",signature("data.frame","validator","list"),function(dat, x,ref,key=NA_character_,...){
+setMethod("confront",signature("data.frame","validator","list"),function(dat, x,ref,key=NULL,...){
   env <- list2env(ref)  
   data_env <- namecheck(list2env(dat,parent=env))
   data_env$. <- dat
-  confront_work(x,data_env,key,class="validation",...)  
+  confront_work(x, data_env, dat[key], class="validation",...)  
 })
 
 
@@ -444,24 +443,24 @@ setMethod("confront",signature("data.frame","validator","list"),function(dat, x,
 # of     : an environment containing data.frames
 # against: a reference data.frame to match againsty.
 # using  : a key (character)
-match_rows <- function(of, against, using){  
-  key1 <- against[,using]
-  for ( nm in ls(of) ){
-    i <- match(key1, of[[nm]][,using], nomatch = nrow(of) + 1)
-    of[[nm]] <- of[[nm]][i,,drop=FALSE]
-  }
-}
+#match_rows <- function(of, against, using){  
+#  key1 <- against[,using]
+#  for ( nm in ls(of) ){
+#    i <- match(key1, of[[nm]][,using], nomatch = nrow(of) + 1)
+#    of[[nm]] <- of[[nm]][i,,drop=FALSE]
+#  }
+#}
 
 
-add_names <- function(L,x,y,key){
-  keys <- y[[key]]
-  nkey <- length(keys)
-  L <- lapply(L,function(v){ 
-    if ( length(v[[1]]) == nkey ) 
-      v[[1]] <- setNames(v[[1]], keys)   
-    v
-  })
-}  
+#add_names <- function(L,x,y,key){
+#  keys <- y[[key]]
+#  nkey <- length(keys)
+#  L <- lapply(L,function(v){ 
+#    if ( length(v[[1]]) == nkey ) 
+#      v[[1]] <- setNames(v[[1]], keys)   
+#    v
+#  })
+#}  
 
 # execute calls. 
 # - Assignments are stored in a separate environment and forgotten afterwards.
@@ -753,21 +752,37 @@ setMethod("as.data.frame","confrontation", function(x,...){
   v <- values(x, simplify=FALSE, drop=FALSE)
   expr <- sapply(x$._calls, call2text)
   nam  <- names(x$._calls)
-  do.call("rbind",
-    lapply(seq_along(v), function(i){
-      d <- data.frame(key=getkey(v[[i]])
-          , name = nam[i], value=v[[i]], expression=expr[i]
-        , row.names=NULL, stringsAsFactors=FALSE )
-      if ( is.na(x$._key)) d$key <- NULL else names(d)[1] <- x$._key
-      d
-    })
-  )
+  
+  key_proto <- lapply(x$._keys$keyset, function(x) x[0])
+  nrec <- nrow(x$._keys$keyset)
+
+  L <- lapply(seq_along(v), function(i){
+    
+    df <- data.frame(name=nam[i]
+            , value=v[[i]]
+            , expression=expr[i]
+            , row.names=NULL
+            , stringsAsFactors=FALSE)
+
+    if ( nrow(df) == nrow(x$._keys$keyset) ){
+      cbind(x$._keys$keyset, df)
+    } else if ( length(key_proto) > 0){
+      nana <- lapply(key_proto, function(d){
+                as(rep(NA, length(v[[i]])) , class(d)) 
+              })
+      cbind(nana, df)
+    } else {
+      df
+    }
+  })
+
+  do.call(rbind, L)
 })
 
-getkey <- function(x){
-  k <- names(x)
-  if (is.null(k)) NA_character_ else k
-}
+#getkey <- function(x){
+#  k <- names(x)
+#  if (is.null(k)) NA_character_ else k
+#}
 
 #' Test if all validations resulted in TRUE
 #'
