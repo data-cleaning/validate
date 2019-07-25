@@ -7,10 +7,12 @@ pkg: doc
 	R CMD build pkg
 
 check: doc
+	rm -f *.tar.gz
 	R CMD build pkg
 	R CMD check *.tar.gz
 
 cran: doc
+	rm -f *.tar.gz
 	R CMD build pkg
 	R CMD check --as-cran *.tar.gz
 
