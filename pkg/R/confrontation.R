@@ -71,20 +71,12 @@ confrontation_nerrs <- function(x) sum(vapply(x$._error, function(w)!is.null(w),
 #' @param ... Options used at execution time (especially \code{'raise'}). 
 #'    See \code{\link{voptions}}.
 #' 
+#' @section Reference data:
 #' 
-#' @section Using reference data:
-#' When reference data sets are given, it is assumed that rows in the reference data
-#' are ordered corresponding to the rows of \code{dat}, except when a \code{key}
-#' is specified.  In that case, all reference datasets are matched against the
-#' rows of \code{dat} using \code{key} Nonmatching records are removed from
-#' datasets in \code{ref}. If there are records in \code{dat} that are not in
-#' \code{ref}, then datasets in \code{ref} are extended with records containing
-#' only \code{NA}.  In particular, this means that wen reference data is passed in
-#' an environment, those reference data sets may altered by the call to
-#' \code{confront}.
-#'
-#' Technically, reference data will be stored in an environment that is the
-#' parent of a (created) environment that contains the columns of \code{dat}.
+#' Reference data is typically a \code{list} with a items such as
+#' a code list, or a data frame of which rows match the rows of the
+#' data under scrutiny.
+#' 
 #' 
 #' @seealso \code{\link{voptions}} 
 #' 
@@ -307,10 +299,6 @@ setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=
 
 #' @rdname confront
 setMethod("confront",signature("data.frame","indicator","environment"), function(dat, x, ref, key=NA_character_, ...){
-  classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
-  if ( !all(class(dat) == classes)  )
-    stop("Class of one or more elements in 'ref' differs from 'dat'")
-  if (!is.na(key)) match_rows(of=ref, against=dat, using=key)
   data_env <- namecheck(list2env(dat,parent=ref))
   data_env$. <- dat
   confront_work(x,data_env,key,class="indication",...)
@@ -320,7 +308,6 @@ setMethod("confront",signature("data.frame","indicator","environment"), function
 setMethod("confront",signature("data.frame","indicator","data.frame"),function(dat, x,ref, key=NA_character_,...){
   env <- new.env()
   env$ref <- ref
-  if (!is.na(key)) match_rows(of=env, against=dat, using=key)
   data_env <- namecheck(list2env(dat, parent=env))
   data_env$. <- dat
   confront_work(x, data_env, key, class="indication", ...)
@@ -328,11 +315,7 @@ setMethod("confront",signature("data.frame","indicator","data.frame"),function(d
 
 #' @rdname confront
 setMethod("confront",signature("data.frame","indicator","list"),function(dat, x,ref,key=NA_character_,...){
-  classes <- sapply(ref,class)
-  if ( !all(class(dat) == classes)  )
-    stop("Class of one or more elements in 'ref' differs from 'dat'")
   env <- list2env(ref)
-  if (!is.na(key)) match_rows(of=ref, against=dat, using=key)
   data_env <- namecheck(list2env(dat,parent=env))
   data_env$. <- dat
   confront_work(x,data_env,key,class="indication",...)
@@ -433,10 +416,6 @@ namecheck <- function(x){
 
 #' @rdname confront
 setMethod("confront",signature("data.frame","validator","environment"), function(dat, x, ref, key=NA_character_, ...){
-  classes <- sapply( ls(ref), function(x) class(ref[[x]]) )
-  if ( !all(class(dat) == classes)  )
-    stop("Class of one or more elements in 'ref' differs from 'dat'")
-  if (!is.na(key)) match_rows(of=ref, against=dat, using=key)
   data_env <- namecheck(list2env(dat,parent=ref))
   data_env$. <- dat
   confront_work(x,data_env,key,class="validation",...)
@@ -446,7 +425,6 @@ setMethod("confront",signature("data.frame","validator","environment"), function
 setMethod("confront",signature("data.frame","validator","data.frame"),function(dat, x,ref, key=NA_character_,...){
   env <- new.env()
   env$ref <- ref
-  if (!is.na(key)) match_rows(of=env, against=dat, using=key)
   data_env <- namecheck(list2env(dat, parent=env))
   data_env$. <- dat
   confront_work(x, data_env, key, class="validation", ...)
@@ -454,11 +432,7 @@ setMethod("confront",signature("data.frame","validator","data.frame"),function(d
 
 #' @rdname confront
 setMethod("confront",signature("data.frame","validator","list"),function(dat, x,ref,key=NA_character_,...){
-  classes <- sapply(ref,class)
-  if ( !all(class(dat) == classes)  )
-    stop("Class of one or more elements in 'ref' differs from 'dat'")
   env <- list2env(ref)  
-  if (!is.na(key)) match_rows(of=ref, against=dat, using=key)
   data_env <- namecheck(list2env(dat,parent=env))
   data_env$. <- dat
   confront_work(x,data_env,key,class="validation",...)  

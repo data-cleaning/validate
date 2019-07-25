@@ -89,6 +89,16 @@ cf3 <- confront(women, v2, ref=e)
 expect_equal(summary(cf1)[1:7],summary(cf2)[1:7])
 expect_equal(summary(cf2)[1:7],summary(cf3)[1:7])
 
+# reference data can be anything
+cf <- confront(data.frame(x = c(1,4,2))
+        , validator(x %in% codelist)
+        , ref = list(codelist = 1:3)
+)
+
+expect_equivalent(as.logical(values(cf)), c(TRUE, FALSE, TRUE))
+
+
+
 # warning when the data-carrying environment has variables with the
 # same name as the parent.
 
