@@ -3,6 +3,9 @@ version 0.2.7
 - Objects inheriting from 'confrontation' now store event metadata. See ?event.
 - Objects of class 'validator' now store (default) metadata on expression 
   language and rule severity.
+- Reference data passed to 'confront' can now be of any type (not just data.frame).
+  This breaks code where both 'ref' and 'key' were submitted and reference data is
+  expected to be matched with data under scrutiny.
 - new helper functions: 'is_unique', 'all_unique', 'is_complete', 'all_complete'
 - switched to 'tinytest' testing framework
 - Fix in algorithm for clustering rules by shared variables #98.
