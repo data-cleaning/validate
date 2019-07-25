@@ -1,4 +1,6 @@
 version 0.2.7
+- 'confront' now accepts a vector of 'key's (thanks to Luca Gramaglia for
+   suggesting)
 - 'lbj_logger' object now has an (experimental) $plot() method.
 - Objects inheriting from 'confrontation' now store event metadata. See ?event.
 - Objects of class 'validator' now store (default) metadata on expression 
