@@ -1,3 +1,7 @@
+#' @importFrom stats complete.cases
+{}
+
+
 #' Syntax to define validation or indicator rules
 #'
 #' A concise overview of the \code{validate} syntax.
@@ -50,7 +54,13 @@
 #' tested by referencing the whole data set with the '\code{.}'. For example,
 #' the rule \code{nrow(.) == 15} checks whether there are 15 rows in the
 #' dataset at hand.
-#'    
+#' 
+#' @section Uniqueness, completeness:
+#'
+#' These can be tested in principle with the 'dot' syntax. However, there are
+#' some convenience functions: \code{\link{is_complete}}, \code{\link{all_complete}}
+#' \code{\link{is_unique}}, \code{\link{all_unique}}.
+#'
 #'
 #' @section Local, transient assignment:
 #' The operator `\code{:=}' can be used to set up local variables (during, for
@@ -177,53 +187,70 @@ matchvars <- function(L,env){
   }
 }
 
-# @param rule R expression: a validation rule. Must result in a logical.
-# @param impact R expression: an expression. Must result in a numeric.
-# @param severity R expression: an expression. Must result in a numeric.
-# @rdname syntax
-# @return For \code{V} a \code{list} containing the return values of \code{rule}, \code{impact} and \code{severity}
-# V <- function(rule, impact=NULL, severity=NULL){
-#   r <- substitute(rule)
-#   i <- substitute(impact)
-#   s <- substitute(severity)
-#   list(
-#     result   = eval(r,envir=sys.parent())
-#     , impact   = eval(i,envir=sys.parent())
-#     , severity = eval(s,envir=sys.parent())
-#   )
-# }
 
-# severity and impact for Linear validators
+#### UNIQUENESS ---------------------------------------------------------------
 
-# @rdname syntax
-# @param linrule A \emph{linear} validating expression
-# @param p $L^p$-norm to use (default is the Euclidean norm)
-# @return For \code{L}, a \code{list} containing the validator value, the impact function and the severity function
-# L <- function(linrule, p=2){
-#   e <- substitute(linrule)
-#   q <- p/(p-1)
-#   a <- const_norm(e,p/(p-1))
-#   result <- eval(e,envir=sys.parent())
-#   severity <- abs(eval(left(e),envir=sys.parent()) - eval(right(e),envir=sys.parent()))  
-#   impact <- severity/a
-#   list(result=result,severity=severity,impact=impact)
-# }
+#' Test for uniquenes of records
+#' 
+#' Utility function to make common tests easier.
+#'
+#' @param ... When used in a validation rule: a bare (unquoted) list of variable names.
+#'     When used directly, a comma-separated list of vectors of equal length.
+#'
+#'
+#' @return 
+#'   For \code{is_unique} A logical vector that is \code{FALSE} for each record
+#'   that has a duplicate.
+#'
+#' @examples
+#' # check that height-weight combinations are unique
+#' d <- data.frame(X = c('a','b','c','b'), Y = c('banana','apple','banana','apple'), Z=1:4)
+#' v <- validator(is_unique(X, Y))
+#' values(confront(d, v))
+#' 
+#' @export
+is_unique <- function(...){
+  d <- data.frame(...)
+  !duplicated(d) & !duplicated(d, fromLast=TRUE)
+}
 
-# const_norm <- function(expr,q){
-#   l <- coefficients(left(expr))
-#   r <- coefficients(right(expr))
-#   vars <- unique(names(c(l,r)))
-#   a <- setNames(numeric(length(vars)),vars)
-#   a[names(l)] <- l
-#   a[names(r)] <- a[names(r)] - r
-#   a = sum(abs(a[!names(a)=='CONSTANT'])^q)^(1/q)
-# }
 
-# d <- data.frame(
-#   x = c(1,NA,3,5)
-#   , y = c(NA,NA,1,2)
-#   , z = letters[1:4]
-#   )
-# I <- indicator(fraction_missing(x),number_missing(),fraction_missing(x,z))
-# 
-# values(confront(I,d))
+#' @rdname is_unique
+#' @return For \code{all_unique} a single \code{TRUE} or \code{FALSE}.
+#' @export
+all_unique <- function(...){
+  !anyDuplicated(data.frame(...))
+}
+
+
+#### MISSING DATA -------------------------------------------------------------
+
+#' Test for completeness of records
+#'
+#' Utility function to make common tests easier.
+#'
+#' @inheritParams is_unique
+#' @return 
+#'   For \code{is_complete} A logical vector that is \code{FALSE} for each record
+#'   that has a duplicate.
+#'
+#' @examples
+#' d <- data.frame(X = c('a','b',NA,'b'), Y = c(NA,'apple','banana','apple'), Z=1:4)
+#' v <- validator(is_complete(X, Y))
+#' values(confront(d, v))
+#'
+#' @export
+is_complete <- function(...){
+  stats::complete.cases(data.frame(...))
+}
+
+
+
+#' @rdname is_complete
+#' @return For \code{all_unique} a single \code{TRUE} or \code{FALSE}.
+#' @export 
+all_complete <- function(...){
+  all(stats::complete.cases(data.frame(...)))
+}
+
+

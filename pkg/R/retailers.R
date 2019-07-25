@@ -1,10 +1,14 @@
 #' @name retailers
+#' @aliases SBS2000
 #' @title data on Dutch supermarkets
-#' @description Anonymized and distorted data on revenue and cost structure for
-#'   60 retailers. 
-#' Currency is in thousands of Euros.
+#' @description 
+#'   Anonymized and distorted data on revenue and cost structure for
+#'   60 retailers. Currency is in thousands of Euros. There are two
+#'   data sets. The \code{SBS2000} dataset is equal to the \code{retailers}
+#'   data set except that it has a record identifier (called \code{id}) column.
 #'
 #' \itemize{
+#'  \item id: A unique identifier (only in SBS2000)
 #'  \item size: Size class (0=undetermined)
 #'  \item incl.prob: Probability of inclusion in the sample
 #'  \item staff: Number of staff
@@ -19,5 +23,10 @@
 #'
 #' @docType data
 #' @format A csv file, one retailer per row.
+NULL
+
+
+#' @name SBS2000
+#' @rdname retailers
 NULL
 

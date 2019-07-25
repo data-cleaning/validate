@@ -1,6 +1,18 @@
 version 0.2.7
-- NEW: lbj_logger object now has an (experimental) $plot() method.
-- FIX: printing confront(data.frame(), validator()) would crash (thanks to Daniel Pritchard)
+- 'lbj_logger' object now has an (experimental) $plot() method.
+- Objects inheriting from 'confrontation' now store event metadata. See ?event.
+- Objects of class 'validator' now store (default) metadata on expression 
+  language and rule severity.
+- Reference data passed to 'confront' can now be of any type (not just data.frame).
+  This breaks code where both 'ref' and 'key' were submitted and reference data is
+  expected to be matched with data under scrutiny.
+- new helper functions: 'is_unique', 'all_unique', 'is_complete', 'all_complete'
+- switched to 'tinytest' testing framework
+- Fix in algorithm for clustering rules by shared variables #98.
+- Fix in 'all' and 'any' methods for confrontation objects #92 (Thanks to 
+  GitHub user 001ben for reporting).
+- Fix: printing confront(data.frame(), validator()) would crash (thanks to Daniel Pritchard)
+
 
 version 0.2.6
 - New methods 'all' and 'any' for 'validation' objects
@@ -21,7 +33,7 @@ version 0.2.6
 version 0.2.5
 - Documentation updates (Thanks to Matthias Gomolka)
 - Removed deprecated functions 'number_missing', 'fraction_missing', 
-  'row_missing', 'number_unique', 'any_dunplicated', 'any_missing'.
+  'row_missing', 'number_unique', 'any_unplicated', 'any_missing'.
 - Bugfix: the 'call' object in a 'confrontation' object was created incorrectly.
   This only affects printing.
 

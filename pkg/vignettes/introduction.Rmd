@@ -17,7 +17,7 @@ library(validate)
 
 ### Introduction
 
-The validate package is intended to make checking your data easy, maintainable
+The validate package is intended to make checking your data easy, maintainable,
 and reproducible. The package allows you to
 
 - Test your data set(s) against predefined rules, either in- or cross-data set
@@ -27,7 +27,7 @@ and reproducible. The package allows you to
 - Define and maintain data quality indicators separately from the data
 
 
-There are a few nouns related to the infrastructure offered by validate,
+There are a few terms related to the infrastructure offered by validate,
 
 - data set: your data
 - `validator` an object representing a set of rules your data must satisfy
@@ -35,7 +35,7 @@ There are a few nouns related to the infrastructure offered by validate,
 - `confrontation` an object representing the results of confronting data with rules or
   quality indicators.
 
-There is also a single verb, namely
+There is also a single activity, namely
 
 - `confront`: evaluate the validation rules or quality indicator in the context of one or more data sets.
 
@@ -44,17 +44,17 @@ vignette](indicators.html) introduces quality indicator rules.
 
 
 ### A quick example
+
 Here's an example demonstrating the typical workflow. We'll use the built-in
-```women``` data set (average heights and weights for American women aged
-30-39).
+`women` data set (average heights and weights for American women aged 30-39).
 ```{r }
 data(women)
 summary(women)
 ```
 Validating data is all about checking whether a data set meets presumptions or
-expectations you have about it, and the validate package makes it easy
-for you to define those expectations. Let's do a quick check on variables
-in the `women` data set.
+expectations you have about it, and the validate package makes it easy for you
+to define those expectations. Let's do a quick check on variables in the
+`women` data set.
 ```{r}
 library(validate)
 cf <- check_that(women, height > 0, weight > 0, height/weight > 0.5)
@@ -75,13 +75,45 @@ the above statement can also be performed as follows.
 women %>% check_that(height > 0, weight > 0, height/weight > 0.5) %>% summary()
 ```
 
-The same information can be summarized graphically as well.
+The same information can be summarized graphically.
 ```{r}
 barplot(cf,main="Checks on the women data set")
 ```
 
+### Using reference data
+
+For some checks it is convenient to compare the data under scrutiny with 
+other data artifacts. Two common examples include:
+
+- Data is checked against an earlier version of the same dataset.
+- We wish to check the contents of a column against a code list,
+  and we do not want to put the code list hard-coded into the 
+  rule set.
+
+For this, we can use the `ref` option in confront. Here is how
+to compare columns from two data frames row-by-row. The user
+has to make sure that the rows of the data set under scrutiny
+(`women`) matches row-wise with the reference data set (`women1`).
+
+```{r}
+women1 <- women
+rules <- validator(height == women_reference$height)
+cf <- confront(women, rules, ref = list(women_reference = women1))
+summary(cf)
+```
+
+Here is how to make a code list available.
+```{r}
+rules <- validator( fruit %in% codelist )
+fruits <-  c("apple", "banana", "orange")
+dat <- data.frame(fruit = c("apple","broccoli","orange","banana"))
+cf <- confront(dat, rules, ref = list(codelist = fruits))
+summary(cf)
+```
+
 
 ### Validator objects
+
 Validator objects are used to store, investigate and manipulate rule sets.
 ```{r}
 v <- validator(height > 0, weight > 0, height/weight > 0)
