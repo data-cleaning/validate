@@ -166,13 +166,23 @@ expect_true( all(values(confront(d,v))) )
 i <- indicator(mean(height),sd(weight))
 v <- validator(height > 0, sd(weight)>0)
 women$id <- letters[1:15]
-#expect_equal(nrow(as.data.frame(confront(women,i))),2)
-#expect_equal(ncol(as.data.frame(confront(women,i))),3)
-#expect_equal(ncol(as.data.frame(confront(women,i,key="id"))),4)
+women$id2 <- LETTERS[1:15]
+expect_equal(nrow(as.data.frame(confront(women,i))),2)
+expect_equal(ncol(as.data.frame(confront(women,i))),3)
+expect_equal(ncol(as.data.frame(confront(women,i,key="id"))),4)
+# multiple keys
+d <- as.data.frame(confront(women, i, key=c("id","id2")))
+expect_equal(ncol(d),5)
+expect_equal(nrow(d), 2)
 
 expect_equal(nrow(as.data.frame(confront(women,v))),16)
 expect_equal(ncol(as.data.frame(confront(women,v))),3)
 expect_equal(ncol(as.data.frame(confront(women,v,key="id"))),4)
+
+# multiple keys
+d <- as.data.frame(confront(women, v, key=c("id","id2")))
+expect_equal(ncol(d),5)
+expect_equal(nrow(d), 16)
 
 v <- validator(hite>0,weight>0)
 d <- confront(women,v)

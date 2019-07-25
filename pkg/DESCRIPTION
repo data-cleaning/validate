@@ -35,6 +35,7 @@ Collate:
     'compare.R'
     'factory.R'
     'lumberjack.R'
+    'prtmp.R'
     'retailers.R'
     'run_validation.R'
     'syntax.R'
