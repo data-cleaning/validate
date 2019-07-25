@@ -5,8 +5,9 @@ version 0.2.7
   language and rule severity.
 - new helper functions: 'is_unique', 'all_unique', 'is_complete', 'all_complete'
 - switched to 'tinytest' testing framework
-- Bugfix in algorithm for clustering rules by shared variables #98.
-
+- Fix in algorithm for clustering rules by shared variables #98.
+- Fix in 'all' and 'any' methods for confrontation objects #92 (Thanks to 
+  GitHub user 001ben for reporting).
 
 version 0.2.6
 - New methods 'all' and 'any' for 'validation' objects

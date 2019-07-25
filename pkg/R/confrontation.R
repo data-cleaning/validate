@@ -808,7 +808,9 @@ getkey <- function(x){
 #' val <- check_that(women, height>60, weight>0)
 #' all(val)
 setMethod("all","validation",function(x,...,na.rm=FALSE){
-  all(sapply(values(x,drop=FALSE), all, na.rm=na.rm), na.rm=na.rm)
+  res <- values(x, simplify=FALSE, drop=FALSE)
+  if (length(res) == 0) return(TRUE)
+  all(sapply(res, all, na.rm=na.rm), na.rm=na.rm)
 })
 
 #' Test if any validation resulted in TRUE
@@ -825,7 +827,9 @@ setMethod("all","validation",function(x,...,na.rm=FALSE){
 #' val <- check_that(women, height>60, weight>0)
 #' any(val)
 setMethod("any","validation",function(x,...,na.rm=FALSE){
-  any(sapply(values(x,drop=FALSE), any, na.rm=na.rm), na.rm=na.rm)
+  res <- values(x, simplify=FALSE, drop=FALSE)
+  if (length(res) == 0) return(FALSE)
+  any(sapply(res, any, na.rm=na.rm), na.rm=na.rm)
 })
 
 
