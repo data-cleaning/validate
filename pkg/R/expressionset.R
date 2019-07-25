@@ -345,24 +345,48 @@ extract_names <- function(L,prefix="V"){
 #' @export
 #' @keywords internal
 .blocks_expressionset <- function(x){
-  varblock <- function(v,vlist){
-    sapply(vlist, function(x) any(v %in% x) | identical(v,character(0)) )
-  }
   # variable x rule matrix
   V <- variables(x,as="matrix")
   # all connections 
-  A <- V %*% t(V) > 0
-  L <- lapply(seq_len(nrow(A)),function(i) which(A[i,]))
-  
-  blocks <- new.env()
-  b <- 0
-  while( length(L) > 0){
-    b <- b+1
-    i <- varblock(L[[1]],L)
-    blocks[[paste0('block',b)]] <- unique(unlist(L[i]))
-    L <- L[!i]
+  M <- V %*% t(V) > 0
+
+
+  # Algorithm: merge overlapping sets.
+  # B := {}
+  # A := {a1, a2,...,an}
+  # while ( A != {} )
+  #   a := some a in A
+  #   for b in B
+  #     if ( a intersects b )
+  #        b := a + b
+  #        A := A - a
+  #        break
+  #   if ( a still in A)
+  #     B := B + a
+  #     A := A - a
+
+
+  B <- list()
+  A <- lapply(seq_len(nrow(M)),function(i) which(M[i,]))
+
+  while( length(A) > 0 ){
+    nL <- length(A)
+    a <- A[[1]]
+    for ( i in seq_along(B) ){
+      b <- B[[i]]
+      if ( any(a %in% b)  ){
+        B[[i]] = unique(c(a,b))
+        A <- A[-1]
+        break
+      }
+    }
+    if (nL == length(A)){ # a still in L
+      B[[length(B)+1]] <- a
+      A <- A[-1]
+    }
   }
-  as.list(blocks)
+
+  B 
 }
 
 
