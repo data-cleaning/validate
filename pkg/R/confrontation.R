@@ -154,7 +154,22 @@ check_that <- function(dat,...){
 }
 
 
+#' Get key set stored with a confrontation
+#'
+#' @inheritParams event
+#'
+#' @return If a confrontation is created with the \code{key=} option
+#' set, this function returns the key set, otherwise \code{NULL}
+#'
+#' @export
+setGeneric("keyset", def=function(x) standardGeneric("keyset"))
 
+#' @rdname keyset
+#' @family confrontation-methods
+#' @export 
+setMethod("keyset", "confrontation", function(x){
+  x$._keys$keyset
+})
 
 
 #' Get values from object
