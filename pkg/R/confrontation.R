@@ -783,7 +783,7 @@ setMethod("as.data.frame","confrontation", function(x,...){
       cbind(x$._keys$keyset, df)
     } else if ( length(key_proto) > 0){
       nana <- lapply(key_proto, function(d){
-                as(rep(NA, length(v[[i]])) , class(d)) 
+                as(rep(NA, length(v[[i]])) , if (inherits(d, "factor")) "character" else class(d)) 
               })
       cbind(nana, df)
     } else {
