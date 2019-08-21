@@ -38,13 +38,15 @@ lbj_cells <- setRefClass("lbj_cells"
         , t     = "POSIXct"
         , expr  = "character"
         , verbose = "logical"
+        , label = "character"
         )
     , methods = list(
-      initialize = function(..., verbose=TRUE){
+      initialize = function(..., verbose=TRUE, label=""){
         "Create object. Optionally toggle verbosity."
         .self$n <- 0
         .self$t <- .POSIXct(numeric(0))
         .self$verbose = verbose
+        .self$label = label
       }
       , add = function(meta, input, output){
         "Add logging info based on in- and output"
@@ -64,12 +66,15 @@ lbj_cells <- setRefClass("lbj_cells"
         .self$expr <- c(.self$expr, meta$src)
         .self$cells <- cbind(.self$cells, cl[,2,drop=FALSE])
       }
-    , dump = function(file="cells.csv",verbose=TRUE,...){
+    , dump = function(file=NULL,verbose=TRUE,...){
       "Dump logging info to csv file. 
        All arguments in '...' except row.names are passed to 'write.csv'"
       out <- .self$log_data()
-      write.csv(out, file=file, row.names=FALSE,...)
-      .self$fmsg("Dumped a log at %s", normalizePath(file))
+      outf <- if( !is.null(file) ) file
+              else if (.self$label == "" ) "lbj_cells.csv" 
+              else paste0(.self$label, "_lbj_cells.csv")
+      write.csv(out, file=outf, row.names=FALSE,...)
+      .self$fmsg("Dumped a log at %s", normalizePath(outf))
     }
     ,  log_data = function(){
       "Return logged data as a data.frame"
@@ -108,14 +113,16 @@ lbj_rules <- setRefClass("lbj_rules",
     , t = "POSIXct"
     , expr = "character"
     , verbose = "logical"
+    , label = "character"
   )
   , methods = list(
-    initialize = function(rules, verbose=TRUE){
+    initialize = function(rules, verbose=TRUE, label=""){
       "Create object. Optionally toggle verbosity."
       .self$n        <- 0
       .self$t        <- .POSIXct(numeric(0))
       .self$verbose  <- verbose
       .self$rules    <- rules$copy()
+      .self$label    <- label
       v              <- validator(x>0)
     }
     , add = function(meta, input, output){
@@ -135,12 +142,15 @@ lbj_rules <- setRefClass("lbj_rules",
         .self$expr <- c(.self$expr, meta$src)
         .self$compare <- cbind(.self$compare, comp[,2,drop=FALSE])
     }
-    , dump = function(file="lbj_rules.csv",...){
+    , dump = function(file=NULL,...){
       "Dump logging info to csv file. 
        All arguments in '...' except row.names are passed to 'write.csv'"
       out <- .self$log_data()
-      write.csv(out, file=file, row.names=FALSE,...)
-      .self$fmsg("Dumped a log at %s", normalizePath(file))
+      outf <- if( !is.null(file) ) file
+              else if (.self$label == "" ) "lbj_rules.csv" 
+              else paste0(.self$label, "_lbj_rules.csv")
+      write.csv(out, file=outf, row.names=FALSE,...)
+      .self$fmsg("Dumped a log at %s", normalizePath(outf))
     }
     ,  log_data = function(){
       "Return logged data as a data.frame"

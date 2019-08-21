@@ -1,7 +1,8 @@
-version 0.2.7
+version 0.9.0
 - 'confront' now accepts a vector of 'key's (thanks to Luca Gramaglia for
    suggesting)
-- 'lbj_logger' object now has an (experimental) $plot() method.
+- new function 'run_validation_file' runs an R script while capturing output
+  of 'confront' calls.
 - Objects inheriting from 'confrontation' now store event metadata. See ?event.
 - Objects of class 'validator' now store (default) metadata on expression 
   language and rule severity.
@@ -9,6 +10,9 @@ version 0.2.7
   This breaks code where both 'ref' and 'key' were submitted and reference data is
   expected to be matched with data under scrutiny.
 - new helper functions: 'is_unique', 'all_unique', 'is_complete', 'all_complete'
+- 'lbj_cells' object now has an (experimental) $plot() method.
+- 'lbj_cells' and 'lbj_rules' have new slot 'label', to comply to 'lumberjack' update.
+- Standard files for output by 'lbj_cells' and 'lbj_rules' now have 'lbj_' prefix.
 - switched to 'tinytest' testing framework
 - Fix in algorithm for clustering rules by shared variables #98.
 - Fix in 'all' and 'any' methods for confrontation objects #92 (Thanks to 
