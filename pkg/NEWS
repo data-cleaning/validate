@@ -1,3 +1,7 @@
+version 0.9.1
+- Fixed nonstandard URL caught on CRAN
+- Added ORCID, link to book in DESCRIPTION
+
 version 0.9.0
 - 'confront' now accepts a vector of 'key's (thanks to Luca Gramaglia for
    suggesting)
