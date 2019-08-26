@@ -51,3 +51,5 @@ clean:
 	rm -rf revdep
 	rm -f *.tar.gz
 	rm -f pkg/vignettes/*.html
+	rm -rf validate.Rcheck
+	rm -rf manual.pdf
