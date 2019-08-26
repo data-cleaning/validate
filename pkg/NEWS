@@ -1,3 +1,7 @@
+version 0.9.2
+- fixed CRAN issue: plots generated during tests would end up under inst/tinytest
+  which is against CRAN policy. (Thanks to Kurt Hornik).
+
 version 0.9.1
 - Fixed nonstandard URL caught on CRAN
 - Added ORCID, link to book in DESCRIPTION
