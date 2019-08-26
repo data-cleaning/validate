@@ -1,4 +1,5 @@
 
+
 ## setting properties ----
   v <- validator(x>0,y+x==1)
   names(v)[1] <- "foo"
