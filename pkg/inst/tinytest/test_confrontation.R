@@ -26,6 +26,17 @@ expect_equal(sort(cf),agg[2:1,])
 expect_equivalent(class(cf[1]),"validation")  
 expect_equal(length(cf[1]),1)
 
+# aggregation when keys are present ----
+rules <- validator(turnover >= 0, other.rev>=0)
+data(SBS2000)
+out <- confront(SBS2000, rules, key="id")
+agg <- aggregate(out, by="record")
+expect_true("id" %in% colnames(agg))
+
+srt <- sort(out, by="record")
+expect_true("id" %in% colnames(srt))
+
+
 
 ## validation logical quantifiers ----
 expect_false(all(confront(women, validator(height < 60, weight>0))))

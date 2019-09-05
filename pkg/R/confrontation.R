@@ -635,6 +635,7 @@ setMethod("plot","validation", function(x, y, ...){
 #'
 #' @return By default, a \code{data.frame} with the following columns.
 #' \tabular{ll}{
+#'   keys \tab If confront was called with \code{key=}\cr
 #'   \code{npass} \tab Number of items passed\cr
 #'   \code{nfail} \tab Number of items failing\cr
 #'   \code{nNA} \tab Number of items resulting in \code{NA}\cr
@@ -664,7 +665,7 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
     na <- aggr(is.na(y))
     N <- ntot(y)
     nfail = N - s - na
-    data.frame( 
+    out <- data.frame( 
       npass = s
       , nfail = nfail 
       , nNA = na
@@ -672,6 +673,8 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
       , rel.fail  = nfail/N
       , rel.NA = na/N
     )
+    keys <- x$._keys$keyset
+    if (by=="record" && nrow(out)==nrow(keys)) cbind(keys,out) else out
   })
   if ( length(L) == 1 && drop ) L <- L[[1]]
   if ( by== 'rule' && !is.data.frame(L) ) L <- do.call(rbind,L)
@@ -690,6 +693,7 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
 #' @param ... Arguments to be passed to or from other methods.
 #' @return A \code{data.frame} with the following columns.
 #' \tabular{ll}{
+#'   keys \tab If confront was called with \code{key=}\cr
 #'   \code{npass} \tab Number of items passed\cr
 #'   \code{nfail} \tab Number of items failing\cr
 #'   \code{nNA} \tab Number of items resulting in \code{NA}\cr
@@ -721,7 +725,7 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
     na <- aggr(is.na(y))[i]
     N <- ntot(y)
     nfail = N - s - na
-    data.frame( 
+    out <- data.frame( 
        npass = s
        , nfail = nfail 
        , nNA = na
@@ -729,6 +733,12 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
        , rel.fail  = nfail/N
        , rel.NA = na/N
       )
+    if (by=="record"){
+      keys <- x$._keys$keyset
+      if (nrow(out)==nrow(keys)) cbind(keys[i,,drop=FALSE],out) else out
+    } else {
+      out
+    }
     })
   if ( length(L) == 1 && drop ) L <- L[[1]]
   if ( by== 'rule' && !is.data.frame(L) ) L <- do.call(rbind,L)
