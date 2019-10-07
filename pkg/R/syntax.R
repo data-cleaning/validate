@@ -203,7 +203,7 @@ matchvars <- function(L,env){
 #'   that has a duplicate.
 #'
 #' @examples
-#' # check that height-weight combinations are unique
+#' 
 #' d <- data.frame(X = c('a','b','c','b'), Y = c('banana','apple','banana','apple'), Z=1:4)
 #' v <- validator(is_unique(X, Y))
 #' values(confront(d, v))
