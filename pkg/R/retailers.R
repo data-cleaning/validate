@@ -15,7 +15,7 @@
 #'  \item turnover: Amount of turnover
 #'  \item other.rev: Amount of other revenue
 #'  \item total.rev: Total revenue
-#'  \item staff.costs: Number of staff employed
+#'  \item staff.costs: Costs assiciated to staff
 #'  \item total.costs: Total costs made
 #'  \item profit: Amount of profit
 #'  \item vat: Turnover reported for Value Added Tax
