@@ -69,12 +69,51 @@ expect_silent( v <- validator(
 ))
 expect_equal(length(v), 4)
 
+## testing existance rules
 
 
+# Persons and household. In each household, one can be
+# 'h'ead of household. 
+
+# Household 1 has two heads, household 3 has no heads.
+dd <- data.frame(
+    hhid   = c(1,  1,  2,  1,  2,  2,  3 )
+  , person = c(1,  2,  3,  4,  5,  6,  7 )
+  , hhrole = c("h","h","m","m","h","m","m")
+)
+
+v <- validator(exists_one(hhrole=="h", hhid))
+expect_equivalent(
+     values(confront(dd, v))
+   , matrix(c(FALSE, FALSE, TRUE, FALSE, TRUE ,TRUE, FALSE), nrow=7)
+)
 
 
+# Household 1 has an NA, household 3 has one member who is the head.
+dd <- data.frame(
+    hhid   = c(1,  1,  2,  1,  2,  2,  3 )
+  , person = c(1,  2,  3,  4,  5,  6,  7 )
+  , hhrole = c("h",NA,"m","m","h","m","h")
+)
 
+v <- validator(exists_one(hhrole=="h", hhid))
+expect_equivalent(
+     values(confront(dd, v))
+   , matrix(c(NA, NA, TRUE, NA, TRUE ,TRUE, TRUE), nrow=7)
+)
+# again, but with na.rm=TRUE
+v <- validator(exists_one(hhrole=="h", hhid, na.rm=TRUE))
+expect_equivalent(
+     values(confront(dd, v))
+   , matrix(c(TRUE, TRUE, TRUE, TRUE, TRUE ,TRUE, TRUE), nrow=7)
+)
 
+# Households must have at least one member.
+v <- validator(exists(hhrole == "m", hhid))
+expect_equivalent(
+    values(confront(dd,v))
+  , matrix(c(NA, NA, TRUE, NA, TRUE, TRUE, FALSE), nrow=7)
+)
 
 
 

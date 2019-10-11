@@ -202,6 +202,7 @@ matchvars <- function(L,env){
 #'   For \code{is_unique} A logical vector that is \code{FALSE} for each record
 #'   that has a duplicate.
 #'
+#' @family cross-record-helpers
 #' @examples
 #' 
 #' d <- data.frame(X = c('a','b','c','b'), Y = c('banana','apple','banana','apple'), Z=1:4)
@@ -234,6 +235,7 @@ all_unique <- function(...){
 #'   For \code{is_complete} A logical vector that is \code{FALSE} for each record
 #'   that has a duplicate.
 #'
+#' @family cross-record-helpers
 #' @examples
 #' d <- data.frame(X = c('a','b',NA,'b'), Y = c(NA,'apple','banana','apple'), Z=1:4)
 #' v <- validator(is_complete(X, Y))
@@ -252,5 +254,81 @@ is_complete <- function(...){
 all_complete <- function(...){
   all(stats::complete.cases(data.frame(...)))
 }
+
+#### EXISTENCE ----------------------------------------------------------------
+
+#' Test for unique existence 
+#'
+#' Group records according to (zero or more) classifying variables.  Test for
+#' each group whether at least one (\code{exists}) or precisely one
+#' (\code{exists_one}) record satisfies a condition.
+#'
+#' @param rule  \code{[expression]} A validation rule
+#' @param ...   A comma-separated list of variables used to group the data.
+#' @param na.rm \code{[logical]} Toggle to ignore results that yield \code{NA}.
+#' 
+#' @return A \code{logical} vector, with the same number of entries as there
+#' are rows in the entire data under scrutiny. If a test fails, all records in
+#' the group are labeled with \code{FALSE}.
+#'
+#' @family cross-record-helpers
+#'
+#' @examples
+#' # Test whether each household has exactly one 'head of household'
+#'
+#' dd <- data.frame(
+#'    hhid   = c(1,  1,  2,  1,  2,  2,  3 )
+#'  , person = c(1,  2,  3,  4,  5,  6,  7 )
+#'  , hhrole = c("h","h","m","m","h","m","m")
+#' )
+#' v <- validator(exists_one(hhrole=="h", hhid))
+#' values(confront(dd, v))
+#'
+#' # same, but now with missing value in the data
+#' dd <- data.frame(
+#'     hhid   = c(1,  1,  2,  1,  2,  2,  3 )
+#'   , person = c(1,  2,  3,  4,  5,  6,  7 )
+#'   , hhrole = c("h",NA,"m","m","h","m","h")
+#' )
+#' values(confront(dd, v))
+#'
+#' # same, but now we ignore the missing values
+#' v <- validator(exists_one(hhrole=="h", hhid, na.rm=TRUE))
+#' values(confront(dd, v))
+#'
+#' @export
+exists <- function(rule, ..., na.rm=FALSE){
+  spvr <- data.frame(...)
+  if (length(spvr) == 0) spvr <- character(nrow(.))
+  parent <- parent.frame()
+  # get the whole data set from the environment provided
+  # by 'confront
+  . <- get(".", parent)
+  rule <- as.expression(substitute(rule))
+  unsplit(lapply(split(., f=spvr), function(d){
+    res <- eval(rule, envir=d, enclos=parent)
+    ntrue <- sum(res, na.rm=na.rm)
+    rep(ntrue >= 1, nrow(d))
+  }), spvr)
+}
+
+
+#' @rdname exists
+#' @export
+exists_one <- function(rule, ..., na.rm=FALSE){
+  spvr <- data.frame(...)
+  if (length(spvr) == 0) spvr <- character(nrow(.))
+  parent <- parent.frame()
+  # get the whole data set from the environment provided
+  # by 'confront
+  . <- get(".", parent)
+  rule <- as.expression(substitute(rule))
+  unsplit(lapply(split(., f=spvr), function(d){
+    res <- eval(rule, envir=d, enclos=parent)
+    ntrue <- sum(res, na.rm=na.rm)
+    rep(ntrue == 1, nrow(d))
+  }), spvr)
+}
+
 
 
