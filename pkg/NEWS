@@ -1,5 +1,5 @@
 version 0.9.3
-- New functions 'exists' and 'exists_one' to help define cross-record 
+- New functions 'exists_any' and 'exists_one' to help define cross-record 
   validation rules (thanks to David Salgado)
 - results of 'sort' and 'aggregate' now include key columns (if any)
 

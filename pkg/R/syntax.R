@@ -257,7 +257,7 @@ all_complete <- function(...){
 
 #### EXISTENCE ----------------------------------------------------------------
 
-#' Test for unique existence 
+#' Test for (unique) existence 
 #'
 #' Group records according to (zero or more) classifying variables.  Test for
 #' each group whether at least one (\code{exists}) or precisely one
@@ -275,7 +275,7 @@ all_complete <- function(...){
 #'
 #' @examples
 #' # Test whether each household has exactly one 'head of household'
-#'
+#' 
 #' dd <- data.frame(
 #'    hhid   = c(1,  1,  2,  1,  2,  2,  3 )
 #'  , person = c(1,  2,  3,  4,  5,  6,  7 )
@@ -295,9 +295,9 @@ all_complete <- function(...){
 #' # same, but now we ignore the missing values
 #' v <- validator(exists_one(hhrole=="h", hhid, na.rm=TRUE))
 #' values(confront(dd, v))
-#'
+#' 
 #' @export
-exists <- function(rule, ..., na.rm=FALSE){
+exists_any <- function(rule, ..., na.rm=FALSE){
   spvr <- data.frame(...)
   if (length(spvr) == 0) spvr <- character(nrow(.))
   parent <- parent.frame()
@@ -313,7 +313,7 @@ exists <- function(rule, ..., na.rm=FALSE){
 }
 
 
-#' @rdname exists
+#' @rdname exists_any
 #' @export
 exists_one <- function(rule, ..., na.rm=FALSE){
   spvr <- data.frame(...)

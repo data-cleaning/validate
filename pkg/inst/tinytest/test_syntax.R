@@ -109,7 +109,7 @@ expect_equivalent(
 )
 
 # Households must have at least one member.
-v <- validator(exists(hhrole == "m", hhid))
+v <- validator(exists_any(hhrole == "m", hhid))
 expect_equivalent(
     values(confront(dd,v))
   , matrix(c(NA, NA, TRUE, NA, TRUE, TRUE, FALSE), nrow=7)
