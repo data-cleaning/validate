@@ -10,8 +10,9 @@ Authors@R: c(person("Mark", "van der Loo"
                    , email  = "mark.vanderloo@gmail.com"
                    , comment= c(ORCID="0000-0002-9807-4686"))
            , person("Edwin", "de Jonge"
-                   , role = "aut" )
-           , person("Paul","Hsieh"
+                   , role = "aut"
+                   , comment=c(ORCID="0000-0002-6580-4718"))
+                   , person("Paul","Hsieh"
                    , role = "ctb" ))
 Description: Declare data validation rules and data quality indicators;
         confront data with them and analyze or visualize the results.
