@@ -2,6 +2,8 @@ version 0.9.3
 - New functions 'exists_any' and 'exists_one' to help define cross-record 
   validation rules (thanks to David Salgado)
 - results of 'sort' and 'aggregate' now include key columns (if any)
+- Added accepted JSS paper as vignette.
+
 
 version 0.9.2
 - fixed CRAN issue: plots generated during tests would end up under inst/tinytest

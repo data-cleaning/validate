@@ -2,21 +2,21 @@
 doc: 
 	R -s -e "pkgload::load_all('pkg');roxygen2::roxygenize('pkg')"
 
-pkg: doc
+pkg: doc pkg/validate/jss3483.pdf
 	rm -f *.tar.gz
 	R CMD build pkg
 
-check: doc
+check: doc pkg/validate/jss3483.pdf
 	rm -f *.tar.gz
 	R CMD build pkg
 	R CMD check *.tar.gz
 
-cran: doc
+cran: doc pkg/validate/jss3483.pdf
 	rm -f *.tar.gz
 	R CMD build pkg
 	R CMD check --as-cran *.tar.gz
 
-install: doc
+install: doc pkg/validate/jss3483.pdf
 	rm *.tar.gz
 	R CMD build pkg
 	R CMD INSTALL *.tar.gz
@@ -27,13 +27,18 @@ test: doc
 manual: doc
 	R CMD Rd2pdf --force -o manual.pdf ./pkg
 
-revdep: doc
+revdep: doc pkg/validate/jss3483.pdf
 	rm -rf *.tar.gz
 	R CMD build pkg
 	rm -rf revcheck
 	mkdir revcheck
 	mv *.tar.gz revcheck
 	R -s -e "out <- tools::check_packages_in_dir('revcheck',reverse=list(which='most'),Ncpus=3); print(summary(out)); saveRDS(out, file='revcheck/output.RDS')"
+
+
+pkg/validate/jss3483.pdf:
+	$(MAKE) -C jsspaper
+	cp jsspaper/validate.pdf pkg/vignettes/jss3483.pdf
 
 introduction:
 	R -s -e "rmarkdown::render('pkg/vignettes/introduction.Rmd')"
@@ -53,3 +58,4 @@ clean:
 	rm -f pkg/vignettes/*.html
 	rm -rf validate.Rcheck
 	rm -rf manual.pdf
+	rm -rf validate*.tar.gz

@@ -1,0 +1,7 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteIndexEntry{Data Validation Infrastructure for R}
+
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{jss3483.pdf}
+\end{document}

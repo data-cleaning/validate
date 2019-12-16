@@ -1,0 +1,13 @@
+---
+include:
+  - general_rules.yml
+---
+
+
+# a reasonable profit
+profit/total.rev <= 0.6
+
+# We assume that the sector
+# sector is on average profitable
+mean(profit) >= 1
+

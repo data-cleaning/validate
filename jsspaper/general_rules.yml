@@ -1,0 +1,35 @@
+---
+options:
+  raise: none
+  lin.eq.eps: 1.0e-08
+  lin.ineq.eps: 1.0e-08
+---
+rules:
+- expr: staff >= 0
+  name: 'G1'
+  label: 'nonnegative staff'
+  description: |
+    'Staff numbers cannot be negative'
+  created: 2018-06-05 14:44:06
+  origin: rules.txt
+  meta: []
+- expr: turnover >= 0
+  name: 'G2'
+  label: 'nonnegative income'
+  description: | 
+    'Income cannot be negative (unlike in the
+     definition of the tax office)'
+  created: 2018-06-05 14:44:06
+  origin: rules.txt
+  meta: []
+- expr: profit + total.costs == total.rev
+  name: 'G3'
+  label: 'Balance check'
+  description: |
+    'Economic profit is defined as the
+     total revenue diminished with the 
+     total costs.'
+  created: 2018-06-05 14:44:06
+  origin: rules.txt
+  meta: []
+
