@@ -69,7 +69,7 @@ the following basic information:
 - Whether the check resulted in an error (could not be performed) or gave an error
 - The expression that was actually evaluated to perform the check.
 
-If you're a fan of the pipe-operator provided by the [magrittr](http://www.r-pkg.org/pkg/magrittr),
+If you're a fan of the pipe-operator provided by the [magrittr](https://CRAN.R-project.org/package=magrittr),
 the above statement can also be performed as follows.
 ```{r eval=FALSE}
 women %>% check_that(height > 0, weight > 0, height/weight > 0.5) %>% summary()

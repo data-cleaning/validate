@@ -2,21 +2,21 @@
 doc: 
 	R -s -e "pkgload::load_all('pkg');roxygen2::roxygenize('pkg')"
 
-pkg: doc pkg/validate/jss3483.pdf
+pkg: doc pkg/vignettes/jss3483.pdf
 	rm -f *.tar.gz
 	R CMD build pkg
 
-check: doc pkg/validate/jss3483.pdf
+check: doc pkg/vignettes/jss3483.pdf
 	rm -f *.tar.gz
 	R CMD build pkg
 	R CMD check *.tar.gz
 
-cran: doc pkg/validate/jss3483.pdf
+cran: doc pkg/vignettes/jss3483.pdf
 	rm -f *.tar.gz
-	R CMD build pkg
+	R CMD build --compact-vignettes="gs+qpdf" ./pkg
 	R CMD check --as-cran *.tar.gz
 
-install: doc pkg/validate/jss3483.pdf
+install: doc pkg/vignettes/jss3483.pdf
 	rm *.tar.gz
 	R CMD build pkg
 	R CMD INSTALL *.tar.gz
@@ -27,7 +27,7 @@ test: doc
 manual: doc
 	R CMD Rd2pdf --force -o manual.pdf ./pkg
 
-revdep: doc pkg/validate/jss3483.pdf
+revdep: doc pkg/vignettes/jss3483.pdf
 	rm -rf *.tar.gz
 	R CMD build pkg
 	rm -rf revcheck
@@ -36,9 +36,9 @@ revdep: doc pkg/validate/jss3483.pdf
 	R -s -e "out <- tools::check_packages_in_dir('revcheck',reverse=list(which='most'),Ncpus=3); print(summary(out)); saveRDS(out, file='revcheck/output.RDS')"
 
 
-pkg/validate/jss3483.pdf:
+pkg/vignettes/jss3483.pdf:
 	$(MAKE) -C jsspaper
-	cp jsspaper/validate.pdf pkg/vignettes/jss3483.pdf
+	cp jsspaper/jss3483.pdf pkg/vignettes/jss3483.pdf
 
 introduction:
 	R -s -e "rmarkdown::render('pkg/vignettes/introduction.Rmd')"
