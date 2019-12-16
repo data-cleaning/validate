@@ -24,4 +24,8 @@ validate.Rproj
 
 .Rproj.user
 
+*.tar.gz
+*.Rcheck
+
+jsspaper/validate.tex
 
