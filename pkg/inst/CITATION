@@ -1,0 +1,10 @@
+bibentry(bibtype = "article",
+ title = "Data Validation Infrastructure for R"
+ , author = c(person("MPJ", "van der Loo"), person("E", "de Jonge"))
+ , year = 2019
+ , journal = "Journal of Statistical Software"
+ , volume = ""
+ , issue  = ""
+ , url = "https://CRAN.R-project.org/package=validate"
+ , pages = "Accepted for publication"
+)
