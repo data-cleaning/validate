@@ -305,8 +305,22 @@ setMethod("length","confrontation",function(x) length(x$._value))
 setRefClass("indication", contains = "confrontation")
 
 #' @rdname confront
-setMethod("confront", signature("data.frame","indicator"), function(dat, x, key=NULL,...){
+setMethod("confront", signature("data.frame", "indicator", "missing"), function(dat, x, key=NULL,...){
   data_env <- list2env(dat)
+  data_env$. <- dat
+  confront_work(x, data_env, dat[key], class = "indication",...)
+})
+
+#' @rdname confront
+setMethod("confront", signature("list", "indicator", "missing"), function(dat, x, key=NULL,...){
+  data_env <- list2env(dat)
+  data_env$. <- dat
+  confront_work(x, data_env, dat[key], class = "indication",...)
+})
+
+#' @rdname confront
+setMethod("confront", signature("ANY", "indicator", "missing"), function(dat, x, key=NULL,...){
+  data_env <- new.env()
   data_env$. <- dat
   confront_work(x, data_env, dat[key], class = "indication",...)
 })
@@ -409,11 +423,28 @@ setMethod("show","validation",function(object){
 
 #' @rdname confront
 #' @param key (optional) name of identifying variable in x.
-setMethod("confront", signature("data.frame","validator"), function(dat, x, key=NULL, ...){
+setMethod("confront", signature("data.frame", "validator", "missing"), function(dat, x, key=NULL, ...){
   data_env <- list2env(dat)
   data_env$. <- dat
   confront_work(x, data_env, dat[key],'validation',...)
 })
+
+#' @rdname confront
+#' @param key (optional) name of identifying variable in x.
+setMethod("confront", signature("list", "validator", "missing"), function(dat, x, key=NULL, ...){
+  data_env <- list2env(dat)
+  data_env$. <- dat
+  confront_work(x, data_env, dat[key],'validation',...)
+})
+
+#' @rdname confront
+#' @param key (optional) name of identifying variable in x.
+setMethod("confront", signature("ANY", "validator", "missing"), function(dat, x, key=NULL, ...){
+  data_env <- new.env()
+  data_env$. <- dat
+  confront_work(x, data_env, dat[key],'validation',...)
+})
+
 
 
 namecheck <- function(x){

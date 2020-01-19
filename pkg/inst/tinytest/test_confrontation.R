@@ -207,4 +207,41 @@ expect_warning(as.data.frame(d))
 d <- confront(data.frame("A" = 1:5), validator())
 expect_silent(d$show())
 
+## We can confront list objects (simple [non reference-case] only) ----
+l <- list("A" = 1:6, "B" = "test")
+v <- validator(c("A", "B") %in% names(.), A < 7, B == "test")
+i <- indicator("sum" = sum(A))
+expect_silent(clv <- confront(l, v))
+expect_silent(cli <- confront(l, i))
+expect_equal(length(clv), 3)
+expect_true(all(clv))
+expect_equal(length(cli), 1)
+expect_equal(values(cli)[1,1], c("sum" = 21))
+# Reference data with an "list" signature for the data is not allowed (it is too complicated.)
+expect_error(confront(l, v, ref = l), "unable to find.+for signature")
+expect_error(confront(l, i, ref = l), "unable to find.+for signature")
 
+## We can confront anything in the simple (non-reference) case ONLY  ----
+m <- matrix(1:6, ncol=2)
+v <- validator(ncol(.) == 2, . < 7)
+i <- indicator("sum" = sum(.))
+expect_silent(cmv <- confront(m, v))
+expect_silent(cmi <- confront(m, i))
+expect_equal(length(cmv), 2)
+expect_true(all(cmv))
+expect_equal(length(cmi), 1)
+expect_equal(values(cmi)[1,1], c("sum" = 21))
+# Reference data with an "ANY" signature for the data is not allowed (it is too complicated.)
+expect_error(confront(m, v, ref = m), "unable to find.+for signature")
+expect_error(confront(m, i, ref = m), "unable to find.+for signature")
+
+## Dispatch on data.frames doesn't cause ambiguity, now that we can dispatch on lists ----
+tst <- testInheritedMethods(f="confront", virtual = TRUE)
+expect_equal(tst@selected, character(0L))
+
+## Confront complains about unnamed 'lists' (via list2env) ----
+l <- list(1:6, "test")
+v <- validator()
+i <- indicator()
+expect_error(confront(l, v), "must be a character vector of the same length")
+expect_error(confront(l, i), "must be a character vector of the same length")
