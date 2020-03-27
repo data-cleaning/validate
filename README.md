@@ -32,6 +32,9 @@ and manipulate data validation rules in a meaninful way. See [this vignette](htt
 - [Slides](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) of the [useR2016](http://www.useR2016.org) talk (Stanford University, June 28 2016).
 - [Video](https://www.youtube.com/watch?v=RMCc2Iu0UIQ) of the [satRdays](https://budapest.satRdays.org) talk (Hungarian Academy of Sciences, Sept 3 2016).
 - [Slides and exercises](https://github.com/data-cleaning/useR2019_tutorial) from the [useR2018](https://user2018.r-project.org/) tutorial.
+- [Materials](https://github.com/data-cleaning/uRos2018_tutorial) for the [uRos2018](http://r-project.ro/conference2018.html) workshop (The Hague, 2018)
+- [Materials](https://github.com/data-cleaning/EESW2019_tutorial) for the [ENBES|EESW](https://statswiki.unece.org/display/ENBES/EESW19) workshop (Bilbao, 2019)
+- [Materials](https://github.com/data-cleaning/ISM2020_tutorial) for the planned workshop at the [Institute for Statistical Methemathics](https://www.ism.ac.jp/index_e.html) (Tokyo, 2020 - cancelled because of the COVID-19 situation)
 
 #### Installation
 
