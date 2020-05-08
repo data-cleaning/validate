@@ -29,6 +29,7 @@ and manipulate data validation rules in a meaninful way. See [this vignette](htt
 
 #### Resources
 
+- The [validate paper](https://arxiv.org/abs/1912.09759), accepted for publication in [JSS](https://www.jstatsoft.org/index).
 - [Slides](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) of the [useR2016](http://www.useR2016.org) talk (Stanford University, June 28 2016).
 - [Video](https://www.youtube.com/watch?v=RMCc2Iu0UIQ) of the [satRdays](https://budapest.satRdays.org) talk (Hungarian Academy of Sciences, Sept 3 2016).
 - [Slides and exercises](https://github.com/data-cleaning/useR2019_tutorial) from the [useR2018](https://user2018.r-project.org/) tutorial.
