@@ -1,3 +1,9 @@
+version 0.9.4
+- New function 'is_sequence' to check for gaps/duplicates in 
+  numerical or time series.
+
+
+
 version 0.9.3
 - New functions 'exists_any' and 'exists_one' to help define cross-record 
   validation rules (thanks to David Salgado)
