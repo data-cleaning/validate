@@ -203,6 +203,7 @@ matchvars <- function(L,env){
 #'   that has a duplicate.
 #'
 #' @family cross-record-helpers
+#' @family long-form
 #' @examples
 #' 
 #' d <- data.frame(X = c('a','b','c','b'), Y = c('banana','apple','banana','apple'), Z=1:4)
