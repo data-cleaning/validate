@@ -91,6 +91,19 @@ expect_equivalent(
 )
 
 
+# testing in_range
+
+expect_true(in_range(1, min=0, max=1))
+expect_false(in_range(1, min=0, max=1, strict=TRUE))
+
+expect_true(in_range(as.Date("2018-03-01")
+            , min=as.Date("2012-01-01")
+            , max=as.Date("2018-03-01"))
+            )
+expect_false(in_range(as.Date("2018-03-01")
+              , min=as.Date("2012-01-01")
+              , max=as.Date("2018-03-01"), strict=TRUE)
+            )
 
 
 

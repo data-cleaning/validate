@@ -203,7 +203,7 @@ matchvars <- function(L,env){
 #'   that has a duplicate.
 #'
 #' @family cross-record-helpers
-#' @family long-form
+#' 
 #' @examples
 #' 
 #' d <- data.frame(X = c('a','b','c','b'), Y = c('banana','apple','banana','apple'), Z=1:4)
@@ -234,7 +234,7 @@ all_unique <- function(...){
 #' @inheritParams is_unique
 #' @return 
 #'   For \code{is_complete} A logical vector that is \code{FALSE} for each record
-#'   that has a duplicate.
+#'   that has at least one missing value.
 #'
 #' @family cross-record-helpers
 #' @examples

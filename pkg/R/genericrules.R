@@ -60,7 +60,7 @@
 #' rule <- validator(in_linear_sequence(time, type))
 #' values( confront(dat, rule) )
 #'
-#' @family long-form
+#' @family cross-record-helpers
 #'
 #' @export
 is_linear_sequence <- function(x, ...) UseMethod("is_linear_sequence")
@@ -128,7 +128,7 @@ is_linear_sequence.POSIXct <- function(x, ... , start=NULL, end=NULL, sort = TRU
 
 #' @rdname is_linear_sequence
 #'
-#' @param format \code{[character]}. How to interpret \code{x} as a period.
+#' @param format \code{[character]}. How to interpret \code{x} as a time period.
 #' Either \code{"auto"} for automatic detection or a specification passed to
 #' \code{\link{strptime}}. Automatically detected periods are of the form year:
 #' \code{"2020"}, yearMmonth: \code{"2020M01"},  yearQquarter: \code{"2020Q3"},
@@ -212,13 +212,9 @@ period_type <- function(x, undefined=NA_character_){
 #'
 #' @param x a \code{character} vector.
 #' @param from \code{character} scalar, indicating the period format 
-#' (see \code{\link{RTS}} for supported formats).
-#'
-#'
-#' @examples
 #' 
-#' periods <- c("2018-Q4","2019-Q1")
-#' period_to_int(periods, from="quarterly")
+#'
+#'
 #'
 period_to_int <- function(x, from = c("annual","quarterly","monthly")){
   from <- match.arg(from)
@@ -245,6 +241,88 @@ period_to_int <- function(x, from = c("annual","quarterly","monthly")){
 
   res
 }
+
+
+#' Check variable range
+#'
+#' Test wether a variable falls within a range.
+#'
+#' @param x A bare (unquoted) variable name.
+#' @param min lower bound
+#' @param max upper bound
+#' @param ... arguments passed to other methods
+#'
+#'
+#' @examples
+#'
+#' d <- data.frame(
+#'    number = c(3,-2,6)
+#'  , time   = as.Date(c("2018-02-01", "2018-03-01", "2018-04-01"))
+#'  , period = c("2020Q1", "2021Q2", "2020Q3") 
+#' )
+#'
+#' rules <- validator(
+#'    in_range(number, min=-2, max=7, strict=TRUE)
+#'  , in_range(time,   min=as.Date("2017-01-01"), max=as.Date("2018-12-31"))
+#'  , in_range(period, min="2020Q1", max="2020Q4")
+#' )
+#'
+#' result <- confront(d, rules)
+#' values(result)
+#'
+#'
+#' @export
+in_range <- function(x, min, max,...) UseMethod("in_range")
+
+#' @rdname in_range
+#' @param strict \code{[logical]} Toggle between including the range boundaries
+#'               (default) or not including them (when strict=TRUE).
+#' 
+#' @export             
+in_range.default <- function(x, min, max, strict=FALSE, ...){
+  if (strict) x > min && x < max
+  else x >= min && x <= max
+}
+
+#' @rdname in_range
+#'
+#' @param format \code{[character]} of \code{NULL}. If \code{format=NULL} the
+#' character vector is interpreted as is. And the whether a character lies
+#' within a character range is determined by the collation order set by the
+#' current locale. See the details of "\code{\link{<}}".  If \code{format} is
+#' not \code{NULL}, it specifies how to interpret the character vector as a
+#' time period.  It can take the value \code{"auto"} for automatic detection or
+#' a specification passed to \code{\link{strptime}}. Automatically detected
+#' periods are of the form year: \code{"2020"}, yearMmonth: \code{"2020M01"},
+#' yearQquarter: \code{"2020Q3"}, or year-Qquarter: \code{"2020-Q3"}. 
+#'
+#'
+#' @export
+in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
+  if (is.null(format)) 
+    in_range.default(x=x, min=min, max=max, strict=strict, ...)
+  else if ( format == "auto" ){
+    pt    <- period_type(x)
+    y     <- period_to_int(x, from=pt)
+    ymin  <- period_to_int(min, from = pt)
+    ymax  <- period_to_int(max, from = pt)
+    in_range(y, min=ymin, max=ymax, strict=strict, ...)
+  } else {
+    y     <- strptime(x, format=format)
+    ymin  <- strptime(min, format=format)
+    ymax  <- strptime(max, format=format)
+    in_range(y, min=ymin, max=ymax, strict=strict, ...)
+  }
+}
+
+
+
+
+
+
+
+
+
 
 
 

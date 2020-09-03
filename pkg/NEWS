@@ -1,6 +1,6 @@
 version 0.9.4
-- New function 'is_sequence' to check for gaps/duplicates in 
-  numerical or time series.
+- New functions 'in_linear_sequence' and 'is_linear_sequence' 
+  check for gaps/duplicates in numerical or time series.
 
 
 
