@@ -8,6 +8,10 @@ version 0.9.4
 - New helper functions that for split-apply-combine on vectors, with the property
   that output is always of the same size as the input: 'sum_by', 'min_by', 'max_by'
   'mean_by' and the general 'do_by'.
+- New convenience function 'check_field_length' checks number (or range) of code
+  points.
+- New convenience function 'check_number_format' with simple syntax for
+  specifying layout of numbers that are stored as character.
 
 
 

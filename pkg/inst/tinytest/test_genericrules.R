@@ -156,6 +156,23 @@ x[1] <- NA
 expect_equal(do_by(x,y,max), rep(c(NA,10),5))
 
 
+expect_equal(sum_by(c(1,2),letters[1:2]), c(1,2))
+expect_equal(min_by(c(1,2),letters[1:2]), c(1,2))
+expect_equal(max_by(c(1,2),letters[1:2]), c(1,2))
+expect_equal(mean_by(c(1,2),letters[1:2]), c(1,2))
+
+# field lenght
+expect_true(check_field_length("abc",3))
+expect_false(check_field_length("abc",2))
+expect_true(check_field_length("abc",min=1, max=3))
+
+## number format 
+
+expect_true(check_number_format("12.34","dd.dd"))
+expect_false(check_number_format("12.345","dd.dd"))
+
+expect_true(check_number_format("0.123E45","0.d*Edd"))
+
 
 
 

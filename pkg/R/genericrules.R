@@ -419,3 +419,95 @@ min_by <- function(x, by, na.rm=FALSE) do_by(x,by,min, na.rm=na.rm)
 #' @export
 max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 
+
+#' Check number of code points
+#'
+#' A convenience function testing for field length.
+#'
+#'
+#' @param x Bare (unquoted) name of a variable. 
+#'     Otherwise a vector of class \code{character}. Coerced to character as 
+#'     necessary.
+#' @param n Number of code points required.
+#' @param min Mimimum number of code points
+#' @param max Maximum number of code points
+#'
+#' @section Details:
+#'
+#' The number of code points (string length) may depend on current locale
+#' settings or encoding issues, including those caused by inconsistent choices
+#' of \code{UTF} normalization.
+#'
+#' @return A \code{[logical]} of size \code{length(x)}.
+#' 
+#' @examples
+#'
+#' df <- data.frame(id = 11001:11003, year = c("2018","2019","2020"), value = 1:3)
+#' rule <- validator(check_field_length(year, 4), check_field_length(id, 5))
+#' out <- confront(df, rule) 
+#' as.data.frame(out)
+#'
+#' @export
+check_field_length <- function(x, n=NULL, min=NULL, max=NULL){
+  len <- nchar(as.character(x))
+
+  if (!is.null(n) & is.null(min) & is.null(max)){
+    len == n 
+  } else if (!is.null(min) & !is.null(max) & is.null(n) ){
+    len >= min & len <= max
+  } else {
+    stop("Ill-specified check: either n, or min and max must be not-NULL")
+  }
+}
+
+#' Check the layouts of numbers.
+#'
+#' Convenience function to check layout of numbers stored as
+#' a character vector.
+#'
+#'
+#' @param x \code{[character]} vector. If \code{x} is not of type
+#'          \code{character} it will be converted.
+#' @param format \code{[character]} denoting the number format (see below).
+#'
+#' @section Specifying numerical formats:
+#' 
+#' Numerical formats can be specified as a sequence of characters. There are a few 
+#' special characters:
+#' \itemize{
+#'  \item{\code{d}} Stands for digit.
+#'  \item{\code{*}} (digit globbing) zero or more digits
+#' }
+#' 
+#' Here are some examples.
+#' \tabular{ll}{
+#' \code{"d.dd"}   \tab One digit, a decimal point followed by two digits.\cr
+#' \code{"d.ddddddddEdd"}\tab Scientific notation with eight digits behind the decimal point.\cr
+#' \code{"0.ddddddddEdd"}\tab Same, but starting with a zero.\cr
+#' \code{"d,dd*"} \tab one digit before the comma and at least two behind it.\cr
+#' }
+#'
+#'
+#' @examples 
+#' df <- data.frame(number = c("12.34","0.23E55","0.98765E12"))
+#' rules <- validator(
+#'    check_number_format(number, format="dd.dd")
+#'    , check_number_format(number, "0.ddEdd")
+#'    , check_number_format(number, "0.*Edd")
+#' )
+#'
+#' out <- confront(df, rules)
+#' values(out)
+#'
+#' @export
+check_number_format <- function(x, format){
+  rx <- utils::glob2rx(format)
+  rx <- gsub("d","\\d", rx, fixed=TRUE)
+  grepl(rx, as.character(x))
+}
+
+
+
+
+
+

@@ -322,6 +322,7 @@ validating_call <- function(cl){
   pure <- c("<", "<=", "==", "!=", ">=", ">", "%in%", "%vin%", "identical", "~" ,"%->%"
           , "grepl" , "is_unique", "all_unique", "is_complete", "all_complete"
           , "exists_any", "exists_one", "is_linear_sequence","in_linear_sequence" 
+          , "check_part_whole_relation", "check_field_length", "check_number_format"
           , "in_range"
           , "var_group")
   unary <- c("!", "(", "all", "any" )
