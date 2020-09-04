@@ -16,7 +16,6 @@ r:
 before_install:
   - R -e "install.packages(c('validate','settings','pkgload','roxygen2','tinytest','knitr','lumberjack'))"
   - make doc
-  - make pkg/vignettes/jss3483.pdf
   - cd ./pkg
 
 r_packages:
