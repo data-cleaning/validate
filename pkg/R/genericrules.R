@@ -335,12 +335,12 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
 #' @param tol \code{[numeric]} tolerance for equality checking
 #' @param by Name of variable, or \code{list} of bare variable names, used to
 #'        split the values and labels before computing the aggregates. 
-#' @param ... Extraa arguments passed to aggregator (for example \code{na.rm=TRUE}).
+#' @param ... Extra arguments passed to aggregator (for example \code{na.rm=TRUE}).
 #'  
 #'
 #' @return A \code{logical} vector of size \code{length(value)}.
 #'
-#' @example
+#' @examples
 #' df <- data.frame(
 #'    id = 10011:10020
 #'  , period   = rep(c("2018Q1", "2018Q2", "2018Q3", "2018Q4","2018"),2)
