@@ -146,6 +146,21 @@ expect_equal(
   , c(rep(FALSE, 5), rep(FALSE, 5))
 )
 
+# testing do_by
+
+x <- 1:10
+y <- rep(letters[1:2],5)
+
+expect_equal(do_by(x,y,sum), rep(c(25,30), 5))
+x[1] <- NA
+expect_equal(do_by(x,y,max), rep(c(NA,10),5))
+
+
+
+
+
+
+
 
 
 

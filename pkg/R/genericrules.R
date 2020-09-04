@@ -317,7 +317,13 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
 }
 
 #' Test whether details combine to a chosen aggregate
-#'  
+#' 
+#' Data in 'long' format often contain records representing totals
+#' (or other aggregates) as well as records that contain details
+#' that add up to the total. This function facilitates checking the
+#' part-whole relation in such cases.
+#'
+#'
 #' @param values A bare (unquoted) variable name holding the values to aggregate
 #' @param labels A bare (unquoted) variable name holding the labels indicating
 #'    whether a value is an aggregate or a detail.
@@ -371,12 +377,45 @@ check_part_whole_relation <- function(values, labels, whole, part = NULL
 }
 
 
+#' split-apply-combine for vectors, with equal-length outptu
+#'
+#' Group \code{x} by one or more categorical variables, compute
+#' an aggregate, repeat that aggregate to match the size of the
+#' group, and combine results. The functions \code{sum_by} and 
+#' so on are convenience wrappers that call \code{do_by} internally.
+#'
+#' @param x A bare variable name
+#' @param by a bare variable name, or a list of bare variable names, used to
+#'        split \code{x} into groups.
+#' @param fun \code{[function]} A function that aggregates \code{x} to a single value.
+#' @param ... passed as extra arguments to \code{fun} (e.g. \code{na.rm=TRUE}
+#' @param na.rm Toggle ignoring \code{NA}
+#'
+#' @examples
+#' x <- 1:10
+#' y <- rep(letters[1:2], 5)
+#' do_by(x, by=y, fun=max)
+#' do_by(x, by=y, fun=sum)
+#'
+#' @family cross-record-helpers
+#' @export
+do_by <- function(x, by, fun, ...){
+  unsplit( lapply(split(x,by), function(d) rep(fun(d,...), length(d))),by)
+}
 
+#' @rdname do_by
+#' @export
+sum_by <- function(x, by, na.rm=FALSE) do_by(x,by,sum, na.rm=na.rm)
 
+#' @rdname do_by
+#' @export
+mean_by <- function(x, by, na.rm=FALSE) do_by(x,by,mean, na.rm=na.rm)
 
+#' @rdname do_by
+#' @export
+min_by <- function(x, by, na.rm=FALSE) do_by(x,by,min, na.rm=na.rm)
 
-
-
-
-
+#' @rdname do_by
+#' @export
+max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 
