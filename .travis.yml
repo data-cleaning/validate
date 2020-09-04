@@ -1,7 +1,7 @@
 
 # travis config
 
-dist: trusty
+dist: bionic
 language: r
 sudo: required
 
