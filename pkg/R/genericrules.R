@@ -19,8 +19,9 @@
 #'        is sorted within each group before testing.
 #' @param start Optionally, a value that should equal \code{min(x)}
 #' @param end   Optionally, a value that should equal \code{max(x)}
-#' @param ... bare (unquoted) variable names used to split \code{x}
-#'        into groups. The check is executed for each group.
+#' @param by bare (unquoted) variable name or a list of unquoted variable names, 
+#'        used to split \code{x} into groups. The check is executed for each group.
+#' @param ... Arguments passed to other methods.
 #'
 #' @return For \code{is_linear_sequence}: a single \code{TRUE} or \code{FALSE},
 #' equal to \code{all(in_linear_sequence)}.
@@ -53,7 +54,7 @@
 #'    time = c(2012, 2013, 2012, 2013, 2015)
 #'  , type = c("hi", "hi", "ha", "ha", "ha")
 #' )
-#' rule <- validator(in_linear_sequence(time, type))
+#' rule <- validator(in_linear_sequence(time, by=type))
 #' values(confront(dat, rule)) ## 2xT, 3xF
 #'
 #'
@@ -63,7 +64,7 @@
 #' @family cross-record-helpers
 #'
 #' @export
-is_linear_sequence <- function(x, ...) UseMethod("is_linear_sequence")
+is_linear_sequence <- function(x, by=NULL,...) UseMethod("is_linear_sequence")
 
 # workhorse function
 is_lin_num_seq <- function(x, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
@@ -94,12 +95,12 @@ as_num <- function(x){
 }
 
 
-all_lin_num_seq <- function(x, ..., start=NULL, end=NULL, sort=TRUE, tol=1e-8){
-  d <- list(...)
-  if (length(d) == 0){
+all_lin_num_seq <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
+  
+  if (length(by) == 0){
     is_lin_num_seq(x, start=start, end=end, sort=sort, tol=tol)
   } else {
-    all(tapply(x, INDEX=d, FUN=is_lin_num_seq, start=start, end=end, sort=sort, tol=tol))
+    all(tapply(x, INDEX=by, FUN=is_lin_num_seq, start=start, end=end, sort=sort, tol=tol))
   }
 } 
 
@@ -108,22 +109,22 @@ all_lin_num_seq <- function(x, ..., start=NULL, end=NULL, sort=TRUE, tol=1e-8){
 #' @rdname is_linear_sequence
 #' @param tol numerical tolerance for gaps.
 #' @export
-is_linear_sequence.numeric <- function(x, ..., start=NULL, end=NULL, sort=TRUE, tol = 1e-8){
-  all_lin_num_seq(x, ..., start=start, end=end, sort=sort, tol=1e-8)
+is_linear_sequence.numeric <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol = 1e-8,...){
+  all_lin_num_seq(x, by=by, start=start, end=end, sort=sort, tol=1e-8)
 }
 
 #' @rdname is_linear_sequence
 #' @export
-is_linear_sequence.Date <- function(x, ..., start=NULL, end=NULL, sort=TRUE){
-  all_lin_num_seq(as.integer(x), start=as_int(start), end=as_int(end), sort=sort, tol=0)
+is_linear_sequence.Date <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE,...){
+  all_lin_num_seq(as.integer(x), by=by, start=as_int(start), end=as_int(end), sort=sort, tol=0)
 }
 
 #' @rdname is_linear_sequence
 #' @export
-is_linear_sequence.POSIXct <- function(x, ... , start=NULL, end=NULL, sort = TRUE, tol=1e-6){
+is_linear_sequence.POSIXct <- function(x, by=NULL , start=NULL, end=NULL, sort = TRUE, tol=1e-6,...){
   # Note. POSIXct can express fractions of a second. Conversion from and to POSIXlt
   # is better than microseconds, so that is what we use as default tolerance/
-  all_lin_num_seq(as.numeric(x), start=as_num(start), end=as_num(end), sort=sort, tol=tol)
+  all_lin_num_seq(as.numeric(x), by=by, start=as_num(start), end=as_num(end), sort=sort, tol=tol)
 }
 
 #' @rdname is_linear_sequence
@@ -135,18 +136,18 @@ is_linear_sequence.POSIXct <- function(x, ... , start=NULL, end=NULL, sort = TRU
 #' or year-Qquarter: \code{"2020-Q3"}. 
 #'
 #' @export
-is_linear_sequence.character <- function(x, ..., start=NULL, end=NULL, sort=TRUE, format="auto"){
+is_linear_sequence.character <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, format="auto",...){
   if ( format == "auto" ){
     pt <- period_type(x)
     y     <- period_to_int(x, from=pt)
     start <- period_to_int(start, from = pt)
     end   <- period_to_int(end, from = pt)
-    is_linear_sequence.numeric(y, ..., start=start, end=end, sort=sort, tol=0)
+    is_linear_sequence.numeric(y, by=by, start=start, end=end, sort=sort, tol=0,...)
   } else {
     y     <- strptime(x, format=format)
     start <- strptime(start, format=format)
     end   <- strptime(end, format=format)
-    is_linear_sequence.POSIXct(y, ..., start=start, end=end, sort=sort, tol=1e-6)
+    is_linear_sequence.POSIXct(y, by=by, start=start, end=end, sort=sort, tol=1e-6,...)
   }
 
 }
@@ -315,7 +316,59 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
   }
 }
 
+#' Test whether details combine to a chosen aggregate
+#'  
+#' @param values A bare (unquoted) variable name holding the values to aggregate
+#' @param labels A bare (unquoted) variable name holding the labels indicating
+#'    whether a value is an aggregate or a detail.
+#' @param whole \code{[character]} regex recognizing a whole in \code{labels}
+#' @param part \code{[character]} regex recognizing a part in \code{labels}. If not specified,
+#'        (\code{NULL}) all values not selected by \code{whole_pat} are used.
+#' @param aggregator \code{[function]} used to aggregate subsets of \code{x}. It should
+#'   accept a \code{numeric} vector and return a single number.
+#' @param tol \code{[numeric]} tolerance for equality checking
+#' @param by Name of variable, or \code{list} of bare variable names, used to
+#'        split the values and labels before computing the aggregates. 
+#' @param ... Extraa arguments passed to aggregator (for example \code{na.rm=TRUE}).
+#'  
+#'
+#' @return A \code{logical} vector of size \code{length(value)}.
+#'
+#' @example
+#' df <- data.frame(
+#'    id = 10011:10020
+#'  , period   = rep(c("2018Q1", "2018Q2", "2018Q3", "2018Q4","2018"),2)
+#'  , direction = c(rep("import",5), rep("export", 5))
+#'  , value     = c(1,2,3,4,10, 3,3,3,3,13)
+#' )
+#' rules <- validator(
+#'   check_part_whole_relation(value, period, whole="^\\d{4}$", by=direction)
+#' )
+#'
+#' out <- confront(df, rules, key="id")
+#' as.data.frame(out)
+#' @export
+check_part_whole_relation <- function(values, labels, whole, part = NULL
+    , aggregator = sum, tol=1e-8, by = NULL, ...){
+  
+  df <- data.frame(values=values, labels=labels)
+  f <- function(d, ...){
+    aggregate   <- d$values[grepl(whole, d$labels)]
+    details     <- if (is.null(part)) d$values[!grepl(whole, d$labels)]
+                   else  labels[grepl(part, d$labels)]
+    if (length(aggregate)>1) stop("Multiple labels matching aggregate. Expecting one", call.=FALSE)
+    out <- abs(aggregator(details, ...) - aggregate) < tol
+    rep(out, length(d$labels))
+  }
 
+  
+  if (length(by) < 1){
+    return( f(df, ...) )
+  } else {
+    unsplit(lapply(split(df, by), f, ...),by)
+  }
+
+}
 
 
 

@@ -33,6 +33,8 @@ expect_true(
   ) )
 
 
+expect_true(is_linear_sequence(rep(1:5, each=2), by=rep(letters[1:2],5)))
+
 
 # POSIXct
 expect_true( is_linear_sequence( as.POSIXct("2015-12-17")) )
@@ -105,16 +107,44 @@ expect_false(in_range(as.Date("2018-03-01")
               , max=as.Date("2018-03-01"), strict=TRUE)
             )
 
+# testing part-whole relation checks
 
+labels <- c("2018Q1", "2018Q2", "2018Q3", "2018Q4","2018")
+values <- c(1,2,3,4, 10)
 
+expect_equal(
+  check_part_whole_relation(values, labels, whole="^\\d{4}$")
+ , rep(TRUE, 5)
+)
 
+values[1] <- 2
 
+expect_equal(
+  check_part_whole_relation(values, labels, whole="^\\d{4}$")
+ , rep(FALSE, 5)
+)
 
+values <- rep(values, 2)
+values[1] <- 1
+labels <- rep(labels, 2)
+direction <- rep(c("import", "export"), each=5)
 
+expect_equal(
+  check_part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
+  , c(rep(TRUE, 5), rep(FALSE, 5))
+)
 
+values[1] <- NA
 
+expect_equal(
+  check_part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
+  , c(rep(NA, 5), rep(FALSE, 5))
+)
 
-
+expect_equal(
+  check_part_whole_relation(values, labels, whole="^\\d{4}$", by=direction, na.rm=TRUE)
+  , c(rep(FALSE, 5), rep(FALSE, 5))
+)
 
 
 
