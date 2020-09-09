@@ -265,7 +265,8 @@ all_complete <- function(...){
 #' (\code{exists_one}) record satisfies a condition.
 #'
 #' @param rule  \code{[expression]} A validation rule
-#' @param ...   A comma-separated list of variables used to group the data.
+#' @param by    A bare (unquoted) variable name or a list of bare variable
+#'              names, that will be used to group the data.
 #' @param na.rm \code{[logical]} Toggle to ignore results that yield \code{NA}.
 #' 
 #' @return A \code{logical} vector, with the same number of entries as there
@@ -298,37 +299,38 @@ all_complete <- function(...){
 #' values(confront(dd, v))
 #' 
 #' @export
-exists_any <- function(rule, ..., na.rm=FALSE){
-  spvr <- data.frame(...)
-  if (length(spvr) == 0) spvr <- character(nrow(.))
+exists_any <- function(rule, by = NULL, na.rm=FALSE){
+
   parent <- parent.frame()
   # get the whole data set from the environment provided
   # by 'confront
   . <- get(".", parent)
+  
+  if (is.null(by)) by <- character(nrow(.))  
+
   rule <- as.expression(substitute(rule))
-  unsplit(lapply(split(., f=spvr), function(d){
+  unsplit(lapply(split(., f=by), function(d){
     res <- eval(rule, envir=d, enclos=parent)
     ntrue <- sum(res, na.rm=na.rm)
     rep(ntrue >= 1, nrow(d))
-  }), spvr)
+  }), by)
 }
 
 
 #' @rdname exists_any
 #' @export
-exists_one <- function(rule, ..., na.rm=FALSE){
-  spvr <- data.frame(...)
-  if (length(spvr) == 0) spvr <- character(nrow(.))
+exists_one <- function(rule, by=NULL, na.rm=FALSE){
   parent <- parent.frame()
   # get the whole data set from the environment provided
   # by 'confront
   . <- get(".", parent)
+  if (is.null(by)) by <- character(nrow(.))  
   rule <- as.expression(substitute(rule))
-  unsplit(lapply(split(., f=spvr), function(d){
+  unsplit(lapply(split(., f=by), function(d){
     res <- eval(rule, envir=d, enclos=parent)
     ntrue <- sum(res, na.rm=na.rm)
     rep(ntrue == 1, nrow(d))
-  }), spvr)
+  }), by)
 }
 
 
