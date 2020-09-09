@@ -173,11 +173,71 @@ expect_false(check_number_format("12.345","dd.dd"))
 
 expect_true(check_number_format("0.123E45","0.d*Edd"))
 
+## Checking data against a fixed set of key-combinations
+
+dat <- data.frame(
+    year    = rep(c("2018","2019"),each=4)
+  , quarter = rep(sprintf("Q%d",1:4), 2)
+  , value   = sample(20:50,8)
+)
+
+# explicit case
+rule <- validator(contains_exactly(
+           expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
+          )
+        )
+expect_equivalent(values(confront(dat, rule)), matrix(TRUE,nrow=1))
+
+# cases using a reference keyset
+keyset  <- expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
+keyset1 <- keyset[-1,]
+ 
+rule  <- validator(contains_exactly(all_keys))
+
+expect_true( as.logical(values(confront(dat, rule, ref=list(all_keys = keyset)))) )
+expect_false(as.logical(values(confront(dat, rule, ref=list(all_keys = keyset1)))) )
 
 
+dat1 <- dat[-1,]
+rule <- validator(contains_at_most(all_keys))
+expect_equivalent(
+  as.logical(values(confront(dat, rule, ref=list(all_keys = keyset))))
+  , rep(TRUE,8))
+expect_equivalent( 
+  as.logical(values(confront(dat, rule, ref=list(all_keys = keyset1)))) 
+  , c(FALSE, rep(TRUE,7))
+  )
+
+rule <- validator(contains_at_least(all_keys))
+expect_true(all(confront(dat, rule, ref=list(all_keys=keyset))))
+expect_false(all(confront(dat1, rule, ref=list(all_keys=keyset))))
+
+rule <- validator(does_not_contain(forbidden_keys))
+
+expect_equivalent(
+  as.logical(values(confront(dat, rule, ref=list(forbidden_keys=keyset))))
+ , rep(FALSE, 8))
 
 
+## Globbing and Regex ---------------------------------------------------------
+
+transactions <- data.frame(
+  sender   = c("S1","S2", "S3", "R1")
+, receiver = c("R1","S1", "R1", "S1")
+)
+
+# a sender 'S*' cannot send to a sender
+rule <- validator(does_not_contain(data.frame(sender = "S*", receiver="S*"), keytype="glob"))
+expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TRUE, TRUE)
+    ,info="globbing in does_not_contain" )
 
 
+rule <- validator(does_not_contain(data.frame(sender = "^S", receiver="^S"), keytype="regex"))
+expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TRUE, TRUE)
+    ,info="regex in does_not_contain" )
 
+# sender ending with a 2 cannot send to receiver ending with 1
+rule <- validator(does_not_contain(data.frame(sender = "2$", receiver="1$"), keytype="regex"))
+expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TRUE, TRUE)
+    ,info="regex in does_not_contain" )
 

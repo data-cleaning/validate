@@ -12,6 +12,9 @@ version 0.9.4
   points.
 - New convenience function 'check_number_format' with simple syntax for
   specifying layout of numbers that are stored as character.
+- New functions to check (non)existens of a given set of key combinations:
+  'contains_exactly', 'contains_at_least', 'contains_at_most', 'does_not_contain'.
+  Support for globbing and regular expression is built in.
 
 
 

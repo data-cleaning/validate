@@ -323,13 +323,17 @@ validating_call <- function(cl){
           , "grepl" , "is_unique", "all_unique", "is_complete", "all_complete"
           , "exists_any", "exists_one", "is_linear_sequence","in_linear_sequence" 
           , "check_part_whole_relation", "check_field_length", "check_number_format"
+          , "contains_exactly", "contains_at_least", "contains_at_most", "does_not_contain"
           , "in_range"
           , "var_group")
   unary <- c("!", "(", "all", "any" )
   binary <- c("|","||","&","&&","if","xor")
 
+  variables_ok <- !is.null(var_from_call(cl)) ||   # validating call must have variables 
+        grepl("contain", deparse(cl[[1]]))         # or be one of the 'contains' functions
+
   # push-button semantic changer. See issue #41
-  assume_logical = FALSE
+  assume_logical <- FALSE
   
   vc <- function(x){
     if (is.symbol(x)) return(assume_logical) 
@@ -340,7 +344,7 @@ validating_call <- function(cl){
     FALSE
   }
   
-  vc(cl)
+  variables_ok && vc(cl) 
   
 }
 

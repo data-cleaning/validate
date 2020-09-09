@@ -104,9 +104,8 @@
   expect_true(validate:::validating_call(expression(any(x > y))[[1]]))
   expect_true(validate:::validating_call(expression(grepl('hello',x))[[1]]))
 
-  ## this is a validating call, but _not_ a validation rule because
-  ## it does not contain any variables.
-  expect_true(validate:::validating_call(expression(exists("hihi")==TRUE)[[1]]))
+  # Removed test (2020-09-08): can be done with "hihi" %in% names(.)
+#  expect_true(validate:::validating_call(expression(exists("hihi")==TRUE)[[1]]))
 
   expect_true(validate:::validating_call(expression(if(x == 1) y == 1)[[1]]))
   expect_true(validate:::validating_call(expression(xor(x == 1, y == 1))[[1]]))

@@ -508,6 +508,192 @@ check_number_format <- function(x, format){
 
 
 
+#' Check records using a predifined table of (im)possible values
+#'
+#' Given a set of keys of key combinations, check whether all thos combinations
+#' occur, or check that they do not occur.  Supports globbing and regular
+#' expressions.
+#'
+#'
+#' @param keys A data frame or bare (unquoted) name of a data
+#'        frame passed as a reference to \code{confront} (see examples).
+#'        The column names of \code{keys} must also occurr in the columns
+#'        of the data under scrutiny.
+#'
+#'
+#' @details
+#' There is no checking for duplicates. See \code{\link{is_unique}} for that.
+#'
+#' \tabular{ll}{
+#'   \code{contains_exactly} \tab dataset contains exactly the key set, no more, no less. \cr
+#'   \code{contains_at_least}\tab dataset contains at least the given keys. \cr
+#'   \code{contains_at_most} \tab all keys in the data set are contained the given keys. \cr
+#'   \code{does_not_contain} \tab The keys are interpreted as forbidden key combinations. \cr
+#' }
+#'
+#'
+#' @section Globbing:
+#' Globbing is a simple method of defining string patterns where the asterisks
+#' (\code{*}) is used a wildcard. For example, the globbing pattern
+#' \code{"abc*"} stands for any string starting with \code{"abc"}.
+#'
+#'
+#' @return 
+#' For \code{contains_exactly}: \code{TRUE} or \code{FALSE}
+#'
+#' @examples
+#'
+#' ## Check that data is present for all quarters in 2018-2019
+#' dat <- data.frame(
+#'     year    = rep(c("2018","2019"),each=4)
+#'   , quarter = rep(sprintf("Q%d",1:4), 2)
+#'   , value   = sample(20:50,8)
+#' )
+#' 
+#' # Method 1: creating a data frame in-place (only for simple cases)
+#' rule <- validator(contains_exactly(
+#'            expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
+#'           )
+#'         )
+#' out <- confront(dat, rule)
+#' values(out)
+#' 
+#' # Method 2: pass the keyset to 'confront', and reference it in the rule.
+#' # this scales to larger key sets but it needs a 'contract' between the
+#' # rule definition and how 'confront' is called.
+#' 
+#' keyset <- expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
+#' rule <- validator(contains_exactly(all_keys))
+#' out <- confront(dat, rule, ref=list(all_keys = keyset))
+#' values(out)
+#' 
+#' ## Globbing (use * as a wildcard)
+#' 
+#' # transaction data 
+#' transactions <- data.frame(
+#'     sender   = c("S21", "X34", "S45","Z22")
+#'   , receiver = c("FG0", "FG2", "DF1","KK2")
+#'   , value    = sample(70:100,4)
+#' )
+#' 
+#' # forbidden combinations: if the sender starts with "S", 
+#' # the receiver can not start "FG"
+#' forbidden <- data.frame(sender="S*",receiver = "FG*")
+#'
+#' rule <- validator(does_not_contain(forbidden_keys, keytype="glob"))
+#' out <- confront(transactions, rule, ref=list(forbidden_keys=forbidden))
+#' values(out)
+#'
+#' ## Quick interactive testing
+#' # use 'with':
+#' with(transactions, does_not_contain(forbidden)) 
+#' 
+#' @export
+contains_exactly <- function(keys){
+  given_keys   <- do.call(paste, keys)
+  L <- list()
+  for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
+  found_keys   <- do.call(paste, L)
+  all(found_keys %in% given_keys) && all(given_keys %in% found_keys)
+}
+
+
+#' @rdname contains_exactly
+#' @export
+#' @return
+#' For \code{contains_at_most}: \code{TRUE} or \code{FALSE} 
+contains_at_least <- function(keys){
+  L <- list()
+  for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
+
+  given_keys   <- do.call(paste, keys)
+  found_keys   <- do.call(paste, L)
+  all(given_keys %in% found_keys)
+
+}
+
+#' @rdname contains_exactly
+#' @return
+#' For \code{contains_at_least}: a \code{logical} vector equal to the number of
+#' records under scrutiny. It is \code{FALSE} where key combinations do not match
+#' any value in \code{keys}.
+#' @export
+contains_at_most <- function(keys, keytype = c("literal","glob")){
+  keytype <- match.arg(keytype)
+
+  L <- list()
+  for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
+  
+  contains(L, keys, keytype=keytype)
+
+}
+
+
+
+#' @rdname contains_exactly
+#'
+#' @param keytype \code{[character]} How to interpret keys, as string literals,
+#' globbing patterns (using '*' as wildcard) or as regular expressions.
+#'
+#' @return 
+#' For \code{does_not_contain}:  a \code{logical} vector equal to the number of
+#' records under scrutiny. It is \code{FALSE} where key combinations do not
+#' match any value in \code{keys}.
+#' @export
+does_not_contain <- function(keys, keytype = c("literal","glob","regex")){
+  keytype <- match.arg(keytype)
+
+  L <- list()
+  for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
+
+  !contains(L, keys, keytype=keytype)
+}
+
+# for each 'x' see if it matches any regular expression in 'pattern'
+rxin <- function(x, pattern){
+  A <- sapply(pattern, grepl, x=x)
+  if (!is.array(A)) A <- matrix(A,ncol=length(pattern))
+  apply(A, 1, any)
+}
+
+# for each 'x' see if it matches any globbing pattern in 'pattern' 
+glin <- function(x, pattern){
+  pattern <- utils::glob2rx(pattern)
+  rxin(x, pattern)
+}
+
+
+contains <- function(dat, keys, keytype){
+
+  if (keytype=="regex" && length(keys) > 1){
+    # some preparations before pasting
+    for (keyname in names(keys)[-1]){ 
+      key <- keys[[keyname]]
+      keys[[keyname]] <- ifelse( substr(key,1,1) == "^"
+                          , sub("^\\^", "", keys[[keyname]])
+                          , paste0(".*", key) )
+    }
+    for (keyname in names(keys)[-length(keys)]){
+      key <- keys[[keyname]]
+      keys[[keyname]] <- ifelse( substr(key, nchar(key), nchar(key)) == "$"
+                           ,  sub("\\$$", "", key)
+                           ,  paste0(key, ".*"))
+    }
+
+  } 
+
+ 
+  given_keys   <- do.call(paste, keys)
+  found_keys   <- do.call(paste, dat)
+
+  switch(keytype
+    , "literal" = found_keys %in% given_keys
+    , "glob"    = glin(found_keys, given_keys)
+    , "regex"   = rxin(found_keys, given_keys)
+  )
+
+}
+
 
 
 

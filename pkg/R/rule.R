@@ -267,7 +267,7 @@ setMethod("show", "rule", function(object){
 })
 
 setMethod("validating","rule", function(x,...){
- !is.null(variables(x)) && validating_call(x@expr)  
+  validating_call(x@expr)  
 })
 
 
