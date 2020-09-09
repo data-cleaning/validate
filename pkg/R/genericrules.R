@@ -510,7 +510,7 @@ check_number_format <- function(x, format){
 
 #' Check records using a predifined table of (im)possible values
 #'
-#' Given a set of keys of key combinations, check whether all thos combinations
+#' Given a set of keys or key combinations, check whether all thos combinations
 #' occur, or check that they do not occur.  Supports globbing and regular
 #' expressions.
 #'
@@ -519,10 +519,13 @@ check_number_format <- function(x, format){
 #'        frame passed as a reference to \code{confront} (see examples).
 #'        The column names of \code{keys} must also occurr in the columns
 #'        of the data under scrutiny.
-#'
+#' @param by A bare (unquoted) variable name or list of variable names. The
+#' data will be split into groups according to these variables and the check is
+#' performed on each group.
+#' @param allow_duplicates \code{[logical]} toggle whether key combinations can occur 
+#'        more than once.
 #'
 #' @details
-#' There is no checking for duplicates. See \code{\link{is_unique}} for that.
 #'
 #' \tabular{ll}{
 #'   \code{contains_exactly} \tab dataset contains exactly the key set, no more, no less. \cr
@@ -539,7 +542,11 @@ check_number_format <- function(x, format){
 #'
 #'
 #' @return 
-#' For \code{contains_exactly}: \code{TRUE} or \code{FALSE}
+#' For \code{contains_exactly}: a \code{logical} vector with one entry for each
+#' record in the dataset. Any group not containing all the keys will have \code{FALSE}
+#' assigned to each record in the group (see examples).
+#'
+#' @family cross-record-helpers
 #'
 #' @examples
 #'
@@ -584,17 +591,57 @@ check_number_format <- function(x, format){
 #' out <- confront(transactions, rule, ref=list(forbidden_keys=forbidden))
 #' values(out)
 #'
+#'
 #' ## Quick interactive testing
 #' # use 'with':
 #' with(transactions, does_not_contain(forbidden)) 
+#'
+#'
+#'
+#' ## Grouping 
+#' 
+#' # data in 'long' format
+#' dat <- expand.grid(
+#'   year = c("2018","2019")
+#'   , quarter = c("Q1","Q2","Q3","Q4")
+#'   , variable = c("import","export")
+#' )
+#' dat$value <- sample(50:100,nrow(dat))
+#' 
+#' 
+#' periods <- expand.grid(
+#'   year = c("2018","2019")
+#'   , quarter = c("Q1","Q2","Q3","Q4")
+#' )
+#' 
+#' rule <- validator(contains_exactly(all_periods, by=variable))
+#' 
+#' out <- confront(dat, rule, ref=list(all_periods=periods))
+#' expect_equivalent(as.logical(values(out)), rep(TRUE,nrow(dat)))
+#' 
+#' # remove one  export record
+#' 
+#' dat1 <- dat[-15,]
+#' out1 <- confront(dat1, rule, ref=list(all_periods=periods))
+#' values(out1)
+#' expect_equivalent(as.logical(values(out1)), c(rep(TRUE,8),rep(FALSE, 7)) )
 #' 
 #' @export
-contains_exactly <- function(keys){
+contains_exactly <- function(keys, by=NULL, allow_duplicates=FALSE){
   given_keys   <- do.call(paste, keys)
   L <- list()
   for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
+
   found_keys   <- do.call(paste, L)
-  all(found_keys %in% given_keys) && all(given_keys %in% found_keys)
+  
+  if (is.null(by)) by <- character(length(found_keys))
+
+  unsplit(lapply(split(found_keys, f=by), function(fk){
+    out <- all(fk %in% given_keys) && all(given_keys %in% fk)
+    if (!allow_duplicates) out <- out && !any(duplicated(fk))
+    rep(out, length(fk))
+  }), by)
+
 }
 
 
@@ -618,7 +665,7 @@ contains_at_least <- function(keys){
 #' records under scrutiny. It is \code{FALSE} where key combinations do not match
 #' any value in \code{keys}.
 #' @export
-contains_at_most <- function(keys, keytype = c("literal","glob")){
+contains_at_most <- function(keys, keytype = c("literal","glob", "regex")){
   keytype <- match.arg(keytype)
 
   L <- list()

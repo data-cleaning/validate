@@ -186,7 +186,7 @@ rule <- validator(contains_exactly(
            expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
           )
         )
-expect_equivalent(values(confront(dat, rule)), matrix(TRUE,nrow=1))
+expect_equivalent(values(confront(dat, rule)), matrix(TRUE,nrow=8))
 
 # cases using a reference keyset
 keyset  <- expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
@@ -194,8 +194,8 @@ keyset1 <- keyset[-1,]
  
 rule  <- validator(contains_exactly(all_keys))
 
-expect_true( as.logical(values(confront(dat, rule, ref=list(all_keys = keyset)))) )
-expect_false(as.logical(values(confront(dat, rule, ref=list(all_keys = keyset1)))) )
+expect_equivalent( as.logical(values(confront(dat, rule, ref=list(all_keys = keyset)))), rep(TRUE,8) )
+expect_equivalent( as.logical(values(confront(dat, rule, ref=list(all_keys = keyset1)))), rep(FALSE,8))
 
 
 dat1 <- dat[-1,]
@@ -240,4 +240,36 @@ expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TR
 rule <- validator(does_not_contain(data.frame(sender = "2$", receiver="1$"), keytype="regex"))
 expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TRUE, TRUE)
     ,info="regex in does_not_contain" )
+
+
+
+## Grouping -------------------------------------------------------------------
+
+# data in 'long' format
+dat <- expand.grid(
+  year = c("2018","2019")
+  , quarter = c("Q1","Q2","Q3","Q4")
+  , variable = c("import","export")
+)
+dat$value <- sample(50:100,nrow(dat))
+
+
+periods <- expand.grid(
+  year = c("2018","2019")
+  , quarter = c("Q1","Q2","Q3","Q4")
+)
+
+rule <- validator(contains_exactly(all_periods, by=variable))
+
+out <- confront(dat, rule, ref=list(all_periods=periods))
+expect_equivalent(as.logical(values(out)), rep(TRUE,nrow(dat)))
+
+# remove one  export record
+
+dat1 <- dat[-15,]
+out1 <- confront(dat1, rule, ref=list(all_periods=periods))
+values(out1)
+expect_equivalent(as.logical(values(out1)), c(rep(TRUE,8),rep(FALSE, 7)) )
+
+
 
