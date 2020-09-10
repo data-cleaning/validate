@@ -519,9 +519,9 @@ check_number_format <- function(x, format){
 #'        frame passed as a reference to \code{confront} (see examples).
 #'        The column names of \code{keys} must also occurr in the columns
 #'        of the data under scrutiny.
-#' @param by A bare (unquoted) variable name or list of variable names. The
-#' data will be split into groups according to these variables and the check is
-#' performed on each group.
+#' @param by A bare (unquoted) variable or list of variable names that occur in
+#' the data under scrutiny. The data will be split into groups according to
+#' these variables and the check is performed on each group.
 #' @param allow_duplicates \code{[logical]} toggle whether key combinations can occur 
 #'        more than once.
 #'
@@ -542,9 +542,10 @@ check_number_format <- function(x, format){
 #'
 #'
 #' @return 
-#' For \code{contains_exactly}: a \code{logical} vector with one entry for each
-#' record in the dataset. Any group not containing all the keys will have \code{FALSE}
-#' assigned to each record in the group (see examples).
+#' For \code{contains_exactly}, \code{contains_at_least}, and
+#' \code{contains_at_most} a \code{logical} vector with one entry for each
+#' record in the dataset. Any group not conforming to the test keys will have
+#' \code{FALSE} assigned to each record in the group (see examples).
 #'
 #' @family cross-record-helpers
 #'
@@ -617,14 +618,14 @@ check_number_format <- function(x, format){
 #' rule <- validator(contains_exactly(all_periods, by=variable))
 #' 
 #' out <- confront(dat, rule, ref=list(all_periods=periods))
-#' expect_equivalent(as.logical(values(out)), rep(TRUE,nrow(dat)))
+#' values(out)
 #' 
 #' # remove one  export record
 #' 
 #' dat1 <- dat[-15,]
 #' out1 <- confront(dat1, rule, ref=list(all_periods=periods))
 #' values(out1)
-#' expect_equivalent(as.logical(values(out1)), c(rep(TRUE,8),rep(FALSE, 7)) )
+#' values(out1)
 #' 
 #' @export
 contains_exactly <- function(keys, by=NULL, allow_duplicates=FALSE){
@@ -647,15 +648,18 @@ contains_exactly <- function(keys, by=NULL, allow_duplicates=FALSE){
 
 #' @rdname contains_exactly
 #' @export
-#' @return
-#' For \code{contains_at_most}: \code{TRUE} or \code{FALSE} 
-contains_at_least <- function(keys){
+contains_at_least <- function(keys, by=NULL){
   L <- list()
   for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
 
   given_keys   <- do.call(paste, keys)
   found_keys   <- do.call(paste, L)
-  all(given_keys %in% found_keys)
+
+  if (is.null(by)) by <- character(length(found_keys))
+
+  unsplit(lapply(split(found_keys, f=by), function(fk){
+    rep(all(given_keys %in% found_keys), length(fk))
+  }), by)
 
 }
 
@@ -665,13 +669,13 @@ contains_at_least <- function(keys){
 #' records under scrutiny. It is \code{FALSE} where key combinations do not match
 #' any value in \code{keys}.
 #' @export
-contains_at_most <- function(keys, keytype = c("literal","glob", "regex")){
+contains_at_most <- function(keys, by=NULL, keytype = c("literal","glob", "regex")){
   keytype <- match.arg(keytype)
 
   L <- list()
   for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
   
-  contains(L, keys, keytype=keytype)
+  contains(L, keys, by=by, keytype=keytype)
 
 }
 
@@ -683,9 +687,9 @@ contains_at_most <- function(keys, keytype = c("literal","glob", "regex")){
 #' globbing patterns (using '*' as wildcard) or as regular expressions.
 #'
 #' @return 
-#' For \code{does_not_contain}:  a \code{logical} vector equal to the number of
-#' records under scrutiny. It is \code{FALSE} where key combinations do not
-#' match any value in \code{keys}.
+#' For \code{does_not_contain}:  a \code{logical} vector with size equal to the
+#' number of records under scrutiny. It is \code{FALSE} where key combinations
+#' do not match any value in \code{keys}.
 #' @export
 does_not_contain <- function(keys, keytype = c("literal","glob","regex")){
   keytype <- match.arg(keytype)
@@ -693,7 +697,7 @@ does_not_contain <- function(keys, keytype = c("literal","glob","regex")){
   L <- list()
   for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
 
-  !contains(L, keys, keytype=keytype)
+  !contains(L, keys, by=NULL, keytype=keytype)
 }
 
 # for each 'x' see if it matches any regular expression in 'pattern'
@@ -710,7 +714,7 @@ glin <- function(x, pattern){
 }
 
 
-contains <- function(dat, keys, keytype){
+contains <- function(dat, keys, by, keytype){
 
   if (keytype=="regex" && length(keys) > 1){
     # some preparations before pasting
@@ -729,15 +733,17 @@ contains <- function(dat, keys, keytype){
 
   } 
 
- 
   given_keys   <- do.call(paste, keys)
   found_keys   <- do.call(paste, dat)
+  if (is.null(by)) by <- character(length(found_keys)) 
 
-  switch(keytype
-    , "literal" = found_keys %in% given_keys
-    , "glob"    = glin(found_keys, given_keys)
-    , "regex"   = rxin(found_keys, given_keys)
-  )
+  unsplit(lapply(split(found_keys, f=by), function(fk){
+    switch(keytype
+      , "literal" = fk %in% given_keys
+      , "glob"    = glin(fk, given_keys)
+      , "regex"   = rxin(fk, given_keys)
+    )
+  }), by)
 
 }
 
