@@ -271,5 +271,7 @@ out1 <- confront(dat1, rule, ref=list(all_periods=periods))
 values(out1)
 expect_equivalent(as.logical(values(out1)), c(rep(TRUE,8),rep(FALSE, 7)) )
 
+## Field format
 
+expect_equal(check_format(c("X0Y","X12"), "^X\\dY"), c(TRUE, FALSE))
 

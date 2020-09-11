@@ -431,7 +431,7 @@ max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 #' @param n Number of code points required.
 #' @param min Mimimum number of code points
 #' @param max Maximum number of code points
-#'
+#' @param ... passed to \code{nchar} (for example \code{type="width"})
 #' @section Details:
 #'
 #' The number of code points (string length) may depend on current locale
@@ -448,8 +448,8 @@ max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 #' as.data.frame(out)
 #'
 #' @export
-check_field_length <- function(x, n=NULL, min=NULL, max=NULL){
-  len <- nchar(as.character(x))
+check_field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
+  len <- nchar(as.character(x),...)
 
   if (!is.null(n) & is.null(min) & is.null(max)){
     len == n 
@@ -459,6 +459,20 @@ check_field_length <- function(x, n=NULL, min=NULL, max=NULL){
     stop("Ill-specified check: either n, or min and max must be not-NULL")
   }
 }
+
+
+#' Check whether a field conforms to a regular expression
+#' 
+#' A convenience wrapper around \code{grepl} to make rule sets more readable.
+#'
+#' @param x Bare (unquoted) name of a variable. 
+#'     Otherwise a vector of class \code{character}. Coerced to character as 
+#'     necessary.
+#' @param pattern \code{[character]} a regular expression
+#' @param ... passed to grepl
+#'
+#' @export
+check_format <- function(x, pattern,...) grepl(pattern, x=as.character(x),...)
 
 #' Check the layouts of numbers.
 #'
