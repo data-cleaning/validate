@@ -211,9 +211,13 @@ setGeneric('sort')
 ## key a character indicating a key.
 ##
 confront_work <- function(x, dat, key=NULL, class='confrontation', ...){
-  opts <- x$clone_options(...)
-  lin_eq_eps <- opts('lin.eq.eps')
-  calls <- x$exprs(expand_assignments=TRUE,lin_eq_eps=lin_eq_eps,dat=dat)
+  opts         <- x$clone_options(...)
+  lin_eq_eps   <- opts('lin.eq.eps')
+  lin_ineq_eps <- opts('lin.ineq.eps')
+  calls <- x$exprs(expand_assignments=TRUE
+            , lin_eq_eps=lin_eq_eps
+            , lin_ineq_eps=lin_ineq_eps
+            , dat=dat)
   L <- execute(calls,dat,opts)
   new(class,
       ._call    = match.call(definition=confront,call=sys.call(sys.parent(2)))

@@ -16,6 +16,7 @@ version 0.9.4
   'contains_exactly', 'contains_at_least', 'contains_at_most', 'does_not_contain'.
   Support for globbing and regular expression is built in, and tests can be
   performed group-wise.
+- Fix: option 'lin.ineq.eps' was ignored by 'confront'.
 - Breaking change: for consistency, the '...' argument in 'exists_one' and 'exists_any'
   is replaced with 'by'. This only affects cases with multiple grouping variables.
 
