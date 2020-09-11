@@ -281,8 +281,8 @@ in_range <- function(x, min, max,...) UseMethod("in_range")
 #' 
 #' @export             
 in_range.default <- function(x, min, max, strict=FALSE, ...){
-  if (strict) x > min && x < max
-  else x >= min && x <= max
+  if (strict) x > min & x < max
+  else x >= min & x <= max
 }
 
 #' @rdname in_range
