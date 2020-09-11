@@ -273,5 +273,6 @@ expect_equivalent(as.logical(values(out1)), c(rep(TRUE,8),rep(FALSE, 7)) )
 
 ## Field format
 
-expect_equal(check_format(c("X0Y","X12"), "^X\\dY"), c(TRUE, FALSE))
+expect_equal(check_format(c("X0Y","X12"), "^X\\dY",type="regex"), c(TRUE, FALSE))
+expect_equal(check_format(c("X0Y","Y12"), "X*",type="glob"), c(TRUE, FALSE))
 

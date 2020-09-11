@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{03_Indicators}
+  %\VignetteIndexEntry{Data quality indicators with the validate package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

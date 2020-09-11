@@ -446,6 +446,8 @@ max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 #' rule <- validator(check_field_length(year, 4), check_field_length(id, 5))
 #' out <- confront(df, rule) 
 #' as.data.frame(out)
+#' 
+#' @family format-checkers
 #'
 #' @export
 check_field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
@@ -469,10 +471,17 @@ check_field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
 #'     Otherwise a vector of class \code{character}. Coerced to character as 
 #'     necessary.
 #' @param pattern \code{[character]} a regular expression
+#' @param type \code{[character]} How to interpret \code{pattern}. In globbing,
+#' the asterisks (`*`) is used as a wildcard that stands for 'zero or more
+#' characters'.
 #' @param ... passed to grepl
 #'
+#' @family format-checkers
 #' @export
-check_format <- function(x, pattern,...) grepl(pattern, x=as.character(x),...)
+check_format <- function(x, pattern, type=c("glob","regex"), ...){ 
+  if (type == "glob") pattern <- utils::glob2rx(pattern)
+  grepl(pattern, x=as.character(x),...)
+}
 
 #' Check the layouts of numbers.
 #'
@@ -513,6 +522,7 @@ check_format <- function(x, pattern,...) grepl(pattern, x=as.character(x),...)
 #' out <- confront(df, rules)
 #' values(out)
 #'
+#' @family format-checkers
 #' @export
 check_number_format <- function(x, format){
   rx <- utils::glob2rx(format)

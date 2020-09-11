@@ -1,12 +1,12 @@
 ---
-title: "Introduction to Validate"
+title: "Introduction to validate"
 author: "Mark van der Loo and Edwin de Jonge"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{01_Introduction}
+  %\VignetteIndexEntry{Introduction to validate}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
