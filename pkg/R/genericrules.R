@@ -326,12 +326,16 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
 #'
 #' @param values A bare (unquoted) variable name holding the values to aggregate
 #' @param labels A bare (unquoted) variable name holding the labels indicating
-#'    whether a value is an aggregate or a detail.
-#' @param whole \code{[character]} regex recognizing a whole in \code{labels}
-#' @param part \code{[character]} regex recognizing a part in \code{labels}. If not specified,
-#'        (\code{NULL}) all values not selected by \code{whole_pat} are used.
+#'        whether a value is an aggregate or a detail.
+#' @param whole \code{[character]} literal label or pattern recognizing a whole
+#'        in \code{labels}. Supports globbing and regular expression patterns (see \code{keytype}).
+#' @param part \code{[character]} vector of label values or pattern recognizing
+#'        a part in \code{labels}. If not specified,
+#'        (\code{NULL}) all values not selected by \code{whole} are used. Supports
+#'        globbing and regular expression patterns (see \code{keytype}).
+#' @param keytype How to interpret the \code{whole} and \code{part} arguments.
 #' @param aggregator \code{[function]} used to aggregate subsets of \code{x}. It should
-#'   accept a \code{numeric} vector and return a single number.
+#'        accept a \code{numeric} vector and return a single number.
 #' @param tol \code{[numeric]} tolerance for equality checking
 #' @param by Name of variable, or \code{list} of bare variable names, used to
 #'        split the values and labels before computing the aggregates. 
@@ -348,20 +352,36 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
 #'  , value     = c(1,2,3,4,10, 3,3,3,3,13)
 #' )
 #' rules <- validator(
-#'   check_part_whole_relation(value, period, whole="^\\d{4}$", by=direction)
+#'   check_part_whole_relation(value, period, whole="^\\d{4}$"
+#'   , keytype="regex", by=direction)
 #' )
 #'
 #' out <- confront(df, rules, key="id")
 #' as.data.frame(out)
 #' @export
 check_part_whole_relation <- function(values, labels, whole, part = NULL
+    , keytype = c("literal","glob","regex")
     , aggregator = sum, tol=1e-8, by = NULL, ...){
+ 
+  keytype <- match.arg(keytype)
+
+  if (keytype == "glob"){
+    whole <- utils::glob2rx(whole)
+    if (!is.null(part)) part <- utils::glob2rx(part)
+  }
   
+
+ 
   df <- data.frame(values=values, labels=labels)
   f <- function(d, ...){
     aggregate   <- d$values[grepl(whole, d$labels)]
-    details     <- if (is.null(part)) d$values[!grepl(whole, d$labels)]
-                   else  labels[grepl(part, d$labels)]
+    details     <- if (keytype %in% c("glob","regex")){
+                      if (is.null(part)) d$values[!grepl(whole, d$labels)]
+                      else  d$values[grepl(part, d$labels)]
+                    } else {
+                      if (is.null(part)) d$values[!grepl(whole, d$labels)]
+                      else d$values[d$labels %in% part]
+                    }
     if (length(aggregate)>1) stop("Multiple labels matching aggregate. Expecting one", call.=FALSE)
     out <- abs(aggregator(details, ...) - aggregate) < tol
     rep(out, length(d$labels))

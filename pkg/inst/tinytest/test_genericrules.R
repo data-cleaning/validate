@@ -146,7 +146,17 @@ expect_equal(
   , c(rep(FALSE, 5), rep(FALSE, 5))
 )
 
-# testing do_by
+# with string literals
+local({
+  region <- c("foo", "bar","baz","bur","boo","fu")
+  amount <- c(10, 4:1, 25)
+  expect_equal(
+    check_part_whole_relation(amount, region, whole="foo", part=c("bar","bur","baz","boo"))
+    , rep(TRUE, length(region))
+  )
+})
+
+## testing do_by
 
 x <- 1:10
 y <- rep(letters[1:2],5)
