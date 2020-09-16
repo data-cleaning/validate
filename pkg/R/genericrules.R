@@ -162,34 +162,34 @@ is_linear_sequence.character <- function(x, by=NULL, start=NULL, end=NULL, sort=
 #' @export
 in_linear_sequence <- function(x, ...) UseMethod("in_linear_sequence")
 
-in_lin_num_seq <- function(x, start=NULL, end=NULL, sort=TRUE, tol=1e8){
+in_lin_num_seq <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e8){
   rep(is_lin_num_seq(x, start=start, end=end, sort=sort, tol=tol), length(x))
 }
 
 
 #' @rdname is_linear_sequence
 #' @export
-in_linear_sequence.numeric <- function(x, ..., start=NULL, end=NULL, sort=TRUE, tol=1e-8){
-  d <- list(...)
-  if (length(d) == 0){
+in_linear_sequence.numeric <- function(x, by, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
+  
+  if (is.null(by)){
     in_lin_num_seq(as.integer(x), start=as_int(start), end=as_int(end), sort=sort, tol=tol)
   } else {
-    result <- tapply(as.integer(x), d, in_lin_num_seq, start=as_int(start), end=as_int(end), sort=sort, tol=tol)
-    unsplit(result, d)
+    result <- tapply(as.integer(x), by, in_lin_num_seq, start=as_int(start), end=as_int(end), sort=sort, tol=tol)
+    unsplit(result, by)
   }
 }
 
 #' @rdname is_linear_sequence
 #' @export
-in_linear_sequence.Date <- function(x, ..., start=NULL, end=NULL, sort=TRUE){
-  in_linear_sequence.numeric(as.integer(x), ..., start=as_int(start), end=as_int(end), sort=TRUE, tol=0)
+in_linear_sequence.Date <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE){
+  in_linear_sequence.numeric(as.integer(x), by=by, start=as_int(start), end=as_int(end), sort=TRUE, tol=0)
 }
 
 
 #' @rdname is_linear_sequence
 #' @export
-in_linear_sequence.POSIXct <- function(x, ..., start=NULL, end=NULL, sort=TRUE, tol=1e-6){
-  in_linear_sequence.numeric(as.numeric(x), ..., start=as_num(start), end=as_num(end), sort=sort, tol=0)
+in_linear_sequence.POSIXct <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e-6){
+  in_linear_sequence.numeric(as.numeric(x), by=by, start=as_num(start), end=as_num(end), sort=sort, tol=0)
 }
 
 
