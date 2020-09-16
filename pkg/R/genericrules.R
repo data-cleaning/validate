@@ -169,7 +169,7 @@ in_lin_num_seq <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e8)
 
 #' @rdname is_linear_sequence
 #' @export
-in_linear_sequence.numeric <- function(x, by, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
+in_linear_sequence.numeric <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
   
   if (is.null(by)){
     in_lin_num_seq(as.integer(x), start=as_int(start), end=as_int(end), sort=sort, tol=tol)
