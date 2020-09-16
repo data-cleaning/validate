@@ -375,7 +375,6 @@ check_part_whole_relation <- function(values, labels, whole, part = NULL
   df <- data.frame(values=values, labels=labels)
   f <- function(d, ...){
     aggregate   <- d$values[grepl(whole, d$labels)]
-    browser()
     details     <- if (keytype %in% c("glob","regex")){
                       if (is.null(part)) d$values[!grepl(whole, d$labels)]
                       else  d$values[grepl(part, d$labels)]
