@@ -14,10 +14,10 @@ expect_true( is.na(is_linear_sequence(c(1,NA,2))) )
 expect_true( is_linear_sequence(NA_integer_) )
 expect_true( is_linear_sequence(rep(NA_integer_,2)) )
 
-expect_false( is_linear_sequence(1:5, start=2))
+expect_false( is_linear_sequence(1:5, begin=2))
 expect_false( is_linear_sequence(1:5, end=7))
-expect_false( is_linear_sequence(1:5, start=1, end=6))
-expect_false( is_linear_sequence(1:5, start=2, end=5))
+expect_false( is_linear_sequence(1:5, begin=1, end=6))
+expect_false( is_linear_sequence(1:5, begin=2, end=5))
 
 
 # dates
@@ -28,7 +28,7 @@ expect_false( is_linear_sequence(as.Date(c("2015-12-17","2015-12-19","2015-12-20
 expect_true( 
   is_linear_sequence(
       as.Date(c("2015-12-17","2015-12-19","2015-12-21"))
-    , start = as.Date("2015-12-17")
+    , begin = as.Date("2015-12-17")
     , end   = as.Date("2015-12-21")
   ) )
 
@@ -44,7 +44,7 @@ expect_false( is_linear_sequence(as.POSIXct(c("2015-12-17","2015-12-19","2015-12
 expect_true( 
   is_linear_sequence( 
       as.POSIXct(c("2015-12-17","2015-12-19","2015-12-21")) 
-    , start= as.POSIXct("2015-12-17")
+    , begin= as.POSIXct("2015-12-17")
     , end  = as.POSIXct("2015-12-21")              
   ) )
 
@@ -55,7 +55,7 @@ expect_true( is_linear_sequence(c("2012", "2013","2014")) )
 expect_true( is_linear_sequence(c("2012M01", "2012M02", "2012M03")) )
 expect_true( is_linear_sequence(c("2012Q1", "2012Q2", "2012Q3")) )
 # conversion of start/end?
-expect_true( is_linear_sequence(c("2012Q1", "2012Q2", "2012Q3"), start="2012Q1") )
+expect_true( is_linear_sequence(c("2012Q1", "2012Q2", "2012Q3"), begin="2012Q1") )
 expect_false( is_linear_sequence(c("2012Q1", "2012Q2", "2012Q3"), end="2012Q4") )
 
 

@@ -17,7 +17,7 @@
 #' @param x An R vector.
 #' @param sort \code{[logical]}. When set to \code{TRUE}, \code{x}
 #'        is sorted within each group before testing.
-#' @param start Optionally, a value that should equal \code{min(x)}
+#' @param begin Optionally, a value that should equal \code{min(x)}
 #' @param end   Optionally, a value that should equal \code{max(x)}
 #' @param by bare (unquoted) variable name or a list of unquoted variable names, 
 #'        used to split \code{x} into groups. The check is executed for each group.
@@ -32,7 +32,7 @@
 #' is_linear_sequence(c(1,3,5,4,2)) # FALSE
 #' is_linear_sequence(c(1,3,5,4,2), sort=TRUE) # TRUE 
 #' is_linear_sequence(NA_integer_) # TRUE
-#' is_linear_sequence(NA_integer_, start=4) # FALSE
+#' is_linear_sequence(NA_integer_, begin=4) # FALSE
 #' is_linear_sequence(c(1, NA, 3)) # FALSE
 #'
 #'
@@ -67,19 +67,19 @@
 is_linear_sequence <- function(x, by=NULL,...) UseMethod("is_linear_sequence")
 
 # workhorse function
-is_lin_num_seq <- function(x, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
+is_lin_num_seq <- function(x, begin=NULL, end=NULL, sort=TRUE, tol=1e-8,...){
 
   # Edge cases: empty sequence, or length 1 sequence with missing value.  In
-  # those cases, return FALSE when any of start or end is checked, otherwise
+  # those cases, return FALSE when any of begin or end is checked, otherwise
   # return TRUE
   if ( length(x) <= 2 && all(is.na(x)) ) 
-    return(is.null(start) && is.null(end))
+    return(is.null(begin) && is.null(end))
 
   if (anyNA(x)) return(NA)
 
   # the regular case
   !anyNA(x) &&
-    (is.null(start) || abs(start - min(x)) <= tol) &&
+    (is.null(begin) || abs(begin - min(x)) <= tol) &&
     (is.null(end)   || abs(end - max(x))   <= tol) &&
     ( length(x) <= 1 || { if(sort) x <- sort(x)
                           d <- diff(x)
@@ -95,12 +95,12 @@ as_num <- function(x){
 }
 
 
-all_lin_num_seq <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
+all_lin_num_seq <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, tol=1e-8){
   
   if (length(by) == 0){
-    is_lin_num_seq(x, start=start, end=end, sort=sort, tol=tol)
+    is_lin_num_seq(x, begin=begin, end=end, sort=sort, tol=tol)
   } else {
-    all(tapply(x, INDEX=by, FUN=is_lin_num_seq, start=start, end=end, sort=sort, tol=tol))
+    all(tapply(x, INDEX=by, FUN=is_lin_num_seq, begin=begin, end=end, sort=sort, tol=tol))
   }
 } 
 
@@ -109,22 +109,22 @@ all_lin_num_seq <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e-
 #' @rdname is_linear_sequence
 #' @param tol numerical tolerance for gaps.
 #' @export
-is_linear_sequence.numeric <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol = 1e-8,...){
-  all_lin_num_seq(x, by=by, start=start, end=end, sort=sort, tol=1e-8)
+is_linear_sequence.numeric <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, tol = 1e-8,...){
+  all_lin_num_seq(x, by=by, begin=begin, end=end, sort=sort, tol=1e-8)
 }
 
 #' @rdname is_linear_sequence
 #' @export
-is_linear_sequence.Date <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE,...){
-  all_lin_num_seq(as.integer(x), by=by, start=as_int(start), end=as_int(end), sort=sort, tol=0)
+is_linear_sequence.Date <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE,...){
+  all_lin_num_seq(as.integer(x), by=by, begin=as_int(begin), end=as_int(end), sort=sort, tol=0)
 }
 
 #' @rdname is_linear_sequence
 #' @export
-is_linear_sequence.POSIXct <- function(x, by=NULL , start=NULL, end=NULL, sort = TRUE, tol=1e-6,...){
+is_linear_sequence.POSIXct <- function(x, by=NULL , begin=NULL, end=NULL, sort = TRUE, tol=1e-6,...){
   # Note. POSIXct can express fractions of a second. Conversion from and to POSIXlt
   # is better than microseconds, so that is what we use as default tolerance/
-  all_lin_num_seq(as.numeric(x), by=by, start=as_num(start), end=as_num(end), sort=sort, tol=tol)
+  all_lin_num_seq(as.numeric(x), by=by, begin=as_num(begin), end=as_num(end), sort=sort, tol=tol)
 }
 
 #' @rdname is_linear_sequence
@@ -136,18 +136,18 @@ is_linear_sequence.POSIXct <- function(x, by=NULL , start=NULL, end=NULL, sort =
 #' or year-Qquarter: \code{"2020-Q3"}. 
 #'
 #' @export
-is_linear_sequence.character <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, format="auto",...){
+is_linear_sequence.character <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, format="auto",...){
   if ( format == "auto" ){
     pt <- period_type(x)
     y     <- period_to_int(x, from=pt)
-    start <- period_to_int(start, from = pt)
+    begin <- period_to_int(begin, from = pt)
     end   <- period_to_int(end, from = pt)
-    is_linear_sequence.numeric(y, by=by, start=start, end=end, sort=sort, tol=0,...)
+    is_linear_sequence.numeric(y, by=by, begin=begin, end=end, sort=sort, tol=0,...)
   } else {
     y     <- strptime(x, format=format)
-    start <- strptime(start, format=format)
+    begin <- strptime(begin, format=format)
     end   <- strptime(end, format=format)
-    is_linear_sequence.POSIXct(y, by=by, start=start, end=end, sort=sort, tol=1e-6,...)
+    is_linear_sequence.POSIXct(y, by=by, begin=begin, end=end, sort=sort, tol=1e-6,...)
   }
 
 }
@@ -162,34 +162,34 @@ is_linear_sequence.character <- function(x, by=NULL, start=NULL, end=NULL, sort=
 #' @export
 in_linear_sequence <- function(x, ...) UseMethod("in_linear_sequence")
 
-in_lin_num_seq <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e8){
-  rep(is_lin_num_seq(x, start=start, end=end, sort=sort, tol=tol), length(x))
+in_lin_num_seq <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, tol=1e8,...){
+  rep(is_lin_num_seq(x, begin=begin, end=end, sort=sort, tol=tol), length(x))
 }
 
 
 #' @rdname is_linear_sequence
 #' @export
-in_linear_sequence.numeric <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e-8){
+in_linear_sequence.numeric <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, tol=1e-8,...){
   
   if (is.null(by)){
-    in_lin_num_seq(as.integer(x), start=as_int(start), end=as_int(end), sort=sort, tol=tol)
+    in_lin_num_seq(as.integer(x), begin=as_int(begin), end=as_int(end), sort=sort, tol=tol)
   } else {
-    result <- tapply(as.integer(x), by, in_lin_num_seq, start=as_int(start), end=as_int(end), sort=sort, tol=tol)
+    result <- tapply(as.integer(x), by, in_lin_num_seq, begin=as_int(begin), end=as_int(end), sort=sort, tol=tol)
     unsplit(result, by)
   }
 }
 
 #' @rdname is_linear_sequence
 #' @export
-in_linear_sequence.Date <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE){
-  in_linear_sequence.numeric(as.integer(x), by=by, start=as_int(start), end=as_int(end), sort=TRUE, tol=0)
+in_linear_sequence.Date <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE,...){
+  in_linear_sequence.numeric(as.integer(x), by=by, begin=as_int(begin), end=as_int(end), sort=TRUE, tol=0)
 }
 
 
 #' @rdname is_linear_sequence
 #' @export
-in_linear_sequence.POSIXct <- function(x, by=NULL, start=NULL, end=NULL, sort=TRUE, tol=1e-6){
-  in_linear_sequence.numeric(as.numeric(x), by=by, start=as_num(start), end=as_num(end), sort=sort, tol=0)
+in_linear_sequence.POSIXct <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, tol=1e-6,...){
+  in_linear_sequence.numeric(as.numeric(x), by=by, begin=as_num(begin), end=as_num(end), sort=sort, tol=0)
 }
 
 
