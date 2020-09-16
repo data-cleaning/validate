@@ -375,6 +375,7 @@ check_part_whole_relation <- function(values, labels, whole, part = NULL
   df <- data.frame(values=values, labels=labels)
   f <- function(d, ...){
     aggregate   <- d$values[grepl(whole, d$labels)]
+    browser()
     details     <- if (keytype %in% c("glob","regex")){
                       if (is.null(part)) d$values[!grepl(whole, d$labels)]
                       else  d$values[grepl(part, d$labels)]
@@ -382,7 +383,9 @@ check_part_whole_relation <- function(values, labels, whole, part = NULL
                       if (is.null(part)) d$values[!grepl(whole, d$labels)]
                       else d$values[d$labels %in% part]
                     }
-    if (length(aggregate)>1) stop("Multiple labels matching aggregate. Expecting one", call.=FALSE)
+    if (length(aggregate)>1) stop(
+        sprintf("Multiple labels matching aggregate: %s. Expecting one",paste(aggregate,collapse=", "))
+        , call.=FALSE)
     out <- abs(aggregator(details, ...) - aggregate) < tol
     rep(out, length(d$labels))
   }
@@ -702,7 +705,7 @@ contains_at_least <- function(keys, by=NULL){
   if (is.null(by)) by <- character(length(found_keys))
 
   unsplit(lapply(split(found_keys, f=by), function(fk){
-    rep(all(given_keys %in% found_keys), length(fk))
+    rep(all(given_keys %in% fk), length(fk))
   }), by)
 
 }
