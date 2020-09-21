@@ -139,7 +139,7 @@ is_linear_sequence.POSIXct <- function(x, by=NULL , begin=NULL, end=NULL, sort =
 is_linear_sequence.character <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, format="auto",...){
   if ( format == "auto" ){
     pt <- period_type(x)
-    y     <- period_to_int(x, from=pt)
+    y     <- period_to_int(x, from=pt, by=by)
     begin <- period_to_int(begin, from = pt)
     end   <- period_to_int(end, from = pt)
     is_linear_sequence.numeric(y, by=by, begin=begin, end=end, sort=sort, tol=0,...)
@@ -164,6 +164,27 @@ in_linear_sequence <- function(x, ...) UseMethod("in_linear_sequence")
 
 in_lin_num_seq <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, tol=1e8,...){
   rep(is_lin_num_seq(x, begin=begin, end=end, sort=sort, tol=tol), length(x))
+}
+
+
+## TODO: postpone conversion to integer to inside the split-apply-combine loop.
+
+#' @rdname is_linear_sequence
+#' @export
+in_linear_sequence.character <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, format="auto",...){
+  if ( format == "auto" ){
+    pt <- period_type(x)
+    y     <- period_to_int(x, from=pt)
+    begin <- period_to_int(begin, from = pt)
+    end   <- period_to_int(end, from = pt)
+    in_linear_sequence.numeric(y, by=by, begin=begin, end=end, sort=sort, tol=0,...)
+  } else {
+    y     <- strptime(x, format=format)
+    begin <- strptime(begin, format=format)
+    end   <- strptime(end, format=format)
+    in_linear_sequence.POSIXct(y, by=by, begin=begin, end=end, sort=sort, tol=1e-6,...)
+  }
+
 }
 
 
@@ -199,7 +220,7 @@ period_type <- function(x, undefined=NA_character_){
   if ( all( grepl("^[12][0-9]{3}-?Q[1-4]$",x) ) )   return("quarterly")
   if ( all( grepl("^[12][0-9]{3}M[01][0-9]$",x) ) ) return("monthly")
 
-  warning("Undefined period type or different period types in single column.", call.=FALSE)
+  warning("Cannot detext period notation: undefined period type or different period types in single column.", call.=FALSE)
   undefined
 }
 
@@ -217,30 +238,34 @@ period_type <- function(x, undefined=NA_character_){
 #'
 #'
 #'
-period_to_int <- function(x, from = c("annual","quarterly","monthly")){
+period_to_int <- function(x, from = c("annual","quarterly","monthly"), by=NULL){
   from <- match.arg(from)
   if (is.null(x)) return(NULL)
 
-  if (from == "annual"){
-    res <- as.numeric(x)
+  f <- function(xx){
+
+    if (from == "annual"){
+      res <- as.numeric(xx)
+    }
+
+
+    if (from ==  "quarterly" ){
+      L       <- strsplit(xx,"-?Q")
+      year    <- as.numeric(sapply(L, `[[`,1))
+      quarter <- as.numeric(sapply(L, `[[`, 2))
+      res     <- 4*year + quarter-1
+    }
+
+    if ( from == "monthly" ){
+      L     <- strsplit(xx, "M")
+      year  <- as.numeric( sapply(L,`[[`,1) )
+      month <- as.numeric( sapply(L, `[[`, 2) )
+      res   <- 12*year + month-1 == 1
+    }
+    res
   }
-
-
-  if (from ==  "quarterly" ){
-    L       <- strsplit(x,"-?Q")
-    year    <- as.numeric(sapply(L, `[[`,1))
-    quarter <- as.numeric(sapply(L, `[[`, 2))
-    res     <- 4*year + quarter-1
-  }
-
-  if ( from == "monthly" ){
-    L     <- strsplit(x, "M")
-    year  <- as.numeric( sapply(L,`[[`,1) )
-    month <- as.numeric( sapply(L, `[[`, 2) )
-    res   <- 12*year + month-1 == 1
-  }
-
-  res
+  if (is.null(by)) by <- character(length(x))
+  unsplit(lapply(split(x, f=by), f), f=by)
 }
 
 

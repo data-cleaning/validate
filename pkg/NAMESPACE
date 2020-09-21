@@ -2,6 +2,7 @@
 
 S3method(in_linear_sequence,Date)
 S3method(in_linear_sequence,POSIXct)
+S3method(in_linear_sequence,character)
 S3method(in_linear_sequence,numeric)
 S3method(in_range,character)
 S3method(in_range,default)
