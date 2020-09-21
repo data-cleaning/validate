@@ -223,19 +223,19 @@ period_type <- function(x, undefined=NA_character_){
 }
 
 
-#' Turn a period into an integer
-#' 
-#' Annual periods are turned in to the integer year. Quarterly 
-#' and Monthly periods are turned in to the month number, counted
-#' from the year zero, so quarters and months have consecutive numbers
-#' accross years.
-#'
-#' @param x a \code{character} vector.
-#' @param from \code{character} scalar, indicating the period format 
-#' 
-#'
-#'
-#'
+# Turn a period into an integer
+# 
+# Annual periods are turned in to the integer year. Quarterly 
+# and Monthly periods are turned in to the month number, counted
+# from the year zero, so quarters and months have consecutive numbers
+# accross years.
+#
+# @param x a \code{character} vector.
+# @param by \code{character} split x into groups before coercion
+# 
+#
+#
+#
 period_to_int <- function(x, by=NULL){
 
   if (is.null(x)) return(NULL)
