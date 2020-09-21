@@ -138,10 +138,9 @@ is_linear_sequence.POSIXct <- function(x, by=NULL , begin=NULL, end=NULL, sort =
 #' @export
 is_linear_sequence.character <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, format="auto",...){
   if ( format == "auto" ){
-    pt <- period_type(x)
-    y     <- period_to_int(x, from=pt, by=by)
-    begin <- period_to_int(begin, from = pt)
-    end   <- period_to_int(end, from = pt)
+    y     <- period_to_int(x, by=by)
+    begin <- period_to_int(begin)
+    end   <- period_to_int(end)
     is_linear_sequence.numeric(y, by=by, begin=begin, end=end, sort=sort, tol=0,...)
   } else {
     y     <- strptime(x, format=format)
@@ -173,10 +172,9 @@ in_lin_num_seq <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, tol=1e8,
 #' @export
 in_linear_sequence.character <- function(x, by=NULL, begin=NULL, end=NULL, sort=TRUE, format="auto",...){
   if ( format == "auto" ){
-    pt <- period_type(x)
-    y     <- period_to_int(x, from=pt)
-    begin <- period_to_int(begin, from = pt)
-    end   <- period_to_int(end, from = pt)
+    y     <- period_to_int(x,by=by)
+    begin <- period_to_int(begin)
+    end   <- period_to_int(end)
     in_linear_sequence.numeric(y, by=by, begin=begin, end=end, sort=sort, tol=0,...)
   } else {
     y     <- strptime(x, format=format)
@@ -220,7 +218,7 @@ period_type <- function(x, undefined=NA_character_){
   if ( all( grepl("^[12][0-9]{3}-?Q[1-4]$",x) ) )   return("quarterly")
   if ( all( grepl("^[12][0-9]{3}M[01][0-9]$",x) ) ) return("monthly")
 
-  warning("Cannot detext period notation: undefined period type or different period types in single column.", call.=FALSE)
+  warning("Cannot detect period notation: undefined period type or different period types in single column.", call.=FALSE)
   undefined
 }
 
@@ -238,11 +236,13 @@ period_type <- function(x, undefined=NA_character_){
 #'
 #'
 #'
-period_to_int <- function(x, from = c("annual","quarterly","monthly"), by=NULL){
-  from <- match.arg(from)
+period_to_int <- function(x, by=NULL){
+
   if (is.null(x)) return(NULL)
 
   f <- function(xx){
+    from <- period_type(xx)
+    if (is.na(from)) return(rep(NA, length(xx)))
 
     if (from == "annual"){
       res <- as.numeric(xx)
@@ -328,11 +328,10 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
   if (is.null(format)) 
     in_range.default(x=x, min=min, max=max, strict=strict, ...)
   else if ( format == "auto" ){
-    pt    <- period_type(x)
-    y     <- period_to_int(x, from=pt)
-    ymin  <- period_to_int(min, from = pt)
-    ymax  <- period_to_int(max, from = pt)
-    in_range(y, min=ymin, max=ymax, strict=strict, ...)
+    y     <- period_to_int(x, by=NULL)
+    ymin  <- period_to_int(min)
+    ymax  <- period_to_int(max)
+    in_range.default(y, min=ymin, max=ymax, strict=strict, ...)
   } else {
     y     <- strptime(x, format=format)
     ymin  <- strptime(min, format=format)
