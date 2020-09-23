@@ -113,14 +113,14 @@ labels <- c("2018Q1", "2018Q2", "2018Q3", "2018Q4","2018")
 values <- c(1,2,3,4, 10)
 
 expect_equal(
-  part_whole_relation(values, labels, whole="^\\d{4}$")
+  part_whole_relation(values, labels, whole=rx("^\\d{4}$"))
  , rep(TRUE, 5)
 )
 
 values[1] <- 2
 
 expect_equal(
-  part_whole_relation(values, labels, whole="^\\d{4}$")
+  part_whole_relation(values, labels, whole=rx("^\\d{4}$"))
  , rep(FALSE, 5)
 )
 
@@ -130,19 +130,19 @@ labels <- rep(labels, 2)
 direction <- rep(c("import", "export"), each=5)
 
 expect_equal(
-  part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
+  part_whole_relation(values, labels, whole=rx("^\\d{4}$"), by=direction)
   , c(rep(TRUE, 5), rep(FALSE, 5))
 )
 
 values[1] <- NA
 
 expect_equal(
-  part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
+  part_whole_relation(values, labels, whole=rx("^\\d{4}$"), by=direction)
   , c(rep(NA, 5), rep(FALSE, 5))
 )
 
 expect_equal(
-  part_whole_relation(values, labels, whole="^\\d{4}$", by=direction, na.rm=TRUE)
+  part_whole_relation(values, labels, whole=rx("^\\d{4}$"), by=direction, na.rm=TRUE)
   , c(rep(FALSE, 5), rep(FALSE, 5))
 )
 
@@ -237,17 +237,17 @@ transactions <- data.frame(
 )
 
 # a sender 'S*' cannot send to a sender
-rule <- validator(does_not_contain(data.frame(sender = "S*", receiver="S*"), keytype="glob"))
+rule <- validator(does_not_contain(glob(data.frame(sender = "S*", receiver="S*"))))
 expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TRUE, TRUE)
     ,info="globbing in does_not_contain" )
 
 
-rule <- validator(does_not_contain(data.frame(sender = "^S", receiver="^S"), keytype="regex"))
+rule <- validator(does_not_contain(rx(data.frame(sender = "^S", receiver="^S"))))
 expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TRUE, TRUE)
     ,info="regex in does_not_contain" )
 
 # sender ending with a 2 cannot send to receiver ending with 1
-rule <- validator(does_not_contain(data.frame(sender = "2$", receiver="1$"), keytype="regex"))
+rule <- validator(does_not_contain(rx(data.frame(sender = "2$", receiver="1$"))))
 expect_equal(as.logical(values(confront(transactions, rule))), c(TRUE, FALSE, TRUE, TRUE)
     ,info="regex in does_not_contain" )
 

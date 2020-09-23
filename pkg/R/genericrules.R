@@ -352,12 +352,14 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
 #' @param labels A bare (unquoted) variable name holding the labels indicating
 #'        whether a value is an aggregate or a detail.
 #' @param whole \code{[character]} literal label or pattern recognizing a whole
-#'        in \code{labels}. Supports globbing and regular expression patterns (see \code{keytype}).
+#'        in \code{labels}. Use \code{\link{glob}} or \code{\link{rx}} to label
+#'        as a globbing or regular expression pattern (see examples).
 #' @param part \code{[character]} vector of label values or pattern recognizing
-#'        a part in \code{labels}. If not specified,
-#'        (\code{NULL}) all values not selected by \code{whole} are used. Supports
-#'        globbing and regular expression patterns (see \code{keytype}).
-#' @param keytype How to interpret the \code{whole} and \code{part} arguments.
+#'        a part in \code{labels}. Use \code{\link{glob}} or \code{\link{rx}}
+#'        to label as a globbing or regular expression pattern. When labeled
+#'        with \code{glob} or \code{rx}, it must be a single string. If `part` is
+#'        left unspecified, all values not recognized as an aggregate are
+#'        interpreted as details that must be aggregated to the whole.
 #' @param aggregator \code{[function]} used to aggregate subsets of \code{x}. It should
 #'        accept a \code{numeric} vector and return a single number.
 #' @param tol \code{[numeric]} tolerance for equality checking
@@ -375,30 +377,22 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
 #'  , direction = c(rep("import",5), rep("export", 5))
 #'  , value     = c(1,2,3,4,10, 3,3,3,3,13)
 #' )
+#' ## use 'rx' to interpret 'whole' as a regular expression.
 #' rules <- validator(
-#'   part_whole_relation(value, period, whole="^\\d{4}$"
-#'   , keytype="regex", by=direction)
+#'   part_whole_relation(value, period, whole=rx("^\\d{4}$")
+#'   , by=direction)
 #' )
 #'
 #' out <- confront(df, rules, key="id")
 #' as.data.frame(out)
 #' @export
 part_whole_relation <- function(values, labels, whole, part = NULL
-    , keytype = c("literal","glob","regex")
     , aggregator = sum, tol=1e-8, by = NULL, ...){
  
-  keytype <- match.arg(keytype)
-
-  if (keytype == "glob"){
-    whole <- utils::glob2rx(whole)
-    if (!is.null(part)) part <- utils::glob2rx(part)
-  }
-  
-
  
   df <- data.frame(values=values, labels=labels)
   f <- function(d, ...){
-    i_aggregate <- grepl(whole, d$labels)
+    i_aggregate <- igrepl(whole, d$labels)
     aggregate   <- d$values[i_aggregate]
     if (length(aggregate)>1){ 
       stop(
@@ -407,13 +401,9 @@ part_whole_relation <- function(values, labels, whole, part = NULL
         , call.=FALSE
       )
     }
-    i_details   <- if (keytype %in% c("glob","regex")){
-                      if (is.null(part)) !grepl(whole, d$labels)
-                      else  grepl(part, d$labels)
-                    } else {
-                      if (is.null(part)) !grepl(whole, d$labels)
-                      else d$labels %in% part
-                    }
+    i_details   <- if (is.null(part)) !i_aggregate
+                   else igrepl(part, d$labels)
+
     details     <- d$values[i_details]
     out <- if (length(aggregate)==0){
       FALSE 
@@ -433,6 +423,38 @@ part_whole_relation <- function(values, labels, whole, part = NULL
 
 }
 
+
+#' Label objects for interpretation as pattern
+#'
+#' Label objects  (typically strings or data frames containing keys combinations) 
+#' to be interpreted as regular expression or globbing pattern.
+#'
+#'
+#' @param x Object to label as regular expression (\code{rx(x)}) or globbing
+#' (\code{glob(x)}) pattern.
+#'
+#' 
+#'
+#' @export
+rx <- function(x){ 
+    structure(x, class=c("regex",class(x)))
+}
+
+#' @rdname rx
+#' @export
+glob <- function(x){ 
+  structure(x, class=c("glob",class(x)))
+}
+
+igrepl <- function(pattern, x,...){
+  if (inherits(pattern, "glob")){
+    grepl(utils::glob2rx(pattern),x,...)
+  } else if (inherits(pattern, "regex",...)){
+    grepl(pattern, x,...)
+  } else {
+    x %in% pattern
+  }
+}
 
 #' split-apply-combine for vectors, with equal-length outptu
 #'
@@ -529,7 +551,7 @@ field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
 #'     necessary.
 #' @param pattern \code{[character]} a regular expression
 #' @param type \code{[character]} How to interpret \code{pattern}. In globbing,
-#' the asterisks (`*`) is used as a wildcard that stands for 'zero or more
+#' the asterisk (`*`) is used as a wildcard that stands for 'zero or more
 #' characters'.
 #' @param ... passed to grepl
 #'
@@ -539,6 +561,8 @@ field_format <- function(x, pattern, type=c("glob","regex"), ...){
   if (type == "glob") pattern <- utils::glob2rx(pattern)
   grepl(pattern, x=as.character(x),...)
 }
+
+
 
 #' Check the layouts of numbers.
 #'
@@ -629,6 +653,7 @@ number_format <- function(x, format){
 #' \code{FALSE} assigned to each record in the group (see examples).
 #'
 #' @family cross-record-helpers
+#' @family key-checkers
 #'
 #' @examples
 #'
@@ -669,7 +694,7 @@ number_format <- function(x, format){
 #' # the receiver can not start "FG"
 #' forbidden <- data.frame(sender="S*",receiver = "FG*")
 #'
-#' rule <- validator(does_not_contain(forbidden_keys, keytype="glob"))
+#' rule <- validator(does_not_contain(glob(forbidden_keys)))
 #' out <- confront(transactions, rule, ref=list(forbidden_keys=forbidden))
 #' values(out)
 #'
@@ -750,13 +775,12 @@ contains_at_least <- function(keys, by=NULL){
 #' records under scrutiny. It is \code{FALSE} where key combinations do not match
 #' any value in \code{keys}.
 #' @export
-contains_at_most <- function(keys, by=NULL, keytype = c("literal","glob", "regex")){
-  keytype <- match.arg(keytype)
+contains_at_most <- function(keys, by=NULL){
 
   L <- list()
   for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
   
-  contains(L, keys, by=by, keytype=keytype)
+  contains(L, keys, by=by)
 
 }
 
@@ -764,21 +788,18 @@ contains_at_most <- function(keys, by=NULL, keytype = c("literal","glob", "regex
 
 #' @rdname contains_exactly
 #'
-#' @param keytype \code{[character]} How to interpret keys, as string literals,
-#' globbing patterns (using '*' as wildcard) or as regular expressions.
 #'
 #' @return 
 #' For \code{does_not_contain}:  a \code{logical} vector with size equal to the
 #' number of records under scrutiny. It is \code{FALSE} where key combinations
 #' do not match any value in \code{keys}.
 #' @export
-does_not_contain <- function(keys, keytype = c("literal","glob","regex")){
-  keytype <- match.arg(keytype)
+does_not_contain <- function(keys){
 
   L <- list()
   for ( keyname in names(keys) ) L[[keyname]] <- dynGet(keyname)
 
-  !contains(L, keys, by=NULL, keytype=keytype)
+  !contains(L, keys, by=NULL)
 }
 
 # for each 'x' see if it matches any regular expression in 'pattern'
@@ -795,9 +816,14 @@ glin <- function(x, pattern){
 }
 
 
-contains <- function(dat, keys, by, keytype){
+contains <- function(dat, keys, by){
 
-  if (keytype=="regex" && length(keys) > 1){
+  keytype <- grep("^(regex)|(glob)$", class(keys), value=TRUE)
+  # unlabeled keys are considered fixed
+  if ( length(keytype) < 1 ) keytype <- "fixed"
+  
+
+  if (isTRUE(keytype=="regex") && length(keys) > 1){
     # some preparations before pasting
     for (keyname in names(keys)[-1]){ 
       key <- keys[[keyname]]
@@ -814,13 +840,15 @@ contains <- function(dat, keys, by, keytype){
 
   } 
 
+  # note: globbing patterns may be pasted before transformation
+  # to regex.
   given_keys   <- do.call(paste, keys)
   found_keys   <- do.call(paste, dat)
   if (is.null(by)) by <- character(length(found_keys)) 
 
   unsplit(lapply(split(found_keys, f=by), function(fk){
     switch(keytype
-      , "literal" = fk %in% given_keys
+      , "fixed" = fk %in% given_keys
       , "glob"    = glin(fk, given_keys)
       , "regex"   = rxin(fk, given_keys)
     )
