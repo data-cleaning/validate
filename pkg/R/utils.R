@@ -78,3 +78,16 @@ violating <- function(x, y, include_missing=FALSE, ...){
   
 }
 
+#' @rdname satisfying
+#' @export
+lacking <- function(x, y, ...){
+  stopifnot(inherits(y,"validator") | inherits(y,"validation"), inherits(x,"data.frame"))
+
+  if (inherits(y,"validator")) y <- confront(x,y,...)
+
+  A <- values(y)
+  if (!is.array(A)|| nrow(A)!=nrow(x) ){
+    stop("Not all rules have record-wise output")
+  }
+  x[apply(A,1,anyNA),,drop=FALSE]
+}

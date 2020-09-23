@@ -143,5 +143,15 @@ expect_equal(
   , subset(women, height>60)
 )
 
-
+local({
+  women[1,1] <- NA
+  expect_equal(
+    lacking(women, validator(height<=60))
+   , women[1,,drop=FALSE]
+  )
+  expect_equal(
+    lacking(women, check_that(women, height<=60))
+   , women[1,,drop=FALSE]
+  )
+})
 

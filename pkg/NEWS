@@ -1,5 +1,5 @@
 version 0.9.4
-- New functions 'violating' and 'satisfying' to select records 
+- New functions 'violating', 'satisfying', 'lacking' to select records 
   based on 'validator' objects or the outcome of validations ('validation' 
   objects).
 - New functions 'in_linear_sequence' and 'is_linear_sequence' 
