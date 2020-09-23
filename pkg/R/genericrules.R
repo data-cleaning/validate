@@ -398,14 +398,8 @@ part_whole_relation <- function(values, labels, whole, part = NULL
  
   df <- data.frame(values=values, labels=labels)
   f <- function(d, ...){
-    aggregate   <- d$values[grepl(whole, d$labels)]
-    details     <- if (keytype %in% c("glob","regex")){
-                      if (is.null(part)) d$values[!grepl(whole, d$labels)]
-                      else  d$values[grepl(part, d$labels)]
-                    } else {
-                      if (is.null(part)) d$values[!grepl(whole, d$labels)]
-                      else d$values[d$labels %in% part]
-                    }
+    i_aggregate <- grepl(whole, d$labels)
+    aggregate   <- d$values[i_aggregate]
     if (length(aggregate)>1){ 
       stop(
           sprintf("Multiple labels matching aggregate: %s. Expecting one"
@@ -413,12 +407,22 @@ part_whole_relation <- function(values, labels, whole, part = NULL
         , call.=FALSE
       )
     }
+    i_details   <- if (keytype %in% c("glob","regex")){
+                      if (is.null(part)) !grepl(whole, d$labels)
+                      else  grepl(part, d$labels)
+                    } else {
+                      if (is.null(part)) !grepl(whole, d$labels)
+                      else d$labels %in% part
+                    }
+    details     <- d$values[i_details]
     out <- if (length(aggregate)==0){
       FALSE 
     } else {
       abs(aggregator(details, ...) - aggregate) < tol
     }
-    rep(out, length(d$labels))
+    values <- !logical(length(d$labels))
+    values[i_details | i_aggregate] <- out
+    values
   }
 
   if (is.null(by)){
