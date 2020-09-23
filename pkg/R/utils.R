@@ -43,7 +43,7 @@ warnf <- function(fmt,...){
 #'
 #' @family select-data
 #' @export
-satisfying <- function(x, y, ...){
+satisfying <- function(x, y, include_missing=FALSE, ...){
   stopifnot(inherits(y,"validator") | inherits(y,"validation"), inherits(x,"data.frame"))
 
   if (inherits(y,"validator")) y <- confront(x,y,...)
@@ -52,12 +52,16 @@ satisfying <- function(x, y, ...){
   if (!is.array(A)|| nrow(A)!=nrow(x) ){
     stop("Not all rules have record-wise output")
   }
-  x[apply(A,1,all),,drop=FALSE]
+  if (include_missing){
+    x[apply(A,1,function(d) all(d | is.na(d)) ),,drop=FALSE]
+  } else {
+    x[apply(A,1,function(d) all(d &!is.na(d)) ), , drop=FALSE]
+  }
 }
 
 #' @rdname satisfying
 #' @export
-violating <- function(x, y, ...){
+violating <- function(x, y, include_missing=FALSE, ...){
   stopifnot(inherits(y,"validator") | inherits(y,"validation"), inherits(x,"data.frame"))
 
   if (inherits(y,"validator")) y <- confront(x,y,...)
@@ -66,7 +70,11 @@ violating <- function(x, y, ...){
   if (!is.array(A)|| nrow(A)!=nrow(x) ){
     stop("Not all rules have record-wise output")
   }
-  x[apply(!A,1,any),,drop=FALSE]
+  if (include_missing){
+    x[apply(A,1, function(d) any(!d | is.na(d)) )   ] 
+  } else {
+    x[apply(A,1,function(d) any(!d &!is.na(d))),,drop=FALSE]
+  }
   
 }
 
