@@ -3,7 +3,7 @@ version 0.9.4
   check for gaps/duplicates in numerical or time series.
 - New function in_range checks whether a variable is between (strict)
   bounds.
-- New function check_part_whole_relation facilitates checking aggregates
+- New function 'part_whole_relation' facilitates checking aggregates
   against details, for data in 'long' format.
 - New helper functions that for split-apply-combine on vectors, with the property
   that output is always of the same size as the input: 'sum_by', 'min_by', 'max_by'

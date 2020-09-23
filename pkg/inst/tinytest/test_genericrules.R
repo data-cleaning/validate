@@ -113,14 +113,14 @@ labels <- c("2018Q1", "2018Q2", "2018Q3", "2018Q4","2018")
 values <- c(1,2,3,4, 10)
 
 expect_equal(
-  check_part_whole_relation(values, labels, whole="^\\d{4}$")
+  part_whole_relation(values, labels, whole="^\\d{4}$")
  , rep(TRUE, 5)
 )
 
 values[1] <- 2
 
 expect_equal(
-  check_part_whole_relation(values, labels, whole="^\\d{4}$")
+  part_whole_relation(values, labels, whole="^\\d{4}$")
  , rep(FALSE, 5)
 )
 
@@ -130,19 +130,19 @@ labels <- rep(labels, 2)
 direction <- rep(c("import", "export"), each=5)
 
 expect_equal(
-  check_part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
+  part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
   , c(rep(TRUE, 5), rep(FALSE, 5))
 )
 
 values[1] <- NA
 
 expect_equal(
-  check_part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
+  part_whole_relation(values, labels, whole="^\\d{4}$", by=direction)
   , c(rep(NA, 5), rep(FALSE, 5))
 )
 
 expect_equal(
-  check_part_whole_relation(values, labels, whole="^\\d{4}$", by=direction, na.rm=TRUE)
+  part_whole_relation(values, labels, whole="^\\d{4}$", by=direction, na.rm=TRUE)
   , c(rep(FALSE, 5), rep(FALSE, 5))
 )
 
@@ -151,7 +151,7 @@ local({
   region <- c("foo", "bar","baz","bur","boo","fu")
   amount <- c(10, 4:1, 25)
   expect_equal(
-    check_part_whole_relation(amount, region, whole="foo", part=c("bar","bur","baz","boo"))
+    part_whole_relation(amount, region, whole="foo", part=c("bar","bur","baz","boo"))
     , rep(TRUE, length(region))
   )
 })

@@ -376,14 +376,14 @@ in_range.character <- function(x, min, max, strict=FALSE, format = "auto",...){
 #'  , value     = c(1,2,3,4,10, 3,3,3,3,13)
 #' )
 #' rules <- validator(
-#'   check_part_whole_relation(value, period, whole="^\\d{4}$"
+#'   part_whole_relation(value, period, whole="^\\d{4}$"
 #'   , keytype="regex", by=direction)
 #' )
 #'
 #' out <- confront(df, rules, key="id")
 #' as.data.frame(out)
 #' @export
-check_part_whole_relation <- function(values, labels, whole, part = NULL
+part_whole_relation <- function(values, labels, whole, part = NULL
     , keytype = c("literal","glob","regex")
     , aggregator = sum, tol=1e-8, by = NULL, ...){
  
@@ -406,15 +406,23 @@ check_part_whole_relation <- function(values, labels, whole, part = NULL
                       if (is.null(part)) d$values[!grepl(whole, d$labels)]
                       else d$values[d$labels %in% part]
                     }
-    if (length(aggregate)>1) stop(
-        sprintf("Multiple labels matching aggregate: %s. Expecting one",paste(aggregate,collapse=", "))
-        , call.=FALSE)
-    out <- abs(aggregator(details, ...) - aggregate) < tol
+    if (length(aggregate)>1){ 
+      stop(
+          sprintf("Multiple labels matching aggregate: %s. Expecting one"
+               , paste(aggregate,collapse=", "))
+        , call.=FALSE
+      )
+    }
+    out <- if (length(aggregate)==0){
+      FALSE 
+    } else {
+      abs(aggregator(details, ...) - aggregate) < tol
+    }
     rep(out, length(d$labels))
   }
 
   
-  if (length(by) < 1){
+  if (is.null(by)){
     return( f(df, ...) )
   } else {
     unsplit(lapply(split(df, by), f, ...),by)
