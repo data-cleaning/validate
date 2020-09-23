@@ -74,7 +74,7 @@ NULL
 #' Wiley & Sons, Hoboken, NJ.
 #'
 #' @docType data
-#' @format A csv file, one retailer per row.
+#' @format An RData file.
 NULL
 
 
