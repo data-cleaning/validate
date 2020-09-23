@@ -1,4 +1,7 @@
 version 0.9.4
+- New functions 'violating' and 'satisfying' to select records 
+  based on 'validator' objects or the outcome of validations ('validation' 
+  objects).
 - New functions 'in_linear_sequence' and 'is_linear_sequence' 
   check for gaps/duplicates in numerical or time series.
 - New function in_range checks whether a variable is between (strict)

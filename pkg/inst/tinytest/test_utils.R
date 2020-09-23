@@ -121,7 +121,27 @@
 
 
 
+## utility record selector functions
+expect_equal(
+  satisfying(women, validator(height>60))
+  , subset(women, height>60)
+)
 
+expect_equal(
+  satisfying(women, check_that(women, height>60))
+  , subset(women, height>60)
+)
+
+
+expect_equal(
+  violating(women, validator(height<=60))
+  , subset(women, height>60)
+)
+
+expect_equal(
+  violating(women, check_that(women, height<=60))
+  , subset(women, height>60)
+)
 
 
 
