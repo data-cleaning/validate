@@ -21,7 +21,7 @@ Description: Declare data validation rules and data quality indicators;
         analyzed for rule type and connectivity. See also Van der Loo
         and De Jonge (2018) <doi:10.1002/9781118897126>,
         chapter 6.
-Version: 0.9.3.25
+Version: 0.9.3.26
 Depends: R (>= 3.1.3), methods
 URL: https://github.com/data-cleaning/validate
 BugReports: https://github.com/data-cleaning/validate/issues
