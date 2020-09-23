@@ -172,16 +172,16 @@ expect_equal(max_by(c(1,2),letters[1:2]), c(1,2))
 expect_equal(mean_by(c(1,2),letters[1:2]), c(1,2))
 
 # field lenght
-expect_true(check_field_length("abc",3))
-expect_false(check_field_length("abc",2))
-expect_true(check_field_length("abc",min=1, max=3))
+expect_true(field_length("abc",3))
+expect_false(field_length("abc",2))
+expect_true(field_length("abc",min=1, max=3))
 
 ## number format 
 
-expect_true(check_number_format("12.34","dd.dd"))
-expect_false(check_number_format("12.345","dd.dd"))
+expect_true(number_format("12.34","dd.dd"))
+expect_false(number_format("12.345","dd.dd"))
 
-expect_true(check_number_format("0.123E45","0.d*Edd"))
+expect_true(number_format("0.123E45","0.d*Edd"))
 
 ## Checking data against a fixed set of key-combinations
 
@@ -283,6 +283,6 @@ expect_equivalent(as.logical(values(out1)), c(rep(TRUE,8),rep(FALSE, 7)) )
 
 ## Field format
 
-expect_equal(check_format(c("X0Y","X12"), "^X\\dY",type="regex"), c(TRUE, FALSE))
-expect_equal(check_format(c("X0Y","Y12"), "X*",type="glob"), c(TRUE, FALSE))
+expect_equal(field_format(c("X0Y","X12"), "^X\\dY",type="regex"), c(TRUE, FALSE))
+expect_equal(field_format(c("X0Y","Y12"), "X*",type="glob"), c(TRUE, FALSE))
 

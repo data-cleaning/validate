@@ -8,15 +8,15 @@ version 0.9.4
 - New helper functions that for split-apply-combine on vectors, with the property
   that output is always of the same size as the input: 'sum_by', 'min_by', 'max_by'
   'mean_by' and the general 'do_by'.
-- New convenience function 'check_field_length' checks number (or range) of code
+- New convenience function 'field_length' checks number (or range) of code
   points.
-- New convenience function 'check_number_format' with simple syntax for
+- New convenience function 'number_format' with simple syntax for
   specifying layout of numbers that are stored as character.
 - New functions to check (non)existens of a given set of key combinations:
   'contains_exactly', 'contains_at_least', 'contains_at_most', 'does_not_contain'.
   Support for globbing and regular expression is built in, and tests can be
   performed group-wise.
-- New function 'check_format': convenience wrapper for 'grepl' that also supports
+- New function 'field_format': convenience wrapper for 'grepl' that also supports
   globbing.
 - Fix: option 'lin.ineq.eps' was ignored by 'confront'.
 - Breaking change: for consistency, the '...' argument in 'exists_one' and 'exists_any'

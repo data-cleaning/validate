@@ -421,7 +421,6 @@ part_whole_relation <- function(values, labels, whole, part = NULL
     rep(out, length(d$labels))
   }
 
-  
   if (is.null(by)){
     return( f(df, ...) )
   } else {
@@ -497,14 +496,14 @@ max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 #' @examples
 #'
 #' df <- data.frame(id = 11001:11003, year = c("2018","2019","2020"), value = 1:3)
-#' rule <- validator(check_field_length(year, 4), check_field_length(id, 5))
+#' rule <- validator(field_length(year, 4), field_length(id, 5))
 #' out <- confront(df, rule) 
 #' as.data.frame(out)
 #' 
 #' @family format-checkers
 #'
 #' @export
-check_field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
+field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
   len <- nchar(as.character(x),...)
 
   if (!is.null(n) & is.null(min) & is.null(max)){
@@ -532,7 +531,7 @@ check_field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
 #'
 #' @family format-checkers
 #' @export
-check_format <- function(x, pattern, type=c("glob","regex"), ...){ 
+field_format <- function(x, pattern, type=c("glob","regex"), ...){ 
   if (type == "glob") pattern <- utils::glob2rx(pattern)
   grepl(pattern, x=as.character(x),...)
 }
@@ -568,9 +567,9 @@ check_format <- function(x, pattern, type=c("glob","regex"), ...){
 #' @examples 
 #' df <- data.frame(number = c("12.34","0.23E55","0.98765E12"))
 #' rules <- validator(
-#'    check_number_format(number, format="dd.dd")
-#'    , check_number_format(number, "0.ddEdd")
-#'    , check_number_format(number, "0.*Edd")
+#'    number_format(number, format="dd.dd")
+#'    , number_format(number, "0.ddEdd")
+#'    , number_format(number, "0.*Edd")
 #' )
 #'
 #' out <- confront(df, rules)
@@ -578,7 +577,7 @@ check_format <- function(x, pattern, type=c("glob","regex"), ...){
 #'
 #' @family format-checkers
 #' @export
-check_number_format <- function(x, format){
+number_format <- function(x, format){
   rx <- utils::glob2rx(format)
   rx <- gsub("d","\\d", rx, fixed=TRUE)
   grepl(rx, as.character(x))
