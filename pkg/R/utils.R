@@ -18,6 +18,7 @@ warnf <- function(fmt,...){
 #'
 #' @param x A \code{data.frame}
 #' @param y a \code{\link{validator}} object or a \code{\link{validation}} object.
+#' @param include_missing Toggle: also select records that have \code{NA} output for a rule?
 #' @param ... options passed to \code{\link{confront}}
 #'
 #' @note
