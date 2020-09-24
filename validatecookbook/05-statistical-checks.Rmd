@@ -1,0 +1,288 @@
+# Statistical checks
+
+Statistical checks involve properties statistical characteristics such 
+as the means of columns. These characteristics can be checked for whole
+columns or grouped by one or more categorical variables. It is also
+possible to use group-wise computed statistics, in validation rules.
+For example by taking the ratio between a column and it's group-wise
+means, and comparing that with a bound. 
+
+For long-form data it is possible to compare aggregate values with underlying
+details. For example to test whether quarterly time series add up to annual
+totals. It is also possible to check properties of groups, for example whether
+in every household (a group of persons) there is exactly one head of household.
+
+#### Data and packages {-}
+
+In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
+
+```{r}
+library(validate)
+data(SBS2000)
+head(SBS2000, 3)
+```
+
+We shall also use the `samplonomy` dataset that also comes with `validate`. See also
+\@ref(long-data).
+
+```{r}
+data(samplonomy)
+head(samplonomy, 3)
+```
+
+
+## Statistical and groupwise characteristics
+
+Any R statement that ultimately is an inequality or inequality check
+is a valid validation rule. This means that any statistical calculation
+can be input to a rule.
+
+Here we check the mean profit and correlation coefficient between profit and
+turnover.
+```{r}
+rule <- validator(
+    mean(profit, na.rm=TRUIE) >= 1
+  , cor(turnover, staff, use="pairwise.complete.obs") > 0
+)
+out <- confront(SBS2000, rule)
+# suppress some columns for brevity
+summary(out)[1:7]
+```
+
+There are a few helper functions to compute group-wise statistics, and to make
+comparing values with group aggregates possible.
+
+For example, here we check whether each turnover is less than ten times
+the group-wise median.
+```{r}
+rule <- validator(
+  turnover <= 10*do_by(turnover, by=size, fun=median, na.rm=TRUE)
+)
+out <- confront(SBS2000, rule)
+# suppress some columns for brevity
+summary(out)[1:7]
+```
+Here, in the right-hand side of the rule the group-wise median of turnover is
+computed. The function `do_by` is very similar to functions such as `tapply`
+in base R. The difference is that `do_by` works on vectors only (not on data
+frames) and always repeats the values of `fun` so that the length of the output is
+equal to the length of the input.
+```{r}
+medians <- with(SBS2000, do_by(turnover, by=size, fun=median, na.rm=TRUE))
+head(data.frame(size = SBS2000$size, median=medians))
+```
+There are also some convenience functions, including `sum_by`, `mean_by`, `min_by`, and `max_by`.
+
+## Group properties
+
+In this section, we group data by one or more categorical variables and
+check for each group whether a rule is satisfied. In particular we are
+going to check whether each household in a small dataset has a unique 
+'head of household'.
+
+We first create some data with household id (`hhid`) a person id (`person`) and
+that person's role in the household (`hhrole`).
+```{r}
+d <- data.frame(
+   hhid   = c(1,  1,  2,  1,  2,  2,  3 )
+ , person = c(1,  2,  3,  4,  5,  6,  7 )
+ , hhrole = c("h","h","m","m","h","m","m")
+)
+d
+```
+With `exists_one()` we can check that there is exactly one person
+with the role `"h"` (head) in each household, by grouping on household id.
+```{r}
+rule <- validator(exists_one(hhrole == "h", by=hhid))
+out <- confront(d, rule)
+# suppress some columns for brevity
+summary(out)
+```
+We can inspect the results by selecting the violating record groups.
+```{r}
+violating(d, out)
+```
+We see that household 1 has two heads of household, while household 3 has no head 
+of household. 
+
+To test whether _at least one_ head of household exists, one can use
+`exists_any`:
+
+```{r}
+violating(d, validator(exists_any(hhrole=="h",by=hhid) ))
+```
+
+
+In the following example we check whether there is exactly one region called Samplonia
+for each period and each measure in the `samplonomy` dataset.
+
+```{r}
+rule <- validator(exists_one(region=="Samplonia", by=list(period, measure)))
+```
+The first argument of `exists_one()` is a rule that has to be checked in every group
+indicated by the `by` argument. The output is a logical vector with an element for
+each record in the dataset under scrutiny. If a group of data fails the test, each record
+in that group is indicated as wrong (`FALSE`).
+
+```{r}
+out <- confront(samplonomy, rule)
+# suppress some columns for brevity
+summary(out)
+```
+Here, there are no groups that violate this assumption. 
+```{r}
+violating(samplonomy, out)
+```
+
+
+
+
+## Aggregates in long-format data
+
+Checking aggregations in long-form format is more involved than for
+data in wide format (as in Section \@ref(balance-equalities-and-inequalities)).
+
+
+Here, we check in the `samplonomy` dataset that for each measure and each
+period, the subregional data adds up to the regional data.
+```{r}
+rules <- validator(
+  part_whole_relation(value
+    , labels=region
+    , whole="Samplonia"
+    , part =c("Agria","Induston")
+    , by=list(measure, period)
+  )
+)
+```
+The first argument of `part_whole_relation()` is the name of the variable
+containing the values. Here, the column `value` from the samplonomy dataset.
+The argument `labels` indicates the variable that labels parts and wholes.
+Next, we define the label value that indicates a total. Here, a record with
+region label `"Samplonia"` indicates a total. Under argument `part` we specify
+the labels that have to add up to Samplonia, here the provinces Agria and
+Induston. Note that there are more subregions in the dataset, for example the
+district of Wheaton (a subregion of Agria). Since we do not specify them, these
+are ignored. In the `by` argument we specify that the dataset must be split
+into measure and period prior to checking the regional aggregates.
+
+
+The output is one boolean value per record. For each block, defined by values
+of `measure` and `period` either all values are `TRUE`, `FALSE`, or `NA`. The
+latter indicates that the aggregate could not be computed because one of the
+values is missing, or the computed aggregate could not be compared with the
+aggregate in the data because it is missing (either the whole record may be
+missing, or the value may be `NA`).
+```{r}
+out <- confront(samplonomy, rules)
+# suppress some columns for brevity
+summary(out)[1:7]
+```
+We can extract the truth values and then inspect the blocks with erroneous values
+using standard R functionality.
+```{r}
+violating(samplonomy, out)
+```
+Recall that the rule was executed per block defined by `measure` and `period`.
+Thus, the result  indicates three errors: one in the block of records defined
+by `measure=="gdp"` and `period=="2015"`, also in the blocks defined by
+`measure=="export"` and `period==2018Q2` or `period=="2018Q3"`. 
+
+First, it seems that the 2015 GDP of Agria 
+is missing from the data set. This turns out indeed to be the case.
+```{r}
+subset(samplonomy, region=="Agria" & period == "2015" & measure == "gdp")
+```
+Second, it can be seen that for Induston, there are two export values for
+`"2018Q2"` while the export value for `"2018Q3"` is missing.
+
+
+#### Notes {-}
+
+Specifying (group-wise) aggregates is fairly detailed job in the case of long
+data (compare this with 
+[balance checks](balance-equalities-and-inequalities)). There are a few things to keep in
+mind when using this function.
+
+- The argument `part` is optional. If not specified, every record not matching
+  with `whole` will be considered a detail that is to be used to compute the total.
+  In the current example this was not possible because besides Agria and Induston,
+  we have other subregions.
+- In the example we used literal values to specify the keys that define parts
+  and wholes. It is possible to, recognize patterns, for example
+  any years (4 digits) as a whole and a quarter as a part. See also the next example.
+  Supported patterns include regular expressions (shown here) and globbing (see help file).
+- It is important that the variables listed in `by` (if any) uniquely specify a
+  single aggregate. So here, for each measure and period, the label `"Samplonia"`
+  should occur at most once (if it does not occur the result will be `NA`).
+- The default way to aggregate is to take the sum. You can specify other ways
+  to aggregate by passing an `aggregator` argument. For example `aggregator=mean`.
+- By default, the aggregate in the data is compared with the computed aggregate
+  up to a tolerance of $10^{-8}$. This tolerance can be set using the `tol`
+  argument.  E.g. for integer data you may want to set `tol=0`.
+
+## Aggregates of time series in long format
+
+We are going to check whether quarterly time series add up to the annual time
+series.  This is more complicated because of two subtleties.
+
+First there is not one fixed aggregate key, like `"Samplonia"`.  Rather, we
+have a key _pattern_. Each total is defined by a period label that consists of
+precisely four digits. So rather than recognizing a specific year we want to
+recognize that a key represents any year. This can be done using a regular
+expression of the form `"^\\d{4}$"`, where the `^` indicates 'start of string',
+the `\\d{4}` indicates 'four times a digit' and `$` indicates 'end of string'.
+
+Second, we wish to check annual totals against the sum over quarters for each region and each
+measure. However, a value-combination of measure and region does not single out
+a single value for `year`. For example, for the Induston export we have the following
+annual data.
+
+```{r}
+subset(samplonomy, region=="Induston" & freq == "A" & measure=="export")
+```
+So in fact, we need to do the check _by year_ as well as by measure and region.
+Fortunately, in this case it is easy to derive a variable that indicates the year
+by selecting the first four characters from `period`.
+
+```{r}
+rules <- validator(part_whole_relation(value
+  , labels = period
+  , whole  = rx("^\\d{4}$")
+  , by = list(region, substr(period,1,4), measure) 
+  ))
+out <- confront(samplonomy, rules)
+```
+We use `rx("^\\d{4}")` to tell `part_whole_relation` that this string must be
+interpreted as a regular expression.  Here, we do not indicate `part` labels
+explicitly: by default any record not matching `whole` will be treated as a
+detail that must be used to compute the total.
+
+```{r}
+errors(out)
+# suppress some columns for brevity
+summary(out)[1:7]
+```
+
+We now get 9 fails and 10 missing values. We can filter out records that
+have `NA` (lacking) results.
+```{r}
+lacking(samplonomy, out)
+```
+There are two blocks where the annual total could not be compared with 
+the sum over quarterly series. The balance value of Crowdon is missing
+for `"2014Q1"` as well as the import value of Wheaton for `"2019Q2"`.
+
+
+Similarly, we can inspect the failing blocks
+```{r}
+violating(samplonomy, out)
+```
+
+
+
+
+
+
+
+

@@ -1,0 +1,286 @@
+# Variable checks
+
+Variable checks are checks that can be performed on a variable by variable
+basis. An example is checking that a variable called `Age` is nonnegative,
+or of integer type. Variable checks are among the simplest checks.
+
+
+#### Data and packages {-}
+
+In this section we will use the `SBS2000` dataset, that is included with `validate`.
+
+```{r}
+library(validate)
+data(SBS2000)
+```
+
+See `?SBS2000` for a description.
+
+
+## Variable type
+
+In `R`, one can test the type of a variable using built-in functions such as
+`is.numeric` or `is.character`. 
+```{r}
+is.character("hihi")
+is.character(3)
+```
+
+In `validate`, any function starting with `is.` ('is' followed by a dot) is
+considered a validation function. 
+
+```{r}
+rules <- validator(
+    is.character(size)
+  , is.numeric(turnover)
+)
+out <- confront(SBS2000, rules)
+summary(out)
+```
+We see that each rule checks a single item, namely one column of data. The
+first rule is violated (it is in fact a `factor` variable). The second rule
+is satisfied.
+
+## Missingness {#sect:missingness}
+
+Use R's standard `is.na()` to check missingness in individual variables. Negate
+it to check that values are available.
+
+```{r}
+rule <- validator(
+   !is.na(turnover)
+ , !is.na(other.rev)
+ , !is.na(profit)
+)
+out <- confront(SBS2000, rule)
+summary(out)
+```
+
+We see that in `r summary(out)$fails[1]` cases the variable `turnover` is missing,
+while `other.rev` and `profit` are missing respectively in `r summary(out)$fails[2]`
+and `r summary(out)$fails[3]` occasions.
+
+More complicated cases of completeness checks are discussed in Chapter \@ref(sect:completeness).
+
+
+## Field length
+
+The length of the content of character fields can be tested using either R's
+standard `nchar()` function, or with the convenience function
+`field_length`.
+
+```{r}
+rules <- validator(
+   nchar(as.character(size)) >= 2
+ , field_length(id, n=5)
+ , field_length(size, min=2, max=3)
+)
+out <- confront(SBS2000, rules)
+summary(out)
+```
+One advantage of `chech_field_length` is that its argument is converted to
+character (recall that `size` is a `factor` variable). The function
+`field_length` can be used to either test for exact field lengths or to
+check whether the number of characters is within a certain range.
+
+**Techincal note.** The field length is measured as the number of [code
+points](https://en.wikipedia.org/wiki/Code_point). Use `type="width"` to
+measure the printed width (nr of columns) or `type="bytes"` to count the number
+of bytes. 
+
+
+
+
+## Format of numeric fields
+
+For numbers that are stored in `character` type, there is a convenience
+function called `number_format()` that accepts a variable name
+and a format specification.
+
+```{r}
+dat <- data.frame(x = c("2.54","2.66","8.142","23.53"))
+```
+To check that the numbers are formatted with one figure before, and two figures
+after the decimal point, we perform the following check.
+```{r}
+rule <- validator( number_format(x, format="d.dd"))
+values(confront(dat, rule))
+```
+Here, the specification `format="d.dd"` describes the allowed numeric formats.
+In this specification the `"d"` stands for a _d_igit, any other character
+except the asterisks stands for itself, and the asterisks stands for zero or
+more digits. Here are some examples of how to define number formats.
+
+|format       | match        | non-match |
+|-------------|--------------|-----------|
+|`0.dddd`     | `"0.4321"`   | `"0.123"`,`"1.4563"` |
+|`d.ddEdd`    | `3.14E00`    | `"31.14E00"` |
+|`d.*Edd`     | `"0.314E01"`,`"3.1415297E00"` | `"3.1415230"` |
+
+This function is convenient only for very simple number formats. For generic
+pattern matching in strings, see the next section.
+
+
+
+## General field format
+
+A simple way to check for more general format is to use [globbing
+patterns](https://en.wikipedia.org/wiki/Glob_(programming)). In such patterns,
+the asterisks wildcard character (`*`) is interpreted as 'one or more characters'
+and the question mark (`?`) is interpreted as 'a character'.
+
+For example, to check that the `id` variable in `SBS2000` starts with `RET` we
+can do the following.
+
+```{r}
+rule <- validator( field_format(id, "RET*"),field_format(size, "sc?" ) )
+out  <- confront(SBS2000, rule)
+summary(out)
+```
+Here, the globbing pattern `"RET*"` is understood as 'a string starting with
+`"RET"`, followed by zero or more characters. The pattern `"sc?"` means 'a
+string starting with `"sc"`, followed by a single character.
+
+
+The most general way to check whether a field conforms to a pattern is to use a
+[regular expression](https://en.wikipedia.org/wiki/Regular_expression). The
+treatment of regular expressions is out of scope for this book, but we will
+give a few examples. A good introduction to regular expressions is given by
+
+> J. Friedl (2006) _Mastering regular expressions._ O'Reilley Media.
+
+
+In `validate` one can use `grepl` or `field_format`, with the argument `type="regex"`
+
+```{r}
+rule <- validator(  grepl("^sc[0-9]$", size)
+                  , field_format(id,"^RET\\d{2}$",type="regex"))
+summary(confront(SBS2000, rule))
+```
+
+Here, the expression `"^sc[0-9]$"` is a regular expression that should be read
+as: the string starts (`"^"`) with `"sc"`, is followed by a number between 0
+and 9 (`"[0-9]"`) and then ends (`"$"`). The regular expression `"^RET\\{d}2"`
+indicates that a string must start (`"^"`) with `"RET"`, followed by two
+digits (`"\\d{2}"`), after which the string must end (`"$"`).
+
+
+## Numeric ranges
+
+Numerical variables may have natural limits from below and/or
+above. For one-sided ranges, you can use the standard comparison operators.
+
+```{r}
+rules <- validator(TO = turnover >= 0, TC=total.costs >= 0)
+```
+
+If a variable is bounded both from above and below one can use two rules,
+or use the convenience function `in_range`.
+
+```{r}
+rules <- rules + validator(PR = in_range(incl.prob, min=0, max=1))
+```
+By default, `in_range` includes the boundaries of the range, so the above rule
+is equivalent to `incl.prob >= 0` and `incl.prob <= 0`. This can be toggled
+using the `strict=TRUE` argument.
+
+```{r}
+out <- confront(SBS2000, rules, lin.ineq.eps=0)
+```
+Here we set `lin.ineq.eps=0` to keep `validate` from building in a 
+margin for machine rounding errors.
+
+```{r}
+summary(out)
+```
+
+**Technical note.** For numeric ranges it is often a better idea to work with
+inclusive inequalities ($\leq$, $\geq$) then with strict inequalities ($<$,
+$>$).  Take as an example the strict inequality demand `income > 0`. This means
+that _any_ income larger than zero is acceptable, including numbers such as
+$0.01$, $0.000001$ and $10^{-\textrm{Googol}}$. In practice there is almost
+always a natural minimal acceptable value that is usually dictated by the unit
+of measurement. For example, if we measure income in whole Euros, a better
+demand would be `income >= 1`.
+
+
+## Ranges for times and periods
+
+For objects of class `Date` and objects of class `POSIXct` one can use comparison
+operators and `in_range` in the same way as for numerical data. The `in_range` function
+has a convenience feature for period data that is coded in character data, as in 
+`"2018Q1"` for quarterly data. 
+
+We first generate some example data.
+```{r}
+period = sprintf("2018Q%d", 1:4)
+period
+```
+
+The `in_range` function is capable of recognizing certain date or period
+formats.
+```{r}
+in_range(period, min="2017Q2", max = "2018Q2", format="auto")
+```
+The formats recognized with `format="auto"` are described in the help file, see `?in_range`.
+
+
+
+## Code lists
+
+A code list is a set of values that a variable is allowed to assume. For small
+code lists, one can use the `%in%` operator.
+
+```{r}
+rule <- validator(size %in% c("sc0","sc1","sc2","sc3"))
+out  <- confront(SBS2000, rule)
+summary(out)
+```
+Notice that `validate` replaces `%in%` with `%vin%`. The reason is that `%vin%` has more consistent
+behavior in the case of missing data. In particular,
+```{r}
+c(1, 3, NA) %in% c(1,2)
+c(1, 3, NA) %vin% c(1,2)
+```
+
+For longer code lists it is convenient to refer to an externally provided list.
+There are two ways of doing this: reading the list in the right-hand-size of `%in%`,
+or passing a code list to `confront` as reference data.
+
+Suppose we have a file called `codelist.csv` with a column `code`. We can define
+a rule as follows.
+
+```{r}
+rule <- validator(
+  x %in% read.csv("codelist.csv")$code
+)
+## Or, equivalently
+rule <- validator(
+  valid_codes := read.csv("codelist.csv")$code
+  , x %in% valid_codes
+)
+
+```
+The disadvantage is that the rule now depends on a path that may or may not be
+available at runtime.
+
+The second option is to assume that a variable, say `valid_codes` exists at
+runtime, and pass this with `confront`.
+```{r}
+codelist <- c("sc0","sc1","sc2","sc3")
+rule <- validator(size %in% valid_codes)
+# pass the codelist
+out <- confront(SBS2000, rule, ref=list(valid_codes=codelist))
+summary(out)
+```
+This way, (very) large code lists can be used, but note that it does
+require a 'contract' between variable names used in the rule set
+and variables passed as reference data.
+
+
+
+
+
+
+
+

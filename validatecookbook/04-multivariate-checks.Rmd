@@ -1,0 +1,180 @@
+# Multivariate checks
+
+In this Chapter we treat tests that involve relationships between variables.
+
+
+#### Data and packages {-}
+
+In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
+
+```{r}
+library(validate)
+data(SBS2000)
+head(SBS2000, 3)
+
+```
+
+## Completeness of records
+
+The functions `is_complete()` and `all_complete()` are convenience functions
+that test for missing values or combinations thereof in records.
+
+```{r}
+rules <- validator(
+          is_complete(id)
+        , is_complete(id, turnover)
+        , is_complete(id, turnover, profit )
+        , all_complete(id)
+)
+out <- confront(SBS2000, rules)
+# suppress last column for brevity
+summary(out)[1:7]
+```
+Here, the first rule checks for missing data in the `id` variable, the second
+rule checks whether subrecords with `id` and `turnover` are complete, and the
+third rule checks whether subrecords with `id`, `turnover` and `profit` are
+complete.  The output is one logical value (`TRUE` or `FALSE`) for each record.
+
+The fourth rule tests whether _all_ values are present in the `id` column, and
+it results in a single `TRUE` or `FALSE`. 
+
+
+## Balance equalities and inequalities 
+
+These concern sums or differences of multiple variables. They can be expressed
+simply as sums and products over variables.
+
+```{r}
+rules <- validator(
+    total.rev - profit == total.costs
+  , turnover + other.rev == total.rev
+  , profit <= 0.6*total.rev
+)
+
+out <- confront(SBS2000, rules)
+summary(out)
+```
+Here, the first rule checks a balance between income, costs, and profit; the
+second rule check a sub-balance, and the third rule is a plausibility check
+where we do not expect profit to exceed 60 per cent of the total revenue.
+
+
+Observe that the expressions have been altered to account for possible machine
+rounding differences. Rather than testing whether variable $x$ equals variable
+$y$, `validate` will check $|x-y|\leq \epsilon$, where the default value of
+$\epsilon$ is $10^{-8}$. The value of this tolerance can be controlled for
+linear equalities and inequalities using respectively `lin.eq.eps` and
+`lin.ineq.eps`.
+
+```{r}
+out <- confront(SBS2000, rules, lin.ineq.eps=0, lin.eq.eps=0.01)
+summary(out)
+```
+
+See \@ref(sect:options) for more information on setting and resetting options.
+
+
+## Conditional restrictions
+
+Conditional restrictions are all about demanding certain value combinations.
+
+```{r}
+rule <- validator(if (staff >= 1) staff.costs >= 1)
+out  <- confront(SBS2000, rule)
+summary(out)
+```
+Here, combinations where there is a positive number of staff must be accompanied with
+a positive staff cost. 
+
+Validate translates the rule `if ( P ) Q` to an expression of the form `!P |
+Q`. The reason for this is that the latter can be evaluated faster
+(vectorised).
+
+The results are to be interpreted as follows. For each record, `validate`  will
+check that cases where `staff>=1` are accompanied by `staff.costs >= 1`. In
+cases where this test results in `FALSE` this means that either the staff
+number is too high, or the staff costs are too low. To be precise, the results
+of a conditional restriction match those of an implication in first-order
+logic as shown in the truth table below.
+
+$$
+\begin{array}{ll|c}
+P & Q & P\Rightarrow Q\\
+\hline
+T & T & T\\
+T & F & F\\
+F & T & T\\
+F & F & F\\
+\end{array}
+$$
+
+
+
+## Forbidden value combinations
+
+In some cases it is more convenient to have a list of forbidden (key) value
+combinations than specifying such combinations individually.  The function
+`does_not_contain()` supports such situations.
+
+
+As an example, let's first create some transaction data.
+```{r}
+transactions <- data.frame(
+   sender   = c("S21", "X34", "S45","Z22")
+ , receiver = c("FG0", "FG2", "DF1","KK2")
+ , value    = sample(70:100,4)
+)
+```
+We assume that it is not possible for senders with codes starting with an `"S"`
+to send something to receivers starting with `FG`. A convenient way to encode
+such demands is to use [globbing patterns](https://en.wikipedia.org/wiki/Glob_(programming).
+We create a data frame that lists forbidden combinations (here: one combination of two key patterns).
+
+```{r}
+forbidden <- data.frame(sender="S*",receiver = "FG*")
+```
+Note that the column names of this data frame correspond to the columns in the transactions
+data frame. We are now ready to check our transactions data frame.
+```{r}
+rule <- validator(does_not_contain(glob(forbidden_keys)))
+out <- confront(transactions, rule, ref=list(forbidden_keys=forbidden))
+## Suppress columns for brevity
+summary(out)[1:7]
+```
+Observer that we use `glob(forbidden_keys)` to tell `does_not_contain` that the
+key combinations in the `forbidden_keys` must be interpreted as globbing
+patterns.
+
+The records containing forbidden keys can be selected as follows.
+```{r}
+violating(transactions, out)
+```
+
+It is also possible to use regular expression patterns, by labeling the
+forbidden key set with `rx()`. If no labeling is used, the key sets are
+interpreted as string literals.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

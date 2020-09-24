@@ -1,0 +1,42 @@
+--- 
+title: "The Data Validation Cookbook"
+author: "Mark P.J. van der Loo"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook."
+---
+
+
+# Preface {-}
+
+This book is about checking data with the
+[validate](https://cran.r-project.org/pacakge=validate) package for
+[R](https://www.r-project.org). 
+
+This version of the book was rendered with `validate` version `r
+packageVersion("validate")`.  If your computer is connected to the internet,
+the latest version of `validate` can be installed from
+[CRAN](https://cran.r-project.org) as follows.
+```{r, echo=TRUE, eval=FALSE}
+install.packages("validate")
+```
+
+The purpose of this book is to give simple examples of common data validation
+tasks. The first Chapter gives a short overview of the `validate` package and
+some references. The following Chapters treat collections of validation
+tasks of increasing complexity, mostly by example. 
+
+
+## Prerequisites {-}
+
+Readers of this book are expected to have some knowledge of R. In particular,
+you should know how to import data into R and know a little about working with
+data frames and vectors.
+
+
+
+
