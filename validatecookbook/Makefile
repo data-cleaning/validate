@@ -4,4 +4,5 @@ all: *.Rmd
 
 pdf: *.Rmd
 	R -e 'bookdown::render_book("./", output_format="pdf_document")'
+	xdg-open validatecookbook.pdf
 
