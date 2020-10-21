@@ -2,10 +2,11 @@ version 0.9.4
 - New functions 'violating', 'satisfying', 'lacking' to select records 
   based on 'validator' objects or the outcome of validations ('validation' 
   objects).
+- New function 'hierarchy' checks aggregations for hierarchical code lists.
+  Supports globbing and regular expression to define parent-child relations.
 - New functions 'in_linear_sequence' and 'is_linear_sequence' 
   check for gaps/duplicates in numerical or time series.
-- New function in_range checks whether a variable is between (strict)
-  bounds.
+- New function in_range checks whether a variable is between bounds.
 - New function 'part_whole_relation' facilitates checking aggregates
   against details, for data in 'long' format.
 - New helper functions that for split-apply-combine on vectors, with the property

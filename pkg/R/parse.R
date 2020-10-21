@@ -324,8 +324,7 @@ validating_call <- function(cl){
           , "exists_any", "exists_one", "is_linear_sequence","in_linear_sequence" 
           , "part_whole_relation", "field_length", "number_format", "field_format"
           , "contains_exactly", "contains_at_least", "contains_at_most", "does_not_contain"
-          , "in_range"
-          , "var_group")
+          , "in_range", "var_group")
   unary <- c("!", "(", "all", "any" )
   binary <- c("|","||","&","&&","if","xor")
 

@@ -47,9 +47,9 @@ summary(cf)
 The easiest way to check the results is with `summary`, which returns a `data.frame` with
 the following basic information:
 
-- How many data items were checked against each rule
-- How many items passed, failed or resulted in `NA`
-- Whether the check resulted in an error (could not be performed) or gave an error
+- How many data items were checked against each rule.
+- How many items passed, failed or resulted in `NA`.
+- Whether the check resulted in an error (could not be performed) or gave an warning.
 - The expression that was actually evaluated to perform the check.
 
 If you're a fan of the pipe-operator provided by the [magrittr](https://CRAN.R-project.org/package=magrittr),

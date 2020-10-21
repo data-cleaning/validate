@@ -448,9 +448,9 @@ glob <- function(x){
 
 igrepl <- function(pattern, x,...){
   if (inherits(pattern, "glob")){
-    grepl(utils::glob2rx(pattern),x,...)
+    Reduce(`|`, lapply(utils::glob2rx(pattern), grepl,x,...))
   } else if (inherits(pattern, "regex",...)){
-    grepl(pattern, x,...)
+    Reduce(`|`, lapply(pattern, grepl, x, ...))
   } else {
     x %in% pattern
   }
@@ -815,12 +815,15 @@ glin <- function(x, pattern){
   rxin(x, pattern)
 }
 
+get_keytype <- function(keys){ 
+  out <- grep("^(regex)|(glob)$", class(keys), value=TRUE)
+  if (length(out) < 1) out <- "fixed"
+  out
+}
 
 contains <- function(dat, keys, by){
 
-  keytype <- grep("^(regex)|(glob)$", class(keys), value=TRUE)
-  # unlabeled keys are considered fixed
-  if ( length(keytype) < 1 ) keytype <- "fixed"
+  keytype <- get_keytype(keys)
   
 
   if (isTRUE(keytype=="regex") && length(keys) > 1){
@@ -856,6 +859,114 @@ contains <- function(dat, keys, by){
 
 }
 
+#' Check aggregates defined by a hierarchical code list
+#'
+#' Check all aggregates defined by a code hierarchy.
+#'
+#'
+#' @param values bare (unquoted) name of a variable that holds values that
+#'        must aggregate according to the \code{hierarchy}.
+#' @param labels bare (unquoted) name of variable holding a grouping variable (a code
+#'        from a hierarchical code list)
+#' @param hierarchy \code{[data.frame]} defining a hierarchical code list. It
+#'        must contain precisely one column called \code{"Code"}, \code{"code"},
+#'        \code{"child"} or \code{"Child"} and precisely one column called
+#'        \code{"parent"} or \code{"Parent"}.
+#' @param by A bare (unquoted) variable or list of variable names that occur in
+#'        the data under scrutiny. The data will be split into groups according 
+#'        to these variables and the check is performed on each group.
+#' @param na_value \code{[logical]} or \code{NA}. Value assigned to values that
+#'        do not occurr in checks.
+#' @param aggregator \code{[function]} that aggregates children to their parents.
+#' @param tol \code{[numeric]} tolerance for equality checking
+#' @param ... arguments passed to \code{aggregator} (e.g. \code{na.rm=TRUE}).
+#' 
+#'
+#' @return A \code{logical} vector with the size of \code{length(values)}. Every
+#'         element involved in an aggregation error is labeled \code{FALSE} (aggregate
+#'         plus aggregated elements). Elements that are involved in correct
+#'         aggregations are set to \code{TRUE}, elements that are not involved in 
+#'         any check get the value \code{na_value} (by default: \code{TRUE}).
+#'
+#'
+#'
+#' @family cross-record-helpers
+#' @export
+#' @examples
+#' # We check some data against the built-in NACE revision 2 classification.
+#' data(nace_rev2)
+#' head(nace_rev2[1:4])
+#'
+#' d <- data.frame(
+#'      nace   = c("01","01.1","01.11","01.12", "01.2")
+#'    , volume = c(100 ,70    , 30    ,40     , 25    )
+#' )
+#' # It is possible to perform checks interactively
+#' d$nacecheck <- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2)
+#' # we have that "01.1" == "01.11" + "01.12", but not "01" == "01.1" +  "01.2"
+#' print(d)
+#'
+#' # Usage as a valiation rule is as follows
+#' rules <- validator(hierarchy(volume, labels = nace, hierarchy=validate::nace_rev_2))
+#' confront(d, rules)
+#'
+#' # you can also pass a hierarchy as a reference, for example.
+#' 
+#' rules <- validator(hierarchy(volume, labels = nace, hierarchy=ref$nacecodes))
+#' out <- confront(d, rules, ref=list(nacecodes=nace_rev2))
+#' summary(out)
+#' 
+#' # set a output to NA when a code does not occur in the code list.
+#' d <- data.frame(
+#'      nace   = c("01","01.1","01.11","01.12", "01.2", "foo")
+#'    , volume = c(100 ,70    , 30    ,40     , 25     , 60)
+#' )
+#' # It is possible to perform checks interactively
+#' d$nacecheck <- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2
+#'                          , na_value = NA)
+#' # we have that "01.1" == "01.11" + "01.12", but not "01" == "01.1" +  "01.2"
+#' print(d)
+#'
+hierarchy <- function(values, labels, hierarchy, by=NULL, tol=1e-8, na_value=TRUE, aggregator = sum, ...){
+  vals <- data.frame(values)  
+
+  # uniformize parent-child names.
+  ichd <- which(names(hierarchy) %in% c("child","Child", "code","Code"))
+  iprt <- which(names(hierarchy) %in% c("parent","Parent"))
+
+  names(hierarchy)[ichd] <- "child"
+  names(hierarchy)[iprt] <- "parent"
+
+  if (is.null(by)) by <- character(length(values))
+  unsplit(lapply(split(values, f=by)
+          , check_hagg, labels=labels, h=hierarchy, na_value = na_value, tol=tol, fun=aggregator,...)
+    , f=by)
+
+}
+
+
+check_hagg <- function(value, labels, h, na_value, tol, fun,...){
+  parents <- unique(h$parent)
+  out <- rep(na_value, length(value))
+ 
+  keytype <- get_keytype(h)
+ 
+
+
+  for (parent in parents){
+    J <- labels %in% parent
+    children <- h$child[h$parent==parent]
+    I <- switch(keytype
+          , "glob"  = glin(labels, children)
+          , "regex" = rxin(labels, children)
+          ,  labels %in% children)
+    if (!any(J) && !any(I)) next
+    if (!any(J) &&  any(I)) out[I] <- FALSE # no parent but children present
+    if ( any(J) && !any(I)) out[J] <- FALSE # no children but parent present
+    if ( any(J) &&  any(I)) out[I|J] <- abs(value[J] - fun(value[I],...)) <= tol
+  }
+  out
+}
 
 
 

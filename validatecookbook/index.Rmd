@@ -17,9 +17,9 @@ This book is about checking data with the
 [validate](https://cran.r-project.org/pacakge=validate) package for
 [R](https://www.r-project.org). 
 
-This version of the book was rendered with `validate` version `r
-packageVersion("validate")`.  If your computer is connected to the internet,
-the latest version of `validate` can be installed from
+This version of the book was rendered with `validate` version 
+`r packageVersion("validate")`.  If your computer is connected to the internet,
+the latest release of `validate` can be installed from
 [CRAN](https://cran.r-project.org) as follows.
 ```{r, echo=TRUE, eval=FALSE}
 install.packages("validate")

@@ -21,6 +21,8 @@
 #'  \item vat: Turnover reported for Value Added Tax
 #'}
 #'
+#' @family datasets
+#'
 #' @docType data
 #' @format A csv file, one retailer per row.
 NULL
@@ -68,6 +70,7 @@ NULL
 #'      \item For Wheaton, the 2019Q2 import is missing (\code{NA}).
 #'    }
 #'
+#' @family datasets
 #'
 #' @references
 #' J. Bethlehem (2009), Applied Survey Methods: A Statistical Perspective. John
@@ -76,5 +79,40 @@ NULL
 #' @docType data
 #' @format An RData file.
 NULL
+
+#' @name nace_rev2
+#' @title NACE classification code table
+#' @description 
+#' Statistical Classification of Economic Activities. 
+#'
+#'
+#' 
+#'\itemize{ 
+#'  \item Order \code{[integer]}
+#'  \item Level \code{[integer]} NACE level
+#'  \item Code  \code{[character]} NACE code
+#'  \item Parent \code{[character]} parent code of \code{"Code"}
+#'  \item Description \code{[character]}
+#'  \item This_item_includes \code{[character]}
+#'  \item This_item_also_includes \code{[character]}
+#'  \item Rulings \code{[character]}
+#'  \item This_item_excludes \code{[character]}
+#'  \item Reference_to_ISIC_Rev._4 \code{[character]}
+#'}
+#'
+#'
+#' @family datasets
+#' @seealso \code{\link{hierarchy}}
+#' @docType data
+#' @references
+#' This codelist was downloaded on 2020-10-21 from 
+#' \href{https://ec.europa.eu/eurostat/ramon/nomenclatures/index.cfm?TargetUrl=LST_CLS_DLD&StrNom=NACE_REV2&StrLanguageCode=EN&StrLayoutCode=HIERARCHIC#}{Eurostat}
+#'
+#'
+#' @format A csv file, one NACE code per row.
+NULL
+
+
+
 
 

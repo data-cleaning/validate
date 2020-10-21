@@ -32,7 +32,7 @@ warnf <- function(fmt,...){
 #'         \code{x} violating at least one of the rules or validation outcomes
 #'         in \code{y}
 #'
-#' @example
+#' @examples
 #' rules <- validator(height >= 60,weight < 159)
 #' satisfying(women, rules)
 #' violating(women, rules)
