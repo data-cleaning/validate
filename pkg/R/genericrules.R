@@ -921,7 +921,7 @@ contains <- function(dat, keys, by){
 #'      nace   = c("01","01.1","01.11","01.12", "01.2", "foo")
 #'    , volume = c(100 ,70    , 30    ,40     , 25     , 60)
 #' )
-#' # It is possible to perform checks interactively
+#' 
 #' d$nacecheck <- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2
 #'                          , na_value = NA)
 #' # we have that "01.1" == "01.11" + "01.12", but not "01" == "01.1" +  "01.2"
