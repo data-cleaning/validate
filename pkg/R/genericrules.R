@@ -605,9 +605,10 @@ field_format <- function(x, pattern, type=c("glob","regex"), ...){
 #'
 #' @family format-checkers
 #' @export
-number_format <- function(x, format){
-  rx <- utils::glob2rx(format)
-  rx <- gsub("d","\\d", rx, fixed=TRUE)
+number_format <- function(x, format=NULL, min_digit=0, max_dig=0){
+  rx <- utils::glob2rx(format, trim.tail=FALSE)
+  rx <- gsub("d",  "\\d", rx, fixed=TRUE)
+  rx <- gsub(".*", "\\d*",   rx, fixed=TRUE)
   grepl(rx, as.character(x))
 }
 

@@ -43,7 +43,7 @@ is satisfied.
 
 ## Missingness {#sect:missingness}
 
-Use R's standard `is.na()` to check missingness in individual variables. Negate
+Use R's standard `is.na()` to check missin items in individual variables. Negate
 it to check that values are available.
 
 ```{r}
@@ -59,6 +59,17 @@ summary(out)
 We see that in `r summary(out)$fails[1]` cases the variable `turnover` is missing,
 while `other.rev` and `profit` are missing respectively in `r summary(out)$fails[2]`
 and `r summary(out)$fails[3]` occasions.
+
+To demand that all items must be present or absent for a certain variable,
+use R's  quantifiers: `any()` or `all()`, possibly negated.
+```{r}
+rules <- validator( 
+    !any(is.na(incl.prob))
+    , all(is.na(vat)) )
+out <- confront(SBS2000, rules)
+summary(out) 
+```
+
 
 More complicated cases of completeness checks are discussed in Chapter \@ref(sect:completeness).
 
@@ -111,11 +122,27 @@ In this specification the `"d"` stands for a _d_igit, any other character
 except the asterisks stands for itself, and the asterisks stands for zero or
 more digits. Here are some examples of how to define number formats.
 
-|format       | match        | non-match |
-|-------------|--------------|-----------|
-|`0.dddd`     | `"0.4321"`   | `"0.123"`,`"1.4563"` |
-|`d.ddEdd`    | `3.14E00`    | `"31.14E00"` |
-|`d.*Edd`     | `"0.314E01"`,`"3.1415297E00"` | `"3.1415230"` |
+|format       | match                         | non-match                           |
+|-------------|-------------------------------|-------------------------------------|
+|`0.dddd`                                     | `"0.4321"`   | `"0.123"`,`"1.4563"` |
+|`d.ddEdd`    | `3.14E00`                     | `"31.14E00"`                        |
+|`d.*Edd`     | `"0.314E01"`,`"3.1415297E00"` | `"3.1415230"`                       |
+|`d.dd*`      | `1.23`, `1.234`,...           | `1.2`                               |
+
+The last example shows how to check for a minimal number of digits behind the decimal
+point.
+
+To check for a maximum number of decimals, one can use regular expression syntax
+with `grepl`. For example to specify a number with one digit, then a decimal point,
+and then maximal two digits, use the following rule.
+```{r}
+rule <- validator(
+  grepl("^\\d\\.\\d{,2}$", x)
+)
+out <- confront(dat, rule)
+violating(dat, out)
+```
+
 
 This function is convenient only for very simple number formats. For generic
 pattern matching in strings, see the next section.

@@ -180,8 +180,9 @@ expect_true(field_length("abc",min=1, max=3))
 
 expect_true(number_format("12.34","dd.dd"))
 expect_false(number_format("12.345","dd.dd"))
-
 expect_true(number_format("0.123E45","0.d*Edd"))
+expect_false(number_format("0.12x", "0.d*"))
+expect_true(number_format("0.12x", "0.d*x"))
 
 ## Checking data against a fixed set of key-combinations
 
