@@ -181,9 +181,10 @@ checks that fail is labeled `FALSE`. Here, this concerns the records with
 labels `"01"`, `"01.1"` and `"01.2"`.
 
 We will next look at a more complicated example, but first note the following.
-The `hierarchy()` funtion
+The `hierarchy()` function
 
 - can handle any statistical aggregate, `sum()` is just the default;
+- supports globbing and regular expressions in the child values;
 - has an adjustable tolerance value for comparing observed with computed aggregates;
 - has configurable behaviour for cases of missing data;
 - can be applied per-group, defined by one or more grouping variables (see next example).
@@ -219,14 +220,53 @@ rule <- validator(
   hierarchy(value, region, hierarchy=ref$codelist, by=list(period, measure))
 )
 out <- confront(samplonomy, rule, ref=list(codelist=samplonia))
-```
-An error has occurred while executing the rule.
-```{r}
 summary(out)
 ```
-Apparently, in one or more of the groups defined by `period` and `measure`
-the parent `` occurs multiple times (see \@ref(sect:uniqueness)). Let us
-remove duplicates before proceeding.
+We see that some aggregates add up correctly, and some don't. There is also
+a warning which we should investigate.
+```{r}
+warnings(out)
+```
+If one of the groups contains a parent more than once it is not possible
+to check whether child values add up to the aggregate. For this reason
+the duplicated parent and all it's children are marked `FALSE`. Indeed we
+find a duplicated record.
+```{r}
+subset(samplonomy, region  == "Induston" & 
+                   period  == "2018Q2"   & 
+                   measure == "export")
+```
+Just to see if we can remove the warning, let us remove the duplicate
+and re-run the check.
+```{r}
+i <- !duplicated(samplonomy[c("region","period","measure")])
+samplonomy2 <- samplonomy[i, ]
+
+out <- confront(samplonomy2, rule, ref=list(codelist=samplonia))
+summary(out)
+```
+
+The `hierarchy()` function marks every record `FALSE` that is involved
+in any check. This may make it hard to figure out which check it failed.
+One can get more detailed information, by checking different parts
+of the hierarchy in separate rules.
+```{r}
+rules <- validator(
+   level0 = hierarchy(value, region, ref$level0, by=list(period, measure))
+ , level1 = hierarchy(value, region, ref$level1, by=list(period, measure))
+)
+out <- confront(samplonomy2, rules
+        , ref=list(level0=samplonia[1:2,], level1=samplonia[3:8,])
+       )
+summary(out)
+```
+We can now select records involved in violating the highest level
+rules separately.
+```{r}
+violating(samplonomy2, out["level0"]) 
+```
+From this it appears that in 2015, the GDP for Agria is missing, and in 
+2018Q3 there is no value for the export of Induston.
 
 
 
