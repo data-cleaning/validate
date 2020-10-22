@@ -930,7 +930,7 @@ hierarchy <- function(values, labels, hierarchy, by=NULL, tol=1e-8, na_value=TRU
 
   if (is.null(by)) by <- character(length(values))
  
-  dat <- data.frame(values=values, labels=labels) 
+  dat <- cbind(data.frame(values=values, labels=labels), by)
   unsplit(lapply(split(dat, f=by)
           , check_hagg,  h=hierarchy, na_value = na_value, tol=tol, fun=aggregator,...)
     , f=by)
@@ -946,17 +946,20 @@ check_hagg <- function(dat, h, na_value, tol, fun,...){
 
   for (parent in parents){
     J <- dat$labels %in% parent
-    if (sum(J) > 1){
-      msg <- "Parent '%s' occurs more than once (%d times) in group"
-      warning(sprintf(msg, parent, sum(J)), call.=FALSE)
-      out <- rep(FALSE, nrow(dat))
-      break
-    }
     children <- h[,1][h[,2] == parent]
     I <- switch(keytype
           , "glob"  = glin(dat$labels, children)
           , "regex" = rxin(dat$labels, children)
           ,  dat$labels %in% children)
+    # found 'parent' too often, so we can't check aggregate
+    if (sum(J) > 1){
+      grp <- paste0("(",paste(t(dat[1,-(1:2)]), collapse=", "),")")
+      msg <- "Parent '%s' occurs more than once (%d times) in group %s"
+      warning(sprintf(msg, parent, sum(J), grp), call.=FALSE)
+      out[I|J] <- FALSE
+      next
+    }
+
     if (!any(J) && !any(I)) next
     if (!any(J) &&  any(I)) out[I] <- FALSE # no parent but children present
     if ( any(J) && !any(I)) out[J] <- FALSE # no children but parent present

@@ -189,10 +189,10 @@ replace_dollar <- function(x){
   L <- which.call(x,'$')
   for ( I in L ){
     if (length(I)==1){
-      x <- parse(text=paste0(left(x),'[,',deparse(right(x)),']'))[[1]]
+      x <- parse(text=paste0(left(x),'[[ "',deparse(right(x)),'" ]]'))[[1]]
     } else {
       I <- I[-length(I)]
-      p <- paste0(left(x[[I]]),'[, "',deparse(right(x[[I]])),'" ]')
+      p <- paste0(left(x[[I]]),'[[ "',deparse(right(x[[I]])),'" ]]')
       x[[I]] <- parse(text=p)[[1]]
     }
   }

@@ -28,6 +28,7 @@ version 0.9.4
 - Package now depends on R >= 3.5.0 because of the samplonomy RData file.
 - Breaking change: for consistency, the '...' argument in 'exists_one' and 'exists_any'
   is replaced with 'by'. This only affects cases with multiple grouping variables.
+- Instances of x$y in reference data are now parsed to x[["y"]] (used to be x[,"y"]).
 
 
 version 0.9.3
