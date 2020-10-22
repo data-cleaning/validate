@@ -868,10 +868,9 @@ contains <- function(dat, keys, by){
 #'        must aggregate according to the \code{hierarchy}.
 #' @param labels bare (unquoted) name of variable holding a grouping variable (a code
 #'        from a hierarchical code list)
-#' @param hierarchy \code{[data.frame]} defining a hierarchical code list. It
-#'        must contain precisely one column called \code{"Code"}, \code{"code"},
-#'        \code{"child"} or \code{"Child"} and precisely one column called
-#'        \code{"parent"} or \code{"Parent"}.
+#' @param hierarchy \code{[data.frame]} defining a hierarchical code list. The
+#'        first column must contain (child) codes, and the second column contains their
+#'        corresponding parents.
 #' @param by A bare (unquoted) variable or list of variable names that occur in
 #'        the data under scrutiny. The data will be split into groups according 
 #'        to these variables and the check is performed on each group.
@@ -895,25 +894,25 @@ contains <- function(dat, keys, by){
 #' @examples
 #' # We check some data against the built-in NACE revision 2 classification.
 #' data(nace_rev2)
-#' head(nace_rev2[1:4])
+#' head(nace_rev2[1:4]) # columns 3 and 4 contain the child-parent relations.
 #'
 #' d <- data.frame(
 #'      nace   = c("01","01.1","01.11","01.12", "01.2")
 #'    , volume = c(100 ,70    , 30    ,40     , 25    )
 #' )
 #' # It is possible to perform checks interactively
-#' d$nacecheck <- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2)
+#' d$nacecheck <- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2[3:4])
 #' # we have that "01.1" == "01.11" + "01.12", but not "01" == "01.1" +  "01.2"
 #' print(d)
 #'
 #' # Usage as a valiation rule is as follows
-#' rules <- validator(hierarchy(volume, labels = nace, hierarchy=validate::nace_rev_2))
+#' rules <- validator(hierarchy(volume, labels = nace, hierarchy=validate::nace_rev_2[3:4]))
 #' confront(d, rules)
 #'
 #' # you can also pass a hierarchy as a reference, for example.
 #' 
 #' rules <- validator(hierarchy(volume, labels = nace, hierarchy=ref$nacecodes))
-#' out <- confront(d, rules, ref=list(nacecodes=nace_rev2))
+#' out <- confront(d, rules, ref=list(nacecodes=nace_rev2[3:4]))
 #' summary(out)
 #' 
 #' # set a output to NA when a code does not occur in the code list.
@@ -922,20 +921,12 @@ contains <- function(dat, keys, by){
 #'    , volume = c(100 ,70    , 30    ,40     , 25     , 60)
 #' )
 #' 
-#' d$nacecheck <- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2
+#' d$nacecheck <- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2[3:4]
 #'                          , na_value = NA)
 #' # we have that "01.1" == "01.11" + "01.12", but not "01" == "01.1" +  "01.2"
 #' print(d)
 #'
 hierarchy <- function(values, labels, hierarchy, by=NULL, tol=1e-8, na_value=TRUE, aggregator = sum, ...){
-  vals <- data.frame(values)  
-
-  # uniformize parent-child names.
-  ichd <- which(names(hierarchy) %in% c("child","Child", "code","Code"))
-  iprt <- which(names(hierarchy) %in% c("parent","Parent"))
-
-  names(hierarchy)[ichd] <- "child"
-  names(hierarchy)[iprt] <- "parent"
 
   if (is.null(by)) by <- character(length(values))
   unsplit(lapply(split(values, f=by)
@@ -946,7 +937,7 @@ hierarchy <- function(values, labels, hierarchy, by=NULL, tol=1e-8, na_value=TRU
 
 
 check_hagg <- function(value, labels, h, na_value, tol, fun,...){
-  parents <- unique(h$parent)
+  parents <- unique(h[,2])
   out <- rep(na_value, length(value))
  
   keytype <- get_keytype(h)
@@ -955,7 +946,7 @@ check_hagg <- function(value, labels, h, na_value, tol, fun,...){
 
   for (parent in parents){
     J <- labels %in% parent
-    children <- h$child[h$parent==parent]
+    children <- h[,1][h[,2] == parent]
     I <- switch(keytype
           , "glob"  = glin(labels, children)
           , "regex" = rxin(labels, children)
@@ -963,7 +954,13 @@ check_hagg <- function(value, labels, h, na_value, tol, fun,...){
     if (!any(J) && !any(I)) next
     if (!any(J) &&  any(I)) out[I] <- FALSE # no parent but children present
     if ( any(J) && !any(I)) out[J] <- FALSE # no children but parent present
-    if ( any(J) &&  any(I)) out[I|J] <- abs(value[J] - fun(value[I],...)) <= tol
+    ii   <- I|J
+    test <- abs(value[J] - fun(value[I],...)) <= tol
+    if (any(J) && any(I)){ 
+      # equivalent, but slower statement:
+      # if ( any(J) &&  any(I)) out[ii] <- ifelse(is.na(out[ii]), test, out[ii] & test)
+      out[ii] <- (is.na(out[ii]) & test) | (!is.na(out[ii]) & out[ii] & test)
+    }
   }
   out
 }

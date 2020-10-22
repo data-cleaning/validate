@@ -134,6 +134,80 @@ Here, there are no groups that violate this assumption.
 violating(samplonomy, out)
 ```
 
+## Aggregates and hierarchical code lists
+
+Classifications and ontologies often have a hierarchical structure.
+A well-known example is the 
+[NACE](https://en.wikipedia.org/wiki/Statistical_Classification_of_Economic_Activities_in_the_European_Community) classification of economic activities. In the NACE classification, 
+the economy is divided into 10 basic types of activities such as `Agriculture'
+or `Mining and Quarrying', and each activity is again divided into subclasses,
+such as `Growing of rice' and `Growing of Grapes` under `Agriculture'. The
+subdividing can go on for several levels. For statistics that describe an
+economy according to the NACE classification, it is desirable that the
+statistics of subclasses add up to their parent classes. This is what the
+function `hierarchy` does in `validate`.
+
+The `validate` package comes with a version of the NACE classification
+(Revision 2, 2008) so we will use that as an example.
+```{r}
+data(nace_rev2)
+head(nace_rev2[1:4])
+```
+The second and third column contain the necessary information: they list the
+parent for each NACE code (where each parent is also a NACE code). To demonstrate
+how `hierarchy()` works, we first create some example data.
+```{r}
+dat <- data.frame(
+        nace   = c("01","01.1","01.11","01.12", "01.2")
+      , volume = c(100 ,70    , 30    ,40     , 25    )
+     )
+dat
+```
+We see that the volumes for subclasses `"01.11"` and `"01.12" add up to
+`"01.1"` ($30+40=70$). However, the volumes for `"01.1"` and `"01.2"` do not
+add up to the volume for `"01"` (70+25\not=100). The `hierarchy()` function
+checks all these relations.
+
+
+Before using `hierarchy` in the setting of a `validator` object, we can examine
+it directly.
+```{r}
+dat$check <- hierarchy(dat$volume, dat$nace, nace_rev2[3:4])
+dat
+```
+We see that `hierarchy()` returns a `logical` vector with one element for each
+record in the data. Each record that is involved in one or more aggregation
+checks that fail is labeled `FALSE`.
+
+
+
+
+
+
+
+
+
+
+
+
+### A more complicated example
+
+Samplonia is divided in two districts, each of which is divided into several
+provinces. Such relations can be defined as parent-child relationships. For
+Samplonia we can do this as follows.
+
+```{r}
+samplonia <- data.frame(
+  code   = c("Agria", "Induston"
+              , "Wheaton", "Greenham"
+              , "Smokely", "Mudwater", "Newbay", "Crowdon")
+  , parent = c(rep("Samplonia",2), rep("Agria",2), rep("Induston",4))
+) 
+samplonia
+```
+The function `hierarchy` can be used to check whether values for
+children aggregate to values for their parents.
+
 
 
 

@@ -294,19 +294,19 @@ d <- data.frame(
     , volume = c(100 ,70    , 30    ,40     , 25)
 )
 data(nace_rev2)
-expect_equal(hierarchy(d$volume, labels=d$nace, hierarchy=nace_rev2)
-            , c(FALSE, TRUE, TRUE, TRUE, FALSE))
+expect_equal(hierarchy(d$volume, labels=d$nace, hierarchy=nace_rev2[3:4])
+            , c(FALSE, FALSE, TRUE, TRUE, FALSE))
 
 
 d <- data.frame(
       nace   = c("01","01.1","01.11","01.12", "01.2","foo")
     , volume = c(100 ,70    , 30    ,40     , 25    , 60)
 )
-expect_equal(hierarchy(d$volume, labels=d$nace, hierarchy=nace_rev2)
-            , c(FALSE, TRUE, TRUE, TRUE, FALSE, TRUE))
+expect_equal(hierarchy(d$volume, labels=d$nace, hierarchy=nace_rev2[3:4])
+            , c(FALSE, FALSE, TRUE, TRUE, FALSE, TRUE))
 
-expect_equal(hierarchy(d$volume, labels=d$nace, hierarchy=nace_rev2, na_value=NA)
-            , c(FALSE, TRUE, TRUE, TRUE, FALSE, NA))
+expect_equal(hierarchy(d$volume, labels=d$nace, hierarchy=nace_rev2[3:4], na_value=NA)
+            , c(FALSE, FALSE, TRUE, TRUE, FALSE, NA))
 
 
 
