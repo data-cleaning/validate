@@ -134,7 +134,7 @@ Here, there are no groups that violate this assumption.
 violating(samplonomy, out)
 ```
 
-## Aggregates and hierarchical code lists
+## Code hierarchies and aggregation
 
 Classifications and ontologies often have a hierarchical structure.
 A well-known example is the 
@@ -163,9 +163,9 @@ dat <- data.frame(
      )
 dat
 ```
-We see that the volumes for subclasses `"01.11"` and `"01.12" add up to
-`"01.1"` ($30+40=70$). However, the volumes for `"01.1"` and `"01.2"` do not
-add up to the volume for `"01"` (70+25\not=100). The `hierarchy()` function
+We see that the volumes for subclasses `"01.11"` and `"01.12"` add up to
+`"01.1"` ( $30+40=70$ ). However, the volumes for `"01.1"` and `"01.2"` do not
+add up to the volume for `"01"` ($70+25\not=100$). The `hierarchy()` function
 checks all these relations.
 
 
@@ -177,41 +177,63 @@ dat
 ```
 We see that `hierarchy()` returns a `logical` vector with one element for each
 record in the data. Each record that is involved in one or more aggregation
-checks that fail is labeled `FALSE`.
+checks that fail is labeled `FALSE`. Here, this concerns the records with
+labels `"01"`, `"01.1"` and `"01.2"`.
+
+We will next look at a more complicated example, but first note the following.
+The `hierarchy()` funtion
+
+- can handle any statistical aggregate, `sum()` is just the default;
+- has an adjustable tolerance value for comparing observed with computed aggregates;
+- has configurable behaviour for cases of missing data;
+- can be applied per-group, defined by one or more grouping variables (see next example).
+
+See the help file `?hierarchy` for specification and examples.
 
 
 
-
-
-
-
-
-
-
-
-
-### A more complicated example
+**A more complicated example**
 
 Samplonia is divided in two districts, each of which is divided into several
-provinces. Such relations can be defined as parent-child relationships. For
-Samplonia we can do this as follows.
+provinces. Let us define the hierarchical code list.
 
 ```{r}
 samplonia <- data.frame(
-  code   = c("Agria", "Induston"
-              , "Wheaton", "Greenham"
-              , "Smokely", "Mudwater", "Newbay", "Crowdon")
+    region   = c("Agria", "Induston"
+               , "Wheaton", "Greenham"
+               , "Smokely", "Mudwater", "Newbay", "Crowdon")
   , parent = c(rep("Samplonia",2), rep("Agria",2), rep("Induston",4))
 ) 
 samplonia
 ```
-The function `hierarchy` can be used to check whether values for
-children aggregate to values for their parents.
+Recall the structure of the `samplonomy` dataset.
+```{r}
+data(samplonomy)
+head(samplonomy)
+```
+We will check whether regions sum to their parent regions, for each period
+and for each measure.
+
+```{r}
+rule <- validator(
+  hierarchy(value, region, hierarchy=ref$codelist, by=list(period, measure))
+)
+out <- confront(samplonomy, rule, ref=list(codelist=samplonia))
+```
+An error has occurred while executing the rule.
+```{r}
+summary(out)
+```
+Apparently, in one or more of the groups defined by `period` and `measure`
+the parent `` occurs multiple times (see \@ref(sect:uniqueness)). Let us
+remove duplicates before proceeding.
 
 
 
 
-## Aggregates in long-format data
+
+
+## General aggregates in long-form data
 
 Checking aggregations in long-form format is more involved than for
 data in wide format (as in Section \@ref(balance-equalities-and-inequalities)).

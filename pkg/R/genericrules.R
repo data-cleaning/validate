@@ -929,33 +929,39 @@ contains <- function(dat, keys, by){
 hierarchy <- function(values, labels, hierarchy, by=NULL, tol=1e-8, na_value=TRUE, aggregator = sum, ...){
 
   if (is.null(by)) by <- character(length(values))
-  unsplit(lapply(split(values, f=by)
-          , check_hagg, labels=labels, h=hierarchy, na_value = na_value, tol=tol, fun=aggregator,...)
+ 
+  dat <- data.frame(values=values, labels=labels) 
+  unsplit(lapply(split(dat, f=by)
+          , check_hagg,  h=hierarchy, na_value = na_value, tol=tol, fun=aggregator,...)
     , f=by)
 
 }
 
 
-check_hagg <- function(value, labels, h, na_value, tol, fun,...){
-  parents <- unique(h[,2])
-  out <- rep(na_value, length(value))
- 
-  keytype <- get_keytype(h)
- 
+check_hagg <- function(dat, h, na_value, tol, fun,...){
 
+  parents <- unique(h[,2])
+  keytype <- get_keytype(h)
+  out <- rep(na_value, nrow(dat))
 
   for (parent in parents){
-    J <- labels %in% parent
+    J <- dat$labels %in% parent
+    if (sum(J) > 1){
+      msg <- "Parent '%s' occurs more than once (%d times) in group"
+      warning(sprintf(msg, parent, sum(J)), call.=FALSE)
+      out <- rep(FALSE, nrow(dat))
+      break
+    }
     children <- h[,1][h[,2] == parent]
     I <- switch(keytype
-          , "glob"  = glin(labels, children)
-          , "regex" = rxin(labels, children)
-          ,  labels %in% children)
+          , "glob"  = glin(dat$labels, children)
+          , "regex" = rxin(dat$labels, children)
+          ,  dat$labels %in% children)
     if (!any(J) && !any(I)) next
     if (!any(J) &&  any(I)) out[I] <- FALSE # no parent but children present
     if ( any(J) && !any(I)) out[J] <- FALSE # no children but parent present
     ii   <- I|J
-    test <- abs(value[J] - fun(value[I],...)) <= tol
+    test <- abs(dat$values[J] - fun(dat$value[I],...)) <= tol
     if (any(J) && any(I)){ 
       # equivalent, but slower statement:
       # if ( any(J) &&  any(I)) out[ii] <- ifelse(is.na(out[ii]), test, out[ii] & test)
