@@ -1,6 +1,6 @@
 # Statistical checks
 
-Statistical checks involve properties statistical characteristics such 
+Statistical checks involve properties of statistical characteristics such 
 as the means of columns. These characteristics can be checked for whole
 columns or grouped by one or more categorical variables. It is also
 possible to use group-wise computed statistics, in validation rules.

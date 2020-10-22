@@ -1,4 +1,4 @@
-# Completeness and uniqueness
+# Availability and uniqueness
 
 In this Chapter it is demonstrated how to check whether records are available
 and/or complete with respect to a set of keys, and whether they are unique.
@@ -8,7 +8,8 @@ one column holds a value and all the other columns identify the value.
 
 #### Data and packages {-}
 
-In this Chapter the `samplonomy` dataset is used that comes with the `validate` package.
+In this Chapter the `samplonomy` dataset is used that comes with the `validate`
+package.
 
 ```{r}
 library(validate)
