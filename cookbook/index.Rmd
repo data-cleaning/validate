@@ -26,9 +26,9 @@ install.packages("validate")
 ```
 
 The purpose of this book is to give simple examples of common data validation
-tasks. The first Chapter gives a short overview of the `validate` package and
-some references. The following Chapters treat collections of validation
-tasks of increasing complexity, mostly by example. 
+tasks. The first Chapter gives a short overview of the `validate` package
+workflow.  The following Chapters treat collections of validation tasks of
+increasing complexity, mostly by example. 
 
 
 ## Prerequisites {-}
@@ -37,6 +37,11 @@ Readers of this book are expected to have some knowledge of R. In particular,
 you should know how to import data into R and know a little about working with
 data frames and vectors.
 
+## Citing this work {-}
 
+To cite the `validate` package please use the following citation.
 
+> MPJ van der Loo and E de Jonge (2020). Data Validation Infrastructure for
+> R. _Journal of Statistical Software_, Accepted for publication. URL:
+> `https://CRAN.R-project.org/package=validate`
 

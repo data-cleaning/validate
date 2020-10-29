@@ -1,4 +1,4 @@
-# Statistical checks
+# Statistical checks {#sect:statisticalchecks}
 
 Statistical checks involve properties of statistical characteristics such 
 as the means of columns. These characteristics can be checked for whole

@@ -132,20 +132,23 @@ more digits. Here are some examples of how to define number formats.
 The last example shows how to check for a minimal number of digits behind the decimal
 point.
 
-To check for a maximum number of decimals, one can use regular expression syntax
-with `grepl`. For example to specify a number with one digit, then a decimal point,
-and then maximal two digits, use the following rule.
+
+There are special arguments to check the number of decimal figures 
+after the decimal separator. 
 ```{r}
-rule <- validator(
-  grepl("^\\d\\.\\d{,2}$", x)
-)
-out <- confront(dat, rule)
-violating(dat, out)
+x <- c("12.123","123.12345")
+number_format(x, min_dig=4)
+number_format(x, max_dig=3)
+number_format(x, min_dig=2, max_dig=4)
+number_format(x, min_dig=2, max_dig=10)
+# specify the decimal separator.
+number_format("12,123", min_dig=2, dec=",")
 ```
+The arguments `min_dig`, `max_dig` and `dec` are ignored when `format` is
+specified.
 
-
-This function is convenient only for very simple number formats. For generic
-pattern matching in strings, see the next section.
+This function is convenient only for fairly simple number formats. Generic
+pattern matching in strings is discussed in the next section.
 
 
 
@@ -208,8 +211,7 @@ or use the convenience function `in_range`.
 rules <- rules + validator(PR = in_range(incl.prob, min=0, max=1))
 ```
 By default, `in_range` includes the boundaries of the range, so the above rule
-is equivalent to `incl.prob >= 0` and `incl.prob <= 0`. This can be toggled
-using the `strict=TRUE` argument.
+is equivalent to `incl.prob >= 0` and `incl.prob <= 0`. 
 
 ```{r}
 out <- confront(SBS2000, rules, lin.ineq.eps=0)

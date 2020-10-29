@@ -1,47 +1,41 @@
 # Introduction to validate {#intro}
 
-The validate package is intended to make checking your data easy, maintainable,
-and reproducible. The package allows you to
-
-- Test your data set(s) against predefined rules, either in- or cross-data set
-- Import and export rule sets from structured or free-format files
-- Investigate and visualize the results of a data validation step
-- Perform basic rule maintenance tasks
-- Define and maintain data quality indicators separately from the data
+> Data validation is an activity where one checks whether a set of values
+> or value combinations satisfies a predifined expectation.
 
 
-There are a few terms related to the infrastructure offered by validate,
+The validate package is intended to make checking your data easy, maintainable, and reproducible.
+It does this by allowing you to
 
-- data set: your data
-- `validator` an object representing a set of rules your data must satisfy
-- `indicator` an object representing a set of numerical quality indicators
-- `confrontation` an object representing the results of confronting data with rules or
-  quality indicators.
+- test data against a reusable set of rules, defined by you;
+- investigate, summarise, visualise rules and data validation results.
+- import, export, rule sets from and to various formats;
+- filter, select and otherwise manipulate data validation rules'
+- investigate, summarise, and visualise rule sets.
 
-There is also a single activity, namely
+For advanced rule manipulation there is the
+[validatetools](https://cran.r-project.org/validatetools) package.
 
-- `confront`: evaluate the validation rules or quality indicator in the context of one or more data sets.
-
-This vignette demonstrates how to apply validation rules. A [second
-vignette](indicators.html) introduces quality indicator rules.
 
 
 ## A quick example
 
 Here's an example demonstrating the typical workflow. We'll use the built-in
-`women` data set (average heights and weights for American women aged 30-39).
+`cars` data set, which contains 50 cases of speed and stopping distances of
+cars. 
 ```{r }
-data(women)
-summary(women)
+data(cars)
+head(cars, 3)
 ```
 Validating data is all about checking whether a data set meets presumptions or
 expectations you have about it, and the validate package makes it easy for you
 to define those expectations. Let's do a quick check on variables in the
-`women` data set.
+`cars` data set.
 ```{r}
 library(validate)
-cf <- check_that(women, height > 0, weight > 0, height/weight > 0.5)
-summary(cf)
+rules <- validator(speed >= 0, dist >= 0, speed/dist <= 1.5)
+out   <- confront(cars, rules)
+summary(out)
 ```
 `check_that` returns an object containing all sorts of information on the validation results.
 The easiest way to check the results is with `summary`, which returns a `data.frame` with
@@ -52,101 +46,217 @@ the following basic information:
 - Whether the check resulted in an error (could not be performed) or gave an warning.
 - The expression that was actually evaluated to perform the check.
 
-If you're a fan of the pipe-operator provided by the [magrittr](https://CRAN.R-project.org/package=magrittr),
-the above statement can also be performed as follows.
-```{r eval=FALSE}
-women %>% check_that(height > 0, weight > 0, height/weight > 0.5) %>% summary()
-```
-
 The same information can be summarized graphically.
 ```{r}
-barplot(cf,main="Checks on the women data set")
+barplot(out)
 ```
 
-You are now ready to start reading Chapters 2 and further.
-
-
-
-## Using reference data
-
-For some checks it is convenient to compare the data under scrutiny with 
-other data artifacts. Two common examples include:
-
-- Data is checked against an earlier version of the same dataset.
-- We wish to check the contents of a column against a code list,
-  and we do not want to put the code list hard-coded into the 
-  rule set.
-
-For this, we can use the `ref` option in confront. Here is how
-to compare columns from two data frames row-by-row. The user
-has to make sure that the rows of the data set under scrutiny
-(`women`) matches row-wise with the reference data set (`women1`).
-
+Using the function `violated` we can select the records that violate one or
+more rules.
 ```{r}
-women1 <- women
-rules <- validator(height == women_reference$height)
-cf <- confront(women, rules, ref = list(women_reference = women1))
-summary(cf)
+violating(cars, out)
 ```
 
-Here is how to make a code list available.
+We can extract all individual resuls results using for example `as.data.frame`.
 ```{r}
-rules <- validator( fruit %in% codelist )
-fruits <-  c("apple", "banana", "orange")
-dat <- data.frame(fruit = c("apple","broccoli","orange","banana"))
-cf <- confront(dat, rules, ref = list(codelist = fruits))
-summary(cf)
+df_out <- as.data.frame(out)
+head(df_out, 3)
+```
+We see that in record `1`, rule `V1`, was satisfied (the result is `TRUE`), and
+that validate left a bit of slack when executing the rule, to avoid false
+negatives caused machine rounding issues.
+
+
+Summarizing, the basic workflow in `validate` is to create a rule set, confront
+a data set with the rules in the rule set, and than analyze or use the results
+further. To understand which checks you can perform with `validate` you only
+need to remember the following.
+
+> Any R expression that results in a `logical` is accepted by `validate` as a
+> validation rule.
+
+
+You are now ready to start validating your data, and navigate Chapters
+\@ref(sect:availableunique)-\@ref(sect:statisticalchecks) to learn how to
+define specific types of checks. The remainder of the current Chapter will
+teach you more about the basic objects and workflow in `validate`. 
+
+## Reading rules from file {#sect:readfromfile}
+
+It is a very good idea to store and maintain rule sets outside of your R
+script. Validate supports two file formats: simple text files and `yaml` files.
+Here we only discuss simple text files, yaml files are treated in \@ref(sect:yamlfiles).
+
+To try this, copy the following rules into a new text file and store it in a
+file called `myrules.R`, in the current working directory of your R session.
+
+```{r, eval=FALSE}
+# basic range checks
+speed >= 0
+dist  >= 0
+
+# ratio check
+speed / dist <= 1.5
+```
+Note that you are allowed to annotate the rules as you would with 
+regular R code. Reading these rules can be done as follows.
+```{r}
+rules <- validator(.file="myrules.R")
 ```
 
 
-## Validator objects
 
-Validator objects are used to store, investigate and manipulate rule sets.
+
+
+## Manipulating rule sets
+
+Validate rulesets in `validator` objects. The `validator()` function
+creates such an object.
 ```{r}
-v <- validator(height > 0, weight > 0, height/weight > 0)
+v <- validator(speed >= 0, dist>=0, speed/dist <= 1.5)
 v
 ```
-The validator object has stored the rule and assigned names to them for future
-reference.  To check this, we confront the data set with the validation rules
-we've just defined:
+Validator objects behave a lot like lists. For example, you can select items
+to get a new `validator`. Here, we select the first and third element.
 ```{r}
-cf <- confront(women,v)
-cf
+w <- v[c(1,3)]
 ```
-The object ```cf``` contains the result of checking the data in ```women```
-against the expectations in ```v```. The fact that there are no warnings or
-errors means that indeed each rule could be evaluated successfully (an error
-would occur for example, if we'd misspell height). Now let's take a look at
-the actual results.
+Here `w` is a new validator object holding only the first and third rule from
+`v`. If not specified by the user, rules are given the default names `"V1"`,
+`"V2"`, and so on. Those names can also be used for selecting rules.
 ```{r}
-summary(cf)
+w <- v[c("V1","V3")]
 ```
 
-Now, suppose that we expect that the BMI (weight divided by height squared) of
-each item to be below 23. We need to express the weight in kg and the height
-in meters, so the equation for BMI becomes
-$$
-BMI = \frac{weight\times0.45359}{(height\times0.0254)^2}
-$$
-Moreover, assume that we suspect that the average BMI is between 22 and 22.5. 
-Let's create another validator object that first computes the BMI and next tests
-whether the BMI values conform to our suspicion.
-```{r}
-v <- validator(
-  BMI := (weight*0.45359)/(height*0.0254)^2
-  , height > 0
-  , weight > 0
-  , BMI < 23
-  , mean(BMI) > 22 & mean(BMI) < 22.5
-)
-v
+Validator objects are reference objects. This means that if you do
 ```
-Checking is easy as before:
-```{r}
-cf <- confront(women,v)
-summary(cf)
+w <- v
 ```
-Observe that the expressions for validation are now manipulated: everywhere where `BMI` was used, it was replaced with the computation defined before.
+then `w` is not a copy of `v`, just another name for the same physical object
+as `v`.  To make an actual copy, you can select everything.
+```
+w <- v[]
+```
+It is also possible to concatenate two validator objects. For example when you
+read two rule sets from two files (See~\@ref(sect:readfromfile)). This is done
+by adding them together with `+`.
+```{r}
+rules1 <- validator(speed>=0)
+rules2 <- validator(dist >= 0)
+all_rules <- rules1 + rules2
+```
+An empty validator object is created with `validator()`.
+
+
+If you select a single element of a validator object, an object of class 'rule'
+is returned. This is the validating expression entered by the user, plus some
+(optional) metadata.
+
+```{r}
+v[[3]]
+```
+Users never need to manipulate rule objects, but it can be convenient to
+inspect them. As you see, the rules have some automatically created metadata.
+In the next section we demonstrate how to retrieve and set the metadata.
+
+
+## Rule metadata 
+
+Validator objects behave a lot like lists. The only metadata in an R
+list are the `names` of its elements. You can get and set names of a list
+using the `names<-` function. Similarly, there are getter/setter functions
+for rule metadata.
+
+
+- `origin()`     : Where was a rule defined?
+- `names()`      : The name per rule
+- `created()`    : when were the rules created?
+- `label()`      : Short description of the rule
+- `description()`: Long description of the rule
+- `meta()`       : Set or get generic metadata
+
+Names can be set on the command line, just like how you would do it for
+an R list.
+```{r}
+rules <- validator(positive_speed = speed >= 0, ratio = speed/dist <= 1.5)
+rules
+```
+Getting and setting names works the same as for lists.
+```{r}
+names(rules)
+names(rules)[1] <- "nonnegative_speed"
+```
+The functions `origin()`, `created()`, `label()`, and `description()` work in
+the same way. It is also possible to add generic key-value pairs as metadata.
+Getting and setting follows the usual recycling rules of R.
+```{r}
+# add 'foo' to the first rule:
+meta(rules[1],"foo") <- 1
+# Add 'bar' to all rules
+meta(rules,"bar") <- "baz"
+```
+Metadata can be made visible by selecting a single rule:
+```{r}
+v[[1]]
+```
+Or by extracting it to a `data.frame`
+```{r}
+meta(v)
+```
+
+Some general information is obtained with `summary`,
+```{r}
+summary(v)
+```
+Here, some properties per _block_ of rules is given. Two rules occur in the same
+block if when they share a variable. In this case, all rules occur in the same
+block.
+
+and the number of rules can be requested with `length`
+```
+length(v)
+```
+With `variables`, the variables occurring per rule, or over all the rules can be requested.
+```{r}
+variables(v)
+variables(v,as="matrix")
+```
+Validator objects can be subsetted as if they were lists using the single and double bracket operators.
+```{r}
+#v[c(1,3)]
+#v[c('ratio','wtest')]
+```
+
+The double bracket can be used to inspect a single rule
+```{r}
+v[[1]]
+```
+
+
+## Rules in data frames
+
+You can read and write rules and their metadata from and to data frames.  This
+is convenient, for example in cases where rules are retrieved from a central
+rule repository in a data base.
+
+Exporting rules and their metadata can be done with `as.data.frame`.
+```{r}
+rules <- validator(speed >= 0, dist >= 0, speed/dist <= 1.5)
+df <- as.data.frame(rules)
+```
+
+Reading from a data frame is done through the `.data` argument.
+```{r}
+rules <- validator(.data=df)
+```
+It is not necessary to define all possible metadata in the data frame. It is
+sufficient to have three character columns, named `rule`, `name` and
+`description` in any order.
+
+
+
+
+
 
 ## Conversion from and to `data.frames`
 
@@ -260,89 +370,39 @@ Linear equalities form an important class of validation rules. To prevent equali
 
 
 
-## Metadata and investigating validator objects
 
-Validator objects store a set of rules, optionally with some metadata per rule.
-Currently, the following functions can be used to get or set metadata:
 
-- `origin` : Where was a rule defined?
-- `names` : The name per rule
-- `created` : when were the rules created?
-- `label` : Short description of the rule
-- `description`: Long description of the rule
-- `meta`: Set or get generic metadata
 
-For example, names can be set from the command line when defining a validator object.
+## Using reference data
+
+For some checks it is convenient to compare the data under scrutiny with 
+other data artifacts. Two common examples include:
+
+- Data is checked against an earlier version of the same dataset.
+- We wish to check the contents of a column against a code list,
+  and we do not want to put the code list hard-coded into the 
+  rule set.
+
+For this, we can use the `ref` option in confront. Here is how
+to compare columns from two data frames row-by-row. The user
+has to make sure that the rows of the data set under scrutiny
+(`women`) matches row-wise with the reference data set (`women1`).
+
 ```{r}
-v <- validator(rat = height/weight > 0.5, htest=height>0, wtest=weight > 0)
-names(v)
+women1 <- women
+rules <- validator(height == women_reference$height)
+cf <- confront(women, rules, ref = list(women_reference = women1))
+summary(cf)
 ```
-Also try
+
+Here is how to make a code list available.
 ```{r}
-names(v)[1] <- "ratio"
-v
+rules <- validator( fruit %in% codelist )
+fruits <-  c("apple", "banana", "orange")
+dat <- data.frame(fruit = c("apple","broccoli","orange","banana"))
+cf <- confront(dat, rules, ref = list(codelist = fruits))
+summary(cf)
 ```
-
-It is also possible to add generic key-value pairs as metadata. Getting and setting follows the usual
-recycling rules of R.
-```{r}
-# add 'foo' to the first rule:
-meta(v[1],"foo") <- 1
-# Add 'bar' to all rules
-meta(v,"bar") <- "baz"
-```
-Metadata can be made visible by selecting a single rule:
-```{r}
-v[[1]]
-```
-Or by extracting it to a `data.frame`
-```{r}
-meta(v)
-```
-
-
-Some general information is obtained with `summary`,
-```{r}
-summary(v)
-```
-Here, some properties per _block_ of rules is given. Two rules occur in the same
-block if when they share a variable. In this case, all rules occur in the same
-block.
-
-and the number of rules can be requested with `length`
-```
-length(v)
-```
-With `variables`, the variables occurring per rule, or over all the rules can be requested.
-```{r}
-variables(v)
-variables(v,as="matrix")
-```
-Validator objects can be subsetted as if they were lists using the single and double bracket operators.
-```{r}
-v[c(1,3)]
-v[c('ratio','wtest')]
-```
-
-The double bracket can be used to inspect a single rule
-```{r}
-v[[1]]
-```
-
-
-## Validator objects and confrontation objects are reference objects
-
-As simple as that. If you do
-```
-w <- v
-```
-for a validator object `v`, then `w` points to the same physical object as `v`.
-To make an actual copy, you can select everything.
-```
-w <- v[]
-```
-
-
 
 
 
