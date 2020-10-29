@@ -572,10 +572,16 @@ field_format <- function(x, pattern, type=c("glob","regex"), ...){
 #'
 #' @param x \code{[character]} vector. If \code{x} is not of type
 #'          \code{character} it will be converted.
-#' @param format \code{[character]} denoting the number format (see below).
-#'
+#' @param format \code{[character]} denoting the number format (see below). 
+#' @param min_dig \code{[numeric]} minimal number of digits after decimal separator.
+#' @param max_dig \code{[numeric]} maximum number of digits after decimal separator.
+#' @param dec \code{[character]} decimal seperator.
 #' @section Specifying numerical formats:
 #' 
+#' @details
+#' If \code{format} is specified, then \code{min_dig}, \code{max_dig} and \code{dec}
+#' are ignored.
+#'
 #' Numerical formats can be specified as a sequence of characters. There are a few 
 #' special characters:
 #' \itemize{
@@ -605,11 +611,20 @@ field_format <- function(x, pattern, type=c("glob","regex"), ...){
 #'
 #' @family format-checkers
 #' @export
-number_format <- function(x, format=NULL, min_digit=0, max_dig=0){
-  rx <- utils::glob2rx(format, trim.tail=FALSE)
-  rx <- gsub("d",  "\\d", rx, fixed=TRUE)
-  rx <- gsub(".*", "\\d*",   rx, fixed=TRUE)
-  grepl(rx, as.character(x))
+number_format <- function(x, format=NULL, min_dig=NULL, max_dig=NULL, dec="."){
+  if ( !is.null(format) ){
+    rx <- utils::glob2rx(format, trim.tail=FALSE)
+    rx <- gsub("d",  "\\d", rx, fixed=TRUE)
+    rx <- gsub(".*", "\\d*",   rx, fixed=TRUE)
+    return( grepl(rx, as.character(x)) )
+  }
+  rx <- if (dec == ".") "^.*\\." else sprintf("^.*\\%s",dec)
+  decimal_digits <- sub(rx, "", x)
+  min_dig <- if (is.null(min_dig)) "0" else as.character(min_dig)
+  max_dig <- if (is.null(max_dig)) ""  else as.character(max_dig)
+  rx <- sprintf("^\\d{%s,%s}$",min_dig,max_dig)
+  grepl(rx,decimal_digits)
+  
 }
 
 
