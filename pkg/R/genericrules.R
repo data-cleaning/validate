@@ -576,7 +576,7 @@ field_format <- function(x, pattern, type=c("glob","regex"), ...){
 #' @param min_dig \code{[numeric]} minimal number of digits after decimal separator.
 #' @param max_dig \code{[numeric]} maximum number of digits after decimal separator.
 #' @param dec \code{[character]} decimal seperator.
-#' @section Specifying numerical formats:
+#' 
 #' 
 #' @details
 #' If \code{format} is specified, then \code{min_dig}, \code{max_dig} and \code{dec}
@@ -608,6 +608,13 @@ field_format <- function(x, pattern, type=c("glob","regex"), ...){
 #'
 #' out <- confront(df, rules)
 #' values(out)
+#'
+#' # a few examples, without 'validator'
+#' number_format("12.345", min_dig=2) # TRUE
+#' number_format("12.345", min_dig=4) # FALSE
+#' number_format("12.345", max_dig=2) # FALSE
+#' number_format("12.345", max_dig=5) # TRUE
+#' number_format("12,345", min_dig=2, max_dig=3, dec=",") # TRUE
 #'
 #' @family format-checkers
 #' @export
