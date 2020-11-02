@@ -1,0 +1,30 @@
+rules:
+- expr: speed >= 0
+  name: 'speed'
+  label: 'speed positivity'
+  description: |
+    speed can not be negative
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+- expr: dist >= 0
+  name: 'dist'
+  label: 'distance positivity'
+  description: |
+    distance cannot be negative.
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+- expr: speed/dist <= 1.5
+  name: 'ratio'
+  label: 'ratio limit'
+  description: | 
+    The speed to distance ratio can
+    not exceed 1.5.
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+

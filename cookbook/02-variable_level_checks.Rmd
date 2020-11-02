@@ -1,4 +1,4 @@
-# Variable checks
+# Variable checks {#sect:varlevelchecks}
 
 Variable checks are checks that can be performed on a variable by variable
 basis. An example is checking that a variable called `Age` is nonnegative,
