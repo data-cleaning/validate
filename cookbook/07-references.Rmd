@@ -1,3 +1,22 @@
-`r if (knitr::is_html_output()) '
-# References {-}
-'`
+# Bibliographical notes {-}
+
+More background on the validate package can be found in the paper
+for the R Journal.
+
+> MPJ van der Loo and E de Jonge (2020). [Data Validation Infrastructure for R](https://cran.r-project.org/web/packages/validate/vignettes/JSS_3483.pdf). _Journal of Statistical Software_ (Accepted).
+
+The theory of data validation is described in the following paper.
+
+> MPJ van der Loo, and E de Jonge (2020). [Data Validation Infrastructure for R](https://cran.r-project.org/web/packages/validate/vignettes/JSS_3483.pdf). _In Wiley StatsRef: Statistics Reference Online (eds N. Balakrishnan, T. Colton, B. Everitt, W. Piegorsch, F. Ruggeri and J.L. Teugels)_. doi:10.1002/9781118445112.stat08255
+
+Data validation is described in the wider context of data cleaning, in Chapter 6 of
+the following book.
+
+> MPJ van der Loo and E de Jonge (2018) [Statistical Data Cleaning With Applications in R](https://www.wiley.com/en-us/Statistical+Data+Cleaning+with+Applications+in+R-p-9781118897157). _John Wiley & Sons, NY_.
+
+The following document describes data validation in the context of European
+Official Statistics. It includes issues such as lifecycle management,
+complexity analyses and examples from practice.
+
+>  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://ec.europa.eu/eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
+

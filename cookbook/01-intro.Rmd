@@ -321,7 +321,7 @@ sufficient to have three character columns, named `rule`, `name` and
 
 
 
-## Validation rule syntax
+## Validation rule syntax {#sect:syntax}
 
 Conceptually, any R statement that will evaluate to a `logical` is considered a
 validating statement. The validate package checks this when the user defines a
@@ -349,10 +349,30 @@ There are some extra syntax elements that help in defining complex rules.
 - Apply the same rule to multiple groups with `var_group`. For exampole 
   `validator(G:=var_group(x,y), G > 0)` is equivalent to `validator(x>0, y>0)`.
 
-Besides this, there are a number of functions that perform a particular
-validation task.  These will be treated extensively in Chapters
-\@ref(sect:varlevelchecks) to \@ref(sect:statisticalchecks), but here is a 
-quick overview.
+A few helper functions are available to compute groupwise values on
+variables (vectors). They differ from functions like `aggregate` or `tapply`
+in that their result is always of the same length as the input.
+```{r}
+sum_by(1:10, by = rep(c("a","b"), each=5) )
+```
+This is useful for rules where you want to compare individual values with
+group aggregates.
+
+
+|function             | computes                         |
+|---------------------|----------------------------------|
+| `do_by`             | genereic groupwise calculation   |
+| `sum_by`            | groupwise sum                    |
+| `min_by`, `max_by`  | groupwise min, max               |
+| `mean_by`           | groupwise mean                   |
+| `median_by`         | groupwise median                 |
+
+See also Section \@ref(sect:groupwise).
+
+There are a number of functions that perform a particular validation task that
+would be hard to express with basic syntax.  These are treated extensively
+in Chapters \@ref(sect:varlevelchecks) to \@ref(sect:statisticalchecks), but
+here is a quick overview.
 
 |function             | checks                                                         |
 |---------------------|----------------------------------------------------------------|

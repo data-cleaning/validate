@@ -14,7 +14,7 @@ head(SBS2000, 3)
 
 ```
 
-## Completeness of records
+## Completeness of records {#sect:iscomplete}
 
 The functions `is_complete()` and `all_complete()` are convenience functions
 that test for missing values or combinations thereof in records.
@@ -38,12 +38,14 @@ complete.  The output is one logical value (`TRUE` or `FALSE`) for each record.
 The fourth rule tests whether _all_ values are present in the `id` column, and
 it results in a single `TRUE` or `FALSE`. 
 
+- To test for missing values in individual variables, see also \@ref(sect:missingness).
+- To check whether records are available at all, see \@ref(sect:completeness).
+
 
 ## Balance equalities and inequalities 
 
-These concern sums or differences of multiple variables. They can be expressed
-simply as sums and products over variables.
-
+Balance restrictions occur for example in economic microdata, where financial
+balances must be met.
 ```{r}
 rules <- validator(
     total.rev - profit == total.costs
@@ -55,16 +57,15 @@ out <- confront(SBS2000, rules)
 summary(out)
 ```
 Here, the first rule checks a balance between income, costs, and profit; the
-second rule check a sub-balance, and the third rule is a plausibility check
+second rule checks a sub-balance, and the third rule is a plausibility check
 where we do not expect profit to exceed 60 per cent of the total revenue.
 
-
-Observe that the expressions have been altered to account for possible machine
-rounding differences. Rather than testing whether variable $x$ equals variable
-$y$, `validate` will check $|x-y|\leq \epsilon$, where the default value of
-$\epsilon$ is $10^{-8}$. The value of this tolerance can be controlled for
-linear equalities and inequalities using respectively `lin.eq.eps` and
-`lin.ineq.eps`.
+Observe that the expressions have been altered by `validate` to account for
+possible machine rounding differences. Rather than testing whether variable $x$
+equals variable $y$, `validate` will check $|x-y|\leq \epsilon$, where the
+default value of $\epsilon$ is $10^{-8}$. The value of this tolerance can be
+controlled for linear equalities and inequalities using respectively
+`lin.eq.eps` and `lin.ineq.eps`.
 
 ```{r}
 out <- confront(SBS2000, rules, lin.ineq.eps=0, lin.eq.eps=0.01)
@@ -77,14 +78,15 @@ See \@ref(sect:options) for more information on setting and resetting options.
 ## Conditional restrictions
 
 Conditional restrictions are all about demanding certain value combinations.
-
+In the following example we check that a business with staff also has staff
+costs.
 ```{r}
 rule <- validator(if (staff >= 1) staff.costs >= 1)
 out  <- confront(SBS2000, rule)
 summary(out)
 ```
-Here, combinations where there is a positive number of staff must be accompanied with
-a positive staff cost. 
+Here, combinations where there is a positive number of staff must be
+accompanied with a positive staff cost. 
 
 Validate translates the rule `if ( P ) Q` to an expression of the form `!P |
 Q`. The reason for this is that the latter can be evaluated faster
@@ -127,8 +129,10 @@ transactions <- data.frame(
 ```
 We assume that it is not possible for senders with codes starting with an `"S"`
 to send something to receivers starting with `FG`. A convenient way to encode
-such demands is to use [globbing patterns](https://en.wikipedia.org/wiki/Glob_(programming).
-We create a data frame that lists forbidden combinations (here: one combination of two key patterns).
+such demands is to use 
+[globbing patterns](https://en.wikipedia.org/wiki/Glob_(programming)).
+We create a data frame that lists forbidden combinations (here: one combination
+of two key patterns).
 
 ```{r}
 forbidden <- data.frame(sender="S*",receiver = "FG*")

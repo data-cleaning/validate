@@ -1,134 +1,61 @@
 # Rules in text files {#sect:rulefiles}
 
+This Chapter is about importing and exporting rules from and to file, both in
+free-form text and in YAML. We also discuss some more advanced features like
+how to have one rule file include another file.
 
-### Importing from free form text files
-The easiest way to define rules is by storing them in a free-form text file. For example,
-create a file called `ex-1.txt`
-```
-# content of ex-1.txt
-
-# Some checks on the 'women' dataset. 
-height > 0
-
-weight > 0
-
-mean(height/weight) < 0.5
-```
-We can read the rules using
-```{r,eval=FALSE}
-v <- validator(.file="ex-1.txt")
-```
-Note that the `#` is used to start comment-lines, just like in regular R
-syntax. Validation rules may span several lines. The only restriction is that
-rules are stated in valid syntax and can be recognized by validate as
-validating (basically, it should result in a `logical`).
+- Importing from free-form text files was discussed in \@ref{sect:readfromfile}
+- Importing from simple YAML files was discussed in \@ref{sect:yamlfiles}
 
 
-### Importing from yaml files
-To set options and metadata for the rules, the well-known
-[yaml](https://yaml.org) (yaml ain't markup language) format is used. Yaml
-is a human-readable way to define (nested) structures. Here is an example of a
-yaml-based rule definition file.
-```
-# content of ex-2.yaml
-rules:
-- 
-  expr: height > 0
-  name: height
-  label: height positivity
-  description: |
-   According to the latest research, the average height of American women
-   must be positive. 
--
-  expr: weight > 0
-  name: weight
-  label: weight positivity
-  description: |
-    By definition, weight must be positive.
-```
-This file can be read in the same way.
-```
-v <- validator(.file='rules.yaml')
-```
-There are a few things to note here:
+## Setting options
 
-- Defining a set of rules with metadata starts with the `rules:` directive.
-- Every dash starts a new rule.
-- Indentation matters. In `yaml` indentation _must be spaces_ and _not tabs_. In the example,
-there are two spaces of indentation before a key name (`expr`, `name`, and so on). For long rules
-or pieces of text, you can add a `|` or `>` after the colon and add a multiline string. You need
-to start on a new line and add an extra indentation.
-- Any entry starting with an exclamation mark (```!```) must be enquoted since the exclamation
-mark has special meaning in YAML.
+Both free-form and YAML files can optionally start with a header section where
+options or file inclusions can be set. The header section is enclosed by lines
+that contain three dashes (`---`) at the beginning of the line.
 
-The latter remark means that this is wrong:
-```
-# READING THIS FILE FAILS
-rules:
-- 
-  expr: !is.na(height) 
-```
+For example, in the following rule file we make sure that errors are not caught
+but raised to run-time level, and we set the tolerance for checking  linear equalities and
+inequalities to zero.
 
-and this is ok:
-```
-# READING THIS FILE SUCCEEDS
-rules:
-- 
-  expr: '!is.na(height)' 
-```
-
-Rules exported with ```export_yaml``` are enquoted by default.
-
-
-
-
-
-
-### Mixing free form and yaml
-This is possible. Just separate free-form sections from structured sections with
-three dashes on a single line.
-```
-# content of ex-3.yaml
-rules:
-- 
-  expr: height > 0
-  name: height
-  label: height positivity
-  description: |
-   According to the latest research, the average height of American women
-   must be positive. 
--
-  expr: weight > 0
-  name: weight
-  label: weight positivity
-  description: |
-    By definition, weight must be positive.
----
-# free form starts here
-
-# we expect the following mean ratio
-mean(height/weight) < 0.5
-
-# we expect a high correlation
-cor(height,weight) > 0.99
-```
-
-### Setting options
-This can be done at the beginning of your file. Start and end the options section with three dashes
-on a line to start the (free form or structured) rule section.
 ```
 ---
 options:
   raise: errors
+  lin.eq.eps: 0
+  lin.ineq.eps: 0
 ---
-height > 0
-```
-The options you set here will be part of the `validator` object, that is created once you read in the file. The options are valid for every confrontation you use this validator for, unless they are overwritten during the call to `confront`.
 
-### Including other rule files
-This is useful, for example when you have a general rule set, that applies to all your data
-files, and some rules that apply only in specific cases. The file with specific cases can include
-one or more rule files in that case. Files should be included in the same section as the options.
+turnover >= 0
+
+staff >= 0
+
+total.rev - profit == total.costs
+
+```
+The options you set here will be part of the `validator` object, that is
+created once you read in the file. The options are valid for every
+confrontation you use this validator for, unless they are overwritten during
+the call to `confront()`.
+
+The header section is interpreted as a block of YAML, so options and file
+inclusions must be specified in that format.
+
+
+## Including other rule files
+
+In validate, rule files can include each other recursively. So file A can
+include file B, which may inclide file C. This is useful for example in surveys
+where the first part of the questionnaire goes to all respondents, and for the
+second part, the contents of the questionnaire (and hence its variables) depend
+on the respondent type. One could create a files with specific rules for the
+second part: one for each respondent group, and have each specific rule file
+include the general rules that must hold for every respondent.
+It can also be useful when different persons are responsible for different rule
+sets. 
+
+File inclusion can be set through the `include` option in the YAML header.
+
 ```
 ---
 include:
@@ -140,8 +67,11 @@ options:
 # start rule definitions here
 ```
 
-### Exporting validator objects
-There are two ways to do that. You can either write to a `yaml` file immediately as follows
+## Exporting validator objects
+
+
+There are three ways to do that. You can either write to a `yaml` file
+immediately as follows
 ```{r, eval=FALSE}
 v <- validator(height>0, weight> 0)
 export_yaml(v,file="my_rules.yaml")
@@ -150,6 +80,16 @@ or you can get the `yaml` text string using `as_yaml`
 ```
 cat(as_yaml(v))
 ```
+
+Finally, you can convert a rule set to data frame and then export it
+to a database.
+
+```{r, eval=FALSE}
+df <- as.data.frame(v)
+```
+
+
+
 
 
 

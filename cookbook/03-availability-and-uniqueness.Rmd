@@ -5,6 +5,9 @@ and/or complete with respect to a set of keys, and whether they are unique.
 The checks described here are typically useful for data in 'long' format, where
 one column holds a value and all the other columns identify the value.
 
+- To test for missing values in individual variables, see also \@ref(sect:missingness).
+- To check whether records or parts thereof are completed, see \@ref(sect:iscomplete).
+
 
 #### Data and packages {-}
 
@@ -35,11 +38,12 @@ bulk-load data into SQL-based data base systems, or to transfer data between
 organisations in a unambiguous way.
 
 Data in long form is in general much harder to check and process for
-statistical purpose than data in wide format. The reason is that in long format
-relations between different variables are spread out across records, and those
-records are not necessarily ordered in any particular way prior to processing.
-This makes interpretation of validation fails intrinsically harder for 
-long-form data then for wide-form data.
+statistical purpose than data in wide format, where each variable is stored in
+a separate column. The reason is that in long format relations between
+different variables are spread out across records, and those records are not
+necessarily ordered in any particular way prior to processing.  This makes
+interpretation of validation fails intrinsically harder for long-form data then
+for wide-form data.
 
 The `samplonomy` data set is has a particularly nasty structure. It contains
 both annual and quarterly time series for GDP, Import, Export and the Balance of
@@ -63,7 +67,7 @@ must add up to the annual values.
 The function `is_unique()` checks whether combinations of variables (usually
 key variables) uniquely identify a record. It accepts any positive number of
 variable names and returns `FALSE` for each record that is duplicated with
-respect to that value.
+respect to the designated variariables.
 
 
 Here, we test whether region, period, and measure uniquely identify a value in
@@ -82,10 +86,10 @@ convenience function from `validate`.
 violating(samplonomy, out)
 ```
 
-## Completeness {#sect:completeness}
+## Availability of records {#sect:completeness}
 
 This section is on testing for availability of whole records. Testing for individual
-missing values (`r NA`), is treated in \@ref(sect:missingness).
+missing values (`r NA`), is treated in \@ref(sect:missingness). 
 
 
 We wish to ensure that for each region, and each variable, the periods 2014,
@@ -190,6 +194,9 @@ unique(erroneous_records$measure)
 ```
 So here, blocks containing GDP and Export have entire records missing.
 
+
+
+
 ## Gaps in (time) series
 
 For time series, or possibly other series it is desirable that
@@ -198,10 +205,9 @@ The mathematical term for such a series is called a _linear sequence_.
 Here are some examples of linear series.
 
 - The natural numbers: $1,2,3,\ldots$
-- The even natural numbers $2, 4, \ldots$
-- quarterly periods: `"2020Q1"`, `"2020Q2"`, $\ldots$
-- Annual, mostly, daily, hourly, or periods
-- Any fixed-frequency time series.
+- The even natural numbers $2, 4, 6, \ldots$
+- Quarters periods: `"2020Q1"`, `"2020Q2"`, $\ldots$
+- Years (these are just natural numbers): $2019, 2020, \ldots$
 
 The `validate` functions `is_linear_sequence` and `in_linear_sequence` check
 whether a variable represents a linear series, possibly in blocks defined by
