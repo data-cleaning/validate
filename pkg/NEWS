@@ -2,7 +2,7 @@ version 0.9.4
 - New functions 'violating', 'satisfying', 'lacking' to select records 
   based on 'validator' objects or the outcome of validations ('validation' 
   objects).
-- New function 'hierarchy' checks aggregations for hierarchical code lists.
+- New function 'hierarchy' checks aggregations against hierarchical code lists.
   Supports globbing and regular expression to define parent-child relations.
 - New functions 'in_linear_sequence' and 'is_linear_sequence' 
   check for gaps/duplicates in numerical or time series.
@@ -27,6 +27,8 @@ version 0.9.4
 - New dataset 'nace_rev2', representing the 2008 (revision 2) NACE hierarchy
   for classification of economic activity.
 - Fix: option 'lin.ineq.eps' was ignored by 'confront'.
+- Fix: indexing of 'confrontation' objects failed in 'lapply' context. (Thanks
+  to Matthias Gomolka for GH issue #116)
 - Package now depends on R >= 3.5.0 because of the samplonomy RData file.
 - Breaking change: for consistency, the '...' argument in 'exists_one' and 'exists_any'
   is replaced with 'by'. This only affects cases with multiple grouping variables.

@@ -243,8 +243,18 @@ confront_work <- function(x, dat, key=NULL, class='confrontation', ...){
 #' @family confrontation-methods
 #' @export 
 setMethod("[","confrontation",function(x,i,j,...,drop=TRUE){
+
+  # this trycatch mechanism protects against an error 
+  # occurring when confrontation objects are indexed
+  # within lapply. See GH issue #116.
+  call <- tryCatch(match.call(call=sys.call(sys.parent()))
+            , error = function(e) NULL)
+  if (is.null(call)){
+    call <- match.call()
+  }
+
   new(class(x)
-    , ._call = match.call(call=sys.call(sys.parent()))
+    , ._call = call
     , ._calls = x$._calls[i]
     , ._value = x$._value[i]
     , ._warn = x$._warn[i]
