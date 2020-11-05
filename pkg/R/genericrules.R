@@ -498,6 +498,36 @@ min_by <- function(x, by, na.rm=FALSE) do_by(x,by,min, na.rm=na.rm)
 #' @export
 max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 
+#' Hiridoglu-Berthelot function
+#'
+#' A function to measure `outlierness' for skew distributed data with long
+#' right tails. The method works by measuring deviation from a reference
+#' value, by default the median. Deviation from above is measured as the
+#' ratio between observed and refence values. Deviation from below is
+#' measured as the inverse: the ratio between reference value and 
+#' observed values.
+#'
+#' @param x \code{[numeric]}
+#' @param ref \code{[function]} or \code{[numeric]}
+#' @param ... arguments passed to \code{ref} after \code{x}
+#'
+#' @return \eqn{\max\{x/ref(x), ref(x)/x\}-1} if \code{ref} is a function,
+#'         otherwise \eqn{\max\{x/ref, ref/x\}-1}
+#'
+#' @references
+#' Hidiroglou, M. A., & Berthelot, J. M. (1986). Statistical editing and
+#' imputation for periodic business surveys. Survey methodology, 12(1), 73-83.
+#'
+#' @family cross-record-helpers
+#' @examples
+#' x <- seq(1,20,by=0.1)
+#' plot(x,hb(x), 'l')
+#'
+hb <- function(x, ref=median,...){
+  refval <- if(is.numeric(ref)) ref else ref(x,...)
+  pmax(x/refval, refval/x) -1
+}
+
 
 #' Check number of code points
 #'
