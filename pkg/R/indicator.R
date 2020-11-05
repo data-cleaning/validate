@@ -7,13 +7,15 @@ NULL
 
 #' Define indicators for data
 #' 
-#' \bold{This feature is currently experimental and may change in future versions}
+#' An indicator maps a data frame, or each record in a data frame to a number.
+#' The purpose of this class is to store and apply expressions that define
+#' indicators.
 #' 
-#' \code{\link{indicator}}
+#' 
 #' @param ... A comma-separated list of indicator definitions
 #' @param .file (optional) A character vector of file locations
 #' 
-#' @seealso \code{\link{syntax}}
+#' @seealso \code{\link{syntax}}, \code{\link{add_indicators}}
 #' 
 #' @export
 #' @keywords internal
@@ -99,7 +101,7 @@ setMethod("+", c("indicator","indicator"), function(e1, e2){
 #' @param dat \code{[data.frame]}
 #' @param x   \code{[indicator]} or \code{[indication]} object. See examples.
 #'
-#' @return 
+#' @return \code{dat} with extra columns defined by \code{x} attached.
 #'
 #' @examples
 #' ii <- indicator(

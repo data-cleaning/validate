@@ -518,12 +518,14 @@ max_by <- function(x, by, na.rm=FALSE) do_by(x,by,max, na.rm=na.rm)
 #' Hidiroglou, M. A., & Berthelot, J. M. (1986). Statistical editing and
 #' imputation for periodic business surveys. Survey methodology, 12(1), 73-83.
 #'
+#' @export
+#'
 #' @family cross-record-helpers
 #' @examples
 #' x <- seq(1,20,by=0.1)
 #' plot(x,hb(x), 'l')
 #'
-hb <- function(x, ref=median,...){
+hb <- function(x, ref=stats::median,...){
   refval <- if(is.numeric(ref)) ref else ref(x,...)
   pmax(x/refval, refval/x) -1
 }
