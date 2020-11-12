@@ -1,10 +1,10 @@
 # Statistical checks {#sect:statisticalchecks}
 
-Statistical checks involve properties of statistical characteristics such as
-the means of columns. These characteristics can be checked for whole columns or
-grouped by one or more categorical variables. It is also possible to use
-group-wise computed statistics in validation rules.  For example if you
-want to compare individual values with a mean within a group.
+Statistical checks involve group properties such as the means of columns. These
+characteristics can be checked for whole columns or grouped by one or more
+categorical variables. It is also possible to use group-wise computed
+statistics in validation rules.  For example if you want to compare individual
+values with a mean within a group.
 
 For long-form data it is possible to compare aggregate values with underlying
 details. For example to test whether quarterly time series add up to annual
@@ -242,7 +242,8 @@ i <- !duplicated(samplonomy[c("region","period","measure")])
 samplonomy2 <- samplonomy[i, ]
 
 out <- confront(samplonomy2, rule, ref=list(codelist=samplonia))
-summary(out)
+# suppress some columns for brevity
+summary(out)[1:7]
 ```
 
 The `hierarchy()` function marks every record `FALSE` that is involved

@@ -1,0 +1,420 @@
+# Working with validate {#sect:work}
+
+```{r, echo=FALSE}
+library(validate)
+```
+
+
+
+## Reading rules from file {#sect:readfromfile}
+
+It is a very good idea to store and maintain rule sets outside of your R
+script. Validate supports two file formats: simple text files and `yaml` files.
+Here we only discuss simple text files, yaml files are treated in \@ref(sect:yamlfiles).
+
+To try this, copy the following rules into a new text file and store it in a
+file called `myrules.R`, in the current working directory of your R session.
+
+```{r, eval=FALSE}
+# basic range checks
+speed >= 0
+dist  >= 0
+
+# ratio check
+speed / dist <= 1.5
+```
+Note that you are allowed to annotate the rules as you would with 
+regular R code. Reading these rules can be done as follows.
+```{r}
+rules <- validator(.file="myrules.R")
+```
+
+
+## Manipulating rule sets
+
+Validate stores rulesets into something called a `validator` object. The
+`validator()` function creates such an object.
+```{r}
+v <- validator(speed >= 0, dist>=0, speed/dist <= 1.5)
+v
+```
+Validator objects behave a lot like lists. For example, you can select items
+to get a new `validator`. Here, we select the first and third element.
+```{r}
+w <- v[c(1,3)]
+```
+Here `w` is a new validator object holding only the first and third rule from
+`v`. If not specified by the user, rules are given the default names `"V1"`,
+`"V2"`, and so on. Those names can also be used for selecting rules.
+```{r}
+w <- v[c("V1","V3")]
+```
+
+Validator objects are reference objects. This means that if you do
+```
+w <- v
+```
+then `w` is not a copy of `v`. It is just another name for the same physical
+object as `v`.  To make an actual copy, you can select everything.
+```
+w <- v[]
+```
+It is also possible to concatenate two validator objects. For example when you
+read two rule sets from two files (See \@ref(sect:readfromfile)). This is done
+by adding them together with `+`.
+```{r}
+rules1 <- validator(speed>=0)
+rules2 <- validator(dist >= 0)
+all_rules <- rules1 + rules2
+```
+An empty validator object is created with `validator()`.
+
+
+If you select a single element of a validator object, an object of class 'rule'
+is returned. This is the validating expression entered by the user, plus some
+(optional) metadata.
+
+```{r}
+v[[3]]
+```
+Users never need to manipulate rule objects, but it can be convenient to
+inspect them. As you see, the rules have some automatically created metadata.
+In the next section we demonstrate how to retrieve and set the metadata.
+
+
+## Rule metadata 
+
+Validator objects behave a lot like lists. The only metadata in an R
+list are the `names` of its elements. You can get and set names of a list
+using the `names<-` function. Similarly, there are getter/setter functions
+for rule metadata.
+
+
+- `origin()`     : Where was a rule defined?
+- `names()`      : The name per rule
+- `created()`    : when were the rules created?
+- `label()`      : Short description of the rule
+- `description()`: Long description of the rule
+- `meta()`       : Set or get generic metadata
+
+Names can be set on the command line, just like how you would do it for
+an R list.
+```{r}
+rules <- validator(positive_speed = speed >= 0, ratio = speed/dist <= 1.5)
+rules
+```
+Getting and setting names works the same as for lists.
+```{r}
+names(rules)
+names(rules)[1] <- "nonnegative_speed"
+```
+The functions `origin()`, `created()`, `label()`, and `description()` work in
+the same way. It is also possible to add generic key-value pairs as metadata.
+Getting and setting follows the usual recycling rules of R.
+```{r}
+# add 'foo' to the first rule:
+meta(rules[1],"foo") <- 1
+# Add 'bar' to all rules
+meta(rules,"bar") <- "baz"
+```
+Metadata can be made visible by selecting a single rule:
+```{r}
+v[[1]]
+```
+Or by extracting it to a `data.frame`
+```{r}
+meta(v)
+```
+
+Some general information is obtained with `summary`,
+```{r}
+summary(v)
+```
+Here, some properties per _block_ of rules is given. Two rules occur in the same
+block if when they share a variable. In this case, all rules occur in the same
+block.
+
+The number of rules can be requested with `length`
+```{r}
+length(v)
+```
+With `variables`, the variables occurring per rule, or over all the rules can be requested.
+```{r}
+variables(v)
+variables(v,as="matrix")
+```
+
+## Metadata in text files: `YAML` {#sect:yamlfiles}
+
+[YAML](https://yaml.org) is a data format that aims to be easy to learn and
+human-readable. The name 'YAML' is a [recursive
+acronym](https://en.wikipedia.org/wiki/Recursive_acronym) that stands for
+
+> YAML Ain't Markup Language.
+
+Validate can read and write rule sets from and to YAML files. For example,
+paste the following code into a file called `myrules.yaml`.
+```
+rules:
+- expr: speed >= 0
+  name: 'speed'
+  label: 'speed positivity'
+  description: |
+    speed can not be negative
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+- expr: dist >= 0
+  name: 'dist'
+  label: 'distance positivity'
+  description: |
+    distance cannot be negative.
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+- expr: speed/dist <= 1.5
+  name: 'ratio'
+  label: 'ratio limit'
+  description: | 
+    The speed to distance ratio can
+    not exceed 1.5.
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+
+```
+We can read this file using `validator(.file=)` as before.
+
+```{r}
+rules <- validator(.file="myrules.yaml")
+rules
+```
+Observe that the labels are printed between brackets.  There are a few things
+to note about these YAML files.
+
+1. `rules:` starts a list of rules. 
+2. Each new rule starts with a dash (`-`)
+3. Each element of a rule is denoted `name: <content>`. The only obligated
+   element is `expr`: the rule expression.
+4. Spaces matter. Each element of a rule must be preceded by a newline and two spaces.
+   Subelements (as in `meta`) are indented again.
+
+A full tutorial on YAML can be found at
+[W3Cschools.io](https://www.w3schools.io/file/yaml-introduction/). 
+
+
+To export a rule set to yaml, use the `export_yaml()` function.
+```{r}
+rules1 <- rules[c(1,3)]
+export_yaml(rules1, file="myrules2.yaml")
+```
+
+We will return extensively to reading rules from YAML or other text files
+in Chapter \@ref(sect:rulefiles).
+
+
+
+
+## Rules in data frames
+
+You can read and write rules and their metadata from and to data frames.  This
+is convenient, for example in cases where rules are retrieved from a central
+rule repository in a data base.
+
+Exporting rules and their metadata can be done with `as.data.frame`.
+```{r}
+rules <- validator(speed >= 0, dist >= 0, speed/dist <= 1.5)
+df <- as.data.frame(rules)
+```
+
+Reading from a data frame is done through the `.data` argument.
+```{r}
+rules <- validator(.data=df)
+```
+It is not necessary to define all possible metadata in the data frame. It is
+sufficient to have three character columns, named `rule`, `name` and
+`description` in any order.
+
+
+
+## Validation rule syntax {#sect:syntax}
+
+Conceptually, any R statement that will evaluate to a `logical` is considered a
+validating statement. The validate package checks this when the user defines a
+rule set, so for example calling `validator( mean(height) )` will result in a
+warning since just computing `mean(x)` does not validate anything.
+
+You will find a concise description of the syntax in the `syntax` help file.
+```{r,eval=FALSE}
+?syntax
+```
+
+In short, you can use
+
+- Type checks: any function starting with `is.`
+- Binary comparisons: `<, <=, ==, !=, >=, >` and `%in%`
+- Unary logical operators: `!, all(), any()`
+- Binary logical operators: `&, &&, |, ||` and logical implication, e.g. `if (staff > 0) staff.costs > 0`
+- Pattern matching  `grepl`
+- [Functional dependency](https://en.wikipedia.org/wiki/Functional_dependency): $X\to Y + Z$ is represented by `X ~ Y + Z`.
+
+There are some extra syntax elements that help in defining complex rules.
+
+- Inspect the whole data set using `.`, e.g. `validator( nrow(.) > 10)`.
+- Reuse a variable using `:=`, e.g. `validator(m := mean(x), x < 2*m )`.
+- Apply the same rule to multiple groups with `var_group`. For example 
+  `validator(G:=var_group(x,y), G > 0)` is equivalent to `validator(x>0, y>0)`.
+
+A few helper functions are available to compute groupwise values on
+variables (vectors). They differ from functions like `aggregate` or `tapply`
+in that their result is always of the same length as the input.
+```{r}
+sum_by(1:10, by = rep(c("a","b"), each=5) )
+```
+This is useful for rules where you want to compare individual values with
+group aggregates.
+
+
+|function             | computes                         |
+|---------------------|----------------------------------|
+| `do_by`             | generic groupwise calculation   |
+| `sum_by`            | groupwise sum                    |
+| `min_by`, `max_by`  | groupwise min, max               |
+| `mean_by`           | groupwise mean                   |
+| `median_by`         | groupwise median                 |
+
+See also Section \@ref(sect:groupwise).
+
+There are a number of functions that perform a particular validation task that
+would be hard to express with basic syntax.  These are treated extensively
+in Chapters \@ref(sect:varlevelchecks) to \@ref(sect:statisticalchecks), but
+here is a quick overview.
+
+|function             | checks                                                         |
+|---------------------|----------------------------------------------------------------|
+|`in_range`           | Numeric variable range                                         |
+|`is_unique`          | Uniqueness of variable combinations                            |
+|`all_unique`         | Equivalent to `all(is_unique())`                               |
+|`is_complete`        | Completeness of records                                        |
+|`all_complete`       | Equivalent to `all(is_complete())`                             |
+|`exists_any`         | For each group, check if any record satisfies a rule           |
+|`exists_one`         | For each group, check if exactly one record satisfies a rule   |
+|`is_linear_sequence` | Linearity of numeric or date/time/period series                |
+|`in_linear_sequence` | Linearity of numeric of date/time/period series                |
+|`hierarchy`          | Hierarchical aggregations                                      |
+|`part_whole_relation`| Generic part-whole relations                                   |
+|`field_length`       | Field length                                                   |
+|`number_format`      | Numeric format in text fields                                  |
+|`field_format`       | Field format                                                   |
+|`contains_exactly`   | Availability of records                                        |
+|`contains_at_least`  | Availability of records                                        |
+|`contains_at_most`   | Availability of records                                        |
+|`does_not_contain`   | Correctness of key combinations                                |
+
+
+## Confrontation objects
+
+The outcome of confronting a validator object with a data set is an object of
+class `confrontation`. There are several ways to extract information from a
+`confrontation` object.
+
+- `summary`: summarize output; returns a `data.frame`
+- `aggregate`: aggregate validation in several ways
+- `sort` : aggregate and sort in several ways
+- `values`: Get the values in an array, or a list of arrays if rules have different output dimension structure
+- `errors`: Retrieve error messages caught during the confrontation
+- `warnings`: Retrieve warning messages caught during the confrontation.
+
+By default aggregates are produced by rule.
+```{r}
+v  <- validator(height>0, weight>0,height/weight < 0.5)
+cf <- confront(women, rules)
+aggregate(cf) 
+```
+To aggregate by record, use `by='record'`
+```{r}
+head(aggregate(cf,by='record'))
+```
+Aggregated results can be automatically sorted, so records with the most violations or
+rules that are violated most sort higher.
+```{r}
+# rules with most violations sorting first:
+sort(cf)
+```
+
+Confrontation objects can be subsetted with single bracket operators (like
+vectors), to obtain a sub-object pertaining only to the selected rules.
+```
+summary(cf[c(1,3)])
+```
+
+
+## Confrontation options {#sect:options}
+By default, all errors and warnings are caught when validation rules are confronted with data. This can be switched off by setting the `raise` option to `"errors"` or `"all"`. The following 
+example contains a specification error: `hite` should be `height` and therefore the rule errors
+on the `women` data.frame because it does not contain a column `hite`. The error is caught
+(not resulting in a R error) and shown in the summary,
+```{r}
+v <- validator(hite > 0, weight>0)
+summary(confront(women, v))
+```
+Setting `raise` to `all` results in a R error:
+
+```{r eval=TRUE, error=TRUE}
+# this gives an error
+confront(women, v, raise='all')
+```
+
+
+Linear equalities form an important class of validation rules. To prevent
+equalities to be strictly tested, there is an option called `lin.eq.eps` (with
+default value $10^{-8}$) that allows one to add some slack to these tests. The
+amount of slack is intended to prevent false negatives (unnecessary failures)
+caused by machine rounding. If you want to check whether a sum-rule is
+satisfied to within one or two units of measurement, it is cleaner to define
+two inequalities for that.
+
+
+
+
+
+
+
+
+## Using reference data
+
+For some checks it is convenient to compare the data under scrutiny with 
+other data artifacts. Two common examples include:
+
+- Data is checked against an earlier version of the same dataset.
+- We wish to check the contents of a column against a code list,
+  and we do not want to put the code list hard-coded into the 
+  rule set.
+
+For this, we can use the `ref` option in confront. Here is how
+to compare columns from two data frames row-by-row. The user
+has to make sure that the rows of the data set under scrutiny
+(`women`) matches row-wise with the reference data set (`women1`).
+
+```{r}
+women1 <- women
+rules <- validator(height == women_reference$height)
+cf <- confront(women, rules, ref = list(women_reference = women1))
+summary(cf)
+```
+
+Here is how to make a code list available.
+```{r}
+rules <- validator( fruit %in% codelist )
+fruits <-  c("apple", "banana", "orange")
+dat <- data.frame(fruit = c("apple","broccoli","orange","banana"))
+cf <- confront(dat, rules, ref = list(codelist = fruits))
+summary(cf)
+```
+
+
+
+

@@ -22,9 +22,9 @@ head(samplonomy, 3)
 
 ## Long data
 
-The samplonomy data set is in structured in 'long form'. This means that each
-record has a single `value` column, and one or more columns containing character
-values that together describe what the value means.
+The samplonomy data set is structured in 'long form'. This means that each
+record has a single `value` column, and one or more columns containing
+character values that together describe what the value means.
 
 ```{r}
 head(samplonomy,3)
@@ -45,13 +45,13 @@ necessarily ordered in any particular way prior to processing.  This makes
 interpretation of validation fails intrinsically harder for long-form data then
 for wide-form data.
 
-The `samplonomy` data set is has a particularly nasty structure. It contains
-both annual and quarterly time series for GDP, Import, Export and the Balance of
+The `samplonomy` data set has a particularly nasty structure. It contains both
+annual and quarterly time series for GDP, Import, Export and the Balance of
 Trade (export less import). The period column therefore contains both quarterly
-and annual labels. Furthermore, there are time series for the whole of Samplonia
-(region Samplonia), for each of its two provinces (regions Agria and Induston)
-and for each of its districts within Agria (Wheaton and Greenham) and Induston
-(Smokeley, Mudwater, Newbay and Oakdale). 
+and annual labels. Furthermore, there are time series for the whole of
+Samplonia (region Samplonia), for each of its two provinces (regions Agria and
+Induston) and for each of its districts within Agria (Wheaton and Greenham) and
+Induston (Smokeley, Mudwater, Newbay and Oakdale). 
 
 Naturally, we expect that the key combinations are unique, that all time series
 are gapless and complete, that the Balance of trade equals Export less Import

@@ -12,6 +12,7 @@ In this section we will use the `SBS2000` dataset, that is included with `valida
 ```{r}
 library(validate)
 data(SBS2000)
+head(SBS2000, 3)
 ```
 
 See `?SBS2000` for a description.
@@ -89,7 +90,7 @@ rules <- validator(
 out <- confront(SBS2000, rules)
 summary(out)
 ```
-One advantage of `chech_field_length` is that its argument is converted to
+One advantage of `check_field_length` is that its argument is converted to
 character (recall that `size` is a `factor` variable). The function
 `field_length` can be used to either test for exact field lengths or to
 check whether the number of characters is within a certain range.
@@ -156,8 +157,8 @@ pattern matching in strings is discussed in the next section.
 
 A simple way to check for more general format is to use [globbing
 patterns](https://en.wikipedia.org/wiki/Glob_(programming)). In such patterns,
-the asterisk wildcard character (`*`) is interpreted as 'one or more characters'
-and the question mark (`?`) is interpreted as 'a character'.
+the asterisk wildcard character (`*`) is interpreted as 'zero or more
+characters' and the question mark (`?`) is interpreted as 'a character'.
 
 For example, to check that the `id` variable in `SBS2000` starts with `RET` we
 can do the following.
@@ -193,6 +194,17 @@ as: the string starts (`"^"`) with `"sc"`, is followed by a number between 0
 and 9 (`"[0-9]"`) and then ends (`"$"`). The regular expression `"^RET\\{d}2"`
 indicates that a string must start (`"^"`) with `"RET"`, followed by two
 digits (`"\\d{2}"`), after which the string must end (`"$"`).
+
+
+Globbing patterns are easier to develop and easier to understand  than regular
+expressions, while regular expressions offer far more flexibility but are
+harder to read. Complex and long regular expressions may have subtle matching
+behaviour that is not immediately obvious to inexperienced users. It is
+therefore advisable to test regular expressions with a a small dataset
+representing realistic cases that contains both matches and non-matches. As a
+rule of thumb we would advise to use globbing patterns unless those offer
+insufficient flexibility.
+
 
 
 ## Numeric ranges

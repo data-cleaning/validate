@@ -1,0 +1,100 @@
+# Indicators
+
+Until now we have discussed various types of data validation rules: decisions
+that assign True or False values to a data frame. In some cases it is
+convenient to have a continuous value that can then be used in further
+assessing the data.
+
+A practical example is the so-called [selective
+editing](https://ec.europa.eu/eurostat/cros/content/selective-editing-theme_en)
+approach to data cleaning. Here, each record in a data set is assigned a number
+that expresses the risk a record poses for inferring a faulty conclusion.
+Records are then ordered from high risk (records that both have suspicious
+values and large influence on the final result) to low risk (records with
+unsuspected values and little influence on the final result). Records with the
+highest risk are then scrutinized by domain experts.
+
+
+In `validate`, an indicator is a rule that returns an numerical value.  Just
+like `validator` objects are lists of validation rules, `indicicator` objects
+are lists of indicator rules. Indices can be computed by confronting data with
+an `indicator`, and using `add_indices`, the computed indices can be added to
+the dataset. You can import, export, select, and combine `indicator` objects
+in the same way as `validator` objects.
+
+
+
+## A quick example
+
+Here is a simple example of the workflow.
+
+```{r}
+library(validate)
+ii <- indicator(
+    BMI = (weight/2.2046)/(height*0.0254)^2 
+  , mh  = mean(height)
+  , mw  = mean(weight))
+out <- confront(women, ii)
+```
+In the first statement we define an `indicator` object storing indicator
+expressions.  Next, we confront a dataset with these indicators. The result is
+an object of class `indication`. It prints as follows.
+```{r}
+out
+```
+To study the results, the object can be summarized.
+```{r}
+summary(out)
+```
+Observe that the first  indicator results in one value per record
+while the second and third indicators  (`mh`, `mw`) each return a single
+value. The single values are repeated when indicator values are added
+to the data.
+```{r}
+head(add_indicators(women, out), 3)
+```
+
+
+
+The columns `error` and `warning` indicate whether calculation of the
+indicators was problematic. 
+A specific problem that may occur is when the result of an indicator is
+non-numeric.
+```{r}
+jj <- indicator(mh = mean(height), a = return("A"))
+```
+here, the second 'indicator' is an expression that yields a constant character
+string `"A"`.
+```{r}
+cf <- confront(women, jj)
+cf
+warnings(cf)
+```
+
+
+## Getting indicator values
+
+Values can be obtained with the `values` function, or by converting to a
+`data.frame`.  In this example we add a unique identifier (this is optional) to
+make it easier to identify the results with data afterwards.
+```{r}
+women$id <- letters[1:15]
+```
+Compute indicators and convert to `data.frame`.
+```{r}
+out <- confront(women, ii,key="id")
+tail( as.data.frame(out) )
+```
+Observe that there is no key for indicators `mh` and `mw` since these are
+constructed from multiple records.
+
+
+## Compare
+
+A compare method for `indicator` objects is not yet implemented.
+
+
+
+
+
+
