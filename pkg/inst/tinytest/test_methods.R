@@ -74,10 +74,10 @@ nullplot <- function(...){
   on.exit(dev.off())
   barplot(check_that(women, height>0, weight/height > 2),...)
 }
-expect_silent(nullplot())
-expect_silent(nullplot(add_exprs=TRUE))
-expect_silent(nullplot(add_legend=FALSE))
-expect_silent(nullplot(topn=5))
+expect_warning(nullplot(), "deprecated")
+expect_warning(nullplot(add_exprs=TRUE), "deprecated")
+expect_warning(nullplot(add_legend=FALSE), "deprecated")
+expect_warning(nullplot(topn=5),"deprecated")
 
 
 

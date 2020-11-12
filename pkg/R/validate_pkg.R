@@ -41,4 +41,5 @@
 #' @importFrom utils getFromNamespace
 #' @import settings
 #' @import yaml
+#' @import grid
 NULL

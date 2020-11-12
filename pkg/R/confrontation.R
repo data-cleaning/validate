@@ -622,18 +622,58 @@ setMethod("warnings","confrontation",function(x,...){
   x$._warn[i]
 })
 
-#' Plot a validation object
+#' Get names from \code{confrontation} object
+#'
+#' @rdname names
+#' @family validation-methods
+#' @export
+setMethod("names", "confrontation", function(x){
+  names(x$._value)
+})
+
+
+#' Plot validaiton results
 #' 
-#' The plot function for the confrontation object is identical to the \code{\link{barplot}} 
-#' method.
+#' Creates a barplot of validation result. For each validation rule, a stacked bar
+#' is plotted with percentages of failing, passing, and missing results.
+#' 
 #' @param x a confrontation object.
+#' @param fill \code{[character]} vector of length 3. Colors representing fails, passes, and missings
+#' @param col  Edge colors for the bars.
+#' @param rulenames \code{[character]} vector of size \code{length(x)}. If not specified, names
+#'        are taken from \code{x}.
+#' @param labels \code{[character]} vector of length 4. Replace legend annotation.
+#' @param title \code{[character]} Change the default title.
+#' @param xlab \code{[character]} Change the title
 #' @param y not used
-#' @param ... passed to \code{barplot}
+#' @param ... not used
+#'
+#' @details 
+#' The plot function tries to be smart about placing labels on the y axis. When 
+#' the number of bars becomes too large, no y axis annotation will be shown and the 
+#' bars will become space-filling.
+#'
+#'
 #' @export
 #' @family validation-methods
 #' @example ../examples/plot.R
-setMethod("plot","validation", function(x, y, ...){
-  barplot(x, ...)
+setMethod("plot","validation", function(x, y
+                    , fill=c("#FE2712","#66B032","#dddddd")
+                    , col=fill
+                    , rulenames = names(x)
+                    , labels=c("Fails","Passing","Missing","Total")
+                    , title = NULL
+                    , xlab = NULL
+                    , ...)
+{
+  m <- aggregate(x, by="rule")
+  plot_validation(as.matrix(m[, c("nfail","npass","nNA"), drop=FALSE]) 
+                 , fill      = fill
+                 , col       = col
+                 , rulenames = rulenames
+                 , labels    = labels
+                 , title     = title
+                 , xlab      = xlab )
 })
 
 

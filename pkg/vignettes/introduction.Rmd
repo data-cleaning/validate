@@ -76,8 +76,8 @@ women %>% check_that(height > 0, weight > 0, height/weight > 0.5) %>% summary()
 ```
 
 The same information can be summarized graphically.
-```{r}
-barplot(cf,main="Checks on the women data set")
+```{r, fig.height=7, fig.width=7}
+plot(cf)
 ```
 
 ### Using reference data

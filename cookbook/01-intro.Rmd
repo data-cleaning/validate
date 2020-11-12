@@ -53,8 +53,8 @@ This returns a data frame with one line of information for each rule `V1`,
 - The expression that was actually evaluated to perform the check.
 
 The same information can be summarized graphically.
-```{r}
-barplot(out)
+```{r,fig.height=7, fig.width=7}
+plot(out)
 ```
 
 Using the function `violated` we can select the records that violate one or
