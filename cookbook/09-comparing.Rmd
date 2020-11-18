@@ -1,0 +1,169 @@
+# Comparing data sets {#sect:comparing}
+
+```{r, echo=FALSE}
+library(validate)
+```
+
+
+When processing data step by step, it is useful to gather information on the
+influence of each step. This way the whole process can be monitored and the
+contribution of each step can be evaluated. Schematically, a data processing
+step can be visualised as follows.
+
+![data, process, changed data](fig/datastep.png){width=50%}
+
+Here, some input data is processed by some procedure that is parameterized,
+usually by domain experts. The output data is again input for a next step.
+
+
+In the following two sections we discuss two methods to compare two or more
+versions of a data set. In the last section we demonstrate how `validate` can
+be combined with the
+[lumberjack](https://cran.r-project.org/package=lumberjack) package to automate
+monitoring in an R script.
+
+## Cell counts
+
+One of the simplest ways to compare different versions of a data set is to
+count how many cells have changed. In this setting it can be useful to
+distinguish between changes from available to missing data (and _vice versa_)
+and changes between data where the values change. When comparing two
+data sets, say the input and the output data, the total number of cells
+can be decomposed according to the following schema.
+
+![decomposition of output fields](fig/cellwise.png){width=70%}
+
+The total number of cells (fields) in the output data can be decomposed into
+those cells that are filled (Available) and those that are empty (missing).
+The missing ones are decomposed into those that were already missing in the
+input data and those that are still missing. Similarly, the available values
+can be decomposed into those that were missing before and have been imputed.
+And those that already were available can be decomposed in those that are the
+same as before (unadapted) and those that ave been changed (adapted).
+
+
+With the `validate` package, these numbers can be computed for two or more
+datasets using `cells()`. As an example, we first create three versions of the
+`SBS2000` dataset. The first version is just the unaltered data. In the 
+second version we replace a revenue column with it's absolute value to 'repair'
+cases with negative revenues. In the third version, we impute cases where
+`turnover` is missing with the `vat` (value added tax) value, when available.
+
+```{r}
+library(validate)
+data(SBS2000)
+original <- SBS2000
+version2 <- original
+version2$other.rev <- abs(version2$other.rev)
+version3 <- version2
+version3$turnover[is.na(version3$turnover)] <- version3$vat[is.na(version3$turnover)]
+```
+We can now compare `version2` and `version3` to the original data set as follows.
+```{r}
+cells(input = original, cleaned = version2, imputed = version3)
+```
+The `cells` function accepts an arbitrary number of `name=data frame` arguments. The
+names provived by the user are used as column names in the output. From the output we see
+that the `cleaned` data set (`version2`) and in the `imputed` data set (`version3`) have
+one adapted value comared to the original data. Similarly, no imputations took place in
+preparing the `cleaned` data set, but a single value was imputed in the `imputed` dataset.
+
+Since each data frame is compared to the first data frame, the last column can be considered
+a 'cumulative' record of all changes that took place from beginning to end. It is also possible
+to print differential changes, where each data set is compared with the previous one.
+```{r}
+cells(input = original, cleaned = version2, imputed = version3
+    , compare="sequential")
+```
+
+The output of `cells()` is an array of class `cellComparison`. The most
+interesting thing about this fact, is that `validate` comes with two plot
+methods. To demonstrate this, we will create a two more versions of the
+`SBS2000` dataset.
+```{r}
+version4 <- version3
+version4$turnover[is.na(version4$turnover)] <- median(version4$turnover, na.rm=TRUE)
+
+# from kEUR to EUR
+version5 <- version4
+version5$staff.costs <- version5$staff.costs * 1000
+```
+
+
+```{r} 
+out <- cells(input = original
+           , cleaned = version2
+           , vat_imp = version3
+           , med_imp = version4
+           , units   = version5)
+par(mfrow=c(2,1))
+barplot(out)
+plot(out)
+```
+The bar plot and line plot convey the same information. The line plot is better
+when the data sets are instances resulting from a sequential process. The bar
+plot can be used more generally since it does not suggest a particular order.
+
+
+## Comparing rule violations
+
+When processing data it is interesting to compare how many data validations
+are violated before and after a processing step. Comparing output data with 
+input data, we can decompose the total number of validation results of
+the output data as follows.
+
+![decomposition of validation output](fig/rulewise.png){width=70%}
+
+The total number of validation results in the output data van be split into
+those that are verifiable (`TRUE` or `FALSE`) and those that are unverifiable
+(`NA`). The unverifiable cases can be split into those that were also
+unverifiable in the input data (still) and those that were verifiable in the
+intput data but can now not be verified, because certain fields have been
+emptied.  The verifiable cases can be split into those that yielded `FALSE`
+(violated) and those that yielded `TRUE` (satisfied). Each can be split into
+cases that stayed the same or changed with respect to the input data.
+
+Wiht `validate` the complete decomposition can be computed with `compare()`.
+It takes as first argument a `validator` object and two or more data sets
+to compare. We will use the data sets developed in the previous paragraph.
+
+```{r}
+rules <- validator(other.rev >= 0
+                 , turnover >= 0
+                 , turnover + other.rev == total.rev
+)
+
+comparison <- compare(rules
+                    , input = original
+                    , cleaned = version2
+                    , vat_imp = version3
+                    , med_imp = version4
+                    , units   = version5)
+comparison
+```
+
+By default each data set is compared to the first dataset (`input=original`).
+Hence the last column represents the cumulative change of all processing steps
+since the first data set. It is possible to investigate local differences by
+setting `how='sequential'`. 
+
+It is possible to plot the output for a graphical overview in two different
+ways: a bar plot and a line plot.
+
+```{r}
+par(mfrow=c(2,1))
+barplot(comparison)
+plot(comparison)
+```
+
+## `validate` and `lumberjack`
+
+
+
+
+
+
+
+
+
+
