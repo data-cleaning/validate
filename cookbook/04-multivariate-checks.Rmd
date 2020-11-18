@@ -3,7 +3,7 @@
 In this Chapter we treat tests that involve relationships between variables.
 
 
-#### Data and packages {-}
+### Data and packages {-}
 
 In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
 
@@ -157,28 +157,6 @@ violating(transactions, out)
 It is also possible to use regular expression patterns, by labeling the
 forbidden key set with `rx()`. If no labeling is used, the key sets are
 interpreted as string literals.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

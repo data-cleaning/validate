@@ -11,7 +11,7 @@ details. For example to test whether quarterly time series add up to annual
 totals. It is also possible to check properties of groups, for example whether
 in every household (a group of persons) there is exactly one head of household.
 
-#### Data and packages {-}
+### Data and packages {-}
 
 In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
 
@@ -333,7 +333,7 @@ Second, it can be seen that for Induston, there are two export values for
 `"2018Q2"` while the export value for `"2018Q3"` is missing.
 
 
-#### Notes {-}
+### Notes {-}
 
 Specifying (group-wise) aggregates is fairly detailed job in the case of long
 data (compare this with 
