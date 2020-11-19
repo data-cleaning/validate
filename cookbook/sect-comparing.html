@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Comparing data sets | The Data Validation Cookbook</title>
+  <meta name="description" content="Chapter 9 Comparing data sets | The Data Validation Cookbook" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Comparing data sets | The Data Validation Cookbook" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Comparing data sets | The Data Validation Cookbook" />
+  
+  
+  
+
+<meta name="author" content="Mark P.J. van der Loo" />
+
+
+<meta name="date" content="2020-11-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sect-rulefiles.html"/>
+<link rel="next" href="bibliographical-notes.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Data Validation Cookbook</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#citing-this-work"><i class="fa fa-check"></i>Citing this work</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
+<li class="chapter" data-level="" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#data-and-packages"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
+<li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect:missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
+<li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
+<li class="chapter" data-level="2.4" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#format-of-numeric-fields"><i class="fa fa-check"></i><b>2.4</b> Format of numeric fields</a></li>
+<li class="chapter" data-level="2.5" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#general-field-format"><i class="fa fa-check"></i><b>2.5</b> General field format</a></li>
+<li class="chapter" data-level="2.6" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#numeric-ranges"><i class="fa fa-check"></i><b>2.6</b> Numeric ranges</a></li>
+<li class="chapter" data-level="2.7" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
+<li class="chapter" data-level="2.8" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
+<li class="chapter" data-level="" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#data-and-packages"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
+<li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect:uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
+<li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect:completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
+<li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
+<li class="chapter" data-level="" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#data-and-packages"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect:iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
+<li class="chapter" data-level="4.2" data-path="multivariate-checks.html"><a href="multivariate-checks.html#balance-equalities-and-inequalities"><i class="fa fa-check"></i><b>4.2</b> Balance equalities and inequalities</a></li>
+<li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
+<li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
+<li class="chapter" data-level="" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#data-and-packages"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect:groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
+<li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
+<li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
+<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
+<li class="chapter" data-level="" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="indicators.html"><a href="indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
+<li class="chapter" data-level="6.1" data-path="intro.html"><a href="intro.html#a-quick-example"><i class="fa fa-check"></i><b>6.1</b> A quick example</a></li>
+<li class="chapter" data-level="6.2" data-path="indicators.html"><a href="indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
+<li class="chapter" data-level="6.3" data-path="indicators.html"><a href="indicators.html#compare"><i class="fa fa-check"></i><b>6.3</b> Compare</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
+<li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#sect:readfromfile"><i class="fa fa-check"></i><b>7.1</b> Reading rules from file</a></li>
+<li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.2</b> Manipulating rule sets</a></li>
+<li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.3</b> Rule metadata</a></li>
+<li class="chapter" data-level="7.4" data-path="sect-work.html"><a href="sect-work.html#sect:yamlfiles"><i class="fa fa-check"></i><b>7.4</b> Metadata in text files: <code>YAML</code></a></li>
+<li class="chapter" data-level="7.5" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.5</b> Rules in data frames</a></li>
+<li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect:syntax"><i class="fa fa-check"></i><b>7.6</b> Validation rule syntax</a></li>
+<li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#confrontation-objects"><i class="fa fa-check"></i><b>7.7</b> Confrontation objects</a></li>
+<li class="chapter" data-level="7.8" data-path="sect-work.html"><a href="sect-work.html#sect:options"><i class="fa fa-check"></i><b>7.8</b> Confrontation options</a></li>
+<li class="chapter" data-level="7.9" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.9</b> Using reference data</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
+<li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.1</b> Setting options</a></li>
+<li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.2</b> Including other rule files</a></li>
+<li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.3</b> Exporting validator objects</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>9</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="9.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>9.1</b> Cell counts</a></li>
+<li class="chapter" data-level="9.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>9.2</b> Comparing rule violations</a></li>
+<li class="chapter" data-level="9.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>9.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bibliographical-notes.html"><a href="bibliographical-notes.html"><i class="fa fa-check"></i>Bibliographical notes</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The Data Validation Cookbook</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sect:comparing" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Comparing data sets</h1>
+<p>When processing data step by step, it is useful to gather information on the
+influence of each step. This way the whole process can be monitored and the
+contribution of each step can be evaluated. Schematically, a data processing
+step can be visualised as follows.</p>
+<div class="figure">
+<img src="fig/datastep.png" alt="data, process, changed data" style="width:50.0%" />
+<p class="caption">data, process, changed data</p>
+</div>
+<p>Here, some input data is processed by some procedure that is parameterized,
+usually by domain experts. The output data is again input for a next step.</p>
+<p>In the following two sections we discuss two methods to compare two or more
+versions of a data set. In the last section we demonstrate how <code>validate</code> can
+be combined with the
+<a href="https://cran.r-project.org/package=lumberjack">lumberjack</a> package to automate
+monitoring in an R script.</p>
+<div id="cell-counts" class="section level2">
+<h2><span class="header-section-number">9.1</span> Cell counts</h2>
+<p>One of the simplest ways to compare different versions of a data set is to
+count how many cells have changed. In this setting it can be useful to
+distinguish between changes from available to missing data (and <em>vice versa</em>)
+and changes between data where the values change. When comparing two
+data sets, say the input and the output data, the total number of cells
+can be decomposed according to the following schema.</p>
+<div class="figure">
+<img src="fig/cellwise.png" alt="decomposition of output fields" style="width:70.0%" />
+<p class="caption">decomposition of output fields</p>
+</div>
+<p>The total number of cells (fields) in the output data can be decomposed into
+those cells that are filled (Available) and those that are empty (missing).
+The missing ones are decomposed into those that were already missing in the
+input data and those that are still missing. Similarly, the available values
+can be decomposed into those that were missing before and have been imputed.
+And those that already were available can be decomposed in those that are the
+same as before (unadapted) and those that ave been changed (adapted).</p>
+<p>With the <code>validate</code> package, these numbers can be computed for two or more
+datasets using <code>cells()</code>. As an example, we first create three versions of the
+<code>SBS2000</code> dataset. The first version is just the unaltered data. In the
+second version we replace a revenue column with it’s absolute value to ‘repair’
+cases with negative revenues. In the third version, we impute cases where
+<code>turnover</code> is missing with the <code>vat</code> (value added tax) value, when available.</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1"><span class="kw">library</span>(validate)</a>
+<a class="sourceLine" id="cb263-2" title="2"><span class="kw">data</span>(SBS2000)</a>
+<a class="sourceLine" id="cb263-3" title="3">original &lt;-<span class="st"> </span>SBS2000</a>
+<a class="sourceLine" id="cb263-4" title="4">version2 &lt;-<span class="st"> </span>original</a>
+<a class="sourceLine" id="cb263-5" title="5">version2<span class="op">$</span>other.rev &lt;-<span class="st"> </span><span class="kw">abs</span>(version2<span class="op">$</span>other.rev)</a>
+<a class="sourceLine" id="cb263-6" title="6">version3 &lt;-<span class="st"> </span>version2</a>
+<a class="sourceLine" id="cb263-7" title="7">version3<span class="op">$</span>turnover[<span class="kw">is.na</span>(version3<span class="op">$</span>turnover)] &lt;-<span class="st"> </span>version3<span class="op">$</span>vat[<span class="kw">is.na</span>(version3<span class="op">$</span>turnover)]</a></code></pre></div>
+<p>We can now compare <code>version2</code> and <code>version3</code> to the original data set as follows.</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1"><span class="kw">cells</span>(<span class="dt">input =</span> original, <span class="dt">cleaned =</span> version2, <span class="dt">imputed =</span> version3)</a></code></pre></div>
+<pre><code>## Object of class cellComparison:
+## 
+##    cells(input = original, cleaned = version2, imputed = version3)
+## 
+##                 input cleaned imputed
+## cells             660     660     660
+## available         580     580     581
+## still_available   580     580     580
+## unadapted         580     579     579
+## adapted             0       1       1
+## imputed             0       0       1
+## missing            80      80      79
+## still_missing      80      80      79
+## removed             0       0       0</code></pre>
+<p>The <code>cells</code> function accepts an arbitrary number of <code>name=data frame</code> arguments. The
+names provided by the user are used as column names in the output. From the output we see
+that the <code>cleaned</code> data set (<code>version2</code>) and in the <code>imputed</code> data set (<code>version3</code>) have
+one adapted value compared to the original data. Similarly, no imputations took place in
+preparing the <code>cleaned</code> data set, but a single value was imputed in the <code>imputed</code> dataset.</p>
+<p>Since each data frame is compared to the first data frame, the last column can be considered
+a ‘cumulative’ record of all changes that took place from beginning to end. It is also possible
+to print differential changes, where each data set is compared with the previous one.</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1"><span class="kw">cells</span>(<span class="dt">input =</span> original, <span class="dt">cleaned =</span> version2, <span class="dt">imputed =</span> version3</a>
+<a class="sourceLine" id="cb266-2" title="2">    , <span class="dt">compare=</span><span class="st">&quot;sequential&quot;</span>)</a></code></pre></div>
+<pre><code>## Object of class cellComparison:
+## 
+##    cells(input = original, cleaned = version2, imputed = version3, compare = &quot;sequential&quot;)
+## 
+##                 input cleaned imputed
+## cells             660     660     660
+## available         580     580     581
+## still_available   580     580     580
+## unadapted         580     579     580
+## adapted             0       1       0
+## imputed             0       0       1
+## missing            80      80      79
+## still_missing      80      80      79
+## removed             0       0       0</code></pre>
+<p>The output of <code>cells()</code> is an array of class <code>cellComparison</code>. The most
+interesting about this is that <code>validate</code> comes with two plot methods for such
+objects. To demonstrate this, we will create a two more versions of the
+<code>SBS2000</code> dataset.</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1">version4 &lt;-<span class="st"> </span>version3</a>
+<a class="sourceLine" id="cb268-2" title="2">version4<span class="op">$</span>turnover[<span class="kw">is.na</span>(version4<span class="op">$</span>turnover)] &lt;-<span class="st"> </span><span class="kw">median</span>(version4<span class="op">$</span>turnover, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb268-3" title="3"></a>
+<a class="sourceLine" id="cb268-4" title="4"><span class="co"># from kEUR to EUR</span></a>
+<a class="sourceLine" id="cb268-5" title="5">version5 &lt;-<span class="st"> </span>version4</a>
+<a class="sourceLine" id="cb268-6" title="6">version5<span class="op">$</span>staff.costs &lt;-<span class="st"> </span>version5<span class="op">$</span>staff.costs <span class="op">*</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1">out &lt;-<span class="st"> </span><span class="kw">cells</span>(<span class="dt">input =</span> original</a>
+<a class="sourceLine" id="cb269-2" title="2">           , <span class="dt">cleaned =</span> version2</a>
+<a class="sourceLine" id="cb269-3" title="3">           , <span class="dt">vat_imp =</span> version3</a>
+<a class="sourceLine" id="cb269-4" title="4">           , <span class="dt">med_imp =</span> version4</a>
+<a class="sourceLine" id="cb269-5" title="5">           , <span class="dt">units   =</span> version5)</a>
+<a class="sourceLine" id="cb269-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb269-7" title="7"><span class="kw">barplot</span>(out)</a>
+<a class="sourceLine" id="cb269-8" title="8"><span class="kw">plot</span>(out)</a></code></pre></div>
+<p><img src="09-comparing_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+The bar plot and line plot convey the same information. The line plot is better
+when the data sets are instances resulting from a sequential process. The bar
+plot can be used more generally since it does not suggest a particular order.</p>
+</div>
+<div id="comparing-rule-violations" class="section level2">
+<h2><span class="header-section-number">9.2</span> Comparing rule violations</h2>
+<p>When processing data it is interesting to compare how many data validations
+are violated before and after a processing step. Comparing output data with
+input data, we can decompose the total number of validation results of
+the output data as follows.</p>
+<div class="figure">
+<img src="fig/rulewise.png" alt="decomposition of validation output" style="width:70.0%" />
+<p class="caption">decomposition of validation output</p>
+</div>
+<p>The total number of validation results in the output data van be split into
+those that are verifiable (<code>TRUE</code> or <code>FALSE</code>) and those that are unverifiable
+(<code>NA</code>). The unverifiable cases can be split into those that were also
+unverifiable in the input data (still) and those that were verifiable in the
+input data but can now not be verified, because certain fields have been
+emptied. The verifiable cases can be split into those that yielded <code>FALSE</code>
+(violated) and those that yielded <code>TRUE</code> (satisfied). Each can be split into
+cases that stayed the same or changed with respect to the input data.</p>
+<p>With <code>validate</code> the complete decomposition can be computed with <code>compare()</code>.
+It takes as first argument a <code>validator</code> object and two or more data sets
+to compare. We will use the data sets developed in the previous paragraph.</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(other.rev <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb270-2" title="2">                 , turnover <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb270-3" title="3">                 , turnover <span class="op">+</span><span class="st"> </span>other.rev <span class="op">==</span><span class="st"> </span>total.rev</a>
+<a class="sourceLine" id="cb270-4" title="4">)</a>
+<a class="sourceLine" id="cb270-5" title="5"></a>
+<a class="sourceLine" id="cb270-6" title="6">comparison &lt;-<span class="st"> </span><span class="kw">compare</span>(rules</a>
+<a class="sourceLine" id="cb270-7" title="7">                    , <span class="dt">input =</span> original</a>
+<a class="sourceLine" id="cb270-8" title="8">                    , <span class="dt">cleaned =</span> version2</a>
+<a class="sourceLine" id="cb270-9" title="9">                    , <span class="dt">vat_imp =</span> version3</a>
+<a class="sourceLine" id="cb270-10" title="10">                    , <span class="dt">med_imp =</span> version4</a>
+<a class="sourceLine" id="cb270-11" title="11">                    , <span class="dt">units   =</span> version5)</a>
+<a class="sourceLine" id="cb270-12" title="12">comparison</a></code></pre></div>
+<pre><code>## Object of class validatorComparison:
+## 
+##    compare(x = rules, input = original, cleaned = version2, vat_imp = version3, med_imp = version4, units = version5)
+## 
+##                     Version
+## Status               input cleaned vat_imp med_imp units
+##   validations          180     180     180     180   180
+##   verifiable           103     103     104     108   108
+##   unverifiable          77      77      76      72    72
+##   still_unverifiable    77      77      76      72    72
+##   new_unverifiable       0       0       0       0     0
+##   satisfied             98     100     101     104   104
+##   still_satisfied       98      98      98      98    98
+##   new_satisfied          0       2       3       6     6
+##   violated               5       3       3       4     4
+##   still_violated         5       3       3       3     3
+##   new_violated           0       0       0       1     1</code></pre>
+<p>By default each data set is compared to the first dataset (<code>input=original</code>).
+Hence the last column represents the cumulative change of all processing steps
+since the first data set. It is possible to investigate local differences by
+setting <code>how='sequential'</code>.</p>
+<p>It is possible to plot the output for a graphical overview in two different
+ways: a bar plot and a line plot.</p>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb272-2" title="2"><span class="kw">barplot</span>(comparison)</a>
+<a class="sourceLine" id="cb272-3" title="3"><span class="kw">plot</span>(comparison)</a></code></pre></div>
+<p><img src="09-comparing_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="validate-and-lumberjack" class="section level2">
+<h2><span class="header-section-number">9.3</span> <code>validate</code> and <code>lumberjack</code></h2>
+<p>The <a href="https://cran.r-project.org/package=lumberjack">lumberjack</a> package makes
+it easy to track changes in data in a user-defined way. The following example
+is slightly adapted from the <a href="https://arxiv.org/abs/2005.04050">JSS paper</a>.</p>
+<p>We create a script that reads data, performs a few data cleaning steps
+and then writes the output. The script is stored in <code>clean_supermarkets.R</code> and
+has the following code.</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" title="1"><span class="co">## Contens of clean_supermarkets.R</span></a>
+<a class="sourceLine" id="cb273-2" title="2"><span class="kw">library</span>(validate)</a>
+<a class="sourceLine" id="cb273-3" title="3"></a>
+<a class="sourceLine" id="cb273-4" title="4"><span class="co"># 1. simulate reading data</span></a>
+<a class="sourceLine" id="cb273-5" title="5"><span class="kw">data</span>(SBS2000)</a>
+<a class="sourceLine" id="cb273-6" title="6">spm &lt;-<span class="st"> </span>SBS2000[<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;staff&quot;</span>,<span class="st">&quot;turnover&quot;</span>,<span class="st">&quot;other.rev&quot;</span>,<span class="st">&quot;total.rev&quot;</span>)]</a>
+<a class="sourceLine" id="cb273-7" title="7"></a>
+<a class="sourceLine" id="cb273-8" title="8"><span class="co"># 2. add a logger from &#39;validate&#39;</span></a>
+<a class="sourceLine" id="cb273-9" title="9"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_cells</span>())</a>
+<a class="sourceLine" id="cb273-10" title="10"></a>
+<a class="sourceLine" id="cb273-11" title="11"><span class="co"># 3. assume empty values should be filled with 0</span></a>
+<a class="sourceLine" id="cb273-12" title="12">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">other.rev =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(other.rev),<span class="dv">0</span>,other.rev))</a>
+<a class="sourceLine" id="cb273-13" title="13"></a>
+<a class="sourceLine" id="cb273-14" title="14"><span class="co"># 4. assume that negative amounts have only a sign error</span></a>
+<a class="sourceLine" id="cb273-15" title="15">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">other.rev =</span> <span class="kw">abs</span>(other.rev))</a>
+<a class="sourceLine" id="cb273-16" title="16"></a>
+<a class="sourceLine" id="cb273-17" title="17"><span class="co"># 5a. ratio estimator for staff conditional on turnover</span></a>
+<a class="sourceLine" id="cb273-18" title="18">Rhat &lt;-<span class="st"> </span><span class="kw">with</span>(spm, <span class="kw">mean</span>(staff,<span class="dt">na.rm=</span><span class="ot">TRUE</span>)<span class="op">/</span><span class="kw">mean</span>(turnover,<span class="dt">na.rm=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb273-19" title="19"></a>
+<a class="sourceLine" id="cb273-20" title="20"><span class="co"># 5b. impute &#39;staff&#39; variable where possible using ratio estimator</span></a>
+<a class="sourceLine" id="cb273-21" title="21">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">staff =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(staff), Rhat <span class="op">*</span><span class="st"> </span>turnover, staff))</a>
+<a class="sourceLine" id="cb273-22" title="22"></a>
+<a class="sourceLine" id="cb273-23" title="23"><span class="co"># 6. write output</span></a>
+<a class="sourceLine" id="cb273-24" title="24"><span class="kw">write.csv</span>(spm, <span class="st">&quot;supermarkets_treated.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>In the first section we do not actually read data from a data source but take a
+few columns from the SBS2000 data set that comes with the validate package.
+The data to be processed is stored in a variable called <code>spm</code>. Next, in
+section two, we use the <code>lumberjack</code> function <code>start_log()</code> to attach a logging
+object of type <code>lbj_cells()</code> to the data under scrutiny. Two things are of
+note here:</p>
+<ol style="list-style-type: decimal">
+<li>The call to <code>library(validate)</code> is necessary to be able to use <code>lbj_cells()</code>.
+Alternatively you can use <code>validate::lbj_cells()</code>.</li>
+<li>It is not necessary to load the <code>lumberjack</code> package in this script (although
+it is no problem if you do).</li>
+</ol>
+<p>In sections three and four, values for other revenue are imputed and then forced to
+be nonnegative. In section 5 a ratio model is used to impute missing staff numbers.
+In section 7 the output is written.</p>
+<p>The purpose of the <code>lbh_cells()</code> logger is to record the output of <code>cells()</code>
+after each step. To make sure this happens, run this file using <code>run_file()</code>
+from the <code>lumberjack</code> package.</p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1"><span class="kw">library</span>(lumberjack)</a>
+<a class="sourceLine" id="cb274-2" title="2"><span class="kw">run_file</span>(<span class="st">&#39;clean_supermarkets.R&#39;</span>)</a></code></pre></div>
+<pre><code>## Dumped a log at /home/mark/projects/validate/cbsrc/spm_lbj_cells.csv</code></pre>
+<p>This command executed all code in <code>clean_supermarkets.R</code>, but <code>run_file()</code> also ensured
+that all changes in the <code>spm</code> variable were recorded and logged using <code>lbj_cells()</code>.
+The output is written to a <code>csv</code> file which we can read.</p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1">logfile &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_cells.csv&quot;</span>)</a></code></pre></div>
+<p>The logfile variable has quite a lot of columns, so here show just two rows.</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1">logfile[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<pre><code>##   step                time
+## 3    2 2020-11-19 22:25:11
+## 4    3 2020-11-19 22:25:11
+##                                                                expression cells
+## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))   300
+## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))   300
+##   available still_available unadapted adapted imputed missing still_missing
+## 3       288             252       252       0      36      12            12
+## 4       288             288       287       1       0      12            12
+##   removed
+## 3       0
+## 4       0</code></pre>
+<p>Each row in the output lists the step number, a time stamp, the expression used
+to alter the contents of the variable under scrutiny, and all columns computed
+by <code>cells()</code>. Since the logger always compares two consecutive steps, these
+numbers are comparable to using <code>cells(comapare='sequential')</code>. For example, we
+see that after step four, one value was adapted compared to the state after
+step three. And in step three, 36 values were imputed compared to the state
+created by step 2. In step four, no values were imputed.</p>
+<p>It is also interesting to follow the progression of rule violations as the
+<code>spm</code> dataset gets processed. This can be done with the <code>lbj_rules()</code> logger
+that is exported by <code>validate</code>. Since <code>lumberjack</code> allows for multiple loggers
+to be attached to an R object, we alter the first part of the above script as
+follows, and store it in <code>clean_supermarkets2.R</code></p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1"><span class="co">## Contents of clean_supermarkets2.R</span></a>
+<a class="sourceLine" id="cb279-2" title="2"><span class="kw">library</span>(validate)</a>
+<a class="sourceLine" id="cb279-3" title="3"></a>
+<a class="sourceLine" id="cb279-4" title="4"><span class="co">#1.a simulate reading data</span></a>
+<a class="sourceLine" id="cb279-5" title="5"><span class="kw">data</span>(SBS2000, <span class="dt">package=</span><span class="st">&quot;validate&quot;</span>)</a>
+<a class="sourceLine" id="cb279-6" title="6">spm &lt;-<span class="st"> </span>SBS2000[<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;staff&quot;</span>,<span class="st">&quot;other.rev&quot;</span>,<span class="st">&quot;turnover&quot;</span>,<span class="st">&quot;total.rev&quot;</span>)]</a>
+<a class="sourceLine" id="cb279-7" title="7"></a>
+<a class="sourceLine" id="cb279-8" title="8"><span class="co"># 1.b Create rule set</span></a>
+<a class="sourceLine" id="cb279-9" title="9">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(staff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, other.rev<span class="op">&gt;=</span><span class="dv">0</span>, turnover<span class="op">&gt;=</span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb279-10" title="10">                 , other.rev <span class="op">+</span><span class="st"> </span>turnover <span class="op">==</span><span class="st"> </span>total.rev)</a>
+<a class="sourceLine" id="cb279-11" title="11"></a>
+<a class="sourceLine" id="cb279-12" title="12"></a>
+<a class="sourceLine" id="cb279-13" title="13"><span class="co"># 2. add two loggers </span></a>
+<a class="sourceLine" id="cb279-14" title="14"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_cells</span>())</a>
+<a class="sourceLine" id="cb279-15" title="15"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_rules</span>(rules))</a>
+<a class="sourceLine" id="cb279-16" title="16"></a>
+<a class="sourceLine" id="cb279-17" title="17"><span class="co">## The rest is the same as above ...</span></a></code></pre></div>
+<p>Running the file again using lumberjack, we now get two log files.</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1"><span class="kw">run_file</span>(<span class="st">&quot;clean_supermarkets2.R&quot;</span>)</a></code></pre></div>
+<pre><code>## Dumped a log at /home/mark/projects/validate/cbsrc/spm_lbj_cells.csv</code></pre>
+<pre><code>## Dumped a log at /home/mark/projects/validate/cbsrc/spm_lbj_rules.csv</code></pre>
+<p>Let’s read the log file from <code>spm_lbj_rules.csv</code> and print row three and four.</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" title="1"><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_rules.csv&quot;</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<pre><code>##   step                time
+## 3    2 2020-11-19 22:25:11
+## 4    3 2020-11-19 22:25:11
+##                                                                expression
+## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))
+## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))
+##   validations verifiable unverifiable still_unverifiable new_unverifiable
+## 3         240        225           15                 15                0
+## 4         240        225           15                 15                0
+##   satisfied still_satisfied new_satisfied violated still_violated new_violated
+## 3       218             152            66        7              5            2
+## 4       220             218             2        5              5            0</code></pre>
+<p>We get the full output created by <code>validate::compare()</code>. For example we
+see that after step three, 66 new cases satisfy one of the checks while two new
+violations were introduced. The fourth step adds two new satisfied cases and no
+new violations. The total number of violations after four steps equals five.</p>
+<p>Until now the logging data was written to files that were determined automatically
+by <code>lumberjack</code>, This is because <code>lumberjack</code> automatically dumps logging data
+after processing executing the file when the user has not done so explicitly.
+You can determine where to write the logging data by adding a <code>stop_log()</code>
+statement anywhere in your code (but at the end would usually make most sense).</p>
+<p>For example, add the following line of code at the end of
+<code>clean_supermarkets2.R</code> to write the output of the <code>lbj_rules</code> logger to
+<code>my_output.csv</code>.</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" title="1"><span class="kw">stop_log</span>(spm, <span class="dt">logger=</span><span class="st">&quot;lbj_rules&quot;</span>,<span class="dt">file=</span><span class="st">&quot;my_output.csv&quot;</span>)</a></code></pre></div>
+<p>The format and way in which logging data is exported is fixed by the logger. So
+<code>lbj_rules()</code> and <code>lbj_cells()</code> can only export to csv, and only the data we’ve
+seen so far. The good news is that the <code>lumberjack</code> package itself contains
+other loggers that may be of interest, and it is also possible to develop your
+own logger. So it is possible to develop loggers that export data to a
+database. See the <a href="https://arxiv.org/abs/2005.04050">lumberjack paper</a> for a
+short tutorial on how to write your own logger.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sect-rulefiles.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bibliographical-notes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["validatecookbook.pdf", "validatecookbook.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

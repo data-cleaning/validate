@@ -1,4 +1,5 @@
 book_filename: "validatecookbook"
+output_dir: "../cookbook"
 delete_merged_file: true
 new_session: true
 language:
