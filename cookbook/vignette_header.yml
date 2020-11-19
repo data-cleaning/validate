@@ -14,7 +14,7 @@ output:
     code_download: false
 vignette: >
   %\VignetteIndexEntry{The Data Validation Cookbook}
-  %\VignetteEngine{rmarkdown::render}
+  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 

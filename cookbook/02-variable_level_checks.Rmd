@@ -5,7 +5,7 @@ example is checking that a variable called `Age` is nonnegative, or of integer
 type. Variable checks are among the simplest checks.
 
 
-### Data and packages {-}
+## Data and packages {-}
 
 In this section we will use the `SBS2000` dataset, that is included with `validate`.
 
