@@ -4,7 +4,6 @@ doc:
 	sed '/^---/,/^---/d' cookbook/index.Rmd >> pkg/vignettes/cookbook.Rmd
 	cat cookbook/0*.Rmd cookbook/1*.Rmd >> pkg/vignettes/cookbook.Rmd
 	cp cookbook/clean*.R pkg/vignettes
-	cp cookbook/spm*.csv pkg/vignettes
 	cp cookbook/myrules* pkg/vignettes
 	cp -r cookbook/fig pkg/vignettes
 	R -s -e "pkgload::load_all('pkg');roxygen2::roxygenize('pkg')"
