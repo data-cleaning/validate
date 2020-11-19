@@ -1,0 +1,8 @@
+"step","time","expression","validations","verifiable","unverifiable","still_unverifiable","new_unverifiable","satisfied","still_satisfied","new_satisfied","violated","still_violated","new_violated"
+0,2020-11-19 16:15:03,"",240,157,83,83,0,152,152,0,5,5,0
+1,2020-11-19 16:15:03,"start_log(spm, logger=lbj_rules(rules))",240,157,83,83,0,152,152,0,5,5,0
+2,2020-11-19 16:15:03,"spm <- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))",240,225,15,15,0,218,152,66,7,5,2
+3,2020-11-19 16:15:03,"spm <- transform(spm, other.rev = abs(other.rev))",240,225,15,15,0,220,218,2,5,5,0
+4,2020-11-19 16:15:03,"Rhat <- with(spm, mean(staff,na.rm=TRUE)/mean(turnover,na.rm=TRUE))",240,225,15,15,0,220,220,0,5,5,0
+5,2020-11-19 16:15:03,"spm <- transform(spm, staff = ifelse(is.na(staff), Rhat * turnover, staff))",240,230,10,10,0,225,220,5,5,5,0
+6,2020-11-19 16:15:03,"write.csv(spm, ""supermarkets_treated.csv"", row.names = FALSE)",240,230,10,10,0,225,225,0,5,5,0

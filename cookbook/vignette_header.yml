@@ -1,0 +1,20 @@
+--- 
+title: "The Data Validation Cookbook"
+author: "Mark P.J. van der Loo"
+date: "`r Sys.Date()`"
+output: 
+  bookdown::html_document2:
+    theme: paper
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    code_folding: none
+    code_download: false
+vignette: >
+  %\VignetteIndexEntry{The Data Validation Cookbook}
+  %\VignetteEngine{rmarkdown::render}
+  \usepackage[utf8]{inputenc}
+---
+

@@ -1,5 +1,12 @@
 
 doc: 
+	cp cookbook/vignette_header.yml pkg/vignettes/cookbook.Rmd
+	sed '/^---/,/^---/d' cookbook/index.Rmd >> pkg/vignettes/cookbook.Rmd
+	cat cookbook/0*.Rmd cookbook/1*.Rmd >> pkg/vignettes/cookbook.Rmd
+	cp cookbook/clean*.R pkg/vignettes
+	cp cookbook/spm*.csv pkg/vignettes
+	cp cookbook/myrules* pkg/vignettes
+	cp -r cookbook/fig pkg/vignettes
 	R -s -e "pkgload::load_all('pkg');roxygen2::roxygenize('pkg')"
 
 pkg: doc pkg/vignettes/jss3483.pdf
@@ -40,17 +47,11 @@ pkg/vignettes/jss3483.pdf:
 	$(MAKE) -C jsspaper
 	cp jsspaper/jss3483.pdf pkg/vignettes/jss3483.pdf
 
-introduction:
-	R -s -e "rmarkdown::render('pkg/vignettes/introduction.Rmd')"
-	xdg-open pkg/vignettes/introduction.html
 
-indicators:
-	R -s -e "rmarkdown::render('pkg/vignettes/indicators.Rmd')"
-	xdg-open pkg/vignettes/indicators.html
+cookbook: doc
+	R -s -e "rmarkdown::render('pkg/vignettes/cookbook.Rmd')"
+	xdg-open pkg/vignettes/cookbook.html
 
-rule_files:
-	R -s -e "rmarkdown::render('pkg/vignettes/rule_files.Rmd')"
-	xdg-open pkg/vignettes/rule_files.html
 
 clean:
 	rm -rf revdep

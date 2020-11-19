@@ -4,16 +4,12 @@ author: "Mark P.J. van der Loo"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
-bibliography: [book.bib, packages.bib]
-biblio-style: apalike
-link-citations: yes
 ---
-
 
 # Preface {-}
 
 This book is about checking data with the
-[validate](https://cran.r-project.org/pacakge=validate) package for
+[validate](https://cran.r-project.org/package=validate) package for
 [R](https://www.r-project.org). 
 
 This version of the book was rendered with `validate` version 

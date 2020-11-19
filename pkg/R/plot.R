@@ -162,7 +162,7 @@ plot_validation <- function(m
                           ,  heights=rep(unit(1/3,"null"),ncols)) 
                   )
   pushViewport(lgd)
-  add_vlegend(m, width=box_width, labels=labels, fill=fill, col=col)
+  add_vlegend(m, width=box_width, labels=labels, fill=fill, color=col)
 }
 
 

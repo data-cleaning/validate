@@ -14,7 +14,7 @@ It does this by allowing you to
 - investigate, summarise, and visualise rule sets.
 
 For advanced rule manipulation there is the
-[validatetools](https://cran.r-project.org/validatetools) package.
+[validatetools](https://cran.r-project.org/package=validatetools) package.
 
 
 
