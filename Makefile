@@ -2,7 +2,7 @@
 doc: 
 	cp cbsrc/vignette_header.yml pkg/vignettes/cookbook.Rmd
 	sed '/^---/,/^---/d' cbsrc/index.Rmd >> pkg/vignettes/cookbook.Rmd
-	cat cbsrc/0*.Rmd cookbook/1*.Rmd >> pkg/vignettes/cookbook.Rmd
+	cat cbsrc/0*.Rmd cbsrc/1*.Rmd >> pkg/vignettes/cookbook.Rmd
 	cp cbsrc/clean*.R pkg/vignettes
 	cp cbsrc/myrules* pkg/vignettes
 	cp -r cbsrc/fig pkg/vignettes
