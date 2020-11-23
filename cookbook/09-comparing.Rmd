@@ -6,11 +6,11 @@ library(validate)
 
 
 When processing data step by step, it is useful to gather information on the
-influence of each step. This way the whole process can be monitored and the
-contribution of each step can be evaluated. Schematically, a data processing
-step can be visualised as follows.
+contribution of each step to the final result. This way the whole process can
+be monitored and the contribution of each step can be evaluated. Schematically,
+a data processing step can be visualised as follows.
 
-![data, process, changed data](fig/datastep.png){width=50%}
+![Data, process, changed data](fig/datastep.png){width=50%}
 
 Here, some input data is processed by some procedure that is parameterized,
 usually by domain experts. The output data is again input for a next step.
@@ -34,7 +34,7 @@ can be decomposed according to the following schema.
 ![decomposition of output fields](fig/cellwise.png){width=70%}
 
 The total number of cells (fields) in the output data can be decomposed into
-those cells that are filled (Available) and those that are empty (missing).
+those cells that are filled (available) and those that are empty (missing).
 The missing ones are decomposed into those that were already missing in the
 input data and those that are still missing. Similarly, the available values
 can be decomposed into those that were missing before and have been imputed.
@@ -78,7 +78,7 @@ cells(input = original, cleaned = version2, imputed = version3
 
 The output of `cells()` is an array of class `cellComparison`. The most
 interesting about this is that `validate` comes with two plot methods for such
-objects. To demonstrate this, we will create a two more versions of the
+objects. To demonstrate this, we will create  two more versions of the
 `SBS2000` dataset.
 ```{r}
 version4 <- version3
@@ -100,6 +100,7 @@ par(mfrow=c(2,1))
 barplot(out)
 plot(out)
 ```
+
 The bar plot and line plot convey the same information. The line plot is better
 when the data sets are instances resulting from a sequential process. The bar
 plot can be used more generally since it does not suggest a particular order.
@@ -167,7 +168,7 @@ and then writes the output. The script is stored in `clean_supermarkets.R` and
 has the following code.
 
 ```{r, eval=FALSE}
-## Contens of clean_supermarkets.R
+## Contents of clean_supermarkets.R
 library(validate)
 
 # 1. simulate reading data
@@ -276,7 +277,7 @@ violations were introduced. The fourth step adds two new satisfied cases and no
 new violations. The total number of violations after four steps equals five.
 
 Until now the logging data was written to files that were determined automatically
-by `lumberjack`, This is because `lumberjack` automatically dumps logging data
+by `lumberjack`. This is because `lumberjack` automatically dumps logging data
 after processing executing the file when the user has not done so explicitly.
 You can determine where to write the logging data by adding a `stop_log()`
 statement anywhere in your code (but at the end would usually make most sense).

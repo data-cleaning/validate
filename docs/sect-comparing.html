@@ -177,7 +177,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="indicators.html"><a href="indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
 <li class="chapter" data-level="6.1" data-path="intro.html"><a href="intro.html#a-quick-example"><i class="fa fa-check"></i><b>6.1</b> A quick example</a></li>
 <li class="chapter" data-level="6.2" data-path="indicators.html"><a href="indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
-<li class="chapter" data-level="6.3" data-path="indicators.html"><a href="indicators.html#compare"><i class="fa fa-check"></i><b>6.3</b> Compare</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
 <li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#sect:readfromfile"><i class="fa fa-check"></i><b>7.1</b> Reading rules from file</a></li>
@@ -224,12 +223,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sect:comparing" class="section level1">
 <h1><span class="header-section-number">Chapter 9</span> Comparing data sets</h1>
 <p>When processing data step by step, it is useful to gather information on the
-influence of each step. This way the whole process can be monitored and the
-contribution of each step can be evaluated. Schematically, a data processing
-step can be visualised as follows.</p>
+contribution of each step to the final result. This way the whole process can
+be monitored and the contribution of each step can be evaluated. Schematically,
+a data processing step can be visualised as follows.</p>
 <div class="figure">
-<img src="fig/datastep.png" alt="data, process, changed data" style="width:50.0%" />
-<p class="caption">data, process, changed data</p>
+<img src="fig/datastep.png" alt="Data, process, changed data" style="width:50.0%" />
+<p class="caption">Data, process, changed data</p>
 </div>
 <p>Here, some input data is processed by some procedure that is parameterized,
 usually by domain experts. The output data is again input for a next step.</p>
@@ -251,7 +250,7 @@ can be decomposed according to the following schema.</p>
 <p class="caption">decomposition of output fields</p>
 </div>
 <p>The total number of cells (fields) in the output data can be decomposed into
-those cells that are filled (Available) and those that are empty (missing).
+those cells that are filled (available) and those that are empty (missing).
 The missing ones are decomposed into those that were already missing in the
 input data and those that are still missing. Similarly, the available values
 can be decomposed into those that were missing before and have been imputed.
@@ -312,7 +311,7 @@ to print differential changes, where each data set is compared with the previous
 ## removed             0       0       0</code></pre>
 <p>The output of <code>cells()</code> is an array of class <code>cellComparison</code>. The most
 interesting about this is that <code>validate</code> comes with two plot methods for such
-objects. To demonstrate this, we will create a two more versions of the
+objects. To demonstrate this, we will create two more versions of the
 <code>SBS2000</code> dataset.</p>
 <div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1">version4 &lt;-<span class="st"> </span>version3</a>
 <a class="sourceLine" id="cb263-2" title="2">version4<span class="op">$</span>turnover[<span class="kw">is.na</span>(version4<span class="op">$</span>turnover)] &lt;-<span class="st"> </span><span class="kw">median</span>(version4<span class="op">$</span>turnover, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a>
@@ -328,8 +327,8 @@ objects. To demonstrate this, we will create a two more versions of the
 <a class="sourceLine" id="cb264-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
 <a class="sourceLine" id="cb264-7" title="7"><span class="kw">barplot</span>(out)</a>
 <a class="sourceLine" id="cb264-8" title="8"><span class="kw">plot</span>(out)</a></code></pre></div>
-<p><img src="09-comparing_files/figure-html/unnamed-chunk-6-1.png" width="672" />
-The bar plot and line plot convey the same information. The line plot is better
+<p><img src="09-comparing_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>The bar plot and line plot convey the same information. The line plot is better
 when the data sets are instances resulting from a sequential process. The bar
 plot can be used more generally since it does not suggest a particular order.</p>
 </div>
@@ -402,7 +401,7 @@ is slightly adapted from the <a href="https://arxiv.org/abs/2005.04050">JSS pape
 <p>We create a script that reads data, performs a few data cleaning steps
 and then writes the output. The script is stored in <code>clean_supermarkets.R</code> and
 has the following code.</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1"><span class="co">## Contens of clean_supermarkets.R</span></a>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1"><span class="co">## Contents of clean_supermarkets.R</span></a>
 <a class="sourceLine" id="cb268-2" title="2"><span class="kw">library</span>(validate)</a>
 <a class="sourceLine" id="cb268-3" title="3"></a>
 <a class="sourceLine" id="cb268-4" title="4"><span class="co"># 1. simulate reading data</span></a>
@@ -454,8 +453,8 @@ The output is written to a <code>csv</code> file which we can read.</p>
 <p>The logfile variable has quite a lot of columns, so here show just two rows.</p>
 <div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">logfile[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-11-23 11:48:56
-## 4    3 2020-11-23 11:48:56
+## 3    2 2020-11-23 12:05:58
+## 4    3 2020-11-23 12:05:58
 ##                                                                expression cells
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))   300
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))   300
@@ -501,8 +500,8 @@ follows, and store it in <code>clean_supermarkets2.R</code></p>
 <p>Let’s read the log file from <code>spm_lbj_rules.csv</code> and print row three and four.</p>
 <div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb278-1" title="1"><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_rules.csv&quot;</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-11-23 11:48:56
-## 4    3 2020-11-23 11:48:56
+## 3    2 2020-11-23 12:05:58
+## 4    3 2020-11-23 12:05:58
 ##                                                                expression
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))
@@ -517,7 +516,7 @@ see that after step three, 66 new cases satisfy one of the checks while two new
 violations were introduced. The fourth step adds two new satisfied cases and no
 new violations. The total number of violations after four steps equals five.</p>
 <p>Until now the logging data was written to files that were determined automatically
-by <code>lumberjack</code>, This is because <code>lumberjack</code> automatically dumps logging data
+by <code>lumberjack</code>. This is because <code>lumberjack</code> automatically dumps logging data
 after processing executing the file when the user has not done so explicitly.
 You can determine where to write the logging data by adding a <code>stop_log()</code>
 statement anywhere in your code (but at the end would usually make most sense).</p>
