@@ -26,3 +26,16 @@ expect_equal(ncol(add_indicators(women, ii)),  ncol(women) + length(ii))
 expect_equal(ncol(add_indicators(women, out)), ncol(women) + length(ii))
 
 
+ii <- indicator(
+BMI = (weight/2.2046)/(height*0.0254)^2
+, mh = mean(height)
+, mw = mean(weight))
+
+out <- confront(women, ii)
+
+expect_equal(names(add_indicators(women, out))
+           , c(names(women), names(ii)) ) 
+
+
+
+

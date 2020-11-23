@@ -134,6 +134,7 @@ add_indicators <- function(dat, x){
       } else {
         y <- matrix(0, nrow=n, ncol=ncol(x))
         y[,] <- x
+        colnames(y) <- colnames(x)
         y
       }
     })

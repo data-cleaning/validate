@@ -24,7 +24,7 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-11-19" />
+<meta name="date" content="2020-11-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -446,7 +446,7 @@ after each step. To make sure this happens, run this file using <code>run_file()
 from the <code>lumberjack</code> package.</p>
 <div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1"><span class="kw">library</span>(lumberjack)</a>
 <a class="sourceLine" id="cb274-2" title="2"><span class="kw">run_file</span>(<span class="st">&#39;clean_supermarkets.R&#39;</span>)</a></code></pre></div>
-<pre><code>## Dumped a log at /home/mark/projects/validate/cbsrc/spm_lbj_cells.csv</code></pre>
+<pre><code>## Dumped a log at /home/mark/projects/validate/cookbook/spm_lbj_cells.csv</code></pre>
 <p>This command executed all code in <code>clean_supermarkets.R</code>, but <code>run_file()</code> also ensured
 that all changes in the <code>spm</code> variable were recorded and logged using <code>lbj_cells()</code>.
 The output is written to a <code>csv</code> file which we can read.</p>
@@ -454,8 +454,8 @@ The output is written to a <code>csv</code> file which we can read.</p>
 <p>The logfile variable has quite a lot of columns, so here show just two rows.</p>
 <div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1">logfile[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-11-19 22:25:11
-## 4    3 2020-11-19 22:25:11
+## 3    2 2020-11-23 11:34:39
+## 4    3 2020-11-23 11:34:39
 ##                                                                expression cells
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))   300
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))   300
@@ -496,13 +496,13 @@ follows, and store it in <code>clean_supermarkets2.R</code></p>
 <a class="sourceLine" id="cb279-17" title="17"><span class="co">## The rest is the same as above ...</span></a></code></pre></div>
 <p>Running the file again using lumberjack, we now get two log files.</p>
 <div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1"><span class="kw">run_file</span>(<span class="st">&quot;clean_supermarkets2.R&quot;</span>)</a></code></pre></div>
-<pre><code>## Dumped a log at /home/mark/projects/validate/cbsrc/spm_lbj_cells.csv</code></pre>
-<pre><code>## Dumped a log at /home/mark/projects/validate/cbsrc/spm_lbj_rules.csv</code></pre>
+<pre><code>## Dumped a log at /home/mark/projects/validate/cookbook/spm_lbj_cells.csv</code></pre>
+<pre><code>## Dumped a log at /home/mark/projects/validate/cookbook/spm_lbj_rules.csv</code></pre>
 <p>Let’s read the log file from <code>spm_lbj_rules.csv</code> and print row three and four.</p>
 <div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" title="1"><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_rules.csv&quot;</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-11-19 22:25:11
-## 4    3 2020-11-19 22:25:11
+## 3    2 2020-11-23 11:34:39
+## 4    3 2020-11-23 11:34:39
 ##                                                                expression
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))
