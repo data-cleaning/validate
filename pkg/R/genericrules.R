@@ -589,7 +589,8 @@ field_length <- function(x, n=NULL, min=NULL, max=NULL,...){
 #'
 #' @family format-checkers
 #' @export
-field_format <- function(x, pattern, type=c("glob","regex"), ...){ 
+field_format <- function(x, pattern, type=c("glob","regex"), ...){
+  type <- match.arg(type)
   if (type == "glob") pattern <- utils::glob2rx(pattern)
   grepl(pattern, x=as.character(x),...)
 }
