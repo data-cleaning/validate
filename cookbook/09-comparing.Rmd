@@ -276,6 +276,7 @@ Let's read the log file from `spm_lbj_rules.csv` and print row three and four.
 ```{r}
 read.csv("spm_lbj_rules.csv")[3:4,]
 ```
+
 We get the full output created by `validate::compare()`. For example we
 see that after step three, 66 new cases satisfy one of the checks while two new
 violations were introduced. The fourth step adds two new satisfied cases and no

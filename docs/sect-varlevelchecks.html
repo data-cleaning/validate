@@ -396,9 +396,10 @@ pattern matching in strings is discussed in the next section.</p>
 <p>A simple way to check for more general format is to use <a href="https://en.wikipedia.org/wiki/Glob_(programming)">globbing
 patterns</a>. In such patterns,
 the asterisk wildcard character (<code>*</code>) is interpreted as ‘zero or more
-characters’ and the question mark (<code>?</code>) is interpreted as ‘a character’.</p>
-<p>For example, to check that the <code>id</code> variable in <code>SBS2000</code> starts with <code>RET</code> we
-can do the following.</p>
+characters’ and the question mark (<code>?</code>) is interpreted as ‘any character’.</p>
+<p>For example, to check that the <code>id</code> variable in <code>SBS2000</code> starts with <code>"RET"</code>,
+and that the <code>size</code> variable has consists of <code>"sc"</code> followed by precisely one
+character, we can do the following.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">field_format</span>(id, <span class="st">&quot;RET*&quot;</span>)</a>
 <a class="sourceLine" id="cb40-2" title="2">                , <span class="kw">field_format</span>(size, <span class="st">&quot;sc?&quot;</span> ))</a>
 <a class="sourceLine" id="cb40-3" title="3">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>

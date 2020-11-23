@@ -163,11 +163,11 @@ pattern matching in strings is discussed in the next section.
 A simple way to check for more general format is to use [globbing
 patterns](https://en.wikipedia.org/wiki/Glob_(programming)). In such patterns,
 the asterisk wildcard character (`*`) is interpreted as 'zero or more
-characters' and the question mark (`?`) is interpreted as 'a character'.
+characters' and the question mark (`?`) is interpreted as 'any character'.
 
-For example, to check that the `id` variable in `SBS2000` starts with `RET` we
-can do the following.
-
+For example, to check that the `id` variable in `SBS2000` starts with `"RET"`,
+and that the `size` variable has consists of `"sc"` followed by precisely one
+character, we can do the following.
 ```{r}
 rule <- validator(field_format(id, "RET*")
                 , field_format(size, "sc?" ))

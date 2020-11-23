@@ -4,6 +4,11 @@ author: "Mark P.J. van der Loo"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
+mainfont: Roboto Condensed Light
+mathfont: FiraMath-Regular.otf
+monofont: Roboto Mono
+monofontoptions:
+- Scale=0.64
 ---
 
 ```{r, include=FALSE}
