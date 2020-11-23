@@ -1,11 +1,16 @@
 # Variable checks {#sect:varlevelchecks}
 
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
+
 Variable checks are checks that can be performed on a field-by-field basis. An
 example is checking that a variable called `Age` is nonnegative, or of integer
 type. Variable checks are among the simplest checks.
 
 
-## Data and packages {-}
+**Data**
 
 In this section we will use the `SBS2000` dataset, that is included with `validate`.
 
@@ -125,10 +130,10 @@ more digits'. Here are some examples of how to define number formats.
 
 |format       | match                         | non-match                           |
 |-------------|-------------------------------|-------------------------------------|
-|`0.dddd`                                     | `"0.4321"`   | `"0.123"`,`"1.4563"` |
-|`d.ddEdd`    | `3.14E00`                     | `"31.14E00"`                        |
+|`0.dddd`     | `"0.4321"`                    | `"0.123"`,`"1.4563"`                |
+|`d.ddEdd`    | `"3.14E00"`                   | `"31.14E00"`                        |
 |`d.*Edd`     | `"0.314E01"`,`"3.1415297E00"` | `"3.1415230"`                       |
-|`d.dd*`      | `1.23`, `1.234`,...           | `1.2`                               |
+|`d.dd*`      | `"1.23"`, `"1.234"`,$\ldots$  | `"1.2"`                             |
 
 The last example shows how to check for a minimal number of digits behind the decimal
 point.
@@ -164,7 +169,8 @@ For example, to check that the `id` variable in `SBS2000` starts with `RET` we
 can do the following.
 
 ```{r}
-rule <- validator( field_format(id, "RET*"),field_format(size, "sc?" ) )
+rule <- validator(field_format(id, "RET*")
+                , field_format(size, "sc?" ))
 out  <- confront(SBS2000, rule)
 summary(out)
 ```
@@ -184,8 +190,9 @@ give a few examples. A good introduction to regular expressions is given by
 In `validate` one can use `grepl` or `field_format`, with the argument `type="regex"`
 
 ```{r}
-rule <- validator(  grepl("^sc[0-9]$", size)
-                  , field_format(id,"^RET\\d{2}$",type="regex"))
+rule <- validator(
+          grepl("^sc[0-9]$", size)
+        , field_format(id, "^RET\\d{2}$" , type="regex") )
 summary(confront(SBS2000, rule))
 ```
 
@@ -213,14 +220,16 @@ Numerical variables may have natural limits from below and/or
 above. For one-sided ranges, you can use the standard comparison operators.
 
 ```{r}
-rules <- validator(TO = turnover >= 0, TC=total.costs >= 0)
+rules <- validator(TO = turnover >= 0
+                 , TC = total.costs >= 0)
 ```
 
 If a variable is bounded both from above and below one can use two rules,
 or use the convenience function `in_range`.
 
 ```{r}
-rules <- rules + validator(PR = in_range(incl.prob, min=0, max=1))
+rules <- rules + 
+  validator(PR = in_range(incl.prob, min=0, max=1))
 ```
 By default, `in_range` includes the boundaries of the range, so the above rule
 is equivalent to `incl.prob >= 0` and `incl.prob <= 0`. 
@@ -261,9 +270,10 @@ period
 The `in_range` function is capable of recognizing certain date or period
 formats.
 ```{r}
-in_range(period, min="2017Q2", max = "2018Q2", format="auto")
+in_range(period, min="2017Q2", max = "2018Q2")
 ```
-The formats recognized with `format="auto"` are described in the help file, see `?in_range`.
+It is possible to specify your own date-time format using `strftime` notation.
+See `?in_range` and `?strptime` for specifications.
 
 
 
@@ -311,7 +321,8 @@ runtime, and pass this with `confront`.
 codelist <- c("sc0","sc1","sc2","sc3")
 rule <- validator(size %in% valid_codes)
 # pass the codelist
-out <- confront(SBS2000, rule, ref=list(valid_codes=codelist))
+out <- confront(SBS2000, rule
+              , ref=list(valid_codes=codelist))
 summary(out)
 ```
 This way, (very) large code lists can be used, but note that it does

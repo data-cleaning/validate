@@ -1,4 +1,9 @@
-# Indicators
+# Indicators {#sect:indicators}
+
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
 
 Until now we have discussed various types of data validation rules: decisions
 that assign True or False values to a data frame. In some cases it is
@@ -24,7 +29,7 @@ in the same way as `validator` objects.
 
 
 
-## A quick example
+## A first example
 
 Here is a simple example of the workflow.
 

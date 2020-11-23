@@ -1,5 +1,10 @@
 # Rules in text files {#sect:rulefiles}
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 This Chapter is about importing and exporting rules from and to file, both in
 free-form text and in YAML. We also discuss some more advanced features like
 how to have one rule file include another file.

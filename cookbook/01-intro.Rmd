@@ -1,4 +1,9 @@
-# Introduction to validate {#intro}
+# Introduction to validate {#sect:intro}
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 
 > Data validation is an activity where one checks whether a set of values
 > or value combinations satisfies a predefined expectation.
@@ -17,6 +22,9 @@ For advanced rule manipulation there is the
 [validatetools](https://cran.r-project.org/package=validatetools) package.
 
 
+```{r, include=FALSE, eval=knitr::is_latex_output()}
+knitr::opts_chunk$set(comment=NA)
+```
 
 ## A quick example
 
@@ -34,7 +42,10 @@ to define those expectations. Let's do a quick check on variables in the
 of data quality demands with the `validator()` function.
 ```{r}
 library(validate)
-rules <- validator(speed >= 0, dist >= 0, speed/dist <= 1.5, cor(speed, dist)>=0.2)
+rules <- validator(speed >= 0
+                 , dist >= 0
+                 , speed/dist <= 1.5
+                 , cor(speed, dist)>=0.2)
 ```
 Here, the first three rules are record-wise checks: each record will yield one
 answer. In the last rule we check whether speed and distance are positively
@@ -56,8 +67,12 @@ This returns a data frame with one line of information for each rule `V1`,
 - Whether the check resulted in an error (could not be performed) or gave an warning.
 - The expression that was actually evaluated to perform the check.
 
-The same information can be summarized graphically.
-```{r,fig.height=7, fig.width=7}
+The same information can be summarized graphically as follows
+`r if( knitr::is_latex_output()) knitr::asis_output("(see Figure \\ref{fig:validateplot})")`. 
+```{r,fig.height=7, fig.width=7, echo=!knitr::is_latex_output(), eval=!knitr::is_latex_output()}
+plot(out)
+```
+```{r, label="validateplot", fig.height=5, fig.width=5, out.width="0.7\\textwidth", fig.align="center", echo=knitr::is_latex_output(), eval=knitr::is_latex_output(), fig.env="figure",fig.pos="!t", fig.cap="Plot of validation output."}
 plot(out)
 ```
 

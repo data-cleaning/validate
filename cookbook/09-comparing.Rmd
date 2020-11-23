@@ -1,5 +1,10 @@
 # Comparing data sets {#sect:comparing}
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 ```{r, echo=FALSE}
 library(validate)
 ```

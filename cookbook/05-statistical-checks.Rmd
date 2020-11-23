@@ -1,5 +1,10 @@
 # Statistical checks {#sect:statisticalchecks}
 
+ 
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 Statistical checks involve group properties such as the means of columns. These
 characteristics can be checked for whole columns or grouped by one or more
 categorical variables. It is also possible to use group-wise computed
@@ -11,7 +16,7 @@ details. For example to test whether quarterly time series add up to annual
 totals. It is also possible to check properties of groups, for example whether
 in every household (a group of persons) there is exactly one head of household.
 
-### Data and packages {-}
+**Data**
 
 In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
 

@@ -6,6 +6,11 @@ site: bookdown::bookdown_site
 documentclass: book
 ---
 
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
+
 # Preface {-}
 
 This book is about checking data with the
@@ -13,18 +18,33 @@ This book is about checking data with the
 [R](https://www.r-project.org). 
 
 This version of the book was rendered with `validate` version 
-`r packageVersion("validate")`.  If your computer is connected to the internet,
-the latest release of `validate` can be installed from
-[CRAN](https://cran.r-project.org) as follows.
+`r packageVersion("validate")`.  The latest release of `validate` can be installed
+from [CRAN](https://cran.r-project.org) as follows.
 ```{r, echo=TRUE, eval=FALSE}
 install.packages("validate")
 ```
 
-The purpose of this book is to give simple examples of common data validation
-tasks. The first Chapter gives a short overview of the `validate` package
-workflow. The next Chapters treat collections of validation tasks of
-increasing complexity, mostly by example. Chapters \@ref(sect:work) and
-\@ref(sect:rulefiles) treat working with validate in-depth.
+The purpose of this book is to give examples of common data validation tasks,
+to demonstrate the main tools and workflows of the `validate` package, and to
+show how to analyze data validation results.
+
+The book is organized as follows. Chapter \@ref(sect:intro) discusses the
+bare necessities to be able to follow the rest of the book. Chapters \@ref(sect:varlevelchecks)
+to \@ref(sect:statisticalchecks) form the 'cookbook' part of the book and discuss
+many different ways to check your data by example. Chapter \@ref(sect:indicators)
+is devoted to deriving plausibility measures with the `validate` package.
+
+The first Chapter gives a short overview of the `validate` package workflow.
+The next Chapters treat collections of validation tasks of increasing
+complexity, mostly by example. Chapters \@ref(sect:work) and
+\@ref(sect:rulefiles) treat working with validate in-depth. In \@ref(sect:work)
+an extensive overview of functionality of the validate package is described.
+\@ref(sect:rulefiles) provides more details and options on working with rules
+stored in text files while \@ref(sect:comparing) discusses how to compare two
+or more versions of a dataset, possibly automated through the
+[lumberjack](https://cran.r-project.org/package=lumberjack) package.  The
+section with Biblographical Notes lists some references and points out some
+literature for further reading.
 
 
 ## Prerequisites {-}
@@ -45,5 +65,18 @@ To cite the `validate` package please use the following citation.
 
 This work was partially funded by European Grant Agreement 88287--NL-VALIDATION
 of the European Statistcal System.
+
+## License {-}
+
+
+
+```{r, echo=FALSE, include=!knitr::is_latex_output()}
+knitr::asis_output("
+[![Creative Commons License](https://i.creativecommons.org/l/by-nc/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
+")
+```
+
+This work is licensed under [Creative Commons Attribution BY-NC 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
+
 
 

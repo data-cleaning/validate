@@ -1,9 +1,14 @@
 # Multivariate checks
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 In this Chapter we treat tests that involve relationships between variables.
 
 
-### Data and packages {-}
+**Data**
 
 In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
 

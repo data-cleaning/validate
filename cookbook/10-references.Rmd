@@ -1,5 +1,10 @@
 # Bibliographical notes {-}
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 More background on the validate package can be found in the paper
 for the R Journal.
 

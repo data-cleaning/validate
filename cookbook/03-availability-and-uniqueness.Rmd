@@ -1,5 +1,10 @@
 # Availability and uniqueness {#sect:availableunique}
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 In this Chapter it is demonstrated how to check whether records are available
 and/or complete with respect to a set of keys, and whether they are unique.
 The checks described here are typically useful for data in 'long' format, where
@@ -8,8 +13,7 @@ one column holds a value and all the other columns identify the value.
 - To test for missing values in individual variables, see also \@ref(sect:missingness).
 - To check whether records or parts thereof are completed, see \@ref(sect:iscomplete).
 
-
-### Data and packages {-}
+**Data**
 
 In this Chapter the `samplonomy` dataset is used that comes with the `validate`
 package.
@@ -98,8 +102,9 @@ this.
 
 ```{r}
 rule <- validator(
-  contains_at_least( keys = data.frame(period = as.character(2014:2019))
-                    , by=list(region, measure) )
+  contains_at_least( 
+      keys = data.frame(period = as.character(2014:2019))
+    , by=list(region, measure) )
 )
 out <- confront(samplonomy, rule)
 # showing 7 columns of output for readability
@@ -140,8 +145,11 @@ This key set will be referenced in the rule, and passed to `confront` as referen
 data.
 
 ```{r}
-rule <- validator(contains_at_least(keys=minimal_keys, by=measure))
-out <- confront(samplonomy, rule, ref=list(minimal_keys=keyset))
+rule <- validator(
+          contains_at_least(keys=minimal_keys, by=measure) 
+        )
+out <- confront(samplonomy, rule
+              , ref=list(minimal_keys=keyset))
 # showing 7 columns of output for readability
 summary(out)[1:7]
 ```
@@ -180,8 +188,9 @@ head(keyset)
 ```
 The keyset is passed as reference data to the rule using `confront`.
 ```{r}
-rule <- validator( contains_exactly(all_keys, by=measure) )
-out  <- confront(samplonomy, rule, ref=list(all_keys=keyset))
+rule <- validator(contains_exactly(all_keys, by=measure))
+out  <- confront(samplonomy, rule
+               , ref=list(all_keys=keyset))
 # showing 7 columns of output for readability
 summary(out)[1:7]
 ```
@@ -235,20 +244,21 @@ is_linear_sequence(c("2020Q4","2020Q2","2020Q3","2020Q1"))
 ```
 One can force a begin and/or end point for the sequence as well.
 ```{r}
-is_linear_sequence(c("2020Q4","2020Q2","2020Q3","2020Q1"), begin="2020Q2")
+is_linear_sequence(c("2020Q4","2020Q2","2020Q3","2020Q1")
+                 , begin = "2020Q2")
 ```
 Finally it is possible to split a variable by one or more other columns and
 check whether each block represents a linear sequence.
 
 ```{r}
 series <- c(1,2,3,4,1,2,3,3)
-blocks <- rep(c("a","b"),each=4)
-is_linear_sequence(series, by=blocks)
+blocks <- rep(c("a","b"), each = 4)
+is_linear_sequence(series, by = blocks)
 ```
 Now, this result is not very useful since now it is unknown which block 
 is not a linear series. This is where the function `in_linear_series` comes in.
 ```{r}
-in_linear_sequence(series, by=blocks)
+in_linear_sequence(series, by = blocks)
 ```
 There are some subtleties. A single element is also a linear sequence (of length 1).
 ```{r}
@@ -257,7 +267,7 @@ is_linear_sequence(5)
 This can yield surprises in cases of blocks of length 1.
 ```{r}
 blocks[8] <- "c"
-data.frame(series=series, blocks=blocks)
+data.frame(series = series, blocks = blocks)
 in_linear_sequence(series, blocks)
 ```
 We now have three linear series, namely
@@ -268,7 +278,7 @@ We now have three linear series, namely
 
 We can circumvent this by giving explicit bounds.
 ```{r}
-in_linear_sequence(series, blocks, begin=1, end=4)
+in_linear_sequence(series, blocks, begin = 1, end = 4)
 ```
 
 
@@ -278,7 +288,10 @@ are time series of different frequencies, we need to split the data by frequency
 as well.
 
 ```{r}
-rule <- validator(in_linear_sequence(period, by=list(region, freq, measure)))
+rule <- validator(
+          in_linear_sequence(period
+            , by = list(region, freq, measure))
+        )
 out  <- confront(samplonomy, rule)
 summary(out)[1:7]
 ```
