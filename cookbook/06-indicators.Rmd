@@ -16,7 +16,7 @@ highest risk are then scrutinized by domain experts.
 
 
 In `validate`, an indicator is a rule that returns an numerical value.  Just
-like `validator` objects are lists of validation rules, `indicicator` objects
+like `validator` objects are lists of validation rules, `indicator` objects
 are lists of indicator rules. Indices can be computed by confronting data with
 an `indicator`, and using `add_indices`, the computed indices can be added to
 the dataset. You can import, export, select, and combine `indicator` objects
@@ -53,23 +53,14 @@ to the data.
 ```{r}
 head(add_indicators(women, out), 3)
 ```
-
+The result is a data frame with indicators attached.
 
 
 The columns `error` and `warning` indicate whether calculation of the
-indicators was problematic. 
-A specific problem that may occur is when the result of an indicator is
-non-numeric.
-```{r}
-jj <- indicator(mh = mean(height), a = return("A"))
-```
-here, the second 'indicator' is an expression that yields a constant character
-string `"A"`.
-```{r}
-cf <- confront(women, jj)
-cf
-warnings(cf)
-```
+indicators was problematic. For example because the output of an indicator rule
+is not numeric, or when it uses variables that do not occur in the data.  Use
+`warnings(out)` or `errors(out)` to obtain the warning and error messages per
+rule.
 
 
 ## Getting indicator values
