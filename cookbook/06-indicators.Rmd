@@ -80,9 +80,6 @@ Observe that there is no key for indicators `mh` and `mw` since these are
 constructed from multiple records.
 
 
-## Compare
-
-A compare method for `indicator` objects is not yet implemented.
 
 
 

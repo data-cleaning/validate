@@ -236,7 +236,7 @@ values and large influence on the final result) to low risk (records with
 unsuspected values and little influence on the final result). Records with the
 highest risk are then scrutinized by domain experts.</p>
 <p>In <code>validate</code>, an indicator is a rule that returns an numerical value. Just
-like <code>validator</code> objects are lists of validation rules, <code>indicicator</code> objects
+like <code>validator</code> objects are lists of validation rules, <code>indicator</code> objects
 are lists of indicator rules. Indices can be computed by confronting data with
 an <code>indicator</code>, and using <code>add_indices</code>, the computed indices can be added to
 the dataset. You can import, export, select, and combine <code>indicator</code> objects
@@ -280,35 +280,22 @@ to the data.</p>
 ## 1     58    115 24.03503  65.0000 136.7333
 ## 2     59    117 23.63114 136.7333  65.0000
 ## 3     60    120 23.43589  65.0000 136.7333</code></pre>
+<p>The result is a data frame with indicators attached.</p>
 <p>The columns <code>error</code> and <code>warning</code> indicate whether calculation of the
-indicators was problematic.
-A specific problem that may occur is when the result of an indicator is
-non-numeric.</p>
-<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" title="1">jj &lt;-<span class="st"> </span><span class="kw">indicator</span>(<span class="dt">mh =</span> <span class="kw">mean</span>(height), <span class="dt">a =</span> <span class="kw">return</span>(<span class="st">&quot;A&quot;</span>))</a></code></pre></div>
-<p>here, the second ‘indicator’ is an expression that yields a constant character
-string <code>"A"</code>.</p>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(women, jj)</a>
-<a class="sourceLine" id="cb198-2" title="2">cf</a></code></pre></div>
-<pre><code>## Object of class &#39;indication&#39;
-## Call:
-##     confront(dat = women, x = jj)
-## 
-## Confrontations: 2
-## Warnings      : 1
-## Errors        : 0</code></pre>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" title="1"><span class="kw">warnings</span>(cf)</a></code></pre></div>
-<pre><code>## $a
-## [1] &quot;Expression did not evaluate to numeric or logical, returning NULL&quot;</code></pre>
+indicators was problematic. For example because the output of an indicator rule
+is not numeric, or when it uses variables that do not occur in the data. Use
+<code>warnings(out)</code> or <code>errors(out)</code> to obtain the warning and error messages per
+rule.</p>
 </div>
 <div id="getting-indicator-values" class="section level2">
 <h2><span class="header-section-number">6.2</span> Getting indicator values</h2>
 <p>Values can be obtained with the <code>values</code> function, or by converting to a
 <code>data.frame</code>. In this example we add a unique identifier (this is optional) to
 make it easier to identify the results with data afterwards.</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" title="1">women<span class="op">$</span>id &lt;-<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" title="1">women<span class="op">$</span>id &lt;-<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>]</a></code></pre></div>
 <p>Compute indicators and convert to <code>data.frame</code>.</p>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(women, ii,<span class="dt">key=</span><span class="st">&quot;id&quot;</span>)</a>
-<a class="sourceLine" id="cb203-2" title="2"><span class="kw">tail</span>( <span class="kw">as.data.frame</span>(out) )</a></code></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(women, ii,<span class="dt">key=</span><span class="st">&quot;id&quot;</span>)</a>
+<a class="sourceLine" id="cb198-2" title="2"><span class="kw">tail</span>( <span class="kw">as.data.frame</span>(out) )</a></code></pre></div>
 <pre><code>##      id name     value                          expression
 ## 12    l  BMI  22.15113 (weight/2.2046)/(height * 0.0254)^2
 ## 13    m  BMI  22.09670 (weight/2.2046)/(height * 0.0254)^2

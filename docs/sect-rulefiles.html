@@ -283,13 +283,13 @@ options:
 <h2><span class="header-section-number">8.3</span> Exporting validator objects</h2>
 <p>There are three ways to do that. You can either write to a <code>yaml</code> file
 immediately as follows</p>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(height<span class="op">&gt;</span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb260-2" title="2"><span class="kw">export_yaml</span>(v,<span class="dt">file=</span><span class="st">&quot;my_rules.yaml&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(height<span class="op">&gt;</span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb255-2" title="2"><span class="kw">export_yaml</span>(v,<span class="dt">file=</span><span class="st">&quot;my_rules.yaml&quot;</span>)</a></code></pre></div>
 <p>or you can get the <code>yaml</code> text string using <code>as_yaml</code></p>
 <pre><code>cat(as_yaml(v))</code></pre>
 <p>Finally, you can convert a rule set to data frame and then export it
 to a database.</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" title="1">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" title="1">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(v)</a></code></pre></div>
 
 </div>
 </div>
