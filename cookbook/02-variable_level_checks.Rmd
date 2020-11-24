@@ -245,7 +245,7 @@ summary(out)
 ```
 
 For numeric ranges it is often a better idea to work with inclusive
-inequalities ($\leq$, $\geq$) then with strict inequalities ($<$, $>$).  Take
+inequalities ($\leq$, $\geq$) than with strict inequalities ($<$, $>$).  Take
 as an example the strict inequality demand `income > 0`. This means that _any_
 income larger than zero is acceptable, including numbers such as $0.01$,
 $0.000001$ and $10^{-\textrm{Googol}}$. In practice there is almost always a
