@@ -1,7 +1,9 @@
-version 0.9.4
+version 1.0.0
+- Added The Data Validation Cookbook as vignette. See also
+  <https://data-cleaning.github.io/validate>
 - Improved visualisation of validation output using 'plot'. The 'barplot'
   method for 'confrontation' objects is now deprecated and will be removed
-  in the next version.
+  eventually.
 - New functions 'violating', 'satisfying', 'lacking' to select records 
   based on 'validator' objects or the outcome of validations ('validation' 
   objects).
