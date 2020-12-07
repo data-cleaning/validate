@@ -19,6 +19,11 @@ vignette: >
 ---
 
 
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
+
 # Preface {-}
 
 This book is about checking data with the
@@ -26,18 +31,33 @@ This book is about checking data with the
 [R](https://www.r-project.org). 
 
 This version of the book was rendered with `validate` version 
-`r packageVersion("validate")`.  If your computer is connected to the internet,
-the latest release of `validate` can be installed from
-[CRAN](https://cran.r-project.org) as follows.
+`r packageVersion("validate")`.  The latest release of `validate` can be installed
+from [CRAN](https://cran.r-project.org) as follows.
 ```{r, echo=TRUE, eval=FALSE}
 install.packages("validate")
 ```
 
-The purpose of this book is to give simple examples of common data validation
-tasks. The first Chapter gives a short overview of the `validate` package
-workflow. The next Chapters treat collections of validation tasks of
-increasing complexity, mostly by example. Chapters \@ref(sect:work) and
-\@ref(sect:rulefiles) treat working with validate in-depth.
+The purpose of this book is to give examples of common data validation tasks,
+to demonstrate the main tools and workflows of the `validate` package, and to
+show how to analyze data validation results.
+
+The book is organized as follows. Chapter \@ref(sect:intro) discusses the
+bare necessities to be able to follow the rest of the book. Chapters \@ref(sect:varlevelchecks)
+to \@ref(sect:statisticalchecks) form the 'cookbook' part of the book and discuss
+many different ways to check your data by example. Chapter \@ref(sect:indicators)
+is devoted to deriving plausibility measures with the `validate` package.
+
+The first Chapter gives a short overview of the `validate` package workflow.
+The next Chapters treat collections of validation tasks of increasing
+complexity, mostly by example. Chapters \@ref(sect:work) and
+\@ref(sect:rulefiles) treat working with validate in-depth. In \@ref(sect:work)
+an extensive overview of functionality of the validate package is described.
+\@ref(sect:rulefiles) provides more details and options on working with rules
+stored in text files while \@ref(sect:comparing) discusses how to compare two
+or more versions of a dataset, possibly automated through the
+[lumberjack](https://cran.r-project.org/package=lumberjack) package.  The
+section with Biblographical Notes lists some references and points out some
+literature for further reading.
 
 
 ## Prerequisites {-}
@@ -59,8 +79,26 @@ To cite the `validate` package please use the following citation.
 This work was partially funded by European Grant Agreement 88287--NL-VALIDATION
 of the European Statistcal System.
 
+## License {-}
 
-# Introduction to validate {#intro}
+
+
+```{r, echo=FALSE, include=!knitr::is_latex_output()}
+knitr::asis_output("
+[![Creative Commons License](https://i.creativecommons.org/l/by-nc/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
+")
+```
+
+This work is licensed under [Creative Commons Attribution BY-NC 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
+
+
+
+# Introduction to validate {#sect:intro}
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 
 > Data validation is an activity where one checks whether a set of values
 > or value combinations satisfies a predefined expectation.
@@ -79,6 +117,9 @@ For advanced rule manipulation there is the
 [validatetools](https://cran.r-project.org/package=validatetools) package.
 
 
+```{r, include=FALSE, eval=knitr::is_latex_output()}
+knitr::opts_chunk$set(comment=NA)
+```
 
 ## A quick example
 
@@ -96,7 +137,10 @@ to define those expectations. Let's do a quick check on variables in the
 of data quality demands with the `validator()` function.
 ```{r}
 library(validate)
-rules <- validator(speed >= 0, dist >= 0, speed/dist <= 1.5, cor(speed, dist)>=0.2)
+rules <- validator(speed >= 0
+                 , dist >= 0
+                 , speed/dist <= 1.5
+                 , cor(speed, dist)>=0.2)
 ```
 Here, the first three rules are record-wise checks: each record will yield one
 answer. In the last rule we check whether speed and distance are positively
@@ -118,8 +162,12 @@ This returns a data frame with one line of information for each rule `V1`,
 - Whether the check resulted in an error (could not be performed) or gave an warning.
 - The expression that was actually evaluated to perform the check.
 
-The same information can be summarized graphically.
-```{r,fig.height=7, fig.width=7}
+The same information can be summarized graphically as follows
+`r if( knitr::is_latex_output()) knitr::asis_output("(see Figure \\ref{fig:validateplot})")`. 
+```{r,fig.height=7, fig.width=7, echo=!knitr::is_latex_output(), eval=!knitr::is_latex_output()}
+plot(out)
+```
+```{r, label="validateplot", fig.height=5, fig.width=5, out.width="0.7\\textwidth", fig.align="center", echo=knitr::is_latex_output(), eval=knitr::is_latex_output(), fig.env="figure",fig.pos="!t", fig.cap="Plot of validation output."}
 plot(out)
 ```
 
@@ -166,12 +214,17 @@ details about working with `validate`.
 
 # Variable checks {#sect:varlevelchecks}
 
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
+
 Variable checks are checks that can be performed on a field-by-field basis. An
 example is checking that a variable called `Age` is nonnegative, or of integer
 type. Variable checks are among the simplest checks.
 
 
-## Data and packages {-}
+**Data**
 
 In this section we will use the `SBS2000` dataset, that is included with `validate`.
 
@@ -291,10 +344,10 @@ more digits'. Here are some examples of how to define number formats.
 
 |format       | match                         | non-match                           |
 |-------------|-------------------------------|-------------------------------------|
-|`0.dddd`                                     | `"0.4321"`   | `"0.123"`,`"1.4563"` |
-|`d.ddEdd`    | `3.14E00`                     | `"31.14E00"`                        |
+|`0.dddd`     | `"0.4321"`                    | `"0.123"`,`"1.4563"`                |
+|`d.ddEdd`    | `"3.14E00"`                   | `"31.14E00"`                        |
 |`d.*Edd`     | `"0.314E01"`,`"3.1415297E00"` | `"3.1415230"`                       |
-|`d.dd*`      | `1.23`, `1.234`,...           | `1.2`                               |
+|`d.dd*`      | `"1.23"`, `"1.234"`,$\ldots$  | `"1.2"`                             |
 
 The last example shows how to check for a minimal number of digits behind the decimal
 point.
@@ -324,13 +377,14 @@ pattern matching in strings is discussed in the next section.
 A simple way to check for more general format is to use [globbing
 patterns](https://en.wikipedia.org/wiki/Glob_(programming)). In such patterns,
 the asterisk wildcard character (`*`) is interpreted as 'zero or more
-characters' and the question mark (`?`) is interpreted as 'a character'.
+characters' and the question mark (`?`) is interpreted as 'any character'.
 
-For example, to check that the `id` variable in `SBS2000` starts with `RET` we
-can do the following.
-
+For example, to check that the `id` variable in `SBS2000` starts with `"RET"`,
+and that the `size` variable has consists of `"sc"` followed by precisely one
+character, we can do the following.
 ```{r}
-rule <- validator( field_format(id, "RET*"),field_format(size, "sc?" ) )
+rule <- validator(field_format(id, "RET*")
+                , field_format(size, "sc?" ))
 out  <- confront(SBS2000, rule)
 summary(out)
 ```
@@ -350,8 +404,9 @@ give a few examples. A good introduction to regular expressions is given by
 In `validate` one can use `grepl` or `field_format`, with the argument `type="regex"`
 
 ```{r}
-rule <- validator(  grepl("^sc[0-9]$", size)
-                  , field_format(id,"^RET\\d{2}$",type="regex"))
+rule <- validator(
+          grepl("^sc[0-9]$", size)
+        , field_format(id, "^RET\\d{2}$" , type="regex") )
 summary(confront(SBS2000, rule))
 ```
 
@@ -379,14 +434,16 @@ Numerical variables may have natural limits from below and/or
 above. For one-sided ranges, you can use the standard comparison operators.
 
 ```{r}
-rules <- validator(TO = turnover >= 0, TC=total.costs >= 0)
+rules <- validator(TO = turnover >= 0
+                 , TC = total.costs >= 0)
 ```
 
 If a variable is bounded both from above and below one can use two rules,
 or use the convenience function `in_range`.
 
 ```{r}
-rules <- rules + validator(PR = in_range(incl.prob, min=0, max=1))
+rules <- rules + 
+  validator(PR = in_range(incl.prob, min=0, max=1))
 ```
 By default, `in_range` includes the boundaries of the range, so the above rule
 is equivalent to `incl.prob >= 0` and `incl.prob <= 0`. 
@@ -402,7 +459,7 @@ summary(out)
 ```
 
 For numeric ranges it is often a better idea to work with inclusive
-inequalities ($\leq$, $\geq$) then with strict inequalities ($<$, $>$).  Take
+inequalities ($\leq$, $\geq$) than with strict inequalities ($<$, $>$).  Take
 as an example the strict inequality demand `income > 0`. This means that _any_
 income larger than zero is acceptable, including numbers such as $0.01$,
 $0.000001$ and $10^{-\textrm{Googol}}$. In practice there is almost always a
@@ -427,9 +484,10 @@ period
 The `in_range` function is capable of recognizing certain date or period
 formats.
 ```{r}
-in_range(period, min="2017Q2", max = "2018Q2", format="auto")
+in_range(period, min="2017Q2", max = "2018Q2")
 ```
-The formats recognized with `format="auto"` are described in the help file, see `?in_range`.
+It is possible to specify your own date-time format using `strftime` notation.
+See `?in_range` and `?strptime` for specifications.
 
 
 
@@ -477,7 +535,8 @@ runtime, and pass this with `confront`.
 codelist <- c("sc0","sc1","sc2","sc3")
 rule <- validator(size %in% valid_codes)
 # pass the codelist
-out <- confront(SBS2000, rule, ref=list(valid_codes=codelist))
+out <- confront(SBS2000, rule
+              , ref=list(valid_codes=codelist))
 summary(out)
 ```
 This way, (very) large code lists can be used, but note that it does
@@ -493,6 +552,11 @@ and variables passed as reference data.
 
 # Availability and uniqueness {#sect:availableunique}
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 In this Chapter it is demonstrated how to check whether records are available
 and/or complete with respect to a set of keys, and whether they are unique.
 The checks described here are typically useful for data in 'long' format, where
@@ -501,8 +565,7 @@ one column holds a value and all the other columns identify the value.
 - To test for missing values in individual variables, see also \@ref(sect:missingness).
 - To check whether records or parts thereof are completed, see \@ref(sect:iscomplete).
 
-
-### Data and packages {-}
+**Data**
 
 In this Chapter the `samplonomy` dataset is used that comes with the `validate`
 package.
@@ -591,8 +654,9 @@ this.
 
 ```{r}
 rule <- validator(
-  contains_at_least( keys = data.frame(period = as.character(2014:2019))
-                    , by=list(region, measure) )
+  contains_at_least( 
+      keys = data.frame(period = as.character(2014:2019))
+    , by=list(region, measure) )
 )
 out <- confront(samplonomy, rule)
 # showing 7 columns of output for readability
@@ -633,8 +697,11 @@ This key set will be referenced in the rule, and passed to `confront` as referen
 data.
 
 ```{r}
-rule <- validator(contains_at_least(keys=minimal_keys, by=measure))
-out <- confront(samplonomy, rule, ref=list(minimal_keys=keyset))
+rule <- validator(
+          contains_at_least(keys=minimal_keys, by=measure) 
+        )
+out <- confront(samplonomy, rule
+              , ref=list(minimal_keys=keyset))
 # showing 7 columns of output for readability
 summary(out)[1:7]
 ```
@@ -673,8 +740,9 @@ head(keyset)
 ```
 The keyset is passed as reference data to the rule using `confront`.
 ```{r}
-rule <- validator( contains_exactly(all_keys, by=measure) )
-out  <- confront(samplonomy, rule, ref=list(all_keys=keyset))
+rule <- validator(contains_exactly(all_keys, by=measure))
+out  <- confront(samplonomy, rule
+               , ref=list(all_keys=keyset))
 # showing 7 columns of output for readability
 summary(out)[1:7]
 ```
@@ -728,20 +796,21 @@ is_linear_sequence(c("2020Q4","2020Q2","2020Q3","2020Q1"))
 ```
 One can force a begin and/or end point for the sequence as well.
 ```{r}
-is_linear_sequence(c("2020Q4","2020Q2","2020Q3","2020Q1"), begin="2020Q2")
+is_linear_sequence(c("2020Q4","2020Q2","2020Q3","2020Q1")
+                 , begin = "2020Q2")
 ```
 Finally it is possible to split a variable by one or more other columns and
 check whether each block represents a linear sequence.
 
 ```{r}
 series <- c(1,2,3,4,1,2,3,3)
-blocks <- rep(c("a","b"),each=4)
-is_linear_sequence(series, by=blocks)
+blocks <- rep(c("a","b"), each = 4)
+is_linear_sequence(series, by = blocks)
 ```
 Now, this result is not very useful since now it is unknown which block 
 is not a linear series. This is where the function `in_linear_series` comes in.
 ```{r}
-in_linear_sequence(series, by=blocks)
+in_linear_sequence(series, by = blocks)
 ```
 There are some subtleties. A single element is also a linear sequence (of length 1).
 ```{r}
@@ -750,7 +819,7 @@ is_linear_sequence(5)
 This can yield surprises in cases of blocks of length 1.
 ```{r}
 blocks[8] <- "c"
-data.frame(series=series, blocks=blocks)
+data.frame(series = series, blocks = blocks)
 in_linear_sequence(series, blocks)
 ```
 We now have three linear series, namely
@@ -761,7 +830,7 @@ We now have three linear series, namely
 
 We can circumvent this by giving explicit bounds.
 ```{r}
-in_linear_sequence(series, blocks, begin=1, end=4)
+in_linear_sequence(series, blocks, begin = 1, end = 4)
 ```
 
 
@@ -771,7 +840,10 @@ are time series of different frequencies, we need to split the data by frequency
 as well.
 
 ```{r}
-rule <- validator(in_linear_sequence(period, by=list(region, freq, measure)))
+rule <- validator(
+          in_linear_sequence(period
+            , by = list(region, freq, measure))
+        )
 out  <- confront(samplonomy, rule)
 summary(out)[1:7]
 ```
@@ -796,10 +868,15 @@ for 2018Q2  occurs twice (but with different values)
 
 # Multivariate checks
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 In this Chapter we treat tests that involve relationships between variables.
 
 
-### Data and packages {-}
+**Data**
 
 In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
 
@@ -958,6 +1035,11 @@ interpreted as string literals.
 
 # Statistical checks {#sect:statisticalchecks}
 
+ 
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 Statistical checks involve group properties such as the means of columns. These
 characteristics can be checked for whole columns or grouped by one or more
 categorical variables. It is also possible to use group-wise computed
@@ -969,7 +1051,7 @@ details. For example to test whether quarterly time series add up to annual
 totals. It is also possible to check properties of groups, for example whether
 in every household (a group of persons) there is exactly one head of household.
 
-### Data and packages {-}
+**Data**
 
 In this Chapter we will use the `SBS2000` dataset that comes with `validate`.
 
@@ -1380,7 +1462,12 @@ violating(samplonomy, out)
 
 
 
-# Indicators
+# Indicators {#sect:indicators}
+
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
 
 Until now we have discussed various types of data validation rules: decisions
 that assign True or False values to a data frame. In some cases it is
@@ -1406,7 +1493,7 @@ in the same way as `validator` objects.
 
 
 
-## A quick example
+## A first example
 
 Here is a simple example of the workflow.
 
@@ -1469,6 +1556,11 @@ constructed from multiple records.
 
 
 # Working with validate {#sect:work}
+
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
 
 ```{r, echo=FALSE}
 library(validate)
@@ -1890,6 +1982,11 @@ summary(cf)
 
 # Rules in text files {#sect:rulefiles}
 
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
+
 This Chapter is about importing and exporting rules from and to file, both in
 free-form text and in YAML. We also discuss some more advanced features like
 how to have one rule file include another file.
@@ -1998,6 +2095,11 @@ df <- as.data.frame(v)
 
 
 # Comparing data sets {#sect:comparing}
+
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
 
 ```{r, echo=FALSE}
 library(validate)
@@ -2270,13 +2372,14 @@ Let's read the log file from `spm_lbj_rules.csv` and print row three and four.
 ```{r}
 read.csv("spm_lbj_rules.csv")[3:4,]
 ```
+
 We get the full output created by `validate::compare()`. For example we
 see that after step three, 66 new cases satisfy one of the checks while two new
 violations were introduced. The fourth step adds two new satisfied cases and no
 new violations. The total number of violations after four steps equals five.
 
 Until now the logging data was written to files that were determined automatically
-by `lumberjack`, This is because `lumberjack` automatically dumps logging data
+by `lumberjack`. This is because `lumberjack` automatically dumps logging data
 after processing executing the file when the user has not done so explicitly.
 You can determine where to write the logging data by adding a `stop_log()`
 statement anywhere in your code (but at the end would usually make most sense).
@@ -2315,6 +2418,11 @@ short tutorial on how to write your own logger.
 
 
 # Bibliographical notes {-}
+
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+```
 
 More background on the validate package can be found in the paper
 for the R Journal.

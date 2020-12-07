@@ -5,6 +5,7 @@ doc:
 	cat cookbook/0*.Rmd cookbook/1*.Rmd >> pkg/vignettes/cookbook.Rmd
 	cp cookbook/clean*.R pkg/vignettes
 	cp cookbook/myrules* pkg/vignettes
+	cp cookbook/chunk_opts.R pkg/vignettes
 	cp -r cookbook/fig pkg/vignettes
 	R -s -e "pkgload::load_all('pkg');roxygen2::roxygenize('pkg')"
 
@@ -23,7 +24,7 @@ cran: doc pkg/vignettes/jss3483.pdf
 	R CMD check --as-cran *.tar.gz
 
 install: doc pkg/vignettes/jss3483.pdf
-	rm *.tar.gz
+	rm -f *.tar.gz
 	R CMD build pkg
 	R CMD INSTALL *.tar.gz
 
