@@ -1,7 +1,7 @@
 --- 
 title: "The Data Validation Cookbook"
 author: "Mark P.J. van der Loo"
-date: "`r Sys.Date()`"
+date: "`r Sys.Date()` | validate version `r packageVersion('validate')`"
 site: bookdown::bookdown_site
 documentclass: book
 mainfont: Roboto Condensed Light
@@ -29,24 +29,19 @@ from [CRAN](https://cran.r-project.org) as follows.
 install.packages("validate")
 ```
 
-The purpose of this book is to give examples of common data validation tasks,
-to demonstrate the main tools and workflows of the `validate` package, and to
-show how to analyze data validation results.
+The purposes of this book include demonstrating the main tools and workflows of
+the `validate` package, giving examples of common data validation tasks, and
+showing how to analyze data validation results.
 
-The book is organized as follows. Chapter \@ref(sect:intro) discusses the
-bare necessities to be able to follow the rest of the book. Chapters \@ref(sect:varlevelchecks)
-to \@ref(sect:statisticalchecks) form the 'cookbook' part of the book and discuss
-many different ways to check your data by example. Chapter \@ref(sect:indicators)
-is devoted to deriving plausibility measures with the `validate` package.
-
-The first Chapter gives a short overview of the `validate` package workflow.
-The next Chapters treat collections of validation tasks of increasing
-complexity, mostly by example. Chapters \@ref(sect:work) and
-\@ref(sect:rulefiles) treat working with validate in-depth. In \@ref(sect:work)
-an extensive overview of functionality of the validate package is described.
-\@ref(sect:rulefiles) provides more details and options on working with rules
-stored in text files while \@ref(sect:comparing) discusses how to compare two
-or more versions of a dataset, possibly automated through the
+The book is organized as follows. Chapter \@ref(sect:intro) discusses the bare
+necessities to be able to follow the rest of the book. Chapters
+\@ref(sect:varlevelchecks) to \@ref(sect:statisticalchecks) form the 'cookbook'
+part of the book and discuss many different ways to check your data by example.
+Chapter \@ref(sect:indicators) is devoted to deriving plausibility measures
+with the `validate` package.  Chapters \@ref(sect:work) and
+\@ref(sect:rulefiles) treat working with validate in-depth. Chapter
+\@ref(sect:comparing) discusses how to compare two or more versions of a
+dataset, possibly automated through the
 [lumberjack](https://cran.r-project.org/package=lumberjack) package.  The
 section with Biblographical Notes lists some references and points out some
 literature for further reading.
@@ -63,8 +58,14 @@ data frames and vectors.
 To cite the `validate` package please use the following citation.
 
 > MPJ van der Loo and E de Jonge (2020). Data Validation Infrastructure for
-> R. _Journal of Statistical Software_, Accepted for publication. URL:
-> `https://CRAN.R-project.org/package=validate`
+> R. _Journal of Statistical Software_, Accepted for publication. 
+> `https://arxiv.org/abs/1912.09759`
+
+To cite this cookbook, please use the following citation.
+
+> MPJ van der Loo (`r substr(as.Date(Sys.time()),1,4)`) _The Data Validation Cookbook_
+> version `r packageVersion("validate")`. [https://data-cleaning.github.io/validate](http://data-cleaning.github.io/validate/)
+
 
 ## Acknowledgements {-}
 
@@ -72,8 +73,6 @@ This work was partially funded by European Grant Agreement 88287--NL-VALIDATION
 of the European Statistcal System.
 
 ## License {-}
-
-
 
 ```{r, echo=FALSE, include=!knitr::is_latex_output()}
 knitr::asis_output("

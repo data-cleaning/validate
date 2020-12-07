@@ -24,7 +24,6 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -220,7 +219,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">The Data Validation Cookbook</h1>
 <p class="author"><em>Mark P.J. van der Loo</em></p>
-<p class="date"><em>2020-12-07</em></p>
+<p class="date"><em>2020-12-07 | validate version 0.9.3.44</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
@@ -231,22 +230,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 0.9.3.44. The latest release of <code>validate</code> can be installed
 from <a href="https://cran.r-project.org">CRAN</a> as follows.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;validate&quot;</span>)</a></code></pre></div>
-<p>The purpose of this book is to give examples of common data validation tasks,
-to demonstrate the main tools and workflows of the <code>validate</code> package, and to
-show how to analyze data validation results.</p>
-<p>The book is organized as follows. Chapter <a href="sect-intro.html#sect:intro">1</a> discusses the
-bare necessities to be able to follow the rest of the book. Chapters <a href="sect-varlevelchecks.html#sect:varlevelchecks">2</a>
-to <a href="sect-statisticalchecks.html#sect:statisticalchecks">5</a> form the ‘cookbook’ part of the book and discuss
-many different ways to check your data by example. Chapter <a href="sect-indicators.html#sect:indicators">6</a>
-is devoted to deriving plausibility measures with the <code>validate</code> package.</p>
-<p>The first Chapter gives a short overview of the <code>validate</code> package workflow.
-The next Chapters treat collections of validation tasks of increasing
-complexity, mostly by example. Chapters <a href="sect-work.html#sect:work">7</a> and
-<a href="sect-rulefiles.html#sect:rulefiles">8</a> treat working with validate in-depth. In <a href="sect-work.html#sect:work">7</a>
-an extensive overview of functionality of the validate package is described.
-<a href="sect-rulefiles.html#sect:rulefiles">8</a> provides more details and options on working with rules
-stored in text files while <a href="sect-comparing.html#sect:comparing">9</a> discusses how to compare two
-or more versions of a dataset, possibly automated through the
+<p>The purposes of this book include demonstrating the main tools and workflows of
+the <code>validate</code> package, giving examples of common data validation tasks, and
+showing how to analyze data validation results.</p>
+<p>The book is organized as follows. Chapter <a href="sect-intro.html#sect:intro">1</a> discusses the bare
+necessities to be able to follow the rest of the book. Chapters
+<a href="sect-varlevelchecks.html#sect:varlevelchecks">2</a> to <a href="sect-statisticalchecks.html#sect:statisticalchecks">5</a> form the ‘cookbook’
+part of the book and discuss many different ways to check your data by example.
+Chapter <a href="sect-indicators.html#sect:indicators">6</a> is devoted to deriving plausibility measures
+with the <code>validate</code> package. Chapters <a href="sect-work.html#sect:work">7</a> and
+<a href="sect-rulefiles.html#sect:rulefiles">8</a> treat working with validate in-depth. Chapter
+<a href="sect-comparing.html#sect:comparing">9</a> discusses how to compare two or more versions of a
+dataset, possibly automated through the
 <a href="https://cran.r-project.org/package=lumberjack">lumberjack</a> package. The
 section with Biblographical Notes lists some references and points out some
 literature for further reading.</p>
@@ -261,8 +256,13 @@ data frames and vectors.</p>
 <p>To cite the <code>validate</code> package please use the following citation.</p>
 <blockquote>
 <p>MPJ van der Loo and E de Jonge (2020). Data Validation Infrastructure for
-R. <em>Journal of Statistical Software</em>, Accepted for publication. URL:
-<code>https://CRAN.R-project.org/package=validate</code></p>
+R. <em>Journal of Statistical Software</em>, Accepted for publication.
+<code>https://arxiv.org/abs/1912.09759</code></p>
+</blockquote>
+<p>To cite this cookbook, please use the following citation.</p>
+<blockquote>
+<p>MPJ van der Loo (2020) <em>The Data Validation Cookbook</em>
+version 0.9.3.44. <a href="http://data-cleaning.github.io/validate/">https://data-cleaning.github.io/validate</a></p>
 </blockquote>
 </div>
 <div id="acknowledgements" class="section level2 unnumbered">
