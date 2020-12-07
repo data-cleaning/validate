@@ -126,7 +126,7 @@ check_primitives <- function(){
 #
 get_linear_coefficients <- function(x, normalize=TRUE,...){
   x <- x[x$is_linear()]
-  calls <- .get_exprs(x,lin_eq_eps=0)
+  calls <- .get_exprs(x,lin_eq_eps=0, lin_ineq_eps=0)
     
   cols <- unique(unlist(lapply(calls, var_from_call)))
   rows <- names(x)
