@@ -24,7 +24,7 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-11-23" />
+<meta name="date" content="2020-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -279,13 +279,13 @@ options:
 <h2><span class="header-section-number">8.3</span> Exporting validator objects</h2>
 <p>There are three ways to do that. You can either write to a <code>yaml</code> file
 immediately as follows</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(height<span class="op">&gt;</span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb255-2" title="2"><span class="kw">export_yaml</span>(v,<span class="dt">file=</span><span class="st">&quot;my_rules.yaml&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(height<span class="op">&gt;</span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb263-2" title="2"><span class="kw">export_yaml</span>(v,<span class="dt">file=</span><span class="st">&quot;my_rules.yaml&quot;</span>)</a></code></pre></div>
 <p>or you can get the <code>yaml</code> text string using <code>as_yaml</code></p>
 <pre><code>cat(as_yaml(v))</code></pre>
 <p>Finally, you can convert a rule set to data frame and then export it
 to a database.</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" title="1">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" title="1">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(v)</a></code></pre></div>
 
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-11-23" />
+<meta name="date" content="2020-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -222,9 +222,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this Chapter we treat tests that involve relationships between variables.</p>
 <p><strong>Data</strong></p>
 <p>In this Chapter we will use the <code>SBS2000</code> dataset that comes with <code>validate</code>.</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb111-2" title="2"><span class="kw">data</span>(SBS2000)</a>
-<a class="sourceLine" id="cb111-3" title="3"><span class="kw">head</span>(SBS2000, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1"><span class="kw">library</span>(validate)</a>
+<a class="sourceLine" id="cb119-2" title="2"><span class="kw">data</span>(SBS2000)</a>
+<a class="sourceLine" id="cb119-3" title="3"><span class="kw">head</span>(SBS2000, <span class="dv">3</span>)</a></code></pre></div>
 <pre><code>##      id size incl.prob staff turnover other.rev total.rev staff.costs
 ## 1 RET01  sc0      0.02    75       NA        NA      1130          NA
 ## 2 RET02  sc3      0.14     9     1607        NA      1607         131
@@ -237,15 +237,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Completeness of records</h2>
 <p>The functions <code>is_complete()</code> and <code>all_complete()</code> are convenience functions
 that test for missing values or combinations thereof in records.</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb113-2" title="2">          <span class="kw">is_complete</span>(id)</a>
-<a class="sourceLine" id="cb113-3" title="3">        , <span class="kw">is_complete</span>(id, turnover)</a>
-<a class="sourceLine" id="cb113-4" title="4">        , <span class="kw">is_complete</span>(id, turnover, profit )</a>
-<a class="sourceLine" id="cb113-5" title="5">        , <span class="kw">all_complete</span>(id)</a>
-<a class="sourceLine" id="cb113-6" title="6">)</a>
-<a class="sourceLine" id="cb113-7" title="7">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
-<a class="sourceLine" id="cb113-8" title="8"><span class="co"># suppress last column for brevity</span></a>
-<a class="sourceLine" id="cb113-9" title="9"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
+<a class="sourceLine" id="cb121-2" title="2">          <span class="kw">is_complete</span>(id)</a>
+<a class="sourceLine" id="cb121-3" title="3">        , <span class="kw">is_complete</span>(id, turnover)</a>
+<a class="sourceLine" id="cb121-4" title="4">        , <span class="kw">is_complete</span>(id, turnover, profit )</a>
+<a class="sourceLine" id="cb121-5" title="5">        , <span class="kw">all_complete</span>(id)</a>
+<a class="sourceLine" id="cb121-6" title="6">)</a>
+<a class="sourceLine" id="cb121-7" title="7">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
+<a class="sourceLine" id="cb121-8" title="8"><span class="co"># suppress last column for brevity</span></a>
+<a class="sourceLine" id="cb121-9" title="9"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     60     0   0 FALSE   FALSE
 ## 2   V2    60     56     4   0 FALSE   FALSE
@@ -266,14 +266,14 @@ it results in a single <code>TRUE</code> or <code>FALSE</code>.</p>
 <h2><span class="header-section-number">4.2</span> Balance equalities and inequalities</h2>
 <p>Balance restrictions occur for example in economic microdata, where financial
 balances must be met.</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb115-2" title="2">    total.rev <span class="op">-</span><span class="st"> </span>profit <span class="op">==</span><span class="st"> </span>total.costs</a>
-<a class="sourceLine" id="cb115-3" title="3">  , turnover <span class="op">+</span><span class="st"> </span>other.rev <span class="op">==</span><span class="st"> </span>total.rev</a>
-<a class="sourceLine" id="cb115-4" title="4">  , profit <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.6</span><span class="op">*</span>total.rev</a>
-<a class="sourceLine" id="cb115-5" title="5">)</a>
-<a class="sourceLine" id="cb115-6" title="6"></a>
-<a class="sourceLine" id="cb115-7" title="7">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
-<a class="sourceLine" id="cb115-8" title="8"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
+<a class="sourceLine" id="cb123-2" title="2">    total.rev <span class="op">-</span><span class="st"> </span>profit <span class="op">==</span><span class="st"> </span>total.costs</a>
+<a class="sourceLine" id="cb123-3" title="3">  , turnover <span class="op">+</span><span class="st"> </span>other.rev <span class="op">==</span><span class="st"> </span>total.rev</a>
+<a class="sourceLine" id="cb123-4" title="4">  , profit <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.6</span><span class="op">*</span>total.rev</a>
+<a class="sourceLine" id="cb123-5" title="5">)</a>
+<a class="sourceLine" id="cb123-6" title="6"></a>
+<a class="sourceLine" id="cb123-7" title="7">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
+<a class="sourceLine" id="cb123-8" title="8"><span class="kw">summary</span>(out)</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     39    14   7 FALSE   FALSE
 ## 2   V2    60     19     4  37 FALSE   FALSE
@@ -291,8 +291,8 @@ equals variable <span class="math inline">\(y\)</span>, <code>validate</code> wi
 default value of <span class="math inline">\(\epsilon\)</span> is <span class="math inline">\(10^{-8}\)</span>. The value of this tolerance can be
 controlled for linear equalities and inequalities using respectively
 <code>lin.eq.eps</code> and <code>lin.ineq.eps</code>.</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules, <span class="dt">lin.ineq.eps=</span><span class="dv">0</span>, <span class="dt">lin.eq.eps=</span><span class="fl">0.01</span>)</a>
-<a class="sourceLine" id="cb117-2" title="2"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules, <span class="dt">lin.ineq.eps=</span><span class="dv">0</span>, <span class="dt">lin.eq.eps=</span><span class="fl">0.01</span>)</a>
+<a class="sourceLine" id="cb125-2" title="2"><span class="kw">summary</span>(out)</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     39    14   7 FALSE   FALSE
 ## 2   V2    60     19     4  37 FALSE   FALSE
@@ -308,9 +308,9 @@ controlled for linear equalities and inequalities using respectively
 <p>Conditional restrictions are all about demanding certain value combinations.
 In the following example we check that a business with staff also has staff
 costs.</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="cf">if</span> (staff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) staff.costs <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb119-2" title="2">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
-<a class="sourceLine" id="cb119-3" title="3"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="cf">if</span> (staff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) staff.costs <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb127-2" title="2">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
+<a class="sourceLine" id="cb127-3" title="3"><span class="kw">summary</span>(out)</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning                         expression
 ## 1   V1    60     50     0  10 FALSE   FALSE !(staff &gt;= 1) | (staff.costs &gt;= 1)</code></pre>
 <p>Here, combinations where there is a positive number of staff must be
@@ -340,33 +340,33 @@ F &amp; F &amp; F\\
 combinations than specifying such combinations individually. The function
 <code>does_not_contain()</code> supports such situations.</p>
 <p>As an example, let’s first create some transaction data.</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1">transactions &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb121-2" title="2">   <span class="dt">sender   =</span> <span class="kw">c</span>(<span class="st">&quot;S21&quot;</span>, <span class="st">&quot;X34&quot;</span>, <span class="st">&quot;S45&quot;</span>,<span class="st">&quot;Z22&quot;</span>)</a>
-<a class="sourceLine" id="cb121-3" title="3"> , <span class="dt">receiver =</span> <span class="kw">c</span>(<span class="st">&quot;FG0&quot;</span>, <span class="st">&quot;FG2&quot;</span>, <span class="st">&quot;DF1&quot;</span>,<span class="st">&quot;KK2&quot;</span>)</a>
-<a class="sourceLine" id="cb121-4" title="4"> , <span class="dt">value    =</span> <span class="kw">sample</span>(<span class="dv">70</span><span class="op">:</span><span class="dv">100</span>,<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb121-5" title="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1">transactions &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb129-2" title="2">   <span class="dt">sender   =</span> <span class="kw">c</span>(<span class="st">&quot;S21&quot;</span>, <span class="st">&quot;X34&quot;</span>, <span class="st">&quot;S45&quot;</span>,<span class="st">&quot;Z22&quot;</span>)</a>
+<a class="sourceLine" id="cb129-3" title="3"> , <span class="dt">receiver =</span> <span class="kw">c</span>(<span class="st">&quot;FG0&quot;</span>, <span class="st">&quot;FG2&quot;</span>, <span class="st">&quot;DF1&quot;</span>,<span class="st">&quot;KK2&quot;</span>)</a>
+<a class="sourceLine" id="cb129-4" title="4"> , <span class="dt">value    =</span> <span class="kw">sample</span>(<span class="dv">70</span><span class="op">:</span><span class="dv">100</span>,<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb129-5" title="5">)</a></code></pre></div>
 <p>We assume that it is not possible for senders with codes starting with an <code>"S"</code>
 to send something to receivers starting with <code>FG</code>. A convenient way to encode
 such demands is to use
 <a href="https://en.wikipedia.org/wiki/Glob_(programming)">globbing patterns</a>.
 We create a data frame that lists forbidden combinations (here: one combination
 of two key patterns).</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1">forbidden &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">sender=</span><span class="st">&quot;S*&quot;</span>,<span class="dt">receiver =</span> <span class="st">&quot;FG*&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1">forbidden &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">sender=</span><span class="st">&quot;S*&quot;</span>,<span class="dt">receiver =</span> <span class="st">&quot;FG*&quot;</span>)</a></code></pre></div>
 <p>Note that the column names of this data frame correspond to the columns in the transactions
 data frame. We are now ready to check our transactions data frame.</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">does_not_contain</span>(<span class="kw">glob</span>(forbidden_keys)))</a>
-<a class="sourceLine" id="cb123-2" title="2">out &lt;-<span class="st"> </span><span class="kw">confront</span>(transactions, rule, <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">forbidden_keys=</span>forbidden))</a>
-<a class="sourceLine" id="cb123-3" title="3"><span class="co">## Suppress columns for brevity</span></a>
-<a class="sourceLine" id="cb123-4" title="4"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">does_not_contain</span>(<span class="kw">glob</span>(forbidden_keys)))</a>
+<a class="sourceLine" id="cb131-2" title="2">out &lt;-<span class="st"> </span><span class="kw">confront</span>(transactions, rule, <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">forbidden_keys=</span>forbidden))</a>
+<a class="sourceLine" id="cb131-3" title="3"><span class="co">## Suppress columns for brevity</span></a>
+<a class="sourceLine" id="cb131-4" title="4"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1     4      3     1   0 FALSE   FALSE</code></pre>
 <p>Observer that we use <code>glob(forbidden_keys)</code> to tell <code>does_not_contain</code> that the
 key combinations in the <code>forbidden_keys</code> must be interpreted as globbing
 patterns.</p>
 <p>The records containing forbidden keys can be selected as follows.</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">violating</span>(transactions, out)</a></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="kw">violating</span>(transactions, out)</a></code></pre></div>
 <pre><code>##   sender receiver value
-## 1    S21      FG0    99</code></pre>
+## 1    S21      FG0    76</code></pre>
 <p>It is also possible to use regular expression patterns, by labeling the
 forbidden key set with <code>rx()</code>. If no labeling is used, the key sets are
 interpreted as string literals.</p>

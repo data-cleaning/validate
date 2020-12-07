@@ -192,13 +192,11 @@ matchvars <- function(L,env){
 
 #' Test for uniquenes of records
 #' 
-#' Test for uniqueness of columns or combinations of columns. Possibly grouped by
-#' other variables.
+#' Test for uniqueness of columns or combinations of columns. 
 #'
 #'
 #' @param ... When used in a validation rule: a bare (unquoted) list of variable names.
 #'     When used directly, a comma-separated list of vectors of equal length.
-#' @param by A bare name or \code{list} of bare names of variables used to group the data.
 #'
 #' @return 
 #'   For \code{is_unique} A logical vector that is \code{FALSE} for each record
@@ -218,15 +216,9 @@ matchvars <- function(L,env){
 #' values(confront(d,v))
 #'
 #' @export
-is_unique <- function(..., by=NULL){
+is_unique <- function(...){
   d <- data.frame(...)
-  if (is.null(by)) return( !duplicated(d) & !duplicated(d, fromLast=TRUE) ) 
-  unsplit(
-    lapply(
-      split(d, by), function(x) !duplicated(x) & !duplicated(x, fromLast=TRUE)
-    )
-  , f=by)
-  
+ !duplicated(d) & !duplicated(d, fromLast=TRUE)
 }
 
 

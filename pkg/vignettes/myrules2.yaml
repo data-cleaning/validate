@@ -1,0 +1,32 @@
+---
+options:
+  raise: none
+  lin.eq.eps: 1.0e-08
+  lin.ineq.eps: 1.0e-08
+  na.value: .na
+  sequential: yes
+  na.condition: no
+---
+rules:
+- expr: speed >= 0
+  name: speed
+  label: speed positivity
+  description: |
+    speed can not be negative
+  created: 2020-12-07 16:50:04
+  origin: myrules.yaml
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+- expr: speed/dist <= 1.5
+  name: ratio
+  label: ratio limit
+  description: |
+    The speed to distance ratio can
+    not exceed 1.5.
+  created: 2020-12-07 16:50:04
+  origin: myrules.yaml
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+

@@ -24,7 +24,7 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-11-23" />
+<meta name="date" content="2020-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -259,15 +259,15 @@ datasets using <code>cells()</code>. As an example, we first create three versio
 second version we replace a revenue column with it’s absolute value to ‘repair’
 cases with negative revenues. In the third version, we impute cases where
 <code>turnover</code> is missing with the <code>vat</code> (value added tax) value, when available.</p>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" title="1"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb258-2" title="2"><span class="kw">data</span>(SBS2000)</a>
-<a class="sourceLine" id="cb258-3" title="3">original &lt;-<span class="st"> </span>SBS2000</a>
-<a class="sourceLine" id="cb258-4" title="4">version2 &lt;-<span class="st"> </span>original</a>
-<a class="sourceLine" id="cb258-5" title="5">version2<span class="op">$</span>other.rev &lt;-<span class="st"> </span><span class="kw">abs</span>(version2<span class="op">$</span>other.rev)</a>
-<a class="sourceLine" id="cb258-6" title="6">version3 &lt;-<span class="st"> </span>version2</a>
-<a class="sourceLine" id="cb258-7" title="7">version3<span class="op">$</span>turnover[<span class="kw">is.na</span>(version3<span class="op">$</span>turnover)] &lt;-<span class="st"> </span>version3<span class="op">$</span>vat[<span class="kw">is.na</span>(version3<span class="op">$</span>turnover)]</a></code></pre></div>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1"><span class="kw">library</span>(validate)</a>
+<a class="sourceLine" id="cb266-2" title="2"><span class="kw">data</span>(SBS2000)</a>
+<a class="sourceLine" id="cb266-3" title="3">original &lt;-<span class="st"> </span>SBS2000</a>
+<a class="sourceLine" id="cb266-4" title="4">version2 &lt;-<span class="st"> </span>original</a>
+<a class="sourceLine" id="cb266-5" title="5">version2<span class="op">$</span>other.rev &lt;-<span class="st"> </span><span class="kw">abs</span>(version2<span class="op">$</span>other.rev)</a>
+<a class="sourceLine" id="cb266-6" title="6">version3 &lt;-<span class="st"> </span>version2</a>
+<a class="sourceLine" id="cb266-7" title="7">version3<span class="op">$</span>turnover[<span class="kw">is.na</span>(version3<span class="op">$</span>turnover)] &lt;-<span class="st"> </span>version3<span class="op">$</span>vat[<span class="kw">is.na</span>(version3<span class="op">$</span>turnover)]</a></code></pre></div>
 <p>We can now compare <code>version2</code> and <code>version3</code> to the original data set as follows.</p>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" title="1"><span class="kw">cells</span>(<span class="dt">input =</span> original, <span class="dt">cleaned =</span> version2, <span class="dt">imputed =</span> version3)</a></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1"><span class="kw">cells</span>(<span class="dt">input =</span> original, <span class="dt">cleaned =</span> version2, <span class="dt">imputed =</span> version3)</a></code></pre></div>
 <pre><code>## Object of class cellComparison:
 ## 
 ##    cells(input = original, cleaned = version2, imputed = version3)
@@ -290,8 +290,8 @@ preparing the <code>cleaned</code> data set, but a single value was imputed in t
 <p>Since each data frame is compared to the first data frame, the last column can be considered
 a ‘cumulative’ record of all changes that took place from beginning to end. It is also possible
 to print differential changes, where each data set is compared with the previous one.</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="kw">cells</span>(<span class="dt">input =</span> original, <span class="dt">cleaned =</span> version2, <span class="dt">imputed =</span> version3</a>
-<a class="sourceLine" id="cb261-2" title="2">    , <span class="dt">compare=</span><span class="st">&quot;sequential&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1"><span class="kw">cells</span>(<span class="dt">input =</span> original, <span class="dt">cleaned =</span> version2, <span class="dt">imputed =</span> version3</a>
+<a class="sourceLine" id="cb269-2" title="2">    , <span class="dt">compare=</span><span class="st">&quot;sequential&quot;</span>)</a></code></pre></div>
 <pre><code>## Object of class cellComparison:
 ## 
 ##    cells(input = original, cleaned = version2, imputed = version3, compare = &quot;sequential&quot;)
@@ -310,20 +310,20 @@ to print differential changes, where each data set is compared with the previous
 interesting about this is that <code>validate</code> comes with two plot methods for such
 objects. To demonstrate this, we will create two more versions of the
 <code>SBS2000</code> dataset.</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1">version4 &lt;-<span class="st"> </span>version3</a>
-<a class="sourceLine" id="cb263-2" title="2">version4<span class="op">$</span>turnover[<span class="kw">is.na</span>(version4<span class="op">$</span>turnover)] &lt;-<span class="st"> </span><span class="kw">median</span>(version4<span class="op">$</span>turnover, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb263-3" title="3"></a>
-<a class="sourceLine" id="cb263-4" title="4"><span class="co"># from kEUR to EUR</span></a>
-<a class="sourceLine" id="cb263-5" title="5">version5 &lt;-<span class="st"> </span>version4</a>
-<a class="sourceLine" id="cb263-6" title="6">version5<span class="op">$</span>staff.costs &lt;-<span class="st"> </span>version5<span class="op">$</span>staff.costs <span class="op">*</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1">out &lt;-<span class="st"> </span><span class="kw">cells</span>(<span class="dt">input =</span> original</a>
-<a class="sourceLine" id="cb264-2" title="2">           , <span class="dt">cleaned =</span> version2</a>
-<a class="sourceLine" id="cb264-3" title="3">           , <span class="dt">vat_imp =</span> version3</a>
-<a class="sourceLine" id="cb264-4" title="4">           , <span class="dt">med_imp =</span> version4</a>
-<a class="sourceLine" id="cb264-5" title="5">           , <span class="dt">units   =</span> version5)</a>
-<a class="sourceLine" id="cb264-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb264-7" title="7"><span class="kw">barplot</span>(out)</a>
-<a class="sourceLine" id="cb264-8" title="8"><span class="kw">plot</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1">version4 &lt;-<span class="st"> </span>version3</a>
+<a class="sourceLine" id="cb271-2" title="2">version4<span class="op">$</span>turnover[<span class="kw">is.na</span>(version4<span class="op">$</span>turnover)] &lt;-<span class="st"> </span><span class="kw">median</span>(version4<span class="op">$</span>turnover, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb271-3" title="3"></a>
+<a class="sourceLine" id="cb271-4" title="4"><span class="co"># from kEUR to EUR</span></a>
+<a class="sourceLine" id="cb271-5" title="5">version5 &lt;-<span class="st"> </span>version4</a>
+<a class="sourceLine" id="cb271-6" title="6">version5<span class="op">$</span>staff.costs &lt;-<span class="st"> </span>version5<span class="op">$</span>staff.costs <span class="op">*</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">out &lt;-<span class="st"> </span><span class="kw">cells</span>(<span class="dt">input =</span> original</a>
+<a class="sourceLine" id="cb272-2" title="2">           , <span class="dt">cleaned =</span> version2</a>
+<a class="sourceLine" id="cb272-3" title="3">           , <span class="dt">vat_imp =</span> version3</a>
+<a class="sourceLine" id="cb272-4" title="4">           , <span class="dt">med_imp =</span> version4</a>
+<a class="sourceLine" id="cb272-5" title="5">           , <span class="dt">units   =</span> version5)</a>
+<a class="sourceLine" id="cb272-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb272-7" title="7"><span class="kw">barplot</span>(out)</a>
+<a class="sourceLine" id="cb272-8" title="8"><span class="kw">plot</span>(out)</a></code></pre></div>
 <p><img src="09-comparing_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>The bar plot and line plot convey the same information. The line plot is better
 when the data sets are instances resulting from a sequential process. The bar
@@ -350,18 +350,18 @@ cases that stayed the same or changed with respect to the input data.</p>
 <p>With <code>validate</code> the complete decomposition can be computed with <code>compare()</code>.
 It takes as first argument a <code>validator</code> object and two or more data sets
 to compare. We will use the data sets developed in the previous paragraph.</p>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(other.rev <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb265-2" title="2">                 , turnover <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb265-3" title="3">                 , turnover <span class="op">+</span><span class="st"> </span>other.rev <span class="op">==</span><span class="st"> </span>total.rev</a>
-<a class="sourceLine" id="cb265-4" title="4">)</a>
-<a class="sourceLine" id="cb265-5" title="5"></a>
-<a class="sourceLine" id="cb265-6" title="6">comparison &lt;-<span class="st"> </span><span class="kw">compare</span>(rules</a>
-<a class="sourceLine" id="cb265-7" title="7">                    , <span class="dt">input =</span> original</a>
-<a class="sourceLine" id="cb265-8" title="8">                    , <span class="dt">cleaned =</span> version2</a>
-<a class="sourceLine" id="cb265-9" title="9">                    , <span class="dt">vat_imp =</span> version3</a>
-<a class="sourceLine" id="cb265-10" title="10">                    , <span class="dt">med_imp =</span> version4</a>
-<a class="sourceLine" id="cb265-11" title="11">                    , <span class="dt">units   =</span> version5)</a>
-<a class="sourceLine" id="cb265-12" title="12">comparison</a></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(other.rev <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb273-2" title="2">                 , turnover <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb273-3" title="3">                 , turnover <span class="op">+</span><span class="st"> </span>other.rev <span class="op">==</span><span class="st"> </span>total.rev</a>
+<a class="sourceLine" id="cb273-4" title="4">)</a>
+<a class="sourceLine" id="cb273-5" title="5"></a>
+<a class="sourceLine" id="cb273-6" title="6">comparison &lt;-<span class="st"> </span><span class="kw">compare</span>(rules</a>
+<a class="sourceLine" id="cb273-7" title="7">                    , <span class="dt">input =</span> original</a>
+<a class="sourceLine" id="cb273-8" title="8">                    , <span class="dt">cleaned =</span> version2</a>
+<a class="sourceLine" id="cb273-9" title="9">                    , <span class="dt">vat_imp =</span> version3</a>
+<a class="sourceLine" id="cb273-10" title="10">                    , <span class="dt">med_imp =</span> version4</a>
+<a class="sourceLine" id="cb273-11" title="11">                    , <span class="dt">units   =</span> version5)</a>
+<a class="sourceLine" id="cb273-12" title="12">comparison</a></code></pre></div>
 <pre><code>## Object of class validatorComparison:
 ## 
 ##    compare(x = rules, input = original, cleaned = version2, vat_imp = version3, med_imp = version4, units = version5)
@@ -385,9 +385,9 @@ since the first data set. It is possible to investigate local differences by
 setting <code>how='sequential'</code>.</p>
 <p>It is possible to plot the output for a graphical overview in two different
 ways: a bar plot and a line plot.</p>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb267-2" title="2"><span class="kw">barplot</span>(comparison)</a>
-<a class="sourceLine" id="cb267-3" title="3"><span class="kw">plot</span>(comparison)</a></code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb275-2" title="2"><span class="kw">barplot</span>(comparison)</a>
+<a class="sourceLine" id="cb275-3" title="3"><span class="kw">plot</span>(comparison)</a></code></pre></div>
 <p><img src="09-comparing_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 <div id="validate-and-lumberjack" class="section level2">
@@ -398,30 +398,30 @@ is slightly adapted from the <a href="https://arxiv.org/abs/2005.04050">JSS pape
 <p>We create a script that reads data, performs a few data cleaning steps
 and then writes the output. The script is stored in <code>clean_supermarkets.R</code> and
 has the following code.</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1"><span class="co">## Contents of clean_supermarkets.R</span></a>
-<a class="sourceLine" id="cb268-2" title="2"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb268-3" title="3"></a>
-<a class="sourceLine" id="cb268-4" title="4"><span class="co"># 1. simulate reading data</span></a>
-<a class="sourceLine" id="cb268-5" title="5"><span class="kw">data</span>(SBS2000)</a>
-<a class="sourceLine" id="cb268-6" title="6">spm &lt;-<span class="st"> </span>SBS2000[<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;staff&quot;</span>,<span class="st">&quot;turnover&quot;</span>,<span class="st">&quot;other.rev&quot;</span>,<span class="st">&quot;total.rev&quot;</span>)]</a>
-<a class="sourceLine" id="cb268-7" title="7"></a>
-<a class="sourceLine" id="cb268-8" title="8"><span class="co"># 2. add a logger from &#39;validate&#39;</span></a>
-<a class="sourceLine" id="cb268-9" title="9"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_cells</span>())</a>
-<a class="sourceLine" id="cb268-10" title="10"></a>
-<a class="sourceLine" id="cb268-11" title="11"><span class="co"># 3. assume empty values should be filled with 0</span></a>
-<a class="sourceLine" id="cb268-12" title="12">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">other.rev =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(other.rev),<span class="dv">0</span>,other.rev))</a>
-<a class="sourceLine" id="cb268-13" title="13"></a>
-<a class="sourceLine" id="cb268-14" title="14"><span class="co"># 4. assume that negative amounts have only a sign error</span></a>
-<a class="sourceLine" id="cb268-15" title="15">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">other.rev =</span> <span class="kw">abs</span>(other.rev))</a>
-<a class="sourceLine" id="cb268-16" title="16"></a>
-<a class="sourceLine" id="cb268-17" title="17"><span class="co"># 5a. ratio estimator for staff conditional on turnover</span></a>
-<a class="sourceLine" id="cb268-18" title="18">Rhat &lt;-<span class="st"> </span><span class="kw">with</span>(spm, <span class="kw">mean</span>(staff,<span class="dt">na.rm=</span><span class="ot">TRUE</span>)<span class="op">/</span><span class="kw">mean</span>(turnover,<span class="dt">na.rm=</span><span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb268-19" title="19"></a>
-<a class="sourceLine" id="cb268-20" title="20"><span class="co"># 5b. impute &#39;staff&#39; variable where possible using ratio estimator</span></a>
-<a class="sourceLine" id="cb268-21" title="21">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">staff =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(staff), Rhat <span class="op">*</span><span class="st"> </span>turnover, staff))</a>
-<a class="sourceLine" id="cb268-22" title="22"></a>
-<a class="sourceLine" id="cb268-23" title="23"><span class="co"># 6. write output</span></a>
-<a class="sourceLine" id="cb268-24" title="24"><span class="kw">write.csv</span>(spm, <span class="st">&quot;supermarkets_treated.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1"><span class="co">## Contents of clean_supermarkets.R</span></a>
+<a class="sourceLine" id="cb276-2" title="2"><span class="kw">library</span>(validate)</a>
+<a class="sourceLine" id="cb276-3" title="3"></a>
+<a class="sourceLine" id="cb276-4" title="4"><span class="co"># 1. simulate reading data</span></a>
+<a class="sourceLine" id="cb276-5" title="5"><span class="kw">data</span>(SBS2000)</a>
+<a class="sourceLine" id="cb276-6" title="6">spm &lt;-<span class="st"> </span>SBS2000[<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;staff&quot;</span>,<span class="st">&quot;turnover&quot;</span>,<span class="st">&quot;other.rev&quot;</span>,<span class="st">&quot;total.rev&quot;</span>)]</a>
+<a class="sourceLine" id="cb276-7" title="7"></a>
+<a class="sourceLine" id="cb276-8" title="8"><span class="co"># 2. add a logger from &#39;validate&#39;</span></a>
+<a class="sourceLine" id="cb276-9" title="9"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_cells</span>())</a>
+<a class="sourceLine" id="cb276-10" title="10"></a>
+<a class="sourceLine" id="cb276-11" title="11"><span class="co"># 3. assume empty values should be filled with 0</span></a>
+<a class="sourceLine" id="cb276-12" title="12">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">other.rev =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(other.rev),<span class="dv">0</span>,other.rev))</a>
+<a class="sourceLine" id="cb276-13" title="13"></a>
+<a class="sourceLine" id="cb276-14" title="14"><span class="co"># 4. assume that negative amounts have only a sign error</span></a>
+<a class="sourceLine" id="cb276-15" title="15">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">other.rev =</span> <span class="kw">abs</span>(other.rev))</a>
+<a class="sourceLine" id="cb276-16" title="16"></a>
+<a class="sourceLine" id="cb276-17" title="17"><span class="co"># 5a. ratio estimator for staff conditional on turnover</span></a>
+<a class="sourceLine" id="cb276-18" title="18">Rhat &lt;-<span class="st"> </span><span class="kw">with</span>(spm, <span class="kw">mean</span>(staff,<span class="dt">na.rm=</span><span class="ot">TRUE</span>)<span class="op">/</span><span class="kw">mean</span>(turnover,<span class="dt">na.rm=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb276-19" title="19"></a>
+<a class="sourceLine" id="cb276-20" title="20"><span class="co"># 5b. impute &#39;staff&#39; variable where possible using ratio estimator</span></a>
+<a class="sourceLine" id="cb276-21" title="21">spm &lt;-<span class="st"> </span><span class="kw">transform</span>(spm, <span class="dt">staff =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(staff), Rhat <span class="op">*</span><span class="st"> </span>turnover, staff))</a>
+<a class="sourceLine" id="cb276-22" title="22"></a>
+<a class="sourceLine" id="cb276-23" title="23"><span class="co"># 6. write output</span></a>
+<a class="sourceLine" id="cb276-24" title="24"><span class="kw">write.csv</span>(spm, <span class="st">&quot;supermarkets_treated.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>In the first section we do not actually read data from a data source but take a
 few columns from the SBS2000 data set that comes with the validate package.
 The data to be processed is stored in a variable called <code>spm</code>. Next, in
@@ -440,18 +440,18 @@ In section 7 the output is written.</p>
 <p>The purpose of the <code>lbh_cells()</code> logger is to record the output of <code>cells()</code>
 after each step. To make sure this happens, run this file using <code>run_file()</code>
 from the <code>lumberjack</code> package.</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1"><span class="kw">library</span>(lumberjack)</a>
-<a class="sourceLine" id="cb269-2" title="2"><span class="kw">run_file</span>(<span class="st">&#39;clean_supermarkets.R&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1"><span class="kw">library</span>(lumberjack)</a>
+<a class="sourceLine" id="cb277-2" title="2"><span class="kw">run_file</span>(<span class="st">&#39;clean_supermarkets.R&#39;</span>)</a></code></pre></div>
 <pre><code>## Dumped a log at /home/mark/projects/validate/cookbook/spm_lbj_cells.csv</code></pre>
 <p>This command executed all code in <code>clean_supermarkets.R</code>, but <code>run_file()</code> also ensured
 that all changes in the <code>spm</code> variable were recorded and logged using <code>lbj_cells()</code>.
 The output is written to a <code>csv</code> file which we can read.</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1">logfile &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_cells.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1">logfile &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_cells.csv&quot;</span>)</a></code></pre></div>
 <p>The logfile variable has quite a lot of columns, so here show just two rows.</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">logfile[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1">logfile[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-11-23 23:52:45
-## 4    3 2020-11-23 23:52:45
+## 3    2 2020-12-07 17:06:06
+## 4    3 2020-12-07 17:06:06
 ##                                                                expression cells
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))   300
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))   300
@@ -473,32 +473,32 @@ created by step 2. In step four, no values were imputed.</p>
 that is exported by <code>validate</code>. Since <code>lumberjack</code> allows for multiple loggers
 to be attached to an R object, we alter the first part of the above script as
 follows, and store it in <code>clean_supermarkets2.R</code></p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1"><span class="co">## Contents of clean_supermarkets2.R</span></a>
-<a class="sourceLine" id="cb274-2" title="2"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb274-3" title="3"></a>
-<a class="sourceLine" id="cb274-4" title="4"><span class="co">#1.a simulate reading data</span></a>
-<a class="sourceLine" id="cb274-5" title="5"><span class="kw">data</span>(SBS2000, <span class="dt">package=</span><span class="st">&quot;validate&quot;</span>)</a>
-<a class="sourceLine" id="cb274-6" title="6">spm &lt;-<span class="st"> </span>SBS2000[<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;staff&quot;</span>,<span class="st">&quot;other.rev&quot;</span>,<span class="st">&quot;turnover&quot;</span>,<span class="st">&quot;total.rev&quot;</span>)]</a>
-<a class="sourceLine" id="cb274-7" title="7"></a>
-<a class="sourceLine" id="cb274-8" title="8"><span class="co"># 1.b Create rule set</span></a>
-<a class="sourceLine" id="cb274-9" title="9">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(staff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, other.rev<span class="op">&gt;=</span><span class="dv">0</span>, turnover<span class="op">&gt;=</span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb274-10" title="10">                 , other.rev <span class="op">+</span><span class="st"> </span>turnover <span class="op">==</span><span class="st"> </span>total.rev)</a>
-<a class="sourceLine" id="cb274-11" title="11"></a>
-<a class="sourceLine" id="cb274-12" title="12"></a>
-<a class="sourceLine" id="cb274-13" title="13"><span class="co"># 2. add two loggers </span></a>
-<a class="sourceLine" id="cb274-14" title="14"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_cells</span>())</a>
-<a class="sourceLine" id="cb274-15" title="15"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_rules</span>(rules))</a>
-<a class="sourceLine" id="cb274-16" title="16"></a>
-<a class="sourceLine" id="cb274-17" title="17"><span class="co">## The rest is the same as above ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" title="1"><span class="co">## Contents of clean_supermarkets2.R</span></a>
+<a class="sourceLine" id="cb282-2" title="2"><span class="kw">library</span>(validate)</a>
+<a class="sourceLine" id="cb282-3" title="3"></a>
+<a class="sourceLine" id="cb282-4" title="4"><span class="co">#1.a simulate reading data</span></a>
+<a class="sourceLine" id="cb282-5" title="5"><span class="kw">data</span>(SBS2000, <span class="dt">package=</span><span class="st">&quot;validate&quot;</span>)</a>
+<a class="sourceLine" id="cb282-6" title="6">spm &lt;-<span class="st"> </span>SBS2000[<span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;staff&quot;</span>,<span class="st">&quot;other.rev&quot;</span>,<span class="st">&quot;turnover&quot;</span>,<span class="st">&quot;total.rev&quot;</span>)]</a>
+<a class="sourceLine" id="cb282-7" title="7"></a>
+<a class="sourceLine" id="cb282-8" title="8"><span class="co"># 1.b Create rule set</span></a>
+<a class="sourceLine" id="cb282-9" title="9">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(staff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, other.rev<span class="op">&gt;=</span><span class="dv">0</span>, turnover<span class="op">&gt;=</span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb282-10" title="10">                 , other.rev <span class="op">+</span><span class="st"> </span>turnover <span class="op">==</span><span class="st"> </span>total.rev)</a>
+<a class="sourceLine" id="cb282-11" title="11"></a>
+<a class="sourceLine" id="cb282-12" title="12"></a>
+<a class="sourceLine" id="cb282-13" title="13"><span class="co"># 2. add two loggers </span></a>
+<a class="sourceLine" id="cb282-14" title="14"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_cells</span>())</a>
+<a class="sourceLine" id="cb282-15" title="15"><span class="kw">start_log</span>(spm, <span class="dt">logger=</span><span class="kw">lbj_rules</span>(rules))</a>
+<a class="sourceLine" id="cb282-16" title="16"></a>
+<a class="sourceLine" id="cb282-17" title="17"><span class="co">## The rest is the same as above ...</span></a></code></pre></div>
 <p>Running the file again using lumberjack, we now get two log files.</p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1"><span class="kw">run_file</span>(<span class="st">&quot;clean_supermarkets2.R&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" title="1"><span class="kw">run_file</span>(<span class="st">&quot;clean_supermarkets2.R&quot;</span>)</a></code></pre></div>
 <pre><code>## Dumped a log at /home/mark/projects/validate/cookbook/spm_lbj_cells.csv</code></pre>
 <pre><code>## Dumped a log at /home/mark/projects/validate/cookbook/spm_lbj_rules.csv</code></pre>
 <p>Let’s read the log file from <code>spm_lbj_rules.csv</code> and print row three and four.</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb278-1" title="1"><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_rules.csv&quot;</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1"><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_rules.csv&quot;</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-11-23 23:52:46
-## 4    3 2020-11-23 23:52:46
+## 3    2 2020-12-07 17:06:06
+## 4    3 2020-12-07 17:06:06
 ##                                                                expression
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))
@@ -520,7 +520,7 @@ statement anywhere in your code (but at the end would usually make most sense).<
 <p>For example, add the following line of code at the end of
 <code>clean_supermarkets2.R</code> to write the output of the <code>lbj_rules</code> logger to
 <code>my_output.csv</code>.</p>
-<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1"><span class="kw">stop_log</span>(spm, <span class="dt">logger=</span><span class="st">&quot;lbj_rules&quot;</span>,<span class="dt">file=</span><span class="st">&quot;my_output.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb288-1" title="1"><span class="kw">stop_log</span>(spm, <span class="dt">logger=</span><span class="st">&quot;lbj_rules&quot;</span>,<span class="dt">file=</span><span class="st">&quot;my_output.csv&quot;</span>)</a></code></pre></div>
 <p>The format and way in which logging data is exported is fixed by the logger. So
 <code>lbj_rules()</code> and <code>lbj_cells()</code> can only export to csv, and only the data we’ve
 seen so far. The good news is that the <code>lumberjack</code> package itself contains

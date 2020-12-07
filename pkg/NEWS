@@ -31,7 +31,6 @@ version 0.9.4
 - New dataset 'nace_rev2', representing the 2008 (revision 2) NACE hierarchy
   for classification of economic activity.
 - Added 'names' method for 'confrontation' objects.
-- 'is_unique' gains 'by' argument for group-wise checks of uniqueness.
 - Fix: option 'lin.ineq.eps' was ignored by 'confront'.
 - Fix: indexing of 'confrontation' objects failed in 'lapply' context. (Thanks
   to Matthias Gomolka for GH issue #116)

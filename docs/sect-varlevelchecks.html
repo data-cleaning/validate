@@ -24,7 +24,7 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-11-23" />
+<meta name="date" content="2020-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -405,8 +405,8 @@ character, we can do the following.</p>
 <a class="sourceLine" id="cb40-3" title="3">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
 <a class="sourceLine" id="cb40-4" title="4"><span class="kw">summary</span>(out)</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning                expression
-## 1   V1    60     60     0   0 FALSE    TRUE  field_format(id, &quot;RET*&quot;)
-## 2   V2    60     60     0   0 FALSE    TRUE field_format(size, &quot;sc?&quot;)</code></pre>
+## 1   V1    60     60     0   0 FALSE   FALSE  field_format(id, &quot;RET*&quot;)
+## 2   V2    60     60     0   0 FALSE   FALSE field_format(size, &quot;sc?&quot;)</code></pre>
 <p>Here, the globbing pattern <code>"RET*"</code> is understood as ’a string starting with
 <code>"RET"</code>, followed by zero or more characters. The pattern <code>"sc?"</code> means ’a
 string starting with <code>"sc"</code>, followed by a single character.</p>
@@ -467,7 +467,7 @@ margin for machine rounding errors.</p>
 ## 2                      total.costs &gt;= 0
 ## 3 in_range(incl.prob, min = 0, max = 1)</code></pre>
 <p>For numeric ranges it is often a better idea to work with inclusive
-inequalities (<span class="math inline">\(\leq\)</span>, <span class="math inline">\(\geq\)</span>) then with strict inequalities (<span class="math inline">\(&lt;\)</span>, <span class="math inline">\(&gt;\)</span>). Take
+inequalities (<span class="math inline">\(\leq\)</span>, <span class="math inline">\(\geq\)</span>) than with strict inequalities (<span class="math inline">\(&lt;\)</span>, <span class="math inline">\(&gt;\)</span>). Take
 as an example the strict inequality demand <code>income &gt; 0</code>. This means that <em>any</em>
 income larger than zero is acceptable, including numbers such as <span class="math inline">\(0.01\)</span>,
 <span class="math inline">\(0.000001\)</span> and <span class="math inline">\(10^{-\textrm{Googol}}\)</span>. In practice there is almost always a

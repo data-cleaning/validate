@@ -24,7 +24,7 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-11-23" />
+<meta name="date" content="2020-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -226,33 +226,33 @@ script. Validate supports two file formats: simple text files and <code>yaml</co
 Here we only discuss simple text files, yaml files are treated in <a href="sect-work.html#sect:yamlfiles">7.4</a>.</p>
 <p>To try this, copy the following rules into a new text file and store it in a
 file called <code>myrules.R</code>, in the current working directory of your R session.</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" title="1"><span class="co"># basic range checks</span></a>
-<a class="sourceLine" id="cb200-2" title="2">speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb200-3" title="3">dist  <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb200-4" title="4"></a>
-<a class="sourceLine" id="cb200-5" title="5"><span class="co"># ratio check</span></a>
-<a class="sourceLine" id="cb200-6" title="6">speed <span class="op">/</span><span class="st"> </span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span></a></code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1"><span class="co"># basic range checks</span></a>
+<a class="sourceLine" id="cb208-2" title="2">speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb208-3" title="3">dist  <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb208-4" title="4"></a>
+<a class="sourceLine" id="cb208-5" title="5"><span class="co"># ratio check</span></a>
+<a class="sourceLine" id="cb208-6" title="6">speed <span class="op">/</span><span class="st"> </span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span></a></code></pre></div>
 <p>Note that you are allowed to annotate the rules as you would with
 regular R code. Reading these rules can be done as follows.</p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">.file=</span><span class="st">&quot;myrules.R&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">.file=</span><span class="st">&quot;myrules.R&quot;</span>)</a></code></pre></div>
 </div>
 <div id="manipulating-rule-sets" class="section level2">
 <h2><span class="header-section-number">7.2</span> Manipulating rule sets</h2>
 <p>Validate stores rulesets into something called a <code>validator</code> object. The
 <code>validator()</code> function creates such an object.</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, dist<span class="op">&gt;=</span><span class="dv">0</span>, speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb202-2" title="2">v</a></code></pre></div>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, dist<span class="op">&gt;=</span><span class="dv">0</span>, speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
+<a class="sourceLine" id="cb210-2" title="2">v</a></code></pre></div>
 <pre><code>## Object of class &#39;validator&#39; with 3 elements:
 ##  V1: speed &gt;= 0
 ##  V2: dist &gt;= 0
 ##  V3: speed/dist &lt;= 1.5</code></pre>
 <p>Validator objects behave a lot like lists. For example, you can select items
 to get a new <code>validator</code>. Here, we select the first and third element.</p>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" title="1">w &lt;-<span class="st"> </span>v[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" title="1">w &lt;-<span class="st"> </span>v[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</a></code></pre></div>
 <p>Here <code>w</code> is a new validator object holding only the first and third rule from
 <code>v</code>. If not specified by the user, rules are given the default names <code>"V1"</code>,
 <code>"V2"</code>, and so on. Those names can also be used for selecting rules.</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" title="1">w &lt;-<span class="st"> </span>v[<span class="kw">c</span>(<span class="st">&quot;V1&quot;</span>,<span class="st">&quot;V3&quot;</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" title="1">w &lt;-<span class="st"> </span>v[<span class="kw">c</span>(<span class="st">&quot;V1&quot;</span>,<span class="st">&quot;V3&quot;</span>)]</a></code></pre></div>
 <p>Validator objects are reference objects. This means that if you do</p>
 <pre><code>w &lt;- v</code></pre>
 <p>then <code>w</code> is not a copy of <code>v</code>. It is just another name for the same physical
@@ -261,14 +261,14 @@ object as <code>v</code>. To make an actual copy, you can select everything.</p>
 <p>It is also possible to concatenate two validator objects. For example when you
 read two rule sets from two files (See <a href="sect-work.html#sect:readfromfile">7.1</a>). This is done
 by adding them together with <code>+</code>.</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1">rules1 &lt;-<span class="st"> </span><span class="kw">validator</span>(speed<span class="op">&gt;=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb208-2" title="2">rules2 &lt;-<span class="st"> </span><span class="kw">validator</span>(dist <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb208-3" title="3">all_rules &lt;-<span class="st"> </span>rules1 <span class="op">+</span><span class="st"> </span>rules2</a></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" title="1">rules1 &lt;-<span class="st"> </span><span class="kw">validator</span>(speed<span class="op">&gt;=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb216-2" title="2">rules2 &lt;-<span class="st"> </span><span class="kw">validator</span>(dist <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb216-3" title="3">all_rules &lt;-<span class="st"> </span>rules1 <span class="op">+</span><span class="st"> </span>rules2</a></code></pre></div>
 <p>An empty validator object is created with <code>validator()</code>.</p>
 <p>If you select a single element of a validator object, an object of class ‘rule’
 is returned. This is the validating expression entered by the user, plus some
 (optional) metadata.</p>
-<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1">v[[<span class="dv">3</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" title="1">v[[<span class="dv">3</span>]]</a></code></pre></div>
 <pre><code>## 
 ## Object of class rule.
 ##  expr       : speed/dist &lt;= 1.5 
@@ -276,7 +276,7 @@ is returned. This is the validating expression entered by the user, plus some
 ##  label      :  
 ##  description:  
 ##  origin     : command-line 
-##  created    : 2020-11-23 23:52:44
+##  created    : 2020-12-07 17:06:04
 ##  meta       : language&lt;chr&gt;, severity&lt;chr&gt;</code></pre>
 <p>Users never need to manipulate rule objects, but it can be convenient to
 inspect them. As you see, the rules have some automatically created metadata.
@@ -298,24 +298,24 @@ for rule metadata.</p>
 </ul>
 <p>Names can be set on the command line, just like how you would do it for
 an R list.</p>
-<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">positive_speed =</span> speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="dt">ratio =</span> speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb211-2" title="2">rules</a></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">positive_speed =</span> speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="dt">ratio =</span> speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
+<a class="sourceLine" id="cb219-2" title="2">rules</a></code></pre></div>
 <pre><code>## Object of class &#39;validator&#39; with 2 elements:
 ##  positive_speed: speed &gt;= 0
 ##  ratio         : speed/dist &lt;= 1.5</code></pre>
 <p>Getting and setting names works the same as for lists.</p>
-<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" title="1"><span class="kw">names</span>(rules)</a></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" title="1"><span class="kw">names</span>(rules)</a></code></pre></div>
 <pre><code>## [1] &quot;positive_speed&quot; &quot;ratio&quot;</code></pre>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" title="1"><span class="kw">names</span>(rules)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;nonnegative_speed&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" title="1"><span class="kw">names</span>(rules)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;nonnegative_speed&quot;</span></a></code></pre></div>
 <p>The functions <code>origin()</code>, <code>created()</code>, <code>label()</code>, and <code>description()</code> work in
 the same way. It is also possible to add generic key-value pairs as metadata.
 Getting and setting follows the usual recycling rules of R.</p>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" title="1"><span class="co"># add &#39;foo&#39; to the first rule:</span></a>
-<a class="sourceLine" id="cb216-2" title="2"><span class="kw">meta</span>(rules[<span class="dv">1</span>],<span class="st">&quot;foo&quot;</span>) &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb216-3" title="3"><span class="co"># Add &#39;bar&#39; to all rules</span></a>
-<a class="sourceLine" id="cb216-4" title="4"><span class="kw">meta</span>(rules,<span class="st">&quot;bar&quot;</span>) &lt;-<span class="st"> &quot;baz&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb224-1" title="1"><span class="co"># add &#39;foo&#39; to the first rule:</span></a>
+<a class="sourceLine" id="cb224-2" title="2"><span class="kw">meta</span>(rules[<span class="dv">1</span>],<span class="st">&quot;foo&quot;</span>) &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb224-3" title="3"><span class="co"># Add &#39;bar&#39; to all rules</span></a>
+<a class="sourceLine" id="cb224-4" title="4"><span class="kw">meta</span>(rules,<span class="st">&quot;bar&quot;</span>) &lt;-<span class="st"> &quot;baz&quot;</span></a></code></pre></div>
 <p>Metadata can be made visible by selecting a single rule:</p>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" title="1">v[[<span class="dv">1</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" title="1">v[[<span class="dv">1</span>]]</a></code></pre></div>
 <pre><code>## 
 ## Object of class rule.
 ##  expr       : speed &gt;= 0 
@@ -323,32 +323,32 @@ Getting and setting follows the usual recycling rules of R.</p>
 ##  label      :  
 ##  description:  
 ##  origin     : command-line 
-##  created    : 2020-11-23 23:52:44
+##  created    : 2020-12-07 17:06:04
 ##  meta       : language&lt;chr&gt;, severity&lt;chr&gt;</code></pre>
 <p>Or by extracting it to a <code>data.frame</code></p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" title="1"><span class="kw">meta</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" title="1"><span class="kw">meta</span>(v)</a></code></pre></div>
 <pre><code>##   name label description       origin             created          language
-## 1   V1                   command-line 2020-11-23 23:52:44 validate 0.9.3.42
-## 2   V2                   command-line 2020-11-23 23:52:44 validate 0.9.3.42
-## 3   V3                   command-line 2020-11-23 23:52:44 validate 0.9.3.42
+## 1   V1                   command-line 2020-12-07 17:06:04 validate 0.9.3.44
+## 2   V2                   command-line 2020-12-07 17:06:04 validate 0.9.3.44
+## 3   V3                   command-line 2020-12-07 17:06:04 validate 0.9.3.44
 ##   severity
 ## 1    error
 ## 2    error
 ## 3    error</code></pre>
 <p>Some general information is obtained with <code>summary</code>,</p>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" title="1"><span class="kw">summary</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" title="1"><span class="kw">summary</span>(v)</a></code></pre></div>
 <pre><code>##   block nvar rules linear
 ## 1     1    2     3      2</code></pre>
 <p>Here, some properties per <em>block</em> of rules is given. Two rules occur in the same
 block if when they share a variable. In this case, all rules occur in the same
 block.</p>
 <p>The number of rules can be requested with <code>length</code></p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" title="1"><span class="kw">length</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" title="1"><span class="kw">length</span>(v)</a></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>With <code>variables</code>, the variables occurring per rule, or over all the rules can be requested.</p>
-<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" title="1"><span class="kw">variables</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" title="1"><span class="kw">variables</span>(v)</a></code></pre></div>
 <pre><code>## [1] &quot;speed&quot; &quot;dist&quot;</code></pre>
-<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" title="1"><span class="kw">variables</span>(v,<span class="dt">as=</span><span class="st">&quot;matrix&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1"><span class="kw">variables</span>(v,<span class="dt">as=</span><span class="st">&quot;matrix&quot;</span>)</a></code></pre></div>
 <pre><code>##     variable
 ## rule speed  dist
 ##   V1  TRUE FALSE
@@ -396,8 +396,8 @@ paste the following code into a file called <code>myrules.yaml</code>.</p>
     severity: error
 </code></pre>
 <p>We can read this file using <code>validator(.file=)</code> as before.</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">.file=</span><span class="st">&quot;myrules.yaml&quot;</span>)</a>
-<a class="sourceLine" id="cb230-2" title="2">rules</a></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">.file=</span><span class="st">&quot;myrules.yaml&quot;</span>)</a>
+<a class="sourceLine" id="cb238-2" title="2">rules</a></code></pre></div>
 <pre><code>## Object of class &#39;validator&#39; with 3 elements:
 ##  speed [speed positivity]  : speed &gt;= 0
 ##  dist [distance positivity]: dist &gt;= 0
@@ -415,8 +415,8 @@ Subelements (as in <code>meta</code>) are indented again.</li>
 <p>A full tutorial on YAML can be found at
 <a href="https://www.w3schools.io/file/yaml-introduction/">W3Cschools.io</a>.</p>
 <p>To export a rule set to yaml, use the <code>export_yaml()</code> function.</p>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb232-1" title="1">rules1 &lt;-<span class="st"> </span>rules[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</a>
-<a class="sourceLine" id="cb232-2" title="2"><span class="kw">export_yaml</span>(rules1, <span class="dt">file=</span><span class="st">&quot;myrules2.yaml&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" title="1">rules1 &lt;-<span class="st"> </span>rules[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</a>
+<a class="sourceLine" id="cb240-2" title="2"><span class="kw">export_yaml</span>(rules1, <span class="dt">file=</span><span class="st">&quot;myrules2.yaml&quot;</span>)</a></code></pre></div>
 <p>We will return extensively to reading rules from YAML or other text files
 in Chapter <a href="sect-rulefiles.html#sect:rulefiles">8</a>.</p>
 </div>
@@ -426,10 +426,10 @@ in Chapter <a href="sect-rulefiles.html#sect:rulefiles">8</a>.</p>
 is convenient, for example in cases where rules are retrieved from a central
 rule repository in a data base.</p>
 <p>Exporting rules and their metadata can be done with <code>as.data.frame</code>.</p>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, dist <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb233-2" title="2">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(rules)</a></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, dist <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
+<a class="sourceLine" id="cb241-2" title="2">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(rules)</a></code></pre></div>
 <p>Reading from a data frame is done through the <code>.data</code> argument.</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">.data=</span>df)</a></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">.data=</span>df)</a></code></pre></div>
 <p>It is not necessary to define all possible metadata in the data frame. It is
 sufficient to have three character columns, named <code>rule</code>, <code>name</code> and
 <code>description</code> in any order.</p>
@@ -441,7 +441,7 @@ validating statement. The validate package checks this when the user defines a
 rule set, so for example calling <code>validator( mean(height) )</code> will result in a
 warning since just computing <code>mean(x)</code> does not validate anything.</p>
 <p>You will find a concise description of the syntax in the <code>syntax</code> help file.</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1">?syntax</a></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" title="1">?syntax</a></code></pre></div>
 <p>In short, you can use</p>
 <ul>
 <li>Type checks: any function starting with <code>is.</code></li>
@@ -461,7 +461,7 @@ warning since just computing <code>mean(x)</code> does not validate anything.</p
 <p>A few helper functions are available to compute groupwise values on
 variables (vectors). They differ from functions like <code>aggregate</code> or <code>tapply</code>
 in that their result is always of the same length as the input.</p>
-<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" title="1"><span class="kw">sum_by</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">by =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>), <span class="dt">each=</span><span class="dv">5</span>) )</a></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" title="1"><span class="kw">sum_by</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">by =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>), <span class="dt">each=</span><span class="dv">5</span>) )</a></code></pre></div>
 <pre><code>##  [1] 15 15 15 15 15 40 40 40 40 40</code></pre>
 <p>This is useful for rules where you want to compare individual values with
 group aggregates.</p>
@@ -597,17 +597,17 @@ class <code>confrontation</code>. There are several ways to extract information 
 <li><code>warnings</code>: Retrieve warning messages caught during the confrontation.</li>
 </ul>
 <p>By default aggregates are produced by rule.</p>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1">v  &lt;-<span class="st"> </span><span class="kw">validator</span>(height<span class="op">&gt;</span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="dv">0</span>,height<span class="op">/</span>weight <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb238-2" title="2">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(women, rules)</a>
-<a class="sourceLine" id="cb238-3" title="3"><span class="kw">aggregate</span>(cf) </a></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb246-1" title="1">v  &lt;-<span class="st"> </span><span class="kw">validator</span>(height<span class="op">&gt;</span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="dv">0</span>,height<span class="op">/</span>weight <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb246-2" title="2">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(women, rules)</a>
+<a class="sourceLine" id="cb246-3" title="3"><span class="kw">aggregate</span>(cf) </a></code></pre></div>
 <pre><code>## NULL</code></pre>
 <p>To aggregate by record, use <code>by='record'</code></p>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" title="1"><span class="kw">head</span>(<span class="kw">aggregate</span>(cf,<span class="dt">by=</span><span class="st">&#39;record&#39;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" title="1"><span class="kw">head</span>(<span class="kw">aggregate</span>(cf,<span class="dt">by=</span><span class="st">&#39;record&#39;</span>))</a></code></pre></div>
 <pre><code>## list()</code></pre>
 <p>Aggregated results can be automatically sorted, so records with the most violations or
 rules that are violated most sort higher.</p>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1"><span class="co"># rules with most violations sorting first:</span></a>
-<a class="sourceLine" id="cb242-2" title="2"><span class="kw">sort</span>(cf)</a></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" title="1"><span class="co"># rules with most violations sorting first:</span></a>
+<a class="sourceLine" id="cb250-2" title="2"><span class="kw">sort</span>(cf)</a></code></pre></div>
 <pre><code>## NULL</code></pre>
 <p>Confrontation objects can be subsetted with single bracket operators (like
 vectors), to obtain a sub-object pertaining only to the selected rules.</p>
@@ -619,14 +619,14 @@ vectors), to obtain a sub-object pertaining only to the selected rules.</p>
 example contains a specification error: <code>hite</code> should be <code>height</code> and therefore the rule errors
 on the <code>women</code> data.frame because it does not contain a column <code>hite</code>. The error is caught
 (not resulting in a R error) and shown in the summary,</p>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(hite <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb245-2" title="2"><span class="kw">summary</span>(<span class="kw">confront</span>(women, v))</a></code></pre></div>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(hite <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb253-2" title="2"><span class="kw">summary</span>(<span class="kw">confront</span>(women, v))</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning expression
 ## 1   V1     0      0     0   0  TRUE   FALSE   hite &gt; 0
 ## 2   V2    15     15     0   0 FALSE   FALSE weight &gt; 0</code></pre>
 <p>Setting <code>raise</code> to <code>all</code> results in a R error:</p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" title="1"><span class="co"># this gives an error</span></a>
-<a class="sourceLine" id="cb247-2" title="2"><span class="kw">confront</span>(women, v, <span class="dt">raise=</span><span class="st">&#39;all&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" title="1"><span class="co"># this gives an error</span></a>
+<a class="sourceLine" id="cb255-2" title="2"><span class="kw">confront</span>(women, v, <span class="dt">raise=</span><span class="st">&#39;all&#39;</span>)</a></code></pre></div>
 <pre><code>## Error in fun(...): object &#39;hite&#39; not found</code></pre>
 <p>Linear equalities form an important class of validation rules. To prevent
 equalities to be strictly tested, there is an option called <code>lin.eq.eps</code> (with
@@ -650,20 +650,20 @@ rule set.</li>
 to compare columns from two data frames row-by-row. The user
 has to make sure that the rows of the data set under scrutiny
 (<code>women</code>) matches row-wise with the reference data set (<code>women1</code>).</p>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" title="1">women1 &lt;-<span class="st"> </span>women</a>
-<a class="sourceLine" id="cb249-2" title="2">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(height <span class="op">==</span><span class="st"> </span>women_reference<span class="op">$</span>height)</a>
-<a class="sourceLine" id="cb249-3" title="3">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(women, rules, <span class="dt">ref =</span> <span class="kw">list</span>(<span class="dt">women_reference =</span> women1))</a>
-<a class="sourceLine" id="cb249-4" title="4"><span class="kw">summary</span>(cf)</a></code></pre></div>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" title="1">women1 &lt;-<span class="st"> </span>women</a>
+<a class="sourceLine" id="cb257-2" title="2">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(height <span class="op">==</span><span class="st"> </span>women_reference<span class="op">$</span>height)</a>
+<a class="sourceLine" id="cb257-3" title="3">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(women, rules, <span class="dt">ref =</span> <span class="kw">list</span>(<span class="dt">women_reference =</span> women1))</a>
+<a class="sourceLine" id="cb257-4" title="4"><span class="kw">summary</span>(cf)</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    15     15     0   0 FALSE   FALSE
 ##                              expression
 ## 1 height == women_reference[[&quot;height&quot;]]</code></pre>
 <p>Here is how to make a code list available.</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>( fruit <span class="op">%in%</span><span class="st"> </span>codelist )</a>
-<a class="sourceLine" id="cb251-2" title="2">fruits &lt;-<span class="st">  </span><span class="kw">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;orange&quot;</span>)</a>
-<a class="sourceLine" id="cb251-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">fruit =</span> <span class="kw">c</span>(<span class="st">&quot;apple&quot;</span>,<span class="st">&quot;broccoli&quot;</span>,<span class="st">&quot;orange&quot;</span>,<span class="st">&quot;banana&quot;</span>))</a>
-<a class="sourceLine" id="cb251-4" title="4">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(dat, rules, <span class="dt">ref =</span> <span class="kw">list</span>(<span class="dt">codelist =</span> fruits))</a>
-<a class="sourceLine" id="cb251-5" title="5"><span class="kw">summary</span>(cf)</a></code></pre></div>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>( fruit <span class="op">%in%</span><span class="st"> </span>codelist )</a>
+<a class="sourceLine" id="cb259-2" title="2">fruits &lt;-<span class="st">  </span><span class="kw">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;orange&quot;</span>)</a>
+<a class="sourceLine" id="cb259-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">fruit =</span> <span class="kw">c</span>(<span class="st">&quot;apple&quot;</span>,<span class="st">&quot;broccoli&quot;</span>,<span class="st">&quot;orange&quot;</span>,<span class="st">&quot;banana&quot;</span>))</a>
+<a class="sourceLine" id="cb259-4" title="4">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(dat, rules, <span class="dt">ref =</span> <span class="kw">list</span>(<span class="dt">codelist =</span> fruits))</a>
+<a class="sourceLine" id="cb259-5" title="5"><span class="kw">summary</span>(cf)</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning           expression
 ## 1   V1     4      3     1   0 FALSE   FALSE fruit %vin% codelist</code></pre>
 

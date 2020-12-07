@@ -90,6 +90,54 @@ convenience function from `validate`.
 violating(samplonomy, out)
 ```
 
+There are a two subtleties to keep in mind when interpreting uniqueness. The
+first has to do with missing values, and the second has to do with grouping.
+To start with the missing value problem, take a look at the following two-record
+data frame.
+```{r}
+df <- data.frame(x = c(1,1), y = c("A",NA))
+df
+```
+How should we judge whether these two records are unique?  A tempting option is
+to say the the first record is unique, and to return `NA` for the second record
+since it contains a missing value: R has the habit of returning `NA` from
+calculations when an input value is `NA`. This choice is not invalid, but it
+would have consequences for determining whether the first record is unique as
+well. After all, it is possible to fill in a value in the missing field such
+that the two records are duplicates. Therefore, if one would return `NA` for
+the second record, the correct thing to do is to also return `NA` for the first
+record. In R, the choice is made to treat `NA` as an actual value when checking
+for duplicates or uniqe records (see `?duplicated` from base R). To see this
+inspect the following code and output.
+```{r}
+df <- data.frame(x=rep(1,3), y = c("A", NA, NA))
+is_unique(df$x, df$y)
+```
+
+The second subtlety has to do with grouping. You may want to test whether a
+column is unique, given one or more other variables. It is tempting to think
+that this requires a split-apply-combine approach where the dataset is first
+split according to one or more grouping variables, check for uniqueness of the
+column in each group, and then combine the results. However, such an approach
+is not necessary as you can simply add the grouping variables to the list of
+variables that _together_ must be unique.
+
+As an example, consider the output of the following two approaches.
+```{r}
+# y is unique, given x. But not by itself
+df <- data.frame(x=rep(letters[1:2],each=3), y=rep(1:3,2))
+
+# the split-apply-combine approach
+unsplit(tapply(df$y, df$x, is_unique), df$x)
+
+# the combined approach
+is_unique(df$x, df$y)
+```
+
+
+
+
+
 ## Availability of records {#sect:completeness}
 
 This section is on testing for availability of whole records. Testing for individual

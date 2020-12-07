@@ -24,7 +24,7 @@
 <meta name="author" content="Mark P.J. van der Loo" />
 
 
-<meta name="date" content="2020-11-23" />
+<meta name="date" content="2020-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -294,6 +294,46 @@ convenience function from <code>validate</code>.</p>
 <pre><code>##       region freq period measure  value
 ## 870 Induston    Q 2018Q2  export 165900
 ## 871 Induston    Q 2018Q2  export 170000</code></pre>
+<p>There are a two subtleties to keep in mind when interpreting uniqueness. The
+first has to do with missing values, and the second has to do with grouping.
+To start with the missing value problem, take a look at the following two-record
+data frame.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">y =</span> <span class="kw">c</span>(<span class="st">&quot;A&quot;</span>,<span class="ot">NA</span>))</a>
+<a class="sourceLine" id="cb70-2" title="2">df</a></code></pre></div>
+<pre><code>##   x    y
+## 1 1    A
+## 2 1 &lt;NA&gt;</code></pre>
+<p>How should we judge whether these two records are unique? A tempting option is
+to say the the first record is unique, and to return <code>NA</code> for the second record
+since it contains a missing value: R has the habit of returning <code>NA</code> from
+calculations when an input value is <code>NA</code>. This choice is not invalid, but it
+would have consequences for determining whether the first record is unique as
+well. After all, it is possible to fill in a value in the missing field such
+that the two records are duplicates. Therefore, if one would return <code>NA</code> for
+the second record, the correct thing to do is to also return <code>NA</code> for the first
+record. In R, the choice is made to treat <code>NA</code> as an actual value when checking
+for duplicates or uniqe records (see <code>?duplicated</code> from base R). To see this
+inspect the following code and output.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="dt">y =</span> <span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="ot">NA</span>, <span class="ot">NA</span>))</a>
+<a class="sourceLine" id="cb72-2" title="2"><span class="kw">is_unique</span>(df<span class="op">$</span>x, df<span class="op">$</span>y)</a></code></pre></div>
+<pre><code>## [1]  TRUE FALSE FALSE</code></pre>
+<p>The second subtlety has to do with grouping. You may want to test whether a
+column is unique, given one or more other variables. It is tempting to think
+that this requires a split-apply-combine approach where the dataset is first
+split according to one or more grouping variables, check for uniqueness of the
+column in each group, and then combine the results. However, such an approach
+is not necessary as you can simply add the grouping variables to the list of
+variables that <em>together</em> must be unique.</p>
+<p>As an example, consider the output of the following two approaches.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co"># y is unique, given x. But not by itself</span></a>
+<a class="sourceLine" id="cb74-2" title="2">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">rep</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>],<span class="dt">each=</span><span class="dv">3</span>), <span class="dt">y=</span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb74-3" title="3"></a>
+<a class="sourceLine" id="cb74-4" title="4"><span class="co"># the split-apply-combine approach</span></a>
+<a class="sourceLine" id="cb74-5" title="5"><span class="kw">unsplit</span>(<span class="kw">tapply</span>(df<span class="op">$</span>y, df<span class="op">$</span>x, is_unique), df<span class="op">$</span>x)</a></code></pre></div>
+<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="co"># the combined approach</span></a>
+<a class="sourceLine" id="cb76-2" title="2"><span class="kw">is_unique</span>(df<span class="op">$</span>x, df<span class="op">$</span>y)</a></code></pre></div>
+<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 </div>
 <div id="sect:completeness" class="section level2">
 <h2><span class="header-section-number">3.3</span> Availability of records</h2>
@@ -302,14 +342,14 @@ missing values (NA), is treated in <a href="sect-varlevelchecks.html#sect:missin
 <p>We wish to ensure that for each region, and each variable, the periods 2014,
 2015, <span class="math inline">\(\ldots\)</span>, 2019 are present. Using <code>contains_at_least</code> we can establish
 this.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb70-2" title="2">  <span class="kw">contains_at_least</span>( </a>
-<a class="sourceLine" id="cb70-3" title="3">      <span class="dt">keys =</span> <span class="kw">data.frame</span>(<span class="dt">period =</span> <span class="kw">as.character</span>(<span class="dv">2014</span><span class="op">:</span><span class="dv">2019</span>))</a>
-<a class="sourceLine" id="cb70-4" title="4">    , <span class="dt">by=</span><span class="kw">list</span>(region, measure) )</a>
-<a class="sourceLine" id="cb70-5" title="5">)</a>
-<a class="sourceLine" id="cb70-6" title="6">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule)</a>
-<a class="sourceLine" id="cb70-7" title="7"><span class="co"># showing 7 columns of output for readability</span></a>
-<a class="sourceLine" id="cb70-8" title="8"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
+<a class="sourceLine" id="cb78-2" title="2">  <span class="kw">contains_at_least</span>( </a>
+<a class="sourceLine" id="cb78-3" title="3">      <span class="dt">keys =</span> <span class="kw">data.frame</span>(<span class="dt">period =</span> <span class="kw">as.character</span>(<span class="dv">2014</span><span class="op">:</span><span class="dv">2019</span>))</a>
+<a class="sourceLine" id="cb78-4" title="4">    , <span class="dt">by=</span><span class="kw">list</span>(region, measure) )</a>
+<a class="sourceLine" id="cb78-5" title="5">)</a>
+<a class="sourceLine" id="cb78-6" title="6">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule)</a>
+<a class="sourceLine" id="cb78-7" title="7"><span class="co"># showing 7 columns of output for readability</span></a>
+<a class="sourceLine" id="cb78-8" title="8"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199   1170    29   0 FALSE   FALSE</code></pre>
 <p>The function <code>contains_at_least</code> splits the <code>samplonomy</code> dataset into blocks
@@ -320,7 +360,7 @@ number of rows in the dataset under scrutiny. It is <code>TRUE</code> for each b
 where all years are present, and <code>FALSE</code> for each block where one of the
 years is missing. In this case 29 records are labeled as FALSE. These
 can be found as follows.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="kw">head</span>(<span class="kw">violating</span>(samplonomy, out))</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="kw">head</span>(<span class="kw">violating</span>(samplonomy, out))</a></code></pre></div>
 <pre><code>##     region freq period measure  value
 ## 1    Agria    A   2014     gdp 600000
 ## 5    Agria    Q 2014Q1     gdp  60000
@@ -333,14 +373,14 @@ for <code>"2015"</code> is missing.</p>
 <p>We can perform a stricter check, and test whether for each <code>measure</code>, all
 quarters <code>"2014Q1"</code> <span class="math inline">\(\ldots\)</span> <code>"2019Q4"</code> are present for each province (<code>Agria</code>
 and <code>Induston</code>). First create a key set to test against.</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">years &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="dv">2014</span><span class="op">:</span><span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb74-2" title="2">quarters &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;Q&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb74-3" title="3"></a>
-<a class="sourceLine" id="cb74-4" title="4">keyset &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb74-5" title="5">  <span class="dt">region =</span> <span class="kw">c</span>(<span class="st">&quot;Agria&quot;</span>, <span class="st">&quot;Induston&quot;</span>)</a>
-<a class="sourceLine" id="cb74-6" title="6">  , <span class="dt">period =</span> <span class="kw">sapply</span>(years, paste0, quarters))</a>
-<a class="sourceLine" id="cb74-7" title="7"></a>
-<a class="sourceLine" id="cb74-8" title="8"><span class="kw">head</span>(keyset)</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">years &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="dv">2014</span><span class="op">:</span><span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb82-2" title="2">quarters &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;Q&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb82-3" title="3"></a>
+<a class="sourceLine" id="cb82-4" title="4">keyset &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb82-5" title="5">  <span class="dt">region =</span> <span class="kw">c</span>(<span class="st">&quot;Agria&quot;</span>, <span class="st">&quot;Induston&quot;</span>)</a>
+<a class="sourceLine" id="cb82-6" title="6">  , <span class="dt">period =</span> <span class="kw">sapply</span>(years, paste0, quarters))</a>
+<a class="sourceLine" id="cb82-7" title="7"></a>
+<a class="sourceLine" id="cb82-8" title="8"><span class="kw">head</span>(keyset)</a></code></pre></div>
 <pre><code>##     region period
 ## 1    Agria 2014Q1
 ## 2 Induston 2014Q1
@@ -350,13 +390,13 @@ and <code>Induston</code>). First create a key set to test against.</p>
 ## 6 Induston 2014Q3</code></pre>
 <p>This key set will be referenced in the rule, and passed to <code>confront</code> as reference
 data.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb76-2" title="2">          <span class="kw">contains_at_least</span>(<span class="dt">keys=</span>minimal_keys, <span class="dt">by=</span>measure) </a>
-<a class="sourceLine" id="cb76-3" title="3">        )</a>
-<a class="sourceLine" id="cb76-4" title="4">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule</a>
-<a class="sourceLine" id="cb76-5" title="5">              , <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">minimal_keys=</span>keyset))</a>
-<a class="sourceLine" id="cb76-6" title="6"><span class="co"># showing 7 columns of output for readability</span></a>
-<a class="sourceLine" id="cb76-7" title="7"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
+<a class="sourceLine" id="cb84-2" title="2">          <span class="kw">contains_at_least</span>(<span class="dt">keys=</span>minimal_keys, <span class="dt">by=</span>measure) </a>
+<a class="sourceLine" id="cb84-3" title="3">        )</a>
+<a class="sourceLine" id="cb84-4" title="4">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule</a>
+<a class="sourceLine" id="cb84-5" title="5">              , <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">minimal_keys=</span>keyset))</a>
+<a class="sourceLine" id="cb84-6" title="6"><span class="co"># showing 7 columns of output for readability</span></a>
+<a class="sourceLine" id="cb84-7" title="7"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199    899   300   0 FALSE   FALSE</code></pre>
 <p>There are 300 fails. Inspecting the data set as above, we
@@ -366,25 +406,25 @@ all regions are reported. We also demand that there are no more and no less
 records than for each individual measure. For this, the function
 <code>contains_exactly</code> can be used.</p>
 <p>First create a keyset.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">years &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="dv">2014</span><span class="op">:</span><span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb78-2" title="2">quarters &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;Q&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb78-3" title="3"></a>
-<a class="sourceLine" id="cb78-4" title="4">keyset &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb78-5" title="5">  <span class="dt">region  =</span> <span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb78-6" title="6">    <span class="st">&quot;Agria&quot;</span> </a>
-<a class="sourceLine" id="cb78-7" title="7">   ,<span class="st">&quot;Crowdon&quot;</span></a>
-<a class="sourceLine" id="cb78-8" title="8">   ,<span class="st">&quot;Greenham&quot;</span></a>
-<a class="sourceLine" id="cb78-9" title="9">   ,<span class="st">&quot;Induston&quot;</span></a>
-<a class="sourceLine" id="cb78-10" title="10">   ,<span class="st">&quot;Mudwater&quot;</span></a>
-<a class="sourceLine" id="cb78-11" title="11">   ,<span class="st">&quot;Newbay&quot;</span></a>
-<a class="sourceLine" id="cb78-12" title="12">   ,<span class="st">&quot;Oakdale&quot;</span></a>
-<a class="sourceLine" id="cb78-13" title="13">   ,<span class="st">&quot;Samplonia&quot;</span></a>
-<a class="sourceLine" id="cb78-14" title="14">   ,<span class="st">&quot;Smokeley&quot;</span></a>
-<a class="sourceLine" id="cb78-15" title="15">   ,<span class="st">&quot;Wheaton&quot;</span></a>
-<a class="sourceLine" id="cb78-16" title="16">  )</a>
-<a class="sourceLine" id="cb78-17" title="17"> ,<span class="dt">period =</span> <span class="kw">c</span>(years, <span class="kw">sapply</span>(years, paste0, quarters))</a>
-<a class="sourceLine" id="cb78-18" title="18">)</a>
-<a class="sourceLine" id="cb78-19" title="19"><span class="kw">head</span>(keyset)</a></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">years &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="dv">2014</span><span class="op">:</span><span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb86-2" title="2">quarters &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;Q&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb86-3" title="3"></a>
+<a class="sourceLine" id="cb86-4" title="4">keyset &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb86-5" title="5">  <span class="dt">region  =</span> <span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb86-6" title="6">    <span class="st">&quot;Agria&quot;</span> </a>
+<a class="sourceLine" id="cb86-7" title="7">   ,<span class="st">&quot;Crowdon&quot;</span></a>
+<a class="sourceLine" id="cb86-8" title="8">   ,<span class="st">&quot;Greenham&quot;</span></a>
+<a class="sourceLine" id="cb86-9" title="9">   ,<span class="st">&quot;Induston&quot;</span></a>
+<a class="sourceLine" id="cb86-10" title="10">   ,<span class="st">&quot;Mudwater&quot;</span></a>
+<a class="sourceLine" id="cb86-11" title="11">   ,<span class="st">&quot;Newbay&quot;</span></a>
+<a class="sourceLine" id="cb86-12" title="12">   ,<span class="st">&quot;Oakdale&quot;</span></a>
+<a class="sourceLine" id="cb86-13" title="13">   ,<span class="st">&quot;Samplonia&quot;</span></a>
+<a class="sourceLine" id="cb86-14" title="14">   ,<span class="st">&quot;Smokeley&quot;</span></a>
+<a class="sourceLine" id="cb86-15" title="15">   ,<span class="st">&quot;Wheaton&quot;</span></a>
+<a class="sourceLine" id="cb86-16" title="16">  )</a>
+<a class="sourceLine" id="cb86-17" title="17"> ,<span class="dt">period =</span> <span class="kw">c</span>(years, <span class="kw">sapply</span>(years, paste0, quarters))</a>
+<a class="sourceLine" id="cb86-18" title="18">)</a>
+<a class="sourceLine" id="cb86-19" title="19"><span class="kw">head</span>(keyset)</a></code></pre></div>
 <pre><code>##     region period
 ## 1    Agria   2014
 ## 2  Crowdon   2014
@@ -393,17 +433,17 @@ records than for each individual measure. For this, the function
 ## 5 Mudwater   2014
 ## 6   Newbay   2014</code></pre>
 <p>The keyset is passed as reference data to the rule using <code>confront</code>.</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">contains_exactly</span>(all_keys, <span class="dt">by=</span>measure))</a>
-<a class="sourceLine" id="cb80-2" title="2">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule</a>
-<a class="sourceLine" id="cb80-3" title="3">               , <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">all_keys=</span>keyset))</a>
-<a class="sourceLine" id="cb80-4" title="4"><span class="co"># showing 7 columns of output for readability</span></a>
-<a class="sourceLine" id="cb80-5" title="5"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">contains_exactly</span>(all_keys, <span class="dt">by=</span>measure))</a>
+<a class="sourceLine" id="cb88-2" title="2">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule</a>
+<a class="sourceLine" id="cb88-3" title="3">               , <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">all_keys=</span>keyset))</a>
+<a class="sourceLine" id="cb88-4" title="4"><span class="co"># showing 7 columns of output for readability</span></a>
+<a class="sourceLine" id="cb88-5" title="5"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199      0  1199   0 FALSE   FALSE</code></pre>
 <p>To find where the errors reside, we first select the records with an error and
 then find the unique measures that occur in those records.</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">erroneous_records &lt;-<span class="st"> </span><span class="kw">violating</span>(samplonomy, out)</a>
-<a class="sourceLine" id="cb82-2" title="2"><span class="kw">unique</span>(erroneous_records<span class="op">$</span>measure)</a></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1">erroneous_records &lt;-<span class="st"> </span><span class="kw">violating</span>(samplonomy, out)</a>
+<a class="sourceLine" id="cb90-2" title="2"><span class="kw">unique</span>(erroneous_records<span class="op">$</span>measure)</a></code></pre></div>
 <pre><code>## [1] &quot;gdp&quot;     &quot;import&quot;  &quot;export&quot;  &quot;balance&quot;</code></pre>
 <p>So here, blocks containing GDP and Export have entire records missing.</p>
 </div>
@@ -424,42 +464,42 @@ whether a variable represents a linear series, possibly in blocks defined by
 categorical variables. They can be used interactively or as a rule in a
 validator object. We first demonstrate how these functions work, and then give
 an example with the <code>samplonomy</code> dataset.</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">2</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">2</span>))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">16</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">16</span>))</a></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>For character data, the function is capable of recognizing certain formats
 for time periods.</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="st">&quot;2020Q1&quot;</span>,<span class="st">&quot;2020Q2&quot;</span>,<span class="st">&quot;2020Q3&quot;</span>,<span class="st">&quot;2020Q4&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="st">&quot;2020Q1&quot;</span>,<span class="st">&quot;2020Q2&quot;</span>,<span class="st">&quot;2020Q3&quot;</span>,<span class="st">&quot;2020Q4&quot;</span>))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>See <code>?is_linear_sequence</code> for a full specification of supported
 date-time formats.</p>
 <p>It is not necessary for data to be sorted in order to be recognized as a
 linear sequence.</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="st">&quot;2020Q4&quot;</span>,<span class="st">&quot;2020Q2&quot;</span>,<span class="st">&quot;2020Q3&quot;</span>,<span class="st">&quot;2020Q1&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="st">&quot;2020Q4&quot;</span>,<span class="st">&quot;2020Q2&quot;</span>,<span class="st">&quot;2020Q3&quot;</span>,<span class="st">&quot;2020Q1&quot;</span>))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>One can force a begin and/or end point for the sequence as well.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="st">&quot;2020Q4&quot;</span>,<span class="st">&quot;2020Q2&quot;</span>,<span class="st">&quot;2020Q3&quot;</span>,<span class="st">&quot;2020Q1&quot;</span>)</a>
-<a class="sourceLine" id="cb94-2" title="2">                 , <span class="dt">begin =</span> <span class="st">&quot;2020Q2&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="kw">c</span>(<span class="st">&quot;2020Q4&quot;</span>,<span class="st">&quot;2020Q2&quot;</span>,<span class="st">&quot;2020Q3&quot;</span>,<span class="st">&quot;2020Q1&quot;</span>)</a>
+<a class="sourceLine" id="cb102-2" title="2">                 , <span class="dt">begin =</span> <span class="st">&quot;2020Q2&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>Finally it is possible to split a variable by one or more other columns and
 check whether each block represents a linear sequence.</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1">series &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb96-2" title="2">blocks &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>), <span class="dt">each =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb96-3" title="3"><span class="kw">is_linear_sequence</span>(series, <span class="dt">by =</span> blocks)</a></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1">series &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb104-2" title="2">blocks &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>), <span class="dt">each =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb104-3" title="3"><span class="kw">is_linear_sequence</span>(series, <span class="dt">by =</span> blocks)</a></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>Now, this result is not very useful since now it is unknown which block
 is not a linear series. This is where the function <code>in_linear_series</code> comes in.</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1"><span class="kw">in_linear_sequence</span>(series, <span class="dt">by =</span> blocks)</a></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="kw">in_linear_sequence</span>(series, <span class="dt">by =</span> blocks)</a></code></pre></div>
 <pre><code>## [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE</code></pre>
 <p>There are some subtleties. A single element is also a linear sequence (of length 1).</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1"><span class="kw">is_linear_sequence</span>(<span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>This can yield surprises in cases of blocks of length 1.</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1">blocks[<span class="dv">8</span>] &lt;-<span class="st"> &quot;c&quot;</span></a>
-<a class="sourceLine" id="cb102-2" title="2"><span class="kw">data.frame</span>(<span class="dt">series =</span> series, <span class="dt">blocks =</span> blocks)</a></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1">blocks[<span class="dv">8</span>] &lt;-<span class="st"> &quot;c&quot;</span></a>
+<a class="sourceLine" id="cb110-2" title="2"><span class="kw">data.frame</span>(<span class="dt">series =</span> series, <span class="dt">blocks =</span> blocks)</a></code></pre></div>
 <pre><code>##   series blocks
 ## 1      1      a
 ## 2      2      a
@@ -469,7 +509,7 @@ is not a linear series. This is where the function <code>in_linear_series</code>
 ## 6      2      b
 ## 7      3      b
 ## 8      3      c</code></pre>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="kw">in_linear_sequence</span>(series, blocks)</a></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1"><span class="kw">in_linear_sequence</span>(series, blocks)</a></code></pre></div>
 <pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
 <p>We now have three linear series, namely</p>
 <ul>
@@ -478,23 +518,23 @@ is not a linear series. This is where the function <code>in_linear_series</code>
 <li>For <code>"c"</code>: <code>3</code>.</li>
 </ul>
 <p>We can circumvent this by giving explicit bounds.</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="kw">in_linear_sequence</span>(series, blocks, <span class="dt">begin =</span> <span class="dv">1</span>, <span class="dt">end =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1"><span class="kw">in_linear_sequence</span>(series, blocks, <span class="dt">begin =</span> <span class="dv">1</span>, <span class="dt">end =</span> <span class="dv">4</span>)</a></code></pre></div>
 <pre><code>## [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE</code></pre>
 <p>We now return to the <code>samplonomy</code> dataset. We wish to check that for
 each measure and each area, the time series are linear series. Since there
 are time series of different frequencies, we need to split the data by frequency
 as well.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb108-2" title="2">          <span class="kw">in_linear_sequence</span>(period</a>
-<a class="sourceLine" id="cb108-3" title="3">            , <span class="dt">by =</span> <span class="kw">list</span>(region, freq, measure))</a>
-<a class="sourceLine" id="cb108-4" title="4">        )</a>
-<a class="sourceLine" id="cb108-5" title="5">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule)</a>
-<a class="sourceLine" id="cb108-6" title="6"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
+<a class="sourceLine" id="cb116-2" title="2">          <span class="kw">in_linear_sequence</span>(period</a>
+<a class="sourceLine" id="cb116-3" title="3">            , <span class="dt">by =</span> <span class="kw">list</span>(region, freq, measure))</a>
+<a class="sourceLine" id="cb116-4" title="4">        )</a>
+<a class="sourceLine" id="cb116-5" title="5">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule)</a>
+<a class="sourceLine" id="cb116-6" title="6"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199   1170    29   0 FALSE   FALSE</code></pre>
 <p>We can find the blocks where records are not in sequence as follows (output not
 printed here for brevity).</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1"><span class="kw">violating</span>(samplonomy, out)</a></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="kw">violating</span>(samplonomy, out)</a></code></pre></div>
 <p>Inspection of the selected records shows that for Agria the GDP for 2015 is
 missing, and that for Induston the Export for 2018Q3 is missing while Export
 for 2018Q2 occurs twice (but with different values)</p>

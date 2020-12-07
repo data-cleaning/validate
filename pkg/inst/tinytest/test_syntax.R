@@ -59,11 +59,6 @@ expect_true(all_unique(x=1:3))
 expect_equal(is_complete(women$height, women$weight),rep(TRUE,15))
 expect_true(all_complete(women$height, women$weight))
 
-# with grouping
-df <- data.frame(x=c(rep("a",3), rep("b",3)),y=c(1,1,2,1:3))
-expect_equal(is_unique(df$y, by=df$x)
-            , c(FALSE, FALSE, TRUE, TRUE, TRUE, TRUE))
-
 
 
 
