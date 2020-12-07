@@ -5,14 +5,13 @@ source("chunk_opts.R")
 ```
 
 
-> Data validation is an activity where one checks whether a set of values
-> or value combinations satisfies a predefined expectation.
-
+> Data Validation is an activity verifying whether or not a combination of
+> values is a member of a set of acceptable combinations [(Di Zio et al , 2015)](https://ec.europa.eu/eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf).
 
 The validate package is intended to make checking your data easy, maintainable, and reproducible.
 It does this by allowing you to
 
-- test data against a reusable set of rules:
+- test data against a reusable set of data validation rules:
 - investigate, summarise, and visualise data validation results;
 - import and export rule sets from and to various formats;
 - filter, select and otherwise manipulate data validation rules';
