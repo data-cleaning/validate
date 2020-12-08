@@ -1,3 +1,6 @@
+version 1.0.1
+- Fixed URL issues caught by CRAN but not by R CMD check --as-cran.
+
 version 1.0.0
 - Added The Data Validation Cookbook as vignette. See also
   <https://data-cleaning.github.io/validate>

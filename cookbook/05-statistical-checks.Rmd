@@ -340,10 +340,8 @@ Second, it can be seen that for Induston, there are two export values for
 
 ### Notes {-}
 
-Specifying (group-wise) aggregates is fairly detailed job in the case of long
-data (compare this with 
-[balance checks](balance-equalities-and-inequalities)). There are a few things to keep in
-mind when using this function.
+Specifying (group-wise) aggregates is a fairly detailed job in the case of long
+data. There are a few things to keep in mind when using this function.
 
 - The argument `part` is optional. If not specified, every record not matching
   with `whole` will be considered a detail that is to be used to compute the total.
