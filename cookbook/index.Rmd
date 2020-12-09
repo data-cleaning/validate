@@ -1,6 +1,10 @@
 --- 
 title: "The Data Validation Cookbook"
-author: "Mark P.J. van der Loo"
+author:
+- name: Mark P.J. van der Loo
+  email: mpj.vanderloo@cbs.nl
+  affiliation: <a href="https://www.cbs.nl">Statistics Netherlands</a>
+  link: https://www.cbs.nl
 date: "`r Sys.Date()` | validate version `r packageVersion('validate')`"
 site: bookdown::bookdown_site
 documentclass: book
@@ -9,6 +13,22 @@ mathfont: FiraMath-Regular.otf
 monofont: Roboto Mono
 monofontoptions:
 - Scale=0.64
+geometry:
+- paperheight=9in
+- paperwidth=6in
+- inner=0.75in
+- outer=0.5in
+- top=0.5in
+- bottom=0.5in
+header-includes:
+- |
+  ```{=latex}
+  \usepackage{authblk}
+  \author{Mark P.J. van der Loo\\ mpj.vanderloo@cbs.nl}
+  \affil{Statistics Netherlands \\
+         \href{https://www.cbs.nl}{\texttt{https://www.cbs.nl}} \\
+        }
+  ```
 ---
 
 ```{r, include=FALSE}
