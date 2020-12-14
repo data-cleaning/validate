@@ -49,7 +49,7 @@ is satisfied.
 
 ## Missingness {#sect:missingness}
 
-Use R's standard `is.na()` to check missin items in individual variables. Negate
+Use R's standard `is.na()` to check missing items in individual variables. Negate
 it to check that values are available.
 
 ```{r}
