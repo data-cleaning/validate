@@ -304,7 +304,7 @@ blocks <- rep(c("a","b"), each = 4)
 is_linear_sequence(series, by = blocks)
 ```
 Now, this result is not very useful since now it is unknown which block 
-is not a linear series. This is where the function `in_linear_series` comes in.
+is not a linear series. This is where the function `in_linear_sequence` comes in.
 ```{r}
 in_linear_sequence(series, by = blocks)
 ```
