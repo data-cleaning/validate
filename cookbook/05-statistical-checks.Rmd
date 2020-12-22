@@ -45,7 +45,7 @@ Here we check the mean profit and correlation coefficient between profit and
 turnover.
 ```{r}
 rule <- validator(
-    mean(profit, na.rm=TRUIE) >= 1
+    mean(profit, na.rm=TRUE) >= 1
   , cor(turnover, staff, use="pairwise.complete.obs") > 0
 )
 out <- confront(SBS2000, rule)
