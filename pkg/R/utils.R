@@ -33,14 +33,14 @@ warnf <- function(fmt,...){
 #'         in \code{y}
 #'
 #' @examples
-#' rules <- validator(height >= 60,weight < 159)
-#' satisfying(women, rules)
-#' violating(women, rules)
+#' rules <- validator(speed >= 12, dist < 100)
+#' satisfying(cars, rules)
+#' violating(cars, rules)
 #'
-#' out <- confront(women, rules)
+#' out <- confront(cars, rules)
 #' summary(out)
-#' satisfying(women, out)
-#' violating(women, out)
+#' satisfying(cars, out)
+#' violating(cars, out)
 #'
 #' @family select-data
 #' @export
