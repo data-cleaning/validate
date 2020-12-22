@@ -256,14 +256,14 @@ calculation can be input to a rule.</p>
 <p>Here we check the mean profit and correlation coefficient between profit and
 turnover.</p>
 <div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb139-2" title="2">    <span class="kw">mean</span>(profit, <span class="dt">na.rm=</span>TRUIE) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb139-2" title="2">    <span class="kw">mean</span>(profit, <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb139-3" title="3">  , <span class="kw">cor</span>(turnover, staff, <span class="dt">use=</span><span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></a>
 <a class="sourceLine" id="cb139-4" title="4">)</a>
 <a class="sourceLine" id="cb139-5" title="5">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
 <a class="sourceLine" id="cb139-6" title="6"><span class="co"># suppress some columns for brevity</span></a>
 <a class="sourceLine" id="cb139-7" title="7"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
-## 1   V1     0      0     0   0  TRUE   FALSE
+## 1   V1     1      1     0   0 FALSE   FALSE
 ## 2   V2     1      1     0   0 FALSE   FALSE</code></pre>
 <p>There are a few helper functions to compute group-wise statistics, and to make
 comparing values with group aggregates possible.</p>

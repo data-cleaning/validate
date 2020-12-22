@@ -490,7 +490,7 @@ check whether each block represents a linear sequence.</p>
 <a class="sourceLine" id="cb104-3" title="3"><span class="kw">is_linear_sequence</span>(series, <span class="dt">by =</span> blocks)</a></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>Now, this result is not very useful since now it is unknown which block
-is not a linear series. This is where the function <code>in_linear_series</code> comes in.</p>
+is not a linear series. This is where the function <code>in_linear_sequence</code> comes in.</p>
 <div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="kw">in_linear_sequence</span>(series, <span class="dt">by =</span> blocks)</a></code></pre></div>
 <pre><code>## [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE</code></pre>
 <p>There are some subtleties. A single element is also a linear sequence (of length 1).</p>

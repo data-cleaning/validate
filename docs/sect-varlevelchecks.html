@@ -260,7 +260,7 @@ is satisfied.</p>
 </div>
 <div id="sect:missingness" class="section level2">
 <h2><span class="header-section-number">2.2</span> Missingness</h2>
-<p>Use R’s standard <code>is.na()</code> to check missin items in individual variables. Negate
+<p>Use R’s standard <code>is.na()</code> to check missing items in individual variables. Negate
 it to check that values are available.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
 <a class="sourceLine" id="cb21-2" title="2">   <span class="op">!</span><span class="kw">is.na</span>(turnover)</a>
