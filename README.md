@@ -22,7 +22,7 @@ The `validate` R-package makes it super-easy to check whether data lives up to e
 
 
 
-To get started, please read our [Introductory vignette](https://cran.r-project.org/web/packages/validate/vignettes/introduction.html).
+To get started, please read our [Introductory vignette](https://data-cleaning.github.io/validate/sect-intro.html).
 
 With `validate`, data validation rules are treated as first-class citizens. This means you can import, export, annotate, investigate
 and manipulate data validation rules in a meaninful way. See [this vignette](https://cran.r-project.org/web/packages/validate/vignettes/rule_files.html) for rule import/export.
