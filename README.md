@@ -19,13 +19,9 @@ The `validate` R-package makes it super-easy to check whether data lives up to e
 1   V1   150     79    71   0 FALSE   FALSE Sepal.Width < 0.5 * Sepal.Length
 ```
 
-
-
-
-To get started, [start here](https://cran.r-project.org/web/packages/validate/vignettes/introduction.html).
-
-With `validate`, data validation rules are treated as first-class citizens. This means you can import, export, annotate, investigate
-and manipulate data validation rules in a meaninful way. See [this vignette](https://cran.r-project.org/web/packages/validate/vignettes/rule_files.html) for rule import/export.
+With `validate`, data validation rules are treated as first-class citizens.
+This means you can import, export, annotate, investigate and manipulate data
+validation rules in a meaninful way. 
 
 #### Resources
 
