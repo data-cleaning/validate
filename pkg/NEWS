@@ -1,4 +1,5 @@
 version 1.0.2
+- Improved 'print' method of all objects inheriting from 'confrontation' (#129)
 - Fix: add_indicators() would fail or not add results properly in some
   cases. (Thanks to Jos de Waard for reporting #128).
 

@@ -42,13 +42,15 @@ setRefClass("confrontation"
 
 confrontation_nwarn <- function(x) sum(vapply(x$._warn, function(w)!is.null(w), FUN.VALUE = logical(1)))
 confrontation_nerrs <- function(x) sum(vapply(x$._error, function(w)!is.null(w), FUN.VALUE = logical(1)))
+confrontation_nmiss <- function(x) sum(vapply(x$._value, anyNA, FUN.VALUE=logical(1)))
 
 .show_confrontation <- function(.self){
   cat(sprintf("Object of class '%s'\n",class(.self)))
   cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
-  cat(sprintf('Confrontations: %d\n', length(.self$._calls)))
-  cat(sprintf('Warnings      : %d\n', confrontation_nwarn(.self) ))
-  cat(sprintf('Errors        : %d\n', confrontation_nerrs(.self) ))
+  cat(sprintf('Rules confronted: %d\n', length(.self$._calls)))
+  cat(sprintf('   With missings: %d\n', confrontation_nmiss(.self) ))
+  cat(sprintf('   Threw warning: %d\n', confrontation_nwarn(.self) ))
+  cat(sprintf('   Threw errors : %d\n', confrontation_nerrs(.self) ))
 }
 
 
@@ -413,10 +415,11 @@ setRefClass("validation", contains = "confrontation")
 setMethod("show","validation",function(object){
    cat(sprintf("Object of class '%s'\n",class(object)))
    cat(sprintf("Call:\n    ")); print(object$._call); cat('\n')
-   cat(sprintf('Confrontations: %d\n', length(object$._calls)))
-   cat(sprintf('With fails    : %d\n', failed_confrontations(object)))
-   cat(sprintf('Warnings      : %d\n',sum(vapply(object$._warn, function(w)!is.null(w), FUN.VALUE = logical(1)))))
-   cat(sprintf('Errors        : %d\n',sum(vapply(object$._error, function(w)!is.null(w), FUN.VALUE = logical(1)))))
+   cat(sprintf('Rules confronted: %d\n', length(object$._calls)))
+   cat(sprintf('   With fails   : %d\n', failed_confrontations(object)))
+   cat(sprintf('   With missings: %d\n', confrontation_nmiss(object)))
+   cat(sprintf('   Threw warning: %d\n', confrontation_nwarn(object)))
+   cat(sprintf('   Threw error  : %d\n', confrontation_nerrs(object)))
 })
 
 
