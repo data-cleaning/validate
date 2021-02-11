@@ -275,7 +275,7 @@ is satisfied.
 
 ## Missingness {#sect:missingness}
 
-Use R's standard `is.na()` to check missin items in individual variables. Negate
+Use R's standard `is.na()` to check missing items in individual variables. Negate
 it to check that values are available.
 
 ```{r}
@@ -868,7 +868,7 @@ blocks <- rep(c("a","b"), each = 4)
 is_linear_sequence(series, by = blocks)
 ```
 Now, this result is not very useful since now it is unknown which block 
-is not a linear series. This is where the function `in_linear_series` comes in.
+is not a linear series. This is where the function `in_linear_sequence` comes in.
 ```{r}
 in_linear_sequence(series, by = blocks)
 ```
@@ -1140,7 +1140,7 @@ Here we check the mean profit and correlation coefficient between profit and
 turnover.
 ```{r}
 rule <- validator(
-    mean(profit, na.rm=TRUIE) >= 1
+    mean(profit, na.rm=TRUE) >= 1
   , cor(turnover, staff, use="pairwise.complete.obs") > 0
 )
 out <- confront(SBS2000, rule)

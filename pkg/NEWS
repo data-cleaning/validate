@@ -1,5 +1,10 @@
+version 1.0.2
+- Fix: add_indicators() would fail or not add results properly in some
+  cases. (Thanks to Jos de Waard for reporting #128).
+
 version 1.0.1
 - Fixed URL issues caught by CRAN but not by R CMD check --as-cran.
+
 
 version 1.0.0
 - Added The Data Validation Cookbook as vignette. See also

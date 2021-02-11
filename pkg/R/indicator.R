@@ -123,23 +123,19 @@ setMethod("+", c("indicator","indicator"), function(e1, e2){
 #' @export
 add_indicators <- function(dat, x){
   if (inherits(x,"indicator")) x <- confront(dat, x)
-  vals <- values(x)
-  if (is.array(vals) && nrow(vals)==nrow(dat)){
-    cbind(dat, as.data.frame(values(x)))
-  } else { # vals is a list
-    n <- nrow(dat)
-    L <- lapply(vals, function(x){
-      if (nrow(x) == n){
-        x
-      } else {
-        y <- matrix(0, nrow=n, ncol=ncol(x))
-        y[,] <- x
-        colnames(y) <- colnames(x)
-        y
-      }
-    })
-    cbind(dat, do.call("cbind", L))
-  }
+  vals <- values(x, simplify=FALSE)
+  n <- nrow(dat)
+  L <- lapply(vals, function(d){
+    if (length(d) == n){
+      d
+    } else if (length(d)==1) {
+      rep(d,n)
+    } else {
+      warnf("Skipping output that does not fit in data frame")
+      NULL
+    }
+  })
+  cbind(dat, do.call("cbind", L))
 }
 
 
