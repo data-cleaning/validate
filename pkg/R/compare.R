@@ -86,7 +86,12 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' @export 
 setMethod("compare", "validator",
   function(x,... , .list=list(), how=c("to_first","sequential")){
-    L <- c(list(...),.list)  
+    L <- c(list(...),.list)
+    # An explicit check so the code also works for tibble objects
+    # who disguise as data frames but are really something else.
+    if (any(sapply(L, inherits, "tbl"))){
+        L <- lapply(L, function(d) if (inherits(d,"tbl")) as.data.frame(d) else d )
+    }
     names(L) <- make_listnames(L)
     how <- match.arg(how)
     
