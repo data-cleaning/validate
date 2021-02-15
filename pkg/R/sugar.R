@@ -31,6 +31,8 @@ expand_groups <- function(calls){
   for (k in seq_along(calls)){
     # this copies the name.
     U <- calls[k]
+    # get reference 
+    ref <- get_ref(U)
     # find var groups, if any.
     cl <- calls[[k]]
     I <- which.call(cl,'var_group')
@@ -45,6 +47,7 @@ expand_groups <- function(calls){
         U <- c(U,u)
       }
       names(U) <- paste0(names(calls)[k],".",seq_along(U))
+      U <- set_ref(U, rep(ref, length(U)))
     }
     L <- c(L,U)
   }
@@ -67,8 +70,12 @@ expand_groups <- function(calls){
 ## Substitute assignments in subsequent calls
 expand_assignments <- function(calls){
   e <- new.env()
+  i <- 1
   lapply(calls, function(x){ 
       x <- substitute_assignments(x,e)
+      # add index into original list of calls.
+      attr(x,"reference") <- i
+      i <<- i+1
       if(x[[1]] == ':=') 
         add_assignment(x,e) 
       x

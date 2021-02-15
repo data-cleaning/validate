@@ -333,15 +333,28 @@ extract_names <- function(L,prefix="V"){
     , dat=NULL
 ){
   exprs <- setNames(lapply(x$rules, expr ),names(x))
-  if ( expand_assignments )  exprs <- expand_assignments(exprs)
+  exprs <- set_ref(exprs)
+  if ( expand_assignments ) exprs <- expand_assignments(exprs)
   if ( expand_groups ) exprs <- expand_groups(exprs)
+  ref <- get_ref(exprs)
   if ( vectorize ) exprs <- lapply(exprs, vectorize)
   if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
   if ( replace_in ) exprs <- lapply(exprs, replace_in)
   if (lin_eq_eps > 0)   exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op="==")
   if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_ineq_eps, dat=dat, op="<=")
   if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_ineq_eps, dat=dat, op=">=")
+  set_ref(exprs, ref)
+}
+
+# get or set reference attribute to list of expressions.
+set_ref <- function(exprs, ref=seq_along(exprs)){
+  for (i in seq_along(exprs)) attr(exprs[[i]],"reference") <- ref[i]
   exprs
+}
+
+get_ref <- function(exprs){
+  if (length(exprs)==0) return(numeric())
+  else sapply(exprs, function(d) attr(d,"reference"))
 }
 
 
@@ -810,8 +823,14 @@ setGeneric("as.data.frame")
 #' @export
 #' @family expressionset-methods
 setMethod("as.data.frame","expressionset", function(x, expand_assignments=TRUE, ...){
-  rules <- sapply(x$exprs(expand_assignments=expand_assignments,...), call2text)
-  dat <- cbind(meta(x,simplify=TRUE),rule=rules)
+  rules <- x$exprs(expand_assignments=expand_assignments,...)
+  i_ref <- if (expand_assignments) sapply(rules, function(d) attr(d,"reference"))
+           else seq_along(rules)
+
+  rules <- sapply(rules, call2text)
+
+
+  dat <- cbind(meta(x,simplify=TRUE)[i_ref,,drop=FALSE],rule=rules)
   # expanding assignments may add numbering to expressions
   dat$name <- names(rules)
   dat
