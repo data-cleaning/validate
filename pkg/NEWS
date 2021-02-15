@@ -4,6 +4,8 @@ version 1.0.2
   as data frames but behave differently.
 - Fix: add_indicators() would fail or not add results properly in some
   cases. (Thanks to Jos de Waard for reporting #128).
+- Fix: Parsing yaml files would crash when the 'expr' field is empty
+  (Thanks to Matthias Gomolka for reporting).
 
 version 1.0.1
 - Fixed URL issues caught by CRAN but not by R CMD check --as-cran.

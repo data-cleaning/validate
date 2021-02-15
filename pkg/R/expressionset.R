@@ -174,7 +174,12 @@ rules_from_block <- function(block, origin){
   }
   
   rules_from_yrf <- function(block, origin){  
-    lapply(block$rules, function(x){
+    rules <- Filter(function(x) !is.null(x$expr), block$rules)
+    if (length(rules)<length(block$rules)){ 
+      warnf("skipped %d rules with empty expressions"
+          , length(block$rules)-length(rules))
+    }
+    lapply(rules, function(x){
       rule(
         expr = parse(text=x$expr)[[1]]
         , name = as.character(x$name)
@@ -811,6 +816,7 @@ setMethod("as.data.frame","expressionset", function(x, expand_assignments=TRUE, 
   dat$name <- names(rules)
   dat
 })
+
 
 
 
