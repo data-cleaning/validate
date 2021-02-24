@@ -59,7 +59,7 @@ expect_true(all_unique(x=1:3))
 expect_equal(is_complete(women$height, women$weight),rep(TRUE,15))
 expect_true(all_complete(women$height, women$weight))
 
-
+expect_equal(occurs(c(1:3,2:0)), c(2,2,1,2,2,1))
 
 
 
