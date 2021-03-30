@@ -1,10 +1,23 @@
-bibentry(bibtype = "article",
- title = "Data Validation Infrastructure for R"
- , author = c(person("MPJ", "van der Loo"), person("E", "de Jonge"))
- , year = 2019
- , journal = "Journal of Statistical Software"
- , volume = ""
- , issue  = ""
- , url = "https://CRAN.R-project.org/package=validate"
- , pages = "Accepted for publication"
+bibentry(bibtype = "Article",
+  title        = "Data Validation Infrastructure for {R}",
+  author       = c(person(given = c("Mark", "P.", "J."),
+                          family = "van der Loo",
+                          email = "m.vanderloo@cbs.nl"),
+                   person(given = "Edwin",
+                          family = "de Jonge",
+                          email = "e.dejonge@cbs.nl")),
+  journal      = "Journal of Statistical Software",
+  year         = "2021",
+  volume       = "97",
+  number       = "10",
+  pages        = "1--31",
+  doi          = "10.18637/jss.v097.i10",
+
+  header       = "To cite validate in publications use:",
+  textVersion  =
+  paste("Mark P. J. van der Loo, Edwin de Jonge (2021).",
+        "Data Validation Infrastructure for R.",
+        "Journal of Statistical Software, 97(10), 1-31.",
+        "doi:10.18637/jss.v097.i10")
 )
+

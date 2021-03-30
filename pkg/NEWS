@@ -1,4 +1,5 @@
 version 1.0.2
+- Updated CITATION since paper will be published by JSS (Thanks to Achim Zeileis).
 - Improved 'print' method of all objects inheriting from 'confrontation' (#129)
 - 'compare' now also works with 'tibble' objects -- who disguise themselves
   as data frames but behave differently.
