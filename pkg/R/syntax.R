@@ -231,45 +231,45 @@ all_unique <- function(...){
 
 ## TODO: work out subtleties regarding NA.
 
-#' Count how often a value of value combination occurs
-#'
-#' For each row in a data frame, count how many similar rows there are. The
-#' \code{...} argument is used to specify which variables are taken into
-#' account. Missing values are counted as a unique value.
-#'
-#' @param ... When used in a validation rule: a bare (unquoted) list of variable names.
-#'     When used directly, a comma-separated list of vectors of equal length.
-#'
-#'
-#' @return For each record it indicates how often the value or value 
-#'         combination in the arguments occur.
-#' @export
-#'
-#' @examples
-#'
-#' # for each element i the sequence (a,b,c,a,c,a) 
-#' # compute how often it occurrs in the sequence.
-#' occurs(c("a","b","c","a","c","a")) 
-#' 
-#' # for each record in 'iris' how often do the same
-#' # (Sepal.Length, Species) combinations occur?
-#' with(iris, occurs(Sepal.Length, Species))
-#'
-#' # in the context of a validation. Check whether
-#' # each individual Species occurs at least 10 times.
-#'
-#' rules <- validator(occurs(Species) > 10)
-#' cf <- confront(iris, rules)
-#' summary(cf)
-#'
-occurs <- function(...){
-  keys <- data.frame(...)
-  tab <- as.data.frame(table(keys,useNA="ifany"))
-  names(tab)[1:(ncol(tab)-1)] <- names(keys)
-  keys$index <- seq_len(nrow(keys))
-  out <- merge(x=keys, y=tab, all.x=TRUE, all.y=FALSE)
-  out$Freq[order(out$index)]
-}
+# Count how often a value of value combination occurs
+#
+# For each row in a data frame, count how many similar rows there are. The
+# \code{...} argument is used to specify which variables are taken into
+# account. Missing values are counted as a unique value.
+#
+# @param ... When used in a validation rule: a bare (unquoted) list of variable names.
+#     When used directly, a comma-separated list of vectors of equal length.
+#
+#
+# @return For each record it indicates how often the value or value 
+#         combination in the arguments occur.
+# @export
+#
+# @examples
+#
+# # for each element i the sequence (a,b,c,a,c,a) 
+# # compute how often it occurrs in the sequence.
+# occurs(c("a","b","c","a","c","a")) 
+# 
+# # for each record in 'iris' how often do the same
+# # (Sepal.Length, Species) combinations occur?
+# with(iris, occurs(Sepal.Length, Species))
+#
+# # in the context of a validation. Check whether
+# # each individual Species occurs at least 10 times.
+#
+# rules <- validator(occurs(Species) > 10)
+# cf <- confront(iris, rules)
+# summary(cf)
+#
+#occurs <- function(...){
+#  keys <- data.frame(...)
+#  tab <- as.data.frame(table(keys,useNA="ifany"))
+#  names(tab)[1:(ncol(tab)-1)] <- names(keys)
+#  keys$index <- seq_len(nrow(keys))
+#  out <- merge(x=keys, y=tab, all.x=TRUE, all.y=FALSE)
+#  out$Freq[order(out$index)]
+#}
 
 #' @rdname is_unique
 #' @return For \code{number_unique} a single number representing the number
