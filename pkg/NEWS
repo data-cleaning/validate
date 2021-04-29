@@ -1,3 +1,6 @@
+version 1.0.3
+- Added 'rmarkdown' to 'Suggests' as requested by CRAN
+
 version 1.0.2
 - Updated CITATION since paper will be published by JSS (Thanks to Achim Zeileis).
 - Improved 'print' method of all objects inheriting from 'confrontation' (#129)

@@ -21,12 +21,12 @@ Description: Declare data validation rules and data quality indicators;
         analyzed for rule type and connectivity. See also Van der Loo
         and De Jonge (2018) <doi:10.1002/9781118897126>, Chapter 6
         and the JSS paper (2021) <doi:10.18637/jss.v097.i10>.
-Version: 1.0.2
+Version: 1.0.2.1
 Depends: R (>= 3.5.0), methods
 URL: https://github.com/data-cleaning/validate
 BugReports: https://github.com/data-cleaning/validate/issues
 Imports: stats, graphics, grid, settings, yaml
-Suggests: tinytest (>= 0.9.6), knitr, bookdown, lumberjack
+Suggests: tinytest (>= 0.9.6), knitr, bookdown, lumberjack, rmarkdown
 VignetteBuilder: knitr
 Collate: 
     'rule.R'
