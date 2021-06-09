@@ -1,3 +1,7 @@
+version 1.1.0
+- Added support for SDMX codelists from SDMX REST APIs, see
+  'sdmx_codelist', 'estat_codelist', 'global_codelist'.
+
 version 1.0.4
 - Added 'rmarkdown' to 'Suggests' as requested by CRAN
 - Small updates for compatibility with new version of 'settings'

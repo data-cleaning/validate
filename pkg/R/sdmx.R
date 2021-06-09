@@ -1,7 +1,8 @@
 #' Get code list from an SDMX REST API endpoint.
 #' 
-#' Constructs an URL for \code{rsdmx::readSDMX} and extracts the code IDs.
-#' Code lists are downloaded once and cached for the duration of the R session.
+#' \code{sdmx_codelist} constructs an URL for \code{rsdmx::readSDMX} and
+#' extracts the code IDs.  Code lists are downloaded once and cached for the
+#' duration of the R session.
 #' 
 #' @param endpoint \code{[character]} REST API endpoint of the SDMX registry
 #' @param agency_id \code{[character]} Agency ID (e.g. \code{"ESTAT"})
@@ -15,24 +16,22 @@
 #' @export
 #' 
 #' @examples
-#' 
-#' # We wrap the example in a 'try' statement to avoid failure on CRAN in case
-#' # the service is off-line.
+#'  
 #' 
 #'  # here we download the CL_ACTIVITY codelist from the  ESTAT registry.
-#' try({
+#' \dontrun{
 #'  codelist <- sdmx_codelist(
 #'    endpoint = "https://registry.sdmx.org/ws/public/sdmxapi/rest/"
 #'    , agency_id = "ESTAT"
-#'    , resource_id = "CL_ACTIVITY"
-#'  )
-#' })
+#'    , resource_id = "CL_ACTIVITY" 
+#' }
+#'
 sdmx_codelist <- local({
   store <- new.env()
   
   function(endpoint, agency_id, resource_id, version="latest", what=c("id","all"), ...){
-    if (!require('rsdmx', quietly=TRUE)){
-      stop("You need to install 'rsdmx' to use SDMX functionality")
+    if (!requireNamespace('rsdmx', quietly=TRUE)){
+      stop("You need to install 'rsdmx' to use SDMX functionality", call.=FALSE)
     }
     what <- match.arg(what)
 
@@ -52,26 +51,22 @@ sdmx_codelist <- local({
 
 #' Get code list from Eurostat SDMX repository
 #' 
-#' Convenience wrapper that calls \code{\link{sdmx_codelist}}.
-#' 
-#' @param resource_id \code{[character]} Resource ID (e.g. \code{"CL_ACTIVITY"})
-#' @param version  \code{[character]} Version of the code list.
-#' @param agency_id \code{[character]} Agency ID (default: \code{"ESTAT"}).
-#' @param ... passed to \code{\link{sdmx_codelist}}
+#' \code{estat_codelist} gets a code list from the REST API provided at
+#' \code{ec.europa.eu/tools/cspa_services_global/sdmxregistry}. It is a
+#' convenience wrapper that calls \code{sdmx_codelist}.
+#'  
+#' @rdname sdmx_codelist
 #'
-#'
-#' @family sdmx
 #' @export
 #'
 #' @examples
-#' # wrapped in a 'try' to avoid failure on CRAN in case the
-#' # service is offline.
-#' try( estat_codelist("CL_ACTIVITY") )
-#'
+#' \dontrun{
+#'   estat_codelist("CL_ACTIVITY")
+#' }
 estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest", ...){
   sdmx_codelist(
     endpoint      = endpoint("ESTAT")
-    , agency_id   = "ESTAT"
+    , agency_id   = agency_id
     , resource_id = resource_id
     , version     = version
     , ...
@@ -80,21 +75,38 @@ estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest", .
 
 #' Get code list from global SDMX repository
 #' 
-#' Convenience wrapper that calls \code{\link{sdmx_codelist}}.
+#' \code{global_codelist} gets a code list from the REST API provided at
+#' \code{https://registry.sdmx.org/webservice/data.html}.  It is a convenience
+#' wrapper that calls \code{sdmx_codelist}.
 #'
-#' @inheritParams  estat_codelist
-#'
-#' @family sdmx
+#' @rdname sdmx_codelist
 #' @export
 #'
 #' @examples
-#' # wrapped in a 'try' to avoid failure on CRAN in case the
-#' # service is offline.
-#' try( global_codelist("CL_ACTIVITY", agency_id="ESTAT") )
-global_codelist <- function(resource_id, agency_id, version="latest", ...){
+#' \dontrun{
+#'   global_codelist("CL_AGE") )
+#'   global_codelist("CL_CONF_STATUS")
+#'   global_codelist("CL_SEX")
+#' }
+#' # An example of using SDMX information, downloaded from the SDMX global
+#' # registry
+#' \dontrun{
+#'  # economic data from the country of Samplonia
+#'  data(samplonomy)
+#'  head(samplonomy)
+#' 
+#'  rules <- validator(
+#'    , freq %in% global_codelist("CL_FREQ")
+#'    , value >= 0
+#'  )
+#'  cf <- confront(samplonomy, rules) 
+#'  summary(cf)
+#'
+#' }
+global_codelist <- function(resource_id, agency_id = "SDMX", version="latest", ...){
   sdmx_codelist(
     endpoint      = endpoint("GLOBAL")
-    , agency_id   = "GLOBAL"
+    , agency_id   = agency_id
     , resource_id = resource_id
     , version     = version
     , ...
