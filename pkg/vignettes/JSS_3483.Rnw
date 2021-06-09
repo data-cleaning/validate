@@ -3,5 +3,5 @@
 %\VignetteIndexEntry{Data Validation Infrastructure for R}
 
 \begin{document}
-\includepdf[pages=-, fitpaper=true]{jss3483.pdf}
+\includepdf[pages=-, fitpaper=true]{v97i10.pdf}
 \end{document}

@@ -72,7 +72,7 @@ violating <- function(x, y, include_missing=FALSE, ...){
     stop("Not all rules have record-wise output")
   }
   if (include_missing){
-    x[apply(A,1, function(d) any(!d | is.na(d)) )   ] 
+    x[apply(A, 1, function(d) any(!d | is.na(d))), , drop = FALSE] 
   } else {
     x[apply(A,1,function(d) any(!d &!is.na(d))),,drop=FALSE]
   }
