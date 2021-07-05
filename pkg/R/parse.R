@@ -154,10 +154,10 @@ negate <- function(x){
   bquote(!.(x))
 }
 
-replace_lin <- function(x, eps_eq=0.1, eps_ineq = 0.01){
+replace_lin <- function(x, dat, eps_eq=0.1, eps_ineq = 0.01){
   if (!is.call(x)){
     x
-  } else if (linear_call(x)){
+  } else if (linear_call(x) && all_numeric(x, dat)){
     op <- as.character(x[[1]])
     if (op == "==" && eps_eq > 0){
       bquote(abs(.(x[[2]]) - .(x[[3]])) <= .(eps_eq))
@@ -173,15 +173,16 @@ replace_lin <- function(x, eps_eq=0.1, eps_ineq = 0.01){
       x
     }
   } else if (x[[1]] == "!"){
-    negate(replace_lin(x[[2]], eps_eq = eps_eq, eps_ineq = eps_ineq))
+    negate(replace_lin(x[[2]], dat = dat, eps_eq = eps_eq, eps_ineq = eps_ineq))
   } else if (x[[1]] == "!="){
     negate(replace_lin( bquote(.(x[[2]]) == .(x[[3]]))
+                        , dat = dat
                         , eps_eq = eps_eq
                         , eps_ineq = eps_ineq
     )
     )
   } else {
-    x[-1] <- lapply(x[-1], replace_lin, eps_eq = eps_eq, eps_ineq=eps_ineq)
+    x[-1] <- lapply(x[-1], replace_lin, dat= dat, eps_eq = eps_eq, eps_ineq=eps_ineq)
     x
   }
 }

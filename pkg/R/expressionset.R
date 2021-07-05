@@ -341,7 +341,7 @@ extract_names <- function(L,prefix="V"){
   if ( replace_dollar ) exprs <- lapply(exprs, replace_dollar)
   if ( replace_in ) exprs <- lapply(exprs, replace_in)
   
-  exprs <- lapply(exprs, replace_lin, eps_eq = lin_eq_eps, eps_ineq = lin_ineq_eps)
+  exprs <- lapply(exprs, dat=dat, replace_lin, eps_eq = lin_eq_eps, eps_ineq = lin_ineq_eps)
   # if (lin_eq_eps > 0)   exprs <- lapply(exprs, replace_linear_restriction, eps=lin_eq_eps, dat=dat, op="==")
   # if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_ineq_eps, dat=dat, op="<=")
   # if (lin_ineq_eps > 0) exprs <- lapply(exprs, replace_linear_restriction, eps=lin_ineq_eps, dat=dat, op=">=")

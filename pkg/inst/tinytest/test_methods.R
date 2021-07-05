@@ -33,14 +33,17 @@ v <- validator(
  , average = mean(x) > 3
  , sum = x + y == z
 )
+
 expect_equivalent(
   variables(v,as='matrix')
-, array(c(T,T,F,T),dim=c(2,2))
+  , matrix(c(TRUE, TRUE, FALSE, TRUE), ncol=2, nrow=2)
 )
+
 expect_equivalent(
   variables(v,as='matrix',dummy=TRUE)
-, array(c(T,F,T,T,T,T,F,F,T),dim=c(3,3))
+, matrix(c(TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,TRUE), ncol=3, nrow=3)
 )
+
 v <- validator(x + y > 0, z>0)
 expect_equal(sort(variables(v[[1]])), c('x','y'))
 

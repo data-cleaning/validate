@@ -173,33 +173,43 @@ expect_identical( as.expression(lapply(e, validate:::negate))
 
 ## injecting eps
 e <- quote(x >= 1)
-expect_identical( validate:::replace_lin(e, eps_ineq = 0.1)
+expect_identical( validate:::replace_lin(e, dat=data.frame(x=1), eps_ineq = 0.1)
                 , quote(x - 1 >= -0.1)
                 )
 
 e <- quote(!x>0)
-expect_identical( validate:::replace_lin(e, eps_ineq = 0.1)
+expect_identical( validate:::replace_lin(e, dat=data.frame(x=1), eps_ineq = 0.1)
                 , quote(x <= 0
                 )
 )
 
 e <- quote(!(x>0))
-expect_identical( validate:::replace_lin(e, eps_ineq = 0.1)
+expect_identical( validate:::replace_lin(e, dat=data.frame(x=1), eps_ineq = 0.1)
                   , quote(x <= 0
                   )
 )
 
 
 e <- quote(if (x > 1) y == 1 else z > 1)
-expect_identical( validate:::replace_lin(e, eps_ineq = 0.1, eps_eq = 0.2)
+expect_identical( validate:::replace_lin(e, dat=data.frame(x=1, y=1,z=1),eps_ineq = 0.1, eps_eq = 0.2)
                 , quote(if (x > 1) abs(y - 1) <= 0.2 else z > 1)
 )
 
 e <- quote(if (x > 1) y == 1 else z > 1)
 e <- validate:::replace_if(e)
-e <- validate:::replace_lin(e)
+e <- validate:::replace_lin(e, dat=data.frame(x=1,y=1,z=1))
 expect_identical( e 
                 , quote(  (x <= 1  | (abs(y - 1) <= 0.1)) 
                        & ((x >  1) | (z > 1))
                        )
                 )
+
+e <- quote(a == b)
+e <- validate:::replace_lin(e, dat=data.frame(a = 1, b=2))
+expect_identical( e, quote(abs(a - b) <= 0.1))
+
+e <- quote(a == b)
+e <- validate:::replace_lin(e, dat=data.frame(a = "A", b="B"))
+expect_identical( e, quote(a == b))
+
+                  
