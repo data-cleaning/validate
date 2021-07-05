@@ -137,7 +137,8 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
 negate <- function(x){
   if (is.call(x)){
     ne <- switch(as.character(x[[1]])
-                 , "!"  = x[-1]
+                 , "!"  = x[[2]]
+                 , "("  = negate(x[[2]])
                  , "==" = bquote(.(x[[2]]) != .(x[[3]]))
                  , "!=" = bquote(.(x[[2]]) == .(x[[3]]))
                  , ">=" = bquote(.(x[[2]]) < .(x[[3]]))
@@ -163,9 +164,9 @@ replace_lin <- function(x, eps_eq=0.1, eps_ineq = 0.01){
     } else if (eps_ineq > 0){
       switch( op
               , ">=" = bquote(.(x[[2]]) - .(x[[3]]) >= -.(eps_ineq))
-              , ">"  = bquote(.(x[[2]]) - .(x[[3]]) >  -.(eps_ineq))
+              #, ">"  = bquote(.(x[[2]]) - .(x[[3]]) >  -.(eps_ineq))
               , "<=" = bquote(.(x[[2]]) - .(x[[3]]) <=  .(eps_ineq))
-              , "<"  = bquote(.(x[[2]]) - .(x[[3]]) <   .(eps_ineq))
+              #, "<"  = bquote(.(x[[2]]) - .(x[[3]]) <   .(eps_ineq))
               , x
       )
     } else {
@@ -187,40 +188,40 @@ replace_lin <- function(x, eps_eq=0.1, eps_ineq = 0.01){
 
 
 # 
-replace_linear_restriction <- function(x,eps,dat, op="=="){
-    repl <- function(x,eps,op){
-      # by replacing nodes in the call tree
-      # we need not concern about brackets
-      if (x[[1]] != op ) return(x)
-      m <- quote(e1-e2)
-      a <- switch(op
-        , "==" = quote(abs(x))
-        , "<=" = quote(x)
-        , ">=" = quote(x)
-      )
-      lt <- switch(op
-        , "==" =  quote(e1 < e2)
-        , "<=" =  quote(e1 <= e2)
-        , ">=" = quote(e1 >= e2)
-      )
-      if (op == ">=") eps <- -eps 
-      m[[2]] <- left(x)
-      m[[3]] <- right(x)
-      a[[2]] <- m
-      lt[[2]] <- a
-      lt[[3]] <- eps
-      lt
-    }
-
-    if (length(x) == 3 && linear_call(x) && all_numeric(x,dat)){
-      return(repl(x,eps,op))
-    } else if (length(x) > 1) {
-      for ( i in 2:length(x) ){
-        x[[i]] <- replace_linear_restriction(x[[i]],eps,dat)
-      }
-    } 
-    x
-}
+# replace_linear_restriction <- function(x,eps,dat, op="=="){
+#     repl <- function(x,eps,op){
+#       # by replacing nodes in the call tree
+#       # we need not concern about brackets
+#       if (x[[1]] != op ) return(x)
+#       m <- quote(e1-e2)
+#       a <- switch(op
+#         , "==" = quote(abs(x))
+#         , "<=" = quote(x)
+#         , ">=" = quote(x)
+#       )
+#       lt <- switch(op
+#         , "==" =  quote(e1 < e2)
+#         , "<=" =  quote(e1 <= e2)
+#         , ">=" = quote(e1 >= e2)
+#       )
+#       if (op == ">=") eps <- -eps 
+#       m[[2]] <- left(x)
+#       m[[3]] <- right(x)
+#       a[[2]] <- m
+#       lt[[2]] <- a
+#       lt[[3]] <- eps
+#       lt
+#     }
+# 
+#     if (length(x) == 3 && linear_call(x) && all_numeric(x,dat)){
+#       return(repl(x,eps,op))
+#     } else if (length(x) > 1) {
+#       for ( i in 2:length(x) ){
+#         x[[i]] <- replace_linear_restriction(x[[i]],eps,dat)
+#       }
+#     } 
+#     x
+# }
   
 all_numeric <- function(x,dat){
   if (is.null(dat)) return(TRUE)
