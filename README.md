@@ -23,6 +23,38 @@ With `validate`, data validation rules are treated as first-class citizens.
 This means you can import, export, annotate, investigate and manipulate data
 validation rules in a meaninful way. 
 
+#### Citing
+
+Please cite the [JSS article](https://journal.r-project.org/archive/2014/RJ-2014-011/index.html)
+
+```
+@article{van2021data,
+  title={Data validation infrastructure for R},
+  author={van der Loo, Mark PJ and de Jonge, Edwin},
+  journal={Journal of Statistical Software},
+  year={2021},
+  volume ={97},
+  issue = {10},
+  pages = {1-33},
+  doi={10.18637/jss.v097.i10},
+  url = {https://www.jstatsoft.org/article/view/v097i10}
+}
+```
+
+To cite the theory, please cite our [Wiley StatsRef](https://arxiv.org/abs/2012.12028) chapter.
+
+```
+@article{loo2020data,
+  title = {Data Validation},
+  year = {2020},
+  journal = {Wiley StatsRef: Statistics Reference Online},
+  author = {M.P.J. van der Loo and E. de Jonge},
+  pages = {1--7},
+  pdf = {https://doi.org/10.1002/9781118445112.stat08255}
+}
+```
+
+
 #### Resources
 
 - [The Data Validation Cookbook](https://data-cleaning.github.io/validate)
