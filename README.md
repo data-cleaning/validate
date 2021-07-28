@@ -50,7 +50,8 @@ To cite the theory, please cite our [Wiley StatsRef](https://arxiv.org/abs/2012.
   journal = {Wiley StatsRef: Statistics Reference Online},
   author = {M.P.J. van der Loo and E. de Jonge},
   pages = {1--7},
-  pdf = {https://doi.org/10.1002/9781118445112.stat08255}
+  doi = {https://doi.org/10.1002/9781118445112.stat08255},
+  url = {https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat08255}
 }
 ```
 
