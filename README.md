@@ -56,10 +56,10 @@ To cite the theory, please cite our [Wiley StatsRef](https://arxiv.org/abs/2012.
 ```
 
 
-#### Resources
+#### Other Resources
 
+- [Tutorial material](https://github.com/data-cleaning/validate) from our tutorial at _useR!_2021
 - [The Data Validation Cookbook](https://data-cleaning.github.io/validate)
-- The [validate paper](https://arxiv.org/abs/1912.09759), accepted for publication in [JSS](https://www.jstatsoft.org/index).
 - [Slides](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) of the [useR2016](http://www.useR2016.org) talk (Stanford University, June 28 2016).
 - [Video](https://www.youtube.com/watch?v=RMCc2Iu0UIQ) of the [satRdays](https://budapest.satRdays.org) talk (Hungarian Academy of Sciences, Sept 3 2016).
 - [Slides and exercises](https://github.com/data-cleaning/useR2019_tutorial) from the [useR2018](https://user2018.r-project.org/) tutorial.
