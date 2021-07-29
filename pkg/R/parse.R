@@ -134,42 +134,95 @@ which.call <- function(x, what, I=1, e=as.environment(list(n=0))){
   L
 }
 
-
-  # 
-replace_linear_restriction <- function(x,eps,dat, op="=="){
-    repl <- function(x,eps,op){
-      # by replacing nodes in the call tree
-      # we need not concern about brackets
-      if (x[[1]] != op ) return(x)
-      m <- expression(e1-e2)[[1]]
-      a <- switch(op
-        , "==" = expression(abs(x))[[1]]
-        , "<=" = expression((x))[[1]]
-        , ">=" = expression((x))[[1]] 
-      )
-      lt <- switch(op
-        , "==" =  expression(e1 < e2)[[1]]
-        , "<=" = expression(e1 <= e2)[[1]]
-        , ">=" = expression(e1 >= e2)[[1]]
-      )
-      if (op == ">=") eps <- -eps 
-      m[[2]] <- left(x)
-      m[[3]] <- right(x)
-      a[[2]] <- m
-      lt[[2]] <- a
-      lt[[3]] <- eps
-      lt
-    }
-
-    if (length(x) == 3 && linear_call(x) && all_numeric(x,dat)){
-      return(repl(x,eps,op))
-    } else if (length(x) > 1) {
-      for ( i in 2:length(x) ){
-        x[[i]] <- replace_linear_restriction(x[[i]],eps,dat)
-      }
-    } 
-    x
+negate <- function(x){
+  if (is.call(x)){
+    ne <- switch(as.character(x[[1]])
+                 , "!"  = x[[2]]
+                 , "("  = negate(x[[2]])
+                 , "==" = bquote(.(x[[2]]) != .(x[[3]]))
+                 , "!=" = bquote(.(x[[2]]) == .(x[[3]]))
+                 , ">=" = bquote(.(x[[2]]) < .(x[[3]]))
+                 , ">"  = bquote(.(x[[2]]) <= .(x[[3]]))
+                 , "<=" = bquote(.(x[[2]]) > .(x[[3]]))
+                 , "<"  = bquote(.(x[[2]]) >= .(x[[3]]))
+                 , "&"  = substitute(P | Q, list(P=negate(x[[2]]), Q=negate(x[[3]])))
+                 , "|"  = substitute(P & Q, list(P=negate(x[[2]]), Q=negate(x[[3]])))
+                 , bquote(!.(x))
+    )
+    return(ne)
+  }
+  bquote(!.(x))
 }
+
+replace_lin <- function(x, dat, eps_eq=0.1, eps_ineq = 0.01){
+  if (!is.call(x)){
+    x
+  } else if (linear_call(x) && all_numeric(x, dat)){
+    op <- as.character(x[[1]])
+    if (op == "==" && eps_eq > 0){
+      bquote(abs(.(x[[2]]) - .(x[[3]])) <= .(eps_eq))
+    } else if (eps_ineq > 0){
+      switch( op
+              , ">=" = bquote(.(x[[2]]) - .(x[[3]]) >= -.(eps_ineq))
+              #, ">"  = bquote(.(x[[2]]) - .(x[[3]]) >  -.(eps_ineq))
+              , "<=" = bquote(.(x[[2]]) - .(x[[3]]) <=  .(eps_ineq))
+              #, "<"  = bquote(.(x[[2]]) - .(x[[3]]) <   .(eps_ineq))
+              , x
+      )
+    } else {
+      x
+    }
+  } else if (x[[1]] == "!"){
+    negate(replace_lin(x[[2]], dat = dat, eps_eq = eps_eq, eps_ineq = eps_ineq))
+  } else if (x[[1]] == "!="){
+    negate(replace_lin( bquote(.(x[[2]]) == .(x[[3]]))
+                        , dat = dat
+                        , eps_eq = eps_eq
+                        , eps_ineq = eps_ineq
+    )
+    )
+  } else {
+    x[-1] <- lapply(x[-1], replace_lin, dat= dat, eps_eq = eps_eq, eps_ineq=eps_ineq)
+    x
+  }
+}
+
+
+# 
+# replace_linear_restriction <- function(x,eps,dat, op="=="){
+#     repl <- function(x,eps,op){
+#       # by replacing nodes in the call tree
+#       # we need not concern about brackets
+#       if (x[[1]] != op ) return(x)
+#       m <- quote(e1-e2)
+#       a <- switch(op
+#         , "==" = quote(abs(x))
+#         , "<=" = quote(x)
+#         , ">=" = quote(x)
+#       )
+#       lt <- switch(op
+#         , "==" =  quote(e1 < e2)
+#         , "<=" =  quote(e1 <= e2)
+#         , ">=" = quote(e1 >= e2)
+#       )
+#       if (op == ">=") eps <- -eps 
+#       m[[2]] <- left(x)
+#       m[[3]] <- right(x)
+#       a[[2]] <- m
+#       lt[[2]] <- a
+#       lt[[3]] <- eps
+#       lt
+#     }
+# 
+#     if (length(x) == 3 && linear_call(x) && all_numeric(x,dat)){
+#       return(repl(x,eps,op))
+#     } else if (length(x) > 1) {
+#       for ( i in 2:length(x) ){
+#         x[[i]] <- replace_linear_restriction(x[[i]],eps,dat)
+#       }
+#     } 
+#     x
+# }
   
 all_numeric <- function(x,dat){
   if (is.null(dat)) return(TRUE)
@@ -307,6 +360,7 @@ right <- function(x) if ( is.call(x) ) x[[min(length(x),3)]] else NULL
 
 linear_call <- function(x){
   if (is.character(x)) return(FALSE)
+  if (is.logical(x)) return(FALSE)
   if ( is.null(node(x)) ) return(TRUE) 
   n <- deparse(node(x))
   if ( !n %in% c("+","-","*","<","<=","==",">=",">" ) ) return(FALSE)

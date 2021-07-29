@@ -23,10 +23,43 @@ With `validate`, data validation rules are treated as first-class citizens.
 This means you can import, export, annotate, investigate and manipulate data
 validation rules in a meaninful way. 
 
-#### Resources
+#### Citing
 
+Please cite the [JSS article](https://journal.r-project.org/archive/2014/RJ-2014-011/index.html)
+
+```
+@article{van2021data,
+  title={Data validation infrastructure for R},
+  author={van der Loo, Mark PJ and de Jonge, Edwin},
+  journal={Journal of Statistical Software},
+  year={2021},
+  volume ={97},
+  issue = {10},
+  pages = {1-33},
+  doi={10.18637/jss.v097.i10},
+  url = {https://www.jstatsoft.org/article/view/v097i10}
+}
+```
+
+To cite the theory, please cite our [Wiley StatsRef](https://arxiv.org/abs/2012.12028) chapter.
+
+```
+@article{loo2020data,
+  title = {Data Validation},
+  year = {2020},
+  journal = {Wiley StatsRef: Statistics Reference Online},
+  author = {M.P.J. van der Loo and E. de Jonge},
+  pages = {1--7},
+  doi = {https://doi.org/10.1002/9781118445112.stat08255},
+  url = {https://onlinelibrary.wiley.com/doi/10.1002/9781118445112.stat08255}
+}
+```
+
+
+#### Other Resources
+
+- [Tutorial material](https://github.com/data-cleaning/validate) from our tutorial at _useR!_2021
 - [The Data Validation Cookbook](https://data-cleaning.github.io/validate)
-- The [validate paper](https://arxiv.org/abs/1912.09759), accepted for publication in [JSS](https://www.jstatsoft.org/index).
 - [Slides](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) of the [useR2016](http://www.useR2016.org) talk (Stanford University, June 28 2016).
 - [Video](https://www.youtube.com/watch?v=RMCc2Iu0UIQ) of the [satRdays](https://budapest.satRdays.org) talk (Hungarian Academy of Sciences, Sept 3 2016).
 - [Slides and exercises](https://github.com/data-cleaning/useR2019_tutorial) from the [useR2018](https://user2018.r-project.org/) tutorial.
