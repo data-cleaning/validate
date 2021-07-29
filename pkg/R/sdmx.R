@@ -37,10 +37,7 @@ download_sdmx <- local({
 #' extracts the code IDs.  Code lists are downloaded once and cached for the
 #' duration of the R session.
 #' 
-#' @param endpoint \code{[character]} REST API endpoint of the SDMX registry
-#' @param agency_id \code{[character]} Agency ID (e.g. \code{"ESTAT"})
-#' @param resource_id \code{[character]} Resource ID (e.g. \code{"CL_ACTIVITY"})
-#' @param version  \code{[character]} Version of the code list.
+#' @inheritParams validator_from_dsd
 #' @param what \code{[character]} Return a \code{character} with code id's, or
 #'        a data frame with all information.
 #'
@@ -85,13 +82,12 @@ sdmx_codelist <- function(endpoint, agency_id, resource_id, version="latest", wh
 #' \dontrun{
 #'   estat_codelist("CL_ACTIVITY")
 #' }
-estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest", ...){
+estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest"){
   sdmx_codelist(
     endpoint      = endpoint("ESTAT")
     , agency_id   = agency_id
     , resource_id = resource_id
     , version     = version
-    , ...
   )   
 }
 
@@ -125,13 +121,12 @@ estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest", .
 #'  summary(cf)
 #'
 #' }
-global_codelist <- function(resource_id, agency_id = "SDMX", version="latest", ...){
+global_codelist <- function(resource_id, agency_id = "SDMX", version="latest"){
   sdmx_codelist(
     endpoint      = endpoint("GLOBAL")
     , agency_id   = agency_id
     , resource_id = resource_id
     , version     = version
-    , ...
   )   
 }
 
@@ -158,8 +153,14 @@ endpoint <- function(registry=NULL){
 
 #' Extract a rule set from an SDMX DSD file
 #'
+#' @param endpoint \code{[character]} REST API endpoint of the SDMX registry
+#' @param agency_id \code{[character]} Agency ID (e.g. \code{"ESTAT"})
+#' @param resource_id \code{[character]} Resource ID (e.g. \code{"CL_ACTIVITY"})
+#' @param version  \code{[character]} Version of the code list.
 #'
+#' @return An object of class \code{\link{validator}}.
 #'
+#' @export
 validator_from_dsd <- function(endpoint, agency_id, resource_id, version="latest"){
   dsd <- download_sdmx(endpoint, "datastructure", agency_id, resource_id, version)
   dimensions <- slot(slot(dsd, "datastructures")[[1]], "Components")
