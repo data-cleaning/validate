@@ -1,3 +1,36 @@
+
+# do we have rsdmx installed?
+check_rsdmx <- function(){
+  if (!requireNamespace('rsdmx', quietly=TRUE)){
+    stop("You need to install 'rsdmx' to use SDMX functionality", call.=FALSE)
+  }
+}
+
+
+
+# download something from an SDMX registry and cash it.
+download_sdmx <- local({
+  store <- new.env()
+  
+  function(endpoint, resource, agency_id, resource_id, version="latest", ...){
+    check_rsdmx()
+
+    url <- file.path(endpoint, resource, agency_id, resource_id, version)
+    if (!url %in% ls(store)){
+      store[[url]] <- tryCatch(rsdmx::readSDMX(url, ...), error=function(e){
+          msg <- sprintf(
+            "retrieving data from \n'%s'\n failed with '%s'\n", url, e$message)
+          stop(msg, call.=FALSE)
+        })
+    }
+    out <- store[[url]]
+    attr(out, "url") <- url
+    out
+  }
+})
+
+
+
 #' Get code list from an SDMX REST API endpoint.
 #' 
 #' \code{sdmx_codelist} constructs an URL for \code{rsdmx::readSDMX} and
@@ -10,7 +43,6 @@
 #' @param version  \code{[character]} Version of the code list.
 #' @param what \code{[character]} Return a \code{character} with code id's, or
 #'        a data frame with all information.
-#' @param ... passed to \code{\link[rsdmx]{readSDMX}}
 #'
 #' @family sdmx
 #' @export
@@ -26,28 +58,18 @@
 #'    , resource_id = "CL_ACTIVITY" 
 #' }
 #'
-sdmx_codelist <- local({
-  store <- new.env()
-  
-  function(endpoint, agency_id, resource_id, version="latest", what=c("id","all"), ...){
-    if (!requireNamespace('rsdmx', quietly=TRUE)){
-      stop("You need to install 'rsdmx' to use SDMX functionality", call.=FALSE)
-    }
-    what <- match.arg(what)
+sdmx_codelist <- function(endpoint, agency_id, resource_id, version="latest", what=c("id","all")){
+  check_rsdmx()
+  what <- match.arg(what)
 
-    url <- file.path(endpoint, "codelist", agency_id, resource_id, version)
-    if (!url %in% ls(store)){
-      store[[url]] <- tryCatch(rsdmx::readSDMX(url, ...), error=function(e){
-          msg <- sprintf(
-            "retrieving data from \n'%s'\n failed with '%s'\n", url, e$message)
-          stop(msg, call.=FALSE)
-        })
-    }
-    
-    df <- as.data.frame(store[[url]])
-    if (what=="all") df else df[,1]
-  }
-})
+  dl <- download_sdmx(endpoint, "codelist", agency_id, resource_id, version)
+  
+  df <- as.data.frame(dl)
+  if (what=="all") df else df[,1]
+}
+
+
+
 
 #' Get code list from Eurostat SDMX repository
 #' 
@@ -131,6 +153,41 @@ endpoint <- function(registry=NULL){
   else out
 
 }
+
+
+
+#' Extract a rule set from an SDMX DSD file
+#'
+#'
+#'
+validator_from_dsd <- function(endpoint, agency_id, resource_id, version="latest"){
+  dsd <- download_sdmx(endpoint, "datastructure", agency_id, resource_id, version)
+  dimensions <- slot(slot(dsd, "datastructures")[[1]], "Components")
+  df <- as.data.frame(dimensions)
+
+  cl_vars <- !is.na(df$codelist)
+
+  template <- '%s %%in%% sdmx_codelist(endpoint  = "%s", agency_id = "%s", resource_id = "%s", version = "%s")'
+
+  df1 <- df[cl_vars,]
+
+  rules <- data.frame(
+    rule = sprintf(template
+      , df1$conceptRef
+      , endpoint
+      , df1$codelistAgency
+      , df1$codelist
+      , version=df1$codelistVersion)
+    , name = paste0("CL_", df1$conceptRef)
+    , origin = attr(dsd,"url")
+    , description = sprintf("Code list from %s::%s %s", resource_id, df1$conceptRef, version)
+  )
+
+  validator(.data=rules)
+}
+
+
+
 
 
 
