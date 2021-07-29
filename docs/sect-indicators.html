@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Indicators | The Data Validation Cookbook</title>
   <meta name="description" content="Chapter 6 Indicators | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Indicators | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
@@ -48,6 +48,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -112,6 +114,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -190,10 +193,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.2</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.3</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>9</b> Comparing data sets</a><ul>
-<li class="chapter" data-level="9.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>9.1</b> Cell counts</a></li>
-<li class="chapter" data-level="9.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>9.2</b> Comparing rule violations</a></li>
-<li class="chapter" data-level="9.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>9.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
+<li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.2</b> Code lists from SDMX registries</a></li>
+<li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.3</b> Derive rules from DSD</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
+<li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
+<li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="bibliographical-notes.html"><a href="bibliographical-notes.html"><i class="fa fa-check"></i>Bibliographical notes</a></li>
 <li class="divider"></li>
@@ -253,9 +261,10 @@ an object of class <code>indication</code>. It prints as follows.</p>
 ## Call:
 ##     confront(dat = women, x = ii)
 ## 
-## Confrontations: 3
-## Warnings      : 0
-## Errors        : 0</code></pre>
+## Rules confronted: 3
+##    With missings: 0
+##    Threw warning: 0
+##    Threw errors : 0</code></pre>
 <p>To study the results, the object can be summarized.</p>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1"><span class="kw">summary</span>(out)</a></code></pre></div>
 <pre><code>##   name items      min      mean       max nNA error warning
@@ -271,10 +280,10 @@ while the second and third indicators (<code>mh</code>, <code>mw</code>) each re
 value. The single values are repeated when indicator values are added
 to the data.</p>
 <div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="kw">head</span>(<span class="kw">add_indicators</span>(women, out), <span class="dv">3</span>)</a></code></pre></div>
-<pre><code>##   height weight      BMI       mh       mw
-## 1     58    115 24.03503  65.0000 136.7333
-## 2     59    117 23.63114 136.7333  65.0000
-## 3     60    120 23.43589  65.0000 136.7333</code></pre>
+<pre><code>##   height weight      BMI mh       mw
+## 1     58    115 24.03503 65 136.7333
+## 2     59    117 23.63114 65 136.7333
+## 3     60    120 23.43589 65 136.7333</code></pre>
 <p>The result is a data frame with indicators attached.</p>
 <p>The columns <code>error</code> and <code>warning</code> indicate whether calculation of the
 indicators was problematic. For example because the output of an indicator rule
@@ -332,6 +341,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

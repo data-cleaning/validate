@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Comparing data sets | The Data Validation Cookbook</title>
-  <meta name="description" content="Chapter 9 Comparing data sets | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <title>Chapter 10 Comparing data sets | The Data Validation Cookbook</title>
+  <meta name="description" content="Chapter 10 Comparing data sets | The Data Validation Cookbook" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Comparing data sets | The Data Validation Cookbook" />
+  <meta property="og:title" content="Chapter 10 Comparing data sets | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Comparing data sets | The Data Validation Cookbook" />
+  <meta name="twitter:title" content="Chapter 10 Comparing data sets | The Data Validation Cookbook" />
   
   
   
@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="sect-rulefiles.html"/>
+<link rel="prev" href="sect-sdmxrules.html"/>
 <link rel="next" href="bibliographical-notes.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -48,6 +48,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -112,6 +114,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -190,10 +193,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.2</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.3</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>9</b> Comparing data sets</a><ul>
-<li class="chapter" data-level="9.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>9.1</b> Cell counts</a></li>
-<li class="chapter" data-level="9.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>9.2</b> Comparing rule violations</a></li>
-<li class="chapter" data-level="9.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>9.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
+<li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.2</b> Code lists from SDMX registries</a></li>
+<li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.3</b> Derive rules from DSD</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
+<li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
+<li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="bibliographical-notes.html"><a href="bibliographical-notes.html"><i class="fa fa-check"></i>Bibliographical notes</a></li>
 <li class="divider"></li>
@@ -217,7 +225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sect:comparing" class="section level1">
-<h1><span class="header-section-number">Chapter 9</span> Comparing data sets</h1>
+<h1><span class="header-section-number">Chapter 10</span> Comparing data sets</h1>
 <p>When processing data step by step, it is useful to gather information on the
 contribution of each step to the final result. This way the whole process can
 be monitored and the contribution of each step can be evaluated. Schematically,
@@ -234,7 +242,7 @@ be combined with the
 <a href="https://cran.r-project.org/package=lumberjack">lumberjack</a> package to automate
 monitoring in an R script.</p>
 <div id="cell-counts" class="section level2">
-<h2><span class="header-section-number">9.1</span> Cell counts</h2>
+<h2><span class="header-section-number">10.1</span> Cell counts</h2>
 <p>One of the simplest ways to compare different versions of a data set is to
 count how many cells have changed. In this setting it can be useful to
 distinguish between changes from available to missing data (and <em>vice versa</em>)
@@ -323,13 +331,13 @@ objects. To demonstrate this, we will create two more versions of the
 <a class="sourceLine" id="cb272-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
 <a class="sourceLine" id="cb272-7" title="7"><span class="kw">barplot</span>(out)</a>
 <a class="sourceLine" id="cb272-8" title="8"><span class="kw">plot</span>(out)</a></code></pre></div>
-<p><img src="09-comparing_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="10-comparing_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>The bar plot and line plot convey the same information. The line plot is better
 when the data sets are instances resulting from a sequential process. The bar
 plot can be used more generally since it does not suggest a particular order.</p>
 </div>
 <div id="comparing-rule-violations" class="section level2">
-<h2><span class="header-section-number">9.2</span> Comparing rule violations</h2>
+<h2><span class="header-section-number">10.2</span> Comparing rule violations</h2>
 <p>When processing data it is interesting to compare how many data validations
 are violated before and after a processing step. Comparing output data with
 input data, we can decompose the total number of validation results of
@@ -387,10 +395,10 @@ ways: a bar plot and a line plot.</p>
 <div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
 <a class="sourceLine" id="cb275-2" title="2"><span class="kw">barplot</span>(comparison)</a>
 <a class="sourceLine" id="cb275-3" title="3"><span class="kw">plot</span>(comparison)</a></code></pre></div>
-<p><img src="09-comparing_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="10-comparing_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 <div id="validate-and-lumberjack" class="section level2">
-<h2><span class="header-section-number">9.3</span> <code>validate</code> and <code>lumberjack</code></h2>
+<h2><span class="header-section-number">10.3</span> <code>validate</code> and <code>lumberjack</code></h2>
 <p>The <a href="https://cran.r-project.org/package=lumberjack">lumberjack</a> package makes
 it easy to track changes in data in a user-defined way. The following example
 is slightly adapted from the <a href="https://arxiv.org/abs/2005.04050">JSS paper</a>.</p>
@@ -449,8 +457,8 @@ The output is written to a <code>csv</code> file which we can read.</p>
 <p>The logfile variable has quite a lot of columns, so here show just two rows.</p>
 <div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1">logfile[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-12-22 09:07:36
-## 4    3 2020-12-22 09:07:36
+## 3    2 2021-07-29 15:20:59
+## 4    3 2021-07-29 15:20:59
 ##                                                                expression cells
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))   300
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))   300
@@ -496,8 +504,8 @@ follows, and store it in <code>clean_supermarkets2.R</code></p>
 <p>Let’s read the log file from <code>spm_lbj_rules.csv</code> and print row three and four.</p>
 <div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1"><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_rules.csv&quot;</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2020-12-22 09:07:36
-## 4    3 2020-12-22 09:07:36
+## 3    2 2021-07-29 15:20:59
+## 4    3 2021-07-29 15:20:59
 ##                                                                expression
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))
@@ -535,7 +543,7 @@ short tutorial on how to write your own logger.</p>
           </div>
         </div>
       </div>
-<a href="sect-rulefiles.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sect-sdmxrules.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="bibliographical-notes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -559,6 +567,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

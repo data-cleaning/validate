@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>The Data Validation Cookbook</title>
   <meta name="description" content="The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
@@ -48,6 +48,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -112,6 +114,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -190,10 +193,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.2</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.3</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>9</b> Comparing data sets</a><ul>
-<li class="chapter" data-level="9.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>9.1</b> Cell counts</a></li>
-<li class="chapter" data-level="9.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>9.2</b> Comparing rule violations</a></li>
-<li class="chapter" data-level="9.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>9.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
+<li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.2</b> Code lists from SDMX registries</a></li>
+<li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.3</b> Derive rules from DSD</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
+<li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
+<li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="bibliographical-notes.html"><a href="bibliographical-notes.html"><i class="fa fa-check"></i>Bibliographical notes</a></li>
 <li class="divider"></li>
@@ -218,11 +226,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="header">
 <h1 class="title">The Data Validation Cookbook</h1>
-<p class="author"><em>Mark P.J. van der Loo</em></p>
+<p class="author" style="margin: 0.5em 0 -0.5em 0;"><em>Mark P.J. van der Loo</em></p>
 <address class="author_afil">
-<a href="https://www.cbs.nl">Statistics Netherlands</a><br><a class="author_email" href="mailto:#"><a href="mailto:mpj.vanderloo@cbs.nl" class="email">mpj.vanderloo@cbs.nl</a></a>
+<a href="https://www.cbs.nl">Statistics Netherlands</a><br>
+<a class="author_email" href="mailto:#"><a href="mailto:mpj.vanderloo@cbs.nl" class="email">mpj.vanderloo@cbs.nl</a></a>
 </address>
-<p class="date"><em>2020-12-22 | validate version 1.0.1</em></p>
+<p class="date" style="margin-top: 1.5em;"><em>2021-07-29 | validate version 1.0.4</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
@@ -230,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a href="https://cran.r-project.org/package=validate">validate</a> package for
 <a href="https://www.r-project.org">R</a>.</p>
 <p>This version of the book was rendered with <code>validate</code> version
-1.0.1. The latest release of <code>validate</code> can be installed
+1.0.4. The latest release of <code>validate</code> can be installed
 from <a href="https://cran.r-project.org">CRAN</a> as follows.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;validate&quot;</span>)</a></code></pre></div>
 <p>The purposes of this book include demonstrating the main tools and workflows of
@@ -243,7 +252,7 @@ part of the book and discuss many different ways to check your data by example.
 Chapter <a href="sect-indicators.html#sect:indicators">6</a> is devoted to deriving plausibility measures
 with the <code>validate</code> package. Chapters <a href="sect-work.html#sect:work">7</a> and
 <a href="sect-rulefiles.html#sect:rulefiles">8</a> treat working with validate in-depth. Chapter
-<a href="sect-comparing.html#sect:comparing">9</a> discusses how to compare two or more versions of a
+<a href="sect-comparing.html#sect:comparing">10</a> discusses how to compare two or more versions of a
 dataset, possibly automated through the
 <a href="https://cran.r-project.org/package=lumberjack">lumberjack</a> package. The
 section with Biblographical Notes lists some references and points out some
@@ -264,8 +273,8 @@ R. <em>Journal of Statistical Software</em>, Accepted for publication.
 </blockquote>
 <p>To cite this cookbook, please use the following citation.</p>
 <blockquote>
-<p>MPJ van der Loo (2020) <em>The Data Validation Cookbook</em>
-version 1.0.1. <a href="http://data-cleaning.github.io/validate/">https://data-cleaning.github.io/validate</a></p>
+<p>MPJ van der Loo (2021) <em>The Data Validation Cookbook</em>
+version 1.0.4. <a href="http://data-cleaning.github.io/validate/">https://data-cleaning.github.io/validate</a></p>
 </blockquote>
 </div>
 <div id="acknowledgements" class="section level2 unnumbered">
@@ -286,7 +295,6 @@ e-mail address that is listed with the package.</p>
 </div>
 <div id="license" class="section level2 unnumbered">
 <h2>License</h2>
-<p><a href="https://creativecommons.org/licenses/by/4.0/"><img src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" alt="Creative Commons License" /></a></p>
 <p>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution BY-NC 4.0 International License</a>.</p>
 
 </div>
@@ -320,6 +328,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
