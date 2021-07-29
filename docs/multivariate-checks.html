@@ -285,10 +285,10 @@ balances must be met.</p>
 ## 1   V1    60     39    14   7 FALSE   FALSE
 ## 2   V2    60     19     4  37 FALSE   FALSE
 ## 3   V3    60     49     6   5 FALSE   FALSE
-##                                      expression
-## 1 abs(total.rev - profit - total.costs) &lt; 1e-08
-## 2 abs(turnover + other.rev - total.rev) &lt; 1e-08
-## 3           (profit - 0.6 * total.rev) &lt;= 1e-08</code></pre>
+##                                       expression
+## 1 abs(total.rev - profit - total.costs) &lt;= 1e-08
+## 2 abs(turnover + other.rev - total.rev) &lt;= 1e-08
+## 3              profit - 0.6 * total.rev &lt;= 1e-08</code></pre>
 <p>Here, the first rule checks a balance between income, costs, and profit; the
 second rule checks a sub-balance, and the third rule is a plausibility check
 where we do not expect profit to exceed 60 per cent of the total revenue.</p>
@@ -304,10 +304,10 @@ controlled for linear equalities and inequalities using respectively
 ## 1   V1    60     39    14   7 FALSE   FALSE
 ## 2   V2    60     19     4  37 FALSE   FALSE
 ## 3   V3    60     49     6   5 FALSE   FALSE
-##                                     expression
-## 1 abs(total.rev - profit - total.costs) &lt; 0.01
-## 2 abs(turnover + other.rev - total.rev) &lt; 0.01
-## 3                    profit &lt;= 0.6 * total.rev</code></pre>
+##                                      expression
+## 1 abs(total.rev - profit - total.costs) &lt;= 0.01
+## 2 abs(turnover + other.rev - total.rev) &lt;= 0.01
+## 3                     profit &lt;= 0.6 * total.rev</code></pre>
 <p>See <a href="sect-work.html#sect:options">7.8</a> for more information on setting and resetting options.</p>
 </div>
 <div id="conditional-restrictions" class="section level2">
@@ -318,8 +318,10 @@ costs.</p>
 <div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="cf">if</span> (staff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) staff.costs <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb127-2" title="2">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
 <a class="sourceLine" id="cb127-3" title="3"><span class="kw">summary</span>(out)</a></code></pre></div>
-<pre><code>##   name items passes fails nNA error warning                         expression
-## 1   V1    60     50     0  10 FALSE   FALSE !(staff &gt;= 1) | (staff.costs &gt;= 1)</code></pre>
+<pre><code>##   name items passes fails nNA error warning
+## 1   V1    60     50     0  10 FALSE   FALSE
+##                                         expression
+## 1 staff - 1 &lt; -1e-08 | (staff.costs - 1 &gt;= -1e-08)</code></pre>
 <p>Here, combinations where there is a positive number of staff must be
 accompanied with a positive staff cost.</p>
 <p>Validate translates the rule <code>if ( P ) Q</code> to an expression of the form <code>!P | Q</code>. The reason for this is that the latter can be evaluated faster
@@ -373,7 +375,7 @@ patterns.</p>
 <p>The records containing forbidden keys can be selected as follows.</p>
 <div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="kw">violating</span>(transactions, out)</a></code></pre></div>
 <pre><code>##   sender receiver value
-## 1    S21      FG0    96</code></pre>
+## 1    S21      FG0    94</code></pre>
 <p>It is also possible to use regular expression patterns, by labeling the
 forbidden key set with <code>rx()</code>. If no labeling is used, the key sets are
 interpreted as string literals.</p>

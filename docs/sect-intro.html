@@ -271,8 +271,8 @@ called <code>out</code>.</p>
 <p>The easiest way to check the results is with <code>summary()</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">summary</span>(out)</a></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning              expression
-## 1   V1    50     50     0   0 FALSE   FALSE   (speed - 0) &gt;= -1e-08
-## 2   V2    50     50     0   0 FALSE   FALSE    (dist - 0) &gt;= -1e-08
+## 1   V1    50     50     0   0 FALSE   FALSE     speed - 0 &gt;= -1e-08
+## 2   V2    50     50     0   0 FALSE   FALSE      dist - 0 &gt;= -1e-08
 ## 3   V3    50     48     2   0 FALSE   FALSE       speed/dist &lt;= 1.5
 ## 4   V4     1      1     0   0 FALSE   FALSE cor(speed, dist) &gt;= 0.2</code></pre>
 <p>This returns a data frame with one line of information for each rule <code>V1</code>,
@@ -302,10 +302,10 @@ not be interpreted record by record.</p>
 <p>We can extract all individual resuls results using for example <code>as.data.frame</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">df_out &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(out)</a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="kw">head</span>(df_out, <span class="dv">3</span>)</a></code></pre></div>
-<pre><code>##   name value            expression
-## 1   V1  TRUE (speed - 0) &gt;= -1e-08
-## 2   V1  TRUE (speed - 0) &gt;= -1e-08
-## 3   V1  TRUE (speed - 0) &gt;= -1e-08</code></pre>
+<pre><code>##   name value          expression
+## 1   V1  TRUE speed - 0 &gt;= -1e-08
+## 2   V1  TRUE speed - 0 &gt;= -1e-08
+## 3   V1  TRUE speed - 0 &gt;= -1e-08</code></pre>
 <p>We see that in record <code>1</code>, rule <code>V1</code>, was satisfied (the result is <code>TRUE</code>), and
 that validate left a bit of slack when executing the rule, to avoid false
 negatives caused machine rounding issues.</p>
