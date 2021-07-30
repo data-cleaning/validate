@@ -2181,6 +2181,16 @@ there are two ways to use SDMX codelists. The first is by referring to a
 specific code list for a specific variable in an SDMX registry. The second way
 is to derive a rule set from a DSD file that can be retrieved from a registry.
 
+Below we discuss the follwing functions.
+
+|function            | what it does                                     |
+|--------------------|--------------------------------------------------|
+|`sdmx_endpoint`     | retrieve URL for SDMX endpoint                   |
+|`sdmx_codelist`     | retrieve sdmx codelist                           |
+|`estat_codelist`    | retrieve codelist from Eurostat SDMX registry    |
+|`global_codelist`   | retrieve codelist from Global SDMX registry      |
+|`validator_from_dsd`| derive validation rules from DSD in SDMX registry|
+
 
 ## Code lists from SDMX registries
 
@@ -2196,6 +2206,17 @@ SDMX registries. To obtain a code list, users must specify the following.
 - version: the code list version.
 
 
+Some API endpoints are stored with the package. The function `sdmx_endpoint()` 
+returns endpoint URLs for several SDMX registries. Use
+```{r,eval=FALSE}
+sdmx_endpoint()
+```
+to get a list of valid endpoints. As an example, to retrieve the endpoint for the global
+SDMX registry, use the following.
+```{r, eval=TRUE}
+sdmx_endpoint(registry="global")
+```
+
 In the following rule we retrieven the codelist of economic activiteis
 from the [global SDMX registry](https://registry.sdmx.org/ws/public/sdmxapi).
 
@@ -2203,17 +2224,44 @@ from the [global SDMX registry](https://registry.sdmx.org/ws/public/sdmxapi).
 codelist <- sdmx_codelist(
   endpoint = "https://registry.sdmx.org/ws/public/sdmxapi/rest/"
   , agency_id = "ESTAT"
-  , resource_id = "CL_ACTIVITY" 
+  , resource_id = "CL_ACTIVITY")
 
 head(codelist)
 [1] "_T"  "_X"  "_Z"  "A"   "A_B" "A01"
+```
+
+Equivalently, you could use `global_codelist()` to avoid specifying the API endpoint. The output
+can be used in a rule.
+```{r, eval=FALSE}
+Activity %in% global_codelist(agency_id="ESTAT", resource_id="CL_ACTIVITY")
+```
+
+Since downloading codelists can take some time, any function that accesses online
+SDMX registries will store the download in memory for the duration of the R session.
+
+There is also a `estat_codelist()` function for downloading codelists from 
+the Eurostat SDMX registry.
+
+
+
+
+## Derive rules from DSD
+
+The functions described in the previous subsection allow you to check
+variables against a particular SDMX code list. It is also possible to
+download a complete Data Structure Definition and generate all checks
+implied by the DSD. 
+
+```{r, eval=FALSE}
+rules <- validator_from_dsd(endpoint = endpoint("ESTAT")
+   , agency_id = "ESTAT", resource_id = "STSALL", version="latest")
+
 ```
 
 
 
 
 
-## Derive rules from DSD
 
 # Comparing data sets {#sect:comparing}
 

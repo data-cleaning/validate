@@ -99,7 +99,7 @@ estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest"){
 #'
 #' @rdname sdmx_codelist
 #' @export
-#'
+#' @family sdmx
 #' @examples
 #' \dontrun{
 #'   global_codelist("CL_AGE") )
@@ -132,15 +132,29 @@ global_codelist <- function(resource_id, agency_id = "SDMX", version="latest"){
 
 
 
-# list of endpoints
-# if 'registry' is missing, the list of supported endpoints is returned
-endpoint <- function(registry=NULL){
+#' Get URL for known SDMX registry endpoints
+#'
+#' Convenience function storing URLs for SDMX endpoints. 
+#'
+#' @param registry \code{[character]} name of the endpoint (case insensitve). If \code{registry}
+#' is \code{NULL} (the default), the list of supported endpoints is returned.
+#'
+#' @family sdmx
+#'
+#' @examples
+#' sdmx_endpoint()
+#' sdmx_endpoint("ESTAT")
+#' sdmx_endpoing("global")
+#'
+#' @export
+sdmx_endpoint <- function(registry=NULL){
   ENDPOINTS <- c(
       "ESTAT"  = "https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest" 
     , "GLOBAL" = "https://registry.sdmx.org/ws/public/sdmxapi/rest"
   )
 
   if (is.null(registry)) return(ENDPOINTS)
+  registry <- toupper(registry)
 
   out <- ENDPOINTS[registry] 
   if (is.na(out)) stop(sprintf("Unrecognized registry, use one of %s"
@@ -153,13 +167,17 @@ endpoint <- function(registry=NULL){
 
 #' Extract a rule set from an SDMX DSD file
 #'
+#' Data Structure Definitions contain references to code lists.
+#' This function extracts those references and generates rules
+#' that check data against code lists in an SDMX registry.
+#'
 #' @param endpoint \code{[character]} REST API endpoint of the SDMX registry
 #' @param agency_id \code{[character]} Agency ID (e.g. \code{"ESTAT"})
 #' @param resource_id \code{[character]} Resource ID (e.g. \code{"CL_ACTIVITY"})
 #' @param version  \code{[character]} Version of the code list.
 #'
 #' @return An object of class \code{\link{validator}}.
-#'
+#' @family sdmx
 #' @export
 validator_from_dsd <- function(endpoint, agency_id, resource_id, version="latest"){
   dsd <- download_sdmx(endpoint, "datastructure", agency_id, resource_id, version)

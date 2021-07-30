@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Indicators | The Data Validation Cookbook</title>
-  <meta name="description" content="Chapter 6 Indicators | The Data Validation Cookbook" />
+  <title>Chapter 9 Rules from SDMX | The Data Validation Cookbook</title>
+  <meta name="description" content="Chapter 9 Rules from SDMX | The Data Validation Cookbook" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Indicators | The Data Validation Cookbook" />
+  <meta property="og:title" content="Chapter 9 Rules from SDMX | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Indicators | The Data Validation Cookbook" />
+  <meta name="twitter:title" content="Chapter 9 Rules from SDMX | The Data Validation Cookbook" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="sect-statisticalchecks.html"/>
-<link rel="next" href="sect-work.html"/>
+<link rel="prev" href="sect-rulefiles.html"/>
+<link rel="next" href="sect-comparing.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -225,91 +225,111 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sect:indicators" class="section level1">
-<h1><span class="header-section-number">Chapter 6</span> Indicators</h1>
-<p>Until now we have discussed various types of data validation rules: decisions
-that assign True or False values to a data frame. In some cases it is
-convenient to have a continuous value that can then be used in further
-assessing the data.</p>
-<p>A practical example is the so-called <a href="https://ec.europa.eu/eurostat/cros/content/selective-editing-theme_en">selective
-editing</a>
-approach to data cleaning. Here, each record in a data set is assigned a number
-that expresses the risk a record poses for inferring a faulty conclusion.
-Records are then ordered from high risk (records that both have suspicious
-values and large influence on the final result) to low risk (records with
-unsuspected values and little influence on the final result). Records with the
-highest risk are then scrutinized by domain experts.</p>
-<p>In <code>validate</code>, an indicator is a rule that returns an numerical value. Just
-like <code>validator</code> objects are lists of validation rules, <code>indicator</code> objects
-are lists of indicator rules. Indices can be computed by confronting data with
-an <code>indicator</code>, and using <code>add_indices</code>, the computed indices can be added to
-the dataset. You can import, export, select, and combine <code>indicator</code> objects
-in the same way as <code>validator</code> objects.</p>
-<div id="a-first-example" class="section level2">
-<h2><span class="header-section-number">6.1</span> A first example</h2>
-<p>Here is a simple example of the workflow.</p>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb198-2" title="2">ii &lt;-<span class="st"> </span><span class="kw">indicator</span>(</a>
-<a class="sourceLine" id="cb198-3" title="3">    <span class="dt">BMI =</span> (weight<span class="op">/</span><span class="fl">2.2046</span>)<span class="op">/</span>(height<span class="op">*</span><span class="fl">0.0254</span>)<span class="op">^</span><span class="dv">2</span> </a>
-<a class="sourceLine" id="cb198-4" title="4">  , <span class="dt">mh  =</span> <span class="kw">mean</span>(height)</a>
-<a class="sourceLine" id="cb198-5" title="5">  , <span class="dt">mw  =</span> <span class="kw">mean</span>(weight))</a>
-<a class="sourceLine" id="cb198-6" title="6">out &lt;-<span class="st"> </span><span class="kw">confront</span>(women, ii)</a></code></pre></div>
-<p>In the first statement we define an <code>indicator</code> object storing indicator
-expressions. Next, we confront a dataset with these indicators. The result is
-an object of class <code>indication</code>. It prints as follows.</p>
-<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" title="1">out</a></code></pre></div>
-<pre><code>## Object of class &#39;indication&#39;
-## Call:
-##     confront(dat = women, x = ii)
-## 
-## Rules confronted: 3
-##    With missings: 0
-##    Threw warning: 0
-##    Threw errors : 0</code></pre>
-<p>To study the results, the object can be summarized.</p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1"><span class="kw">summary</span>(out)</a></code></pre></div>
-<pre><code>##   name items      min      mean       max nNA error warning
-## 1  BMI    15  22.0967  22.72691  24.03503   0 FALSE   FALSE
-## 2   mh     1  65.0000  65.00000  65.00000   0 FALSE   FALSE
-## 3   mw     1 136.7333 136.73333 136.73333   0 FALSE   FALSE
-##                            expression
-## 1 (weight/2.2046)/(height * 0.0254)^2
-## 2                        mean(height)
-## 3                        mean(weight)</code></pre>
-<p>Observe that the first indicator results in one value per record
-while the second and third indicators (<code>mh</code>, <code>mw</code>) each return a single
-value. The single values are repeated when indicator values are added
-to the data.</p>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="kw">head</span>(<span class="kw">add_indicators</span>(women, out), <span class="dv">3</span>)</a></code></pre></div>
-<pre><code>##   height weight      BMI mh       mw
-## 1     58    115 24.03503 65 136.7333
-## 2     59    117 23.63114 65 136.7333
-## 3     60    120 23.43589 65 136.7333</code></pre>
-<p>The result is a data frame with indicators attached.</p>
-<p>The columns <code>error</code> and <code>warning</code> indicate whether calculation of the
-indicators was problematic. For example because the output of an indicator rule
-is not numeric, or when it uses variables that do not occur in the data. Use
-<code>warnings(out)</code> or <code>errors(out)</code> to obtain the warning and error messages per
-rule.</p>
+<div id="sect:sdmxrules" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Rules from SDMX</h1>
+<div id="sdmx-and-validate" class="section level2">
+<h2><span class="header-section-number">9.1</span> SDMX and <code>validate</code></h2>
+<p>Statistical Data and Metadata eXchange, or SDMX is a standard for storing data
+and the description of its structure, meaning, and content. The standard is
+developed by the <a href="https://sdmx.org">SDMX consortium</a>. It is used, amongst
+others, in the <a href="https://en.wikipedia.org/wiki/Official_statistics">Official Statistics</a> community to
+exchange data in a standardized way.</p>
+<p>A key aspect of SDMX is a standardized way to describe variables, data
+structure (how is it stored), and code lists. This metadata is defined in an
+<em>SDMX registry</em> where data producers can download or query the necessary
+metadata. Alternatively, metadata is distributed in a so-called Data Structure
+Definition (DSD) file, which is usually in
+<a href="https://en.wikipedia.org/wiki/XML">XML</a> format.</p>
+<p>For data validation, some aspects of the metadata are of interest. In
+particular, code lists are interesting objects to test against. In validate
+there are two ways to use SDMX codelists. The first is by referring to a
+specific code list for a specific variable in an SDMX registry. The second way
+is to derive a rule set from a DSD file that can be retrieved from a registry.</p>
+<p>Below we discuss the follwing functions.</p>
+<table>
+<thead>
+<tr class="header">
+<th>function</th>
+<th>what it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sdmx_endpoint</code></td>
+<td>retrieve URL for SDMX endpoint</td>
+</tr>
+<tr class="even">
+<td><code>sdmx_codelist</code></td>
+<td>retrieve sdmx codelist</td>
+</tr>
+<tr class="odd">
+<td><code>estat_codelist</code></td>
+<td>retrieve codelist from Eurostat SDMX registry</td>
+</tr>
+<tr class="even">
+<td><code>global_codelist</code></td>
+<td>retrieve codelist from Global SDMX registry</td>
+</tr>
+<tr class="odd">
+<td><code>validator_from_dsd</code></td>
+<td>derive validation rules from DSD in SDMX registry</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="getting-indicator-values" class="section level2">
-<h2><span class="header-section-number">6.2</span> Getting indicator values</h2>
-<p>Values can be obtained with the <code>values</code> function, or by converting to a
-<code>data.frame</code>. In this example we add a unique identifier (this is optional) to
-make it easier to identify the results with data afterwards.</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" title="1">women<span class="op">$</span>id &lt;-<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>]</a></code></pre></div>
-<p>Compute indicators and convert to <code>data.frame</code>.</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(women, ii,<span class="dt">key=</span><span class="st">&quot;id&quot;</span>)</a>
-<a class="sourceLine" id="cb206-2" title="2"><span class="kw">tail</span>( <span class="kw">as.data.frame</span>(out) )</a></code></pre></div>
-<pre><code>##      id name     value                          expression
-## 12    l  BMI  22.15113 (weight/2.2046)/(height * 0.0254)^2
-## 13    m  BMI  22.09670 (weight/2.2046)/(height * 0.0254)^2
-## 14    n  BMI  22.17600 (weight/2.2046)/(height * 0.0254)^2
-## 15    o  BMI  22.24240 (weight/2.2046)/(height * 0.0254)^2
-## 16 &lt;NA&gt;   mh  65.00000                        mean(height)
-## 17 &lt;NA&gt;   mw 136.73333                        mean(weight)</code></pre>
-<p>Observe that there is no key for indicators <code>mh</code> and <code>mw</code> since these are
-constructed from multiple records.</p>
+<div id="sdmx-and-api-locations" class="section level2">
+<h2><span class="header-section-number">9.2</span> SDMX and API locations</h2>
+<p>SDMX metadata is typically exposed through a standardized REST API.
+To query an SDMX registry, one needs to supply at least the following
+information:</p>
+<ul>
+<li>The registry’s API entry point. This is the base URL for the online registry.
+You can specify it literally, or use one of the helper functions that
+are aware of certan known SDMX registries.</li>
+<li>Agency ID: the ID of the agency that responsible for the code list</li>
+<li>Resource IDL the name of the SDMX resource. This is usually the name of
+a type of statistic, like STS (short term statistics)</li>
+<li>version: the code list version.</li>
+</ul>
+<p>Some API endpoints are stored with the package. The function <code>sdmx_endpoint()</code>
+returns endpoint URLs for several SDMX registries. Use</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1"><span class="kw">sdmx_endpoint</span>()</a></code></pre></div>
+<p>to get a list of valid endpoints. As an example, to retrieve the endpoint for the global
+SDMX registry, use the following.</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1"><span class="kw">sdmx_endpoint</span>(<span class="dt">registry=</span><span class="st">&quot;global&quot;</span>)</a></code></pre></div>
+<pre><code>##                                             GLOBAL 
+## &quot;https://registry.sdmx.org/ws/public/sdmxapi/rest&quot;</code></pre>
+</div>
+<div id="code-lists-from-sdmx-registries" class="section level2">
+<h2><span class="header-section-number">9.3</span> Code lists from SDMX registries</h2>
+<p>Code lists can be retrieved on-the-fly from one of the online
+SDMX registries. In the following rule we retrieven the codelist of economic activiteis
+from the <a href="https://registry.sdmx.org/ws/public/sdmxapi">global SDMX registry</a>.</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1">codelist &lt;-<span class="st"> </span><span class="kw">sdmx_codelist</span>(</a>
+<a class="sourceLine" id="cb269-2" title="2">  <span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;global&quot;</span>)</a>
+<a class="sourceLine" id="cb269-3" title="3">  , <span class="dt">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span></a>
+<a class="sourceLine" id="cb269-4" title="4">  , <span class="dt">resource_id =</span> <span class="st">&quot;CL_ACTIVITY&quot;</span>)</a>
+<a class="sourceLine" id="cb269-5" title="5"></a>
+<a class="sourceLine" id="cb269-6" title="6"><span class="kw">head</span>(codelist)</a>
+<a class="sourceLine" id="cb269-7" title="7">[<span class="dv">1</span>] <span class="st">&quot;_T&quot;</span>  <span class="st">&quot;_X&quot;</span>  <span class="st">&quot;_Z&quot;</span>  <span class="st">&quot;A&quot;</span>   <span class="st">&quot;A_B&quot;</span> <span class="st">&quot;A01&quot;</span></a></code></pre></div>
+<p>Equivalently, and as a convenience, you could use <code>global_codelist()</code> to avoid
+specifying the API endpoint explicitly. The output can be used in a rule.</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" title="1">Activity <span class="op">%in%</span><span class="st"> </span><span class="kw">global_codelist</span>(<span class="dt">agency_id=</span><span class="st">&quot;ESTAT&quot;</span>, <span class="dt">resource_id=</span><span class="st">&quot;CL_ACTIVITY&quot;</span>)</a></code></pre></div>
+<p>Since downloading codelists can take some time, any function that accesses online
+SDMX registries will store the download in memory for the duration of the R session.</p>
+<p>There is also a <code>estat_codelist()</code> function for downloading codelists from
+the Eurostat SDMX registry.</p>
+</div>
+<div id="derive-rules-from-dsd" class="section level2">
+<h2><span class="header-section-number">9.4</span> Derive rules from DSD</h2>
+<p>The functions described in the previous subsection allow you to check
+variables against a particular SDMX code list. It is also possible to
+download a complete Data Structure Definition and generate all checks
+implied by the DSD.</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator_from_dsd</span>(<span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;ESTAT&quot;</span>)</a>
+<a class="sourceLine" id="cb271-2" title="2">   , <span class="dt">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span>, <span class="dt">resource_id =</span> <span class="st">&quot;STSALL&quot;</span>, <span class="dt">version=</span><span class="st">&quot;latest&quot;</span>)</a></code></pre></div>
+<p>The <code>validator_from_dsd</code> function adds relevant metadata such as a
+rule name, the origin of the rule and a short description.</p>
 
 </div>
 </div>
@@ -318,8 +338,8 @@ constructed from multiple records.</p>
           </div>
         </div>
       </div>
-<a href="sect-statisticalchecks.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sect-work.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sect-rulefiles.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sect-comparing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
