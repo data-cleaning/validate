@@ -1,0 +1,118 @@
+# Rules from SDMX {#sect:sdmxrules}
+
+
+```{r, include=FALSE}
+source("chunk_opts.R")
+library(validate)
+```
+
+## SDMX and `validate`
+
+Statistical Data and Metadata eXchange, or SDMX is a standard for storing data
+and the description of its structure, meaning, and content. The standard is
+developed by the [SDMX consortium](https://sdmx.org). It is used, amongst
+others, in the [Official Statistics](https://en.wikipedia.org/wiki/Official_statistics) community to
+exchange data in a standardized way.
+
+A key aspect of SDMX is a standardized way to describe variables, data
+structure (how is it stored), and code lists. This metadata is defined in an
+_SDMX registry_ where data producers can download or query the necessary
+metadata. Alternatively, metadata is distributed in a so-called Data Structure
+Definition (DSD) file, which is usually in
+[XML](https://en.wikipedia.org/wiki/XML) format.
+
+
+For data validation, some aspects of the metadata are of interest. In
+particular, code lists are interesting objects to test against.  In validate
+there are two ways to use SDMX codelists. The first is by referring to a
+specific code list for a specific variable in an SDMX registry. The second way
+is to derive a rule set from a DSD file that can be retrieved from a registry.
+
+Below we discuss the follwing functions.
+
+|function            | what it does                                     |
+|--------------------|--------------------------------------------------|
+|`sdmx_endpoint`     | retrieve URL for SDMX endpoint                   |
+|`sdmx_codelist`     | retrieve sdmx codelist                           |
+|`estat_codelist`    | retrieve codelist from Eurostat SDMX registry    |
+|`global_codelist`   | retrieve codelist from Global SDMX registry      |
+|`validator_from_dsd`| derive validation rules from DSD in SDMX registry|
+
+
+## SDMX and API locations
+
+SDMX metadata is typically exposed through a standardized REST API.
+To query an SDMX registry, one needs to supply at least the following
+information:
+
+- The registry's API entry point. This is the base URL for the online registry.
+  You can specify it literally, or use one of the helper functions that 
+  are aware of certan known SDMX registries.
+- Agency ID: the ID of the agency that responsible for the code list
+- Resource IDL the name of the SDMX resource. This is usually the name of 
+  a type of statistic, like STS (short term statistics)
+- version: the code list version.
+
+
+Some API endpoints are stored with the package. The function `sdmx_endpoint()` 
+returns endpoint URLs for several SDMX registries. Use
+```{r,eval=FALSE}
+sdmx_endpoint()
+```
+to get a list of valid endpoints. As an example, to retrieve the endpoint for the global
+SDMX registry, use the following.
+```{r, eval=TRUE}
+sdmx_endpoint(registry="global")
+```
+
+
+## Code lists from SDMX registries
+
+Code lists can be retrieved on-the-fly from one of the online
+SDMX registries. In the following rule we retrieven the codelist of economic activiteis
+from the [global SDMX registry](https://registry.sdmx.org/ws/public/sdmxapi).
+
+```{r, eval=FALSE}
+codelist <- sdmx_codelist(
+  endpoint = sdmx_endpoint("global")
+  , agency_id = "ESTAT"
+  , resource_id = "CL_ACTIVITY")
+
+head(codelist)
+[1] "_T"  "_X"  "_Z"  "A"   "A_B" "A01"
+```
+
+Equivalently, and as a convenience, you could use `global_codelist()` to avoid
+specifying the API endpoint explicitly. The output can be used in a rule.
+```{r, eval=FALSE}
+Activity %in% global_codelist(agency_id="ESTAT", resource_id="CL_ACTIVITY")
+```
+
+Since downloading codelists can take some time, any function that accesses online
+SDMX registries will store the download in memory for the duration of the R session.
+
+There is also a `estat_codelist()` function for downloading codelists from 
+the Eurostat SDMX registry.
+
+
+
+
+## Derive rules from DSD
+
+The functions described in the previous subsection allow you to check
+variables against a particular SDMX code list. It is also possible to
+download a complete Data Structure Definition and generate all checks
+implied by the DSD. 
+
+```{r, eval=FALSE}
+rules <- validator_from_dsd(endpoint = sdmx_endpoint("ESTAT")
+   , agency_id = "ESTAT", resource_id = "STSALL", version="latest")
+
+```
+
+The `validator_from_dsd` function adds relevant metadata such as a
+rule name, the origin of the rule and a short description.
+
+
+
+
