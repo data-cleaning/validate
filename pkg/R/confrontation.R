@@ -635,7 +635,7 @@ setMethod("names", "confrontation", function(x){
 })
 
 
-#' Plot validaiton results
+#' Plot validation results
 #' 
 #' Creates a barplot of validation result. For each validation rule, a stacked bar
 #' is plotted with percentages of failing, passing, and missing results.
@@ -669,7 +669,15 @@ setMethod("plot","validation", function(x, y
                     , xlab = NULL
                     , ...)
 {
+  if(length(errors(x)>=1)){
+    msgf("%d rules gave a runtime error on execution so those results are not plotted. See ?errors"
+        , length(errors(x)))
+  }
   m <- aggregate(x, by="rule")
+  if (is.null(m)){
+    msgf("Noting to plot")
+    return(NULL)
+  }
   plot_validation(as.matrix(m[, c("nfail","npass","nNA"), drop=FALSE]) 
                  , fill      = fill
                  , col       = col

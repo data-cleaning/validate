@@ -217,6 +217,7 @@ setMethod("plot","validator"
     , show_legend = TRUE
     , ...
     ){
+
   
   if (show_legend){  
     oldpar <- par(xpd=TRUE, mar=c(7,4,3,3))

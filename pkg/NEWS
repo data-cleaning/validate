@@ -1,6 +1,9 @@
 version 1.1.0
 - Added support for SDMX codelists from SDMX REST APIs, see
   'sdmx_codelist', 'estat_codelist', 'global_codelist'.
+- plot-validation method now prints a message to console when one or more
+  rules yielded an error so it's explicit that not all data can be plotted.
+  (Thanks to John Kennedy for pointing this out).
 - Fix: 'aggregate' would fail for validations based on empty data frames (thanks
   to Matthials Gomolka for reporting).
 - Fix: empty names in a data frame passed as '.data' to 'validator' would

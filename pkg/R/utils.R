@@ -4,9 +4,13 @@ setNames <- function(x,nm){
   x
 }
 
-# a reasonable warning
+# a reasonable warning and message
 warnf <- function(fmt,...){
   warning(sprintf(fmt,...),call.=FALSE)
+}
+
+msgf <- function(fmt, ...){
+  message(sprintf(fmt, ...))
 }
 
 

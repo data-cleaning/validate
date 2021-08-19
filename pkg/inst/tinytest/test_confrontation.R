@@ -57,6 +57,11 @@ Z <- plot(v)
 expect_equal(ncol(Z), length(v))
 expect_equal(nrow(Z), length(variables(v)))
 
+v <- validator(x>0,z>0)
+cf <- confront(data.frame(z=1), v)
+expect_message(plot(cf), pattern = "runtime")
+
+
 
 ## indication object contents ----
 ind <- indicator(mean(height),sd(weight), sum(foo))
