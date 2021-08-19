@@ -43,6 +43,9 @@ revdep: doc pkg/vignettes/jss3483.pdf
 	R -s -e "out <- tools::check_packages_in_dir('revcheck',reverse=list(which='most'),Ncpus=3); print(summary(out)); saveRDS(out, file='revcheck/output.RDS')"
 
 
+urlcheck:
+	R -e "urlchecker::url_check('./pkg')"
+
 pkg/vignettes/jss3483.pdf:
 	$(MAKE) -C jsspaper
 	cp jsspaper/jss3483.pdf pkg/vignettes/jss3483.pdf

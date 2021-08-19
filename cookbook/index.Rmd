@@ -95,10 +95,6 @@ To cite this cookbook, please use the following citation.
 This work was partially funded by European Grant Agreement 88287--NL-VALIDATION
 of the European Statistcal System.
 
-I am greatly indebted by [dr Olav ten Bosch](https://github.com/donthebike) for
-carefully reviewing the manuscript of version 1.0.1. Any mistakes are of course
-entirely the author's fault. 
-
 
 ## Contributing {-}
 

@@ -198,6 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
 <li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
 <li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
+<li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
 <li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
@@ -227,6 +228,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="sect:sdmxrules" class="section level1">
 <h1><span class="header-section-number">Chapter 9</span> Rules from SDMX</h1>
+<p><strong>Note</strong> This functionality is available for <code>validate</code> versions <code>1.1.0</code> or higher.</p>
+<p>In this Chapter we first demonstrate how to use SDMX with the <code>validate</code>
+package. In <a href="sect-sdmxrules.html#moresdmx">9.5</a> we provide a bit more general information on the
+SDMX landscape, registries, and available APIs.</p>
 <div id="sdmx-and-validate" class="section level2">
 <h2><span class="header-section-number">9.1</span> SDMX and <code>validate</code></h2>
 <p>Statistical Data and Metadata eXchange, or SDMX is a standard for storing data
@@ -303,7 +308,7 @@ SDMX registry, use the following.</p>
 <div id="code-lists-from-sdmx-registries" class="section level2">
 <h2><span class="header-section-number">9.3</span> Code lists from SDMX registries</h2>
 <p>Code lists can be retrieved on-the-fly from one of the online
-SDMX registries. In the following rule we retrieven the codelist of economic activiteis
+SDMX registries. In the following rule we retrieve the codelist of economic activiteis
 from the <a href="https://registry.sdmx.org/ws/public/sdmxapi">global SDMX registry</a>.</p>
 <div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1">codelist &lt;-<span class="st"> </span><span class="kw">sdmx_codelist</span>(</a>
 <a class="sourceLine" id="cb269-2" title="2">  <span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;global&quot;</span>)</a>
@@ -327,9 +332,100 @@ variables against a particular SDMX code list. It is also possible to
 download a complete Data Structure Definition and generate all checks
 implied by the DSD.</p>
 <div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator_from_dsd</span>(<span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;ESTAT&quot;</span>)</a>
-<a class="sourceLine" id="cb271-2" title="2">   , <span class="dt">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span>, <span class="dt">resource_id =</span> <span class="st">&quot;STSALL&quot;</span>, <span class="dt">version=</span><span class="st">&quot;latest&quot;</span>)</a></code></pre></div>
-<p>The <code>validator_from_dsd</code> function adds relevant metadata such as a
-rule name, the origin of the rule and a short description.</p>
+<a class="sourceLine" id="cb271-2" title="2">   , <span class="dt">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span>, <span class="dt">resource_id =</span> <span class="st">&quot;STSALL&quot;</span>, <span class="dt">version=</span><span class="st">&quot;latest&quot;</span>)</a>
+<a class="sourceLine" id="cb271-3" title="3"></a>
+<a class="sourceLine" id="cb271-4" title="4"><span class="kw">length</span>(rules)</a>
+<a class="sourceLine" id="cb271-5" title="5">[<span class="dv">1</span>] <span class="dv">13</span></a>
+<a class="sourceLine" id="cb271-6" title="6">rules[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb271-7" title="7">Object of class <span class="st">&#39;validator&#39;</span> with <span class="dv">1</span> elements<span class="op">:</span></a>
+<a class="sourceLine" id="cb271-8" title="8"><span class="st"> </span>CL_FREQ<span class="op">:</span><span class="st"> </span>FREQ <span class="op">%in%</span><span class="st"> </span><span class="kw">sdmx_codelist</span>(<span class="dt">endpoint =</span> <span class="st">&quot;https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest&quot;</span>, <span class="dt">agency_id =</span> <span class="st">&quot;SDMX&quot;</span>, <span class="dt">resource_id =</span> <span class="st">&quot;CL_FREQ&quot;</span>, <span class="dt">version =</span> <span class="st">&quot;2.0&quot;</span>)</a>
+<a class="sourceLine" id="cb271-9" title="9">Rules are evaluated using locally defined options</a></code></pre></div>
+<p>There are 13 rules in total. For brevity, we only sho the first rule here.
+Observe that the first rule checks the variable <code>CL_FREQ</code> against a code list
+that is retrieved from the global SDMX registry. A demonstration of the fact
+that in a DSD does not have to be fully self-contained and can refer to
+metadata in other standard registries. If a data set is checked against this
+rule, <code>validate</code> will download the codelist from the global registry and
+compare each value in column <code>CL_FREQ</code> against the codelist.</p>
+<p>Note that the <code>validator_from_dsd</code> function adds relevant metadata such as a
+rule name, the origin of the rule and a short description. Try</p>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">rule[[<span class="dv">1</span>]]</a></code></pre></div>
+<p>to see all information.</p>
+</div>
+<div id="moresdmx" class="section level2">
+<h2><span class="header-section-number">9.5</span> More on <code>SDMX</code></h2>
+<p>The Statistical Data and Metadata eXchange (<a href="https://sdmx.org">SDMX</a>) standard
+is an ISO standard designed to facilitate the exchange or dissemination of
+<a href="https://en.wikipedia.org/wiki/Official_statistics#:~:text=Official%20statistics%20are%20statistics%20published,organizations%20as%20a%20public%20good.">Official
+Statistics</a>.
+At the core it has a logical information model describing the key
+characteristics of statistical data and metadata, which can be applied to any
+statistical domain. Various data formats have been defined based on this
+information model, such as SDMX-<a href="https://tools.ietf.org/html/rfc4180">CSV</a>,
+SDMX-<a href="https://www.json.org/json-en.html">JSON</a>), and - by far the most widely
+known - SDMX-ML (data in <a href="https://www.w3.org/XML/">XML</a>). A key aspect of the
+SDMX standard is that one defines the metadata, including data structure,
+variables, and code lists beforehand in order to describe what data is shared
+or published. This metadata is defined in an <em>SDMX registry</em> where data
+producers can download or query the necessary metadata. Alternatively metadata
+is distributed in a so-called <em>Data Structure Definition</em> (DSD) file, which is
+usually an XML format. Both types of modes should result in exactly the same
+metadata agreements.</p>
+<p>SDMX registries can be accessed through a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST
+API</a>, using a
+standardized set of parameters. We can distinguish between registries
+that provide metadata and registries that provide the actual data.
+For the validate package, the metadata registries are of interest. Some of
+widely used metada registries include the following.</p>
+<ul>
+<li><a href="https://registry.sdmx.org/">Global SDMX Registry</a>: for global metadata,
+hosted by the SDMX consortium. The central place for ESS-wide metadata. This
+registry hosts important statistical metadata such as for CPI/HICP, National
+Accounts (NA), Environmental accounting (SEEA), BOP, GFS, FDI and many more.
+Unfortunately not all ESS metadata is present in this registry.</li>
+<li><a href="https://webgate.ec.europa.eu/sdmxregistry/">Eurostat SDMX Registry</a>: for
+Eurostat-wide metadata, hosted by Eurostat. This registry contains statistical
+metadata for all other official statistics in the European Statistical System
+(ESS). Access is offered via SDMX 2.1 REST API.</li>
+<li><a href="https://sdmxcentral.imf.org/overview.html">IMF SDMX Central</a>: Registry by
+the IMF.</li>
+<li><a href="https://sdmx.data.unicef.org/">UNICEF</a>: Registry by UNICEF</li>
+</ul>
+<p>Organisations that at the time of writing (summer 2021) actively offer
+automated access to their data (not just metadata) via an SDMX API include
+the European Central Bank (<a href="https://sdw-wsrest.ecb.europa.eu/help/">ECB</a>),
+the <a href="https://data.oecd.org/api/">OECD</a> (in
+<a href="https://data.oecd.org/api/sdmx-json-documentation/">SDMX-JSON</a> or
+<a href="https://data.oecd.org/api/sdmx-ml-documentation/">SDMX-ML</a> format),
+<a href="https://ec.europa.eu/eurostat/web/sdmx-web-services/rest-sdmx-2.1">Eurostat</a>,
+the International Labour Organisation (<a href="https://www.ilo.org/sdmx/index.html">ILO</a>),
+the UN Food and Agriculture Organization
+(<a href="http://api.data.fao.org/1.0/esb-rest/sdmx/introduction.html">FAO</a>),
+the <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries">Worldbank</a>,
+the Bank for International Settlements
+(<a href="https://www.bis.org/statistics/sdmx_techspec.htm?accordion1=1&amp;m=6%7C346%7C718">BIS</a>),
+and the Italian Office of National Statistics (<a href="https://www.istat.it/it/metodi-e-strumenti/web-service-sdmx">ISTAT</a>).
+The SDMX consortium does not maintain a list of active SDMX endpoints. The
+<a href="https://cran.r-project.org/package=rsdmx">rsdmx R package</a> maintains such a
+list based on an earlier inventory of Data Sources, but at the time of writing
+not all those links appear to be active.</p>
+<p>Ideally, all SDMX providers would have implemented SDMX in a coordinated way so
+that a client looking for SDMX metadata to validate its data before sending
+could query the respective sources using one and the same API. The latest
+version of the REST API is 2.1 which is described very well in the easy to use
+<a href="https://raw.githubusercontent.com/sdmx-twg/sdmx-rest/master/v2_1/ws/rest/docs/rest_cheat_sheet.pdf">SDMX API cheet
+sheet</a>.
+Inspecting the endpoints shows that not all providers implement all same
+resource values. Depending on the provider an organization may decide which
+elements of the API are exposed. For example, the API standard defines methods
+to retrieve code lists from a DSD, but this functionality may or may not be
+offered by an API instance. If it is not offered, this means the client
+software needs to retrieve this metadata via other resource requests or
+alternatively extract them locally from a DSD file. Finally we signal that on
+a technical level the API of the various institutes may differ considerably and
+that not all SDMX services implement the same version of SDMX.</p>
+<p>This means that users should typically familiarize themselves somewhat with the
+specific API they try to access (e.g. from <code>validate</code>).</p>
 
 </div>
 </div>

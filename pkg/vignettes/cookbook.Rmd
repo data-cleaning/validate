@@ -80,10 +80,6 @@ To cite this cookbook, please use the following citation.
 This work was partially funded by European Grant Agreement 88287--NL-VALIDATION
 of the European Statistcal System.
 
-I am greatly indebted by [dr Olav ten Bosch](https://github.com/donthebike) for
-carefully reviewing the manuscript of version 1.0.1. Any mistakes are of course
-entirely the author's fault. 
-
 
 ## Contributing {-}
 
@@ -2227,9 +2223,9 @@ sdmx_endpoint(registry="global")
 
 ## Code lists from SDMX registries
 
-Code lists can be retrieved on-the-fly from one of the online
-SDMX registries. In the following rule we retrieve the codelist of economic activiteis
-from the [global SDMX registry](https://registry.sdmx.org/ws/public/sdmxapi).
+Code lists can be retrieved on-the-fly from one of the online SDMX registries.
+In the following rule we retrieve the codelist of economic activiteis from the
+[global SDMX registry](https://registry.sdmx.org/overview.html).
 
 ```{r, eval=FALSE}
 codelist <- sdmx_codelist(
@@ -2285,7 +2281,7 @@ compare each value in column `CL_FREQ` against the codelist.
 
 Note that the `validator_from_dsd` function adds relevant metadata such as a
 rule name, the origin of the rule and a short description. Try
-```{r}
+```{r, eval=FALSE}
 rule[[1]]
 ```
 to see all information.
@@ -2347,7 +2343,7 @@ the UN Food and Agriculture Organization
 the [Worldbank](https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries),
 the Bank for International Settlements 
 ([BIS](https://www.bis.org/statistics/sdmx_techspec.htm?accordion1=1&m=6%7C346%7C718)),
-and the Italian Office of National Statistics ([ISTAT](https://www.istat.it/it/metodi-e-strumenti/web-service-sdmx)). 
+and the Italian Office of National Statistics (ISTAT).
 The SDMX consortium does not maintain a list of active SDMX endpoints. The
 [rsdmx R package](https://cran.r-project.org/package=rsdmx) maintains such a
 list based on an earlier inventory of Data Sources, but at the time of writing

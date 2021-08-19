@@ -144,7 +144,7 @@ global_codelist <- function(resource_id, agency_id = "SDMX", version="latest"){
 #' @examples
 #' sdmx_endpoint()
 #' sdmx_endpoint("ESTAT")
-#' sdmx_endpoing("global")
+#' sdmx_endpoint("global")
 #'
 #' @export
 sdmx_endpoint <- function(registry=NULL){

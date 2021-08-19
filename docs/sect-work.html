@@ -198,6 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
 <li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
 <li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
+<li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
 <li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
@@ -284,7 +285,7 @@ is returned. This is the validating expression entered by the user, plus some
 ##  label      :  
 ##  description:  
 ##  origin     : command-line 
-##  created    : 2021-07-30 15:17:10
+##  created    : 2021-08-19 14:23:40
 ##  meta       : language&lt;chr&gt;, severity&lt;chr&gt;</code></pre>
 <p>Users never need to manipulate rule objects, but it can be convenient to
 inspect them. As you see, the rules have some automatically created metadata.
@@ -331,14 +332,14 @@ Getting and setting follows the usual recycling rules of R.</p>
 ##  label      :  
 ##  description:  
 ##  origin     : command-line 
-##  created    : 2021-07-30 15:17:10
+##  created    : 2021-08-19 14:23:40
 ##  meta       : language&lt;chr&gt;, severity&lt;chr&gt;</code></pre>
 <p>Or by extracting it to a <code>data.frame</code></p>
 <div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" title="1"><span class="kw">meta</span>(v)</a></code></pre></div>
 <pre><code>##   name label description       origin             created         language
-## 1   V1                   command-line 2021-07-30 15:17:10 validate 1.0.5.2
-## 2   V2                   command-line 2021-07-30 15:17:10 validate 1.0.5.2
-## 3   V3                   command-line 2021-07-30 15:17:10 validate 1.0.5.2
+## 1   V1                   command-line 2021-08-19 14:23:40 validate 1.0.5.2
+## 2   V2                   command-line 2021-08-19 14:23:40 validate 1.0.5.2
+## 3   V3                   command-line 2021-08-19 14:23:40 validate 1.0.5.2
 ##   severity
 ## 1    error
 ## 2    error
