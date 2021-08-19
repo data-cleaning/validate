@@ -124,9 +124,10 @@ expressionset <- setRefClass("expressionset"
   if (is.null(dat[["rule"]])){
     stop("No column called 'rule' found")
   }
-  dat$name <- as.character(dat$name)
+  L <- setNames(vector(mode="list", length=nrow(dat)), dat$name)
+  dat$name  <- extract_names(L)
   dat$label <- as.character(dat$label)
-  dat$rule <- as.character(dat$rule)
+  dat$rule  <- as.character(dat$rule)
   dat$description <- as.character(dat$description)
   for ( i in seq_len(n)){
     R[[i]] <- rule(

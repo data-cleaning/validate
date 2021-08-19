@@ -1,9 +1,11 @@
 version 1.1.0
 - Added support for SDMX codelists from SDMX REST APIs, see
   'sdmx_codelist', 'estat_codelist', 'global_codelist'.
-- Fixed edge case in 'aggregate'. Would fail for validations
-  base on empty data frames (thanks to Matthials Gomolka
-  for reporting).
+- Fix: 'aggregate' would fail for validations based on empty data frames (thanks
+  to Matthials Gomolka for reporting).
+- Fix: empty names in a data frame passed as '.data' to 'validator' would
+  yield empty names in the resulting 'validator' object. (Thanks to Wytze
+  Gelderloos for reporting)
 
 version 1.0.4
 - Added 'rmarkdown' to 'Suggests' as requested by CRAN
