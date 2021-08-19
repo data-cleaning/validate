@@ -717,10 +717,10 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
   aggr <- if ( by == 'rule') colSums else rowSums
   ntot <- if ( by == 'rule') nrow else ncol
   L <- lapply(v, function(y){
-    s <- aggr(y,na.rm=TRUE)
+    s <- if(is.null(dim(y))) 0 else aggr(y,na.rm=TRUE)
     s <- s
-    na <- aggr(is.na(y))
-    N <- ntot(y)
+    na <- if(is.null(dim(y))) 0 else aggr(is.na(y))
+    N <- if (is.null(dim(y))) 0 else ntot(y)
     nfail = N - s - na
     out <- data.frame( 
       npass = s
