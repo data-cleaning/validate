@@ -1,5 +1,10 @@
 # Rules from SDMX {#sect:sdmxrules}
 
+**Note** This functionality is available for `validate` versions `1.1.0` or higher.
+
+In this Chapter we first demonstrate how to use SDMX with the `validate`
+package. In \@ref(moresdmx) we provide a bit more general information on the
+SDMX landscape, registries, and available APIs.
 
 ```{r, include=FALSE}
 source("chunk_opts.R")
@@ -69,7 +74,7 @@ sdmx_endpoint(registry="global")
 ## Code lists from SDMX registries
 
 Code lists can be retrieved on-the-fly from one of the online
-SDMX registries. In the following rule we retrieven the codelist of economic activiteis
+SDMX registries. In the following rule we retrieve the codelist of economic activiteis
 from the [global SDMX registry](https://registry.sdmx.org/ws/public/sdmxapi).
 
 ```{r, eval=FALSE}
@@ -108,11 +113,111 @@ implied by the DSD.
 rules <- validator_from_dsd(endpoint = sdmx_endpoint("ESTAT")
    , agency_id = "ESTAT", resource_id = "STSALL", version="latest")
 
+length(rules)
+[1] 13
+rules[1]
+Object of class 'validator' with 1 elements:
+ CL_FREQ: FREQ %in% sdmx_codelist(endpoint = "https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest", agency_id = "SDMX", resource_id = "CL_FREQ", version = "2.0")
+Rules are evaluated using locally defined options
 ```
+There are 13 rules in total. For brevity, we only sho the first rule here.
+Observe that the first rule checks the variable `CL_FREQ` against a code list
+that is retrieved from the global SDMX registry. A demonstration of the fact
+that in a DSD does not have to be fully self-contained and can refer to
+metadata in other standard registries. If a data set is checked against this
+rule, `validate` will download the codelist from the global registry and
+compare each value in column `CL_FREQ` against the codelist.
 
-The `validator_from_dsd` function adds relevant metadata such as a
-rule name, the origin of the rule and a short description.
 
+Note that the `validator_from_dsd` function adds relevant metadata such as a
+rule name, the origin of the rule and a short description. Try
+```{r}
+rule[[1]]
+```
+to see all information.
+
+
+## More on `SDMX` {#moresdmx}
+
+
+The Statistical Data and Metadata eXchange ([SDMX](https://sdmx.org)) standard
+is an ISO standard designed to facilitate the exchange or dissemination of
+[Official
+Statistics](https://en.wikipedia.org/wiki/Official_statistics#:~:text=Official%20statistics%20are%20statistics%20published,organizations%20as%20a%20public%20good.).
+At the core it has a logical information model describing the key
+characteristics of statistical data and metadata, which can be applied to any
+statistical domain.  Various data formats have been defined based on this
+information model, such as SDMX-[CSV](https://tools.ietf.org/html/rfc4180),
+SDMX-[JSON](https://www.json.org/json-en.html)), and - by far the most widely
+known - SDMX-ML (data in [XML](https://www.w3.org/XML/)).  A key aspect of the
+SDMX standard is that one defines the metadata, including data structure,
+variables, and code lists beforehand in order to describe what data is shared
+or published.  This metadata is defined in an *SDMX registry* where data
+producers can download or query the necessary metadata. Alternatively metadata
+is distributed in a so-called *Data Structure Definition* (DSD) file, which is
+usually an XML format.  Both types of modes should result in exactly the same
+metadata agreements. 
+
+SDMX registries can be accessed through a [REST
+API](https://en.wikipedia.org/wiki/Representational_state_transfer), using a
+standardized set of parameters.  We can distinguish between registries
+that provide metadata and registries that provide the actual data.
+For the validate package, the metadata registries are of interest. Some of
+widely used metada registries include the following.
+
+- [Global SDMX Registry](https://registry.sdmx.org/): for global metadata,
+  hosted by the SDMX consortium. The central place for ESS-wide metadata. This
+  registry hosts important statistical metadata such as for CPI/HICP, National
+  Accounts (NA), Environmental accounting (SEEA), BOP, GFS, FDI and many more.
+  Unfortunately not all ESS metadata is present in this registry.
+- [Eurostat SDMX Registry](https://webgate.ec.europa.eu/sdmxregistry/): for
+  Eurostat-wide metadata, hosted by Eurostat. This registry contains statistical
+  metadata for all other official statistics in the European Statistical System
+  (ESS). Access is offered via SDMX 2.1 REST API.
+- [IMF SDMX Central](https://sdmxcentral.imf.org/overview.html): Registry by
+  the IMF. 
+- [UNICEF](https://sdmx.data.unicef.org/): Registry by UNICEF
+
+
+
+Organisations that at the time of writing (summer 2021) actively offer
+automated access to their data (not just metadata) via an SDMX API include
+the European Central Bank ([ECB](https://sdw-wsrest.ecb.europa.eu/help/)), 
+the [OECD](https://data.oecd.org/api/) (in
+  [SDMX-JSON](https://data.oecd.org/api/sdmx-json-documentation/) or
+  [SDMX-ML](https://data.oecd.org/api/sdmx-ml-documentation/) format),
+[Eurostat](https://ec.europa.eu/eurostat/web/sdmx-web-services/rest-sdmx-2.1),
+the International Labour Organisation ([ILO](https://www.ilo.org/sdmx/index.html)),
+the UN Food and Agriculture Organization 
+([FAO](http://api.data.fao.org/1.0/esb-rest/sdmx/introduction.html)),
+the [Worldbank](https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries),
+the Bank for International Settlements 
+([BIS](https://www.bis.org/statistics/sdmx_techspec.htm?accordion1=1&m=6%7C346%7C718)),
+and the Italian Office of National Statistics ([ISTAT](https://www.istat.it/it/metodi-e-strumenti/web-service-sdmx)). 
+The SDMX consortium does not maintain a list of active SDMX endpoints. The
+[rsdmx R package](https://cran.r-project.org/package=rsdmx) maintains such a
+list based on an earlier inventory of Data Sources, but at the time of writing
+not all those links appear to be active.
+
+
+Ideally, all SDMX providers would have implemented SDMX in a coordinated way so
+that a client looking for SDMX metadata to validate its data before sending
+could query the respective sources using one and the same API.  The latest
+version of the REST API is 2.1 which is described very well in the easy to use
+[SDMX API cheet
+sheet](https://raw.githubusercontent.com/sdmx-twg/sdmx-rest/master/v2_1/ws/rest/docs/rest_cheat_sheet.pdf).
+Inspecting the endpoints shows that not all providers implement all same
+resource values.  Depending on the provider an organization may decide which
+elements of the API are exposed.  For example, the API standard defines methods
+to retrieve code lists from a DSD, but this functionality may or may not be
+offered by an API instance. If it is not offered, this means the client
+software needs to retrieve this metadata via other resource requests or
+alternatively extract them locally from a DSD file.  Finally we signal that on
+a technical level the API of the various institutes may differ considerably and
+that not all SDMX services implement the same version of SDMX. 
+
+This means that users should typically familiarize themselves somewhat with the
+specific API they try to access (e.g. from `validate`).
 
 
 

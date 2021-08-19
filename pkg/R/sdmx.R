@@ -84,7 +84,7 @@ sdmx_codelist <- function(endpoint, agency_id, resource_id, version="latest", wh
 #' }
 estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest"){
   sdmx_codelist(
-    endpoint      = endpoint("ESTAT")
+    endpoint      = sdmx_endpoint("ESTAT")
     , agency_id   = agency_id
     , resource_id = resource_id
     , version     = version
@@ -123,7 +123,7 @@ estat_codelist <- function(resource_id, agency_id = "ESTAT", version="latest"){
 #' }
 global_codelist <- function(resource_id, agency_id = "SDMX", version="latest"){
   sdmx_codelist(
-    endpoint      = endpoint("GLOBAL")
+    endpoint      = sdmx_endpoint("GLOBAL")
     , agency_id   = agency_id
     , resource_id = resource_id
     , version     = version

@@ -5,6 +5,9 @@ author:
   email: mpj.vanderloo@cbs.nl
   affiliation: <a href="https://www.cbs.nl">Statistics Netherlands</a>
   link: https://www.cbs.nl
+- name: Olav ten Bosch
+  email: ko.tenbosch@cbs.nl
+  link: https://www.cbs.nl
 date: "`r Sys.Date()` | validate version `r packageVersion('validate')`"
 site: bookdown::bookdown_site
 documentclass: book

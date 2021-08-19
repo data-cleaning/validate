@@ -13,7 +13,7 @@ rules:
   label: speed positivity
   description: |
     speed can not be negative
-  created: 2021-07-30 13:50:21
+  created: 2021-08-19 14:16:36
   origin: myrules.yaml
   meta:
     language: validate 0.9.3.36
@@ -24,7 +24,7 @@ rules:
   description: |
     The speed to distance ratio can
     not exceed 1.5.
-  created: 2021-07-30 13:50:21
+  created: 2021-08-19 14:16:36
   origin: myrules.yaml
   meta:
     language: validate 0.9.3.36
