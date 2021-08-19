@@ -33,6 +33,10 @@
   out <- capture.output(expect_warning(validator(.file="yamltests/invalidR.yaml")))
   expect_true(any(nchar(out)>0))
 
+## Duplicate names ----
+  v <- validator(.file="yamltests/duplicate_name.yaml") 
+  nms <- names(v)
+  expect_equal(nms, unique(nms))
 
 ## Parsing options ----
   v <- validator(.file="yamltests/yamloptions.yaml") 

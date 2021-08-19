@@ -1,0 +1,7 @@
+rules:
+- expr: height > 0
+  name: "1"
+- expr: weight > 0
+  name: "1"
+- expr: height < 1.5 * weight
+  name: "2"

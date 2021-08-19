@@ -138,7 +138,11 @@ expressionset <- setRefClass("expressionset"
       , created = cr
     )
   }
+  names(R) <- names(R)
   obj$rules <- R
+  
+  # make names unique (in the identical way as the other creation methods)
+  names(obj) <- names(obj)
 }
 
 
@@ -155,6 +159,9 @@ expressionset <- setRefClass("expressionset"
   for ( fl in S )
     R <- c(R, rules_from_yrf_file(fl,prefix=.prefix))
   obj$rules <- R
+  # make names unique (in the identical way as the other creation methods)
+  names(obj) <- names(obj)
+  
   obj$._options <- .PKGOPT
   # options only from the 'including' file (not from included)
   local_opt <- options_from_yml(file)
