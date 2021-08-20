@@ -25,7 +25,7 @@ validation rules in a meaninful way.
 
 #### Citing
 
-Please cite the [JSS article](https://journal.r-project.org/archive/2014/RJ-2014-011/index.html)
+Please cite the [JSS article](https://www.jstatsoft.org/article/view/v097i10)
 
 ```
 @article{van2021data,
