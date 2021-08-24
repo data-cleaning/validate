@@ -307,9 +307,9 @@ SDMX registry, use the following.</p>
 </div>
 <div id="code-lists-from-sdmx-registries" class="section level2">
 <h2><span class="header-section-number">9.3</span> Code lists from SDMX registries</h2>
-<p>Code lists can be retrieved on-the-fly from one of the online
-SDMX registries. In the following rule we retrieve the codelist of economic activiteis
-from the <a href="https://registry.sdmx.org/ws/public/sdmxapi">global SDMX registry</a>.</p>
+<p>Code lists can be retrieved on-the-fly from one of the online SDMX registries.
+In the following rule we retrieve the codelist of economic activiteis from the
+<a href="https://registry.sdmx.org/overview.html">global SDMX registry</a>.</p>
 <div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1">codelist &lt;-<span class="st"> </span><span class="kw">sdmx_codelist</span>(</a>
 <a class="sourceLine" id="cb269-2" title="2">  <span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;global&quot;</span>)</a>
 <a class="sourceLine" id="cb269-3" title="3">  , <span class="dt">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span></a>
@@ -404,7 +404,7 @@ the UN Food and Agriculture Organization
 the <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries">Worldbank</a>,
 the Bank for International Settlements
 (<a href="https://www.bis.org/statistics/sdmx_techspec.htm?accordion1=1&amp;m=6%7C346%7C718">BIS</a>),
-and the Italian Office of National Statistics (<a href="https://www.istat.it/it/metodi-e-strumenti/web-service-sdmx">ISTAT</a>).
+and the Italian Office of National Statistics (ISTAT).
 The SDMX consortium does not maintain a list of active SDMX endpoints. The
 <a href="https://cran.r-project.org/package=rsdmx">rsdmx R package</a> maintains such a
 list based on an earlier inventory of Data Sources, but at the time of writing

@@ -55,6 +55,9 @@ cookbook: doc
 	R -s -e "rmarkdown::render('pkg/vignettes/cookbook.Rmd')"
 	xdg-open pkg/vignettes/cookbook.html
 
+publish:
+	cp cookbook/*.html docs/
+
 
 clean:
 	rm -rf revdep
