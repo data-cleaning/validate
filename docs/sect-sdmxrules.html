@@ -231,7 +231,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Note</strong> This functionality is available for <code>validate</code> versions <code>1.1.0</code> or higher.</p>
 <p>In this Chapter we first demonstrate how to use SDMX with the <code>validate</code>
 package. In <a href="sect-sdmxrules.html#moresdmx">9.5</a> we provide a bit more general information on the
-SDMX landscape, registries, and available APIs.</p>
+SDMX landscape, registries, and their APIs.</p>
 <div id="sdmx-and-validate" class="section level2">
 <h2><span class="header-section-number">9.1</span> SDMX and <code>validate</code></h2>
 <p>Statistical Data and Metadata eXchange, or SDMX is a standard for storing data
@@ -250,7 +250,7 @@ particular, code lists are interesting objects to test against. In validate
 there are two ways to use SDMX codelists. The first is by referring to a
 specific code list for a specific variable in an SDMX registry. The second way
 is to derive a rule set from a DSD file that can be retrieved from a registry.</p>
-<p>Below we discuss the follwing functions.</p>
+<p>Below we discuss the following functions.</p>
 <table>
 <thead>
 <tr class="header">
@@ -291,9 +291,9 @@ information:</p>
 <li>The registry’s API entry point. This is the base URL for the online registry.
 You can specify it literally, or use one of the helper functions that
 are aware of certan known SDMX registries.</li>
-<li>Agency ID: the ID of the agency that responsible for the code list</li>
-<li>Resource IDL the name of the SDMX resource. This is usually the name of
-a type of statistic, like STS (short term statistics)</li>
+<li>Agency ID: the ID of the agency that is responsible for the code list</li>
+<li>Resource ID: the name of the SDMX resource. This is usually the name of
+a type of statistic, like STS (short term statistics).</li>
 <li>version: the code list version.</li>
 </ul>
 <p>Some API endpoints are stored with the package. The function <code>sdmx_endpoint()</code>
@@ -308,7 +308,7 @@ SDMX registry, use the following.</p>
 <div id="code-lists-from-sdmx-registries" class="section level2">
 <h2><span class="header-section-number">9.3</span> Code lists from SDMX registries</h2>
 <p>Code lists can be retrieved on-the-fly from one of the online SDMX registries.
-In the following rule we retrieve the codelist of economic activiteis from the
+In the following rule we retrieve the codelist of economic activities from the
 <a href="https://registry.sdmx.org/overview.html">global SDMX registry</a>.</p>
 <div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1">codelist &lt;-<span class="st"> </span><span class="kw">sdmx_codelist</span>(</a>
 <a class="sourceLine" id="cb269-2" title="2">  <span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;global&quot;</span>)</a>
@@ -340,10 +340,10 @@ implied by the DSD.</p>
 <a class="sourceLine" id="cb271-7" title="7">Object of class <span class="st">&#39;validator&#39;</span> with <span class="dv">1</span> elements<span class="op">:</span></a>
 <a class="sourceLine" id="cb271-8" title="8"><span class="st"> </span>CL_FREQ<span class="op">:</span><span class="st"> </span>FREQ <span class="op">%in%</span><span class="st"> </span><span class="kw">sdmx_codelist</span>(<span class="dt">endpoint =</span> <span class="st">&quot;https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest&quot;</span>, <span class="dt">agency_id =</span> <span class="st">&quot;SDMX&quot;</span>, <span class="dt">resource_id =</span> <span class="st">&quot;CL_FREQ&quot;</span>, <span class="dt">version =</span> <span class="st">&quot;2.0&quot;</span>)</a>
 <a class="sourceLine" id="cb271-9" title="9">Rules are evaluated using locally defined options</a></code></pre></div>
-<p>There are 13 rules in total. For brevity, we only sho the first rule here.
+<p>There are 13 rules in total. For brevity, we only show the first rule here.
 Observe that the first rule checks the variable <code>CL_FREQ</code> against a code list
 that is retrieved from the global SDMX registry. A demonstration of the fact
-that in a DSD does not have to be fully self-contained and can refer to
+that a DSD does not have to be fully self-contained and can refer to
 metadata in other standard registries. If a data set is checked against this
 rule, <code>validate</code> will download the codelist from the global registry and
 compare each value in column <code>CL_FREQ</code> against the codelist.</p>

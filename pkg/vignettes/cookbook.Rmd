@@ -2154,7 +2154,7 @@ df <- as.data.frame(v)
 
 In this Chapter we first demonstrate how to use SDMX with the `validate`
 package. In \@ref(moresdmx) we provide a bit more general information on the
-SDMX landscape, registries, and available APIs.
+SDMX landscape, registries, and their APIs.
 
 ```{r, include=FALSE}
 source("chunk_opts.R")
@@ -2183,7 +2183,7 @@ there are two ways to use SDMX codelists. The first is by referring to a
 specific code list for a specific variable in an SDMX registry. The second way
 is to derive a rule set from a DSD file that can be retrieved from a registry.
 
-Below we discuss the follwing functions.
+Below we discuss the following functions.
 
 |function            | what it does                                     |
 |--------------------|--------------------------------------------------|
@@ -2203,9 +2203,9 @@ information:
 - The registry's API entry point. This is the base URL for the online registry.
   You can specify it literally, or use one of the helper functions that 
   are aware of certan known SDMX registries.
-- Agency ID: the ID of the agency that responsible for the code list
-- Resource IDL the name of the SDMX resource. This is usually the name of 
-  a type of statistic, like STS (short term statistics)
+- Agency ID: the ID of the agency that is responsible for the code list
+- Resource ID: the name of the SDMX resource. This is usually the name of 
+  a type of statistic, like STS (short term statistics).
 - version: the code list version.
 
 
@@ -2224,7 +2224,7 @@ sdmx_endpoint(registry="global")
 ## Code lists from SDMX registries
 
 Code lists can be retrieved on-the-fly from one of the online SDMX registries.
-In the following rule we retrieve the codelist of economic activiteis from the
+In the following rule we retrieve the codelist of economic activities from the
 [global SDMX registry](https://registry.sdmx.org/overview.html).
 
 ```{r, eval=FALSE}
@@ -2270,10 +2270,10 @@ Object of class 'validator' with 1 elements:
  CL_FREQ: FREQ %in% sdmx_codelist(endpoint = "https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest", agency_id = "SDMX", resource_id = "CL_FREQ", version = "2.0")
 Rules are evaluated using locally defined options
 ```
-There are 13 rules in total. For brevity, we only sho the first rule here.
+There are 13 rules in total. For brevity, we only show the first rule here.
 Observe that the first rule checks the variable `CL_FREQ` against a code list
 that is retrieved from the global SDMX registry. A demonstration of the fact
-that in a DSD does not have to be fully self-contained and can refer to
+that a DSD does not have to be fully self-contained and can refer to
 metadata in other standard registries. If a data set is checked against this
 rule, `validate` will download the codelist from the global registry and
 compare each value in column `CL_FREQ` against the codelist.

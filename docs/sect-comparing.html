@@ -459,8 +459,8 @@ The output is written to a <code>csv</code> file which we can read.</p>
 <p>The logfile variable has quite a lot of columns, so here show just two rows.</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1">logfile[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2021-08-19 16:34:50
-## 4    3 2021-08-19 16:34:50
+## 3    2 2021-08-24 17:22:40
+## 4    3 2021-08-24 17:22:40
 ##                                                                expression cells
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))   300
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))   300
@@ -506,8 +506,8 @@ follows, and store it in <code>clean_supermarkets2.R</code></p>
 <p>Let’s read the log file from <code>spm_lbj_rules.csv</code> and print row three and four.</p>
 <div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb293-1" title="1"><span class="kw">read.csv</span>(<span class="st">&quot;spm_lbj_rules.csv&quot;</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>##   step                time
-## 3    2 2021-08-19 16:34:50
-## 4    3 2021-08-19 16:34:50
+## 3    2 2021-08-24 17:22:40
+## 4    3 2021-08-24 17:22:40
 ##                                                                expression
 ## 3 spm &lt;- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))
 ## 4                       spm &lt;- transform(spm, other.rev = abs(other.rev))
