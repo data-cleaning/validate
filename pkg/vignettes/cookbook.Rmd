@@ -2165,7 +2165,7 @@ library(validate)
 
 Statistical Data and Metadata eXchange, or SDMX is a standard for storing data
 and the description of its structure, meaning, and content. The standard is
-developed by the [SDMX consortium](https://sdmx.org). It is used, amongst
+developed by the SDMX consortium (`https://sdmx.org`). It is used, amongst
 others, in the [Official Statistics](https://en.wikipedia.org/wiki/Official_statistics) community to
 exchange data in a standardized way.
 
@@ -2290,7 +2290,7 @@ to see all information.
 ## More on `SDMX` {#moresdmx}
 
 
-The Statistical Data and Metadata eXchange ([SDMX](https://sdmx.org)) standard
+The Statistical Data and Metadata eXchange (SDMX) standard
 is an ISO standard designed to facilitate the exchange or dissemination of
 [Official
 Statistics](https://en.wikipedia.org/wiki/Official_statistics#:~:text=Official%20statistics%20are%20statistics%20published,organizations%20as%20a%20public%20good.).
@@ -2337,7 +2337,7 @@ the [OECD](https://data.oecd.org/api/) (in
   [SDMX-JSON](https://data.oecd.org/api/sdmx-json-documentation/) or
   [SDMX-ML](https://data.oecd.org/api/sdmx-ml-documentation/) format),
 [Eurostat](https://ec.europa.eu/eurostat/web/sdmx-web-services/rest-sdmx-2.1),
-the International Labour Organisation ([ILO](https://www.ilo.org/sdmx/index.html)),
+the International Labour Organisation [ILO (`https://www.ilo.org/sdmx/index.html`)],
 the UN Food and Agriculture Organization 
 ([FAO](http://api.data.fao.org/1.0/esb-rest/sdmx/introduction.html)),
 the [Worldbank](https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries),
