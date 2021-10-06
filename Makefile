@@ -31,6 +31,9 @@ install: doc pkg/vignettes/jss3483.pdf
 test: doc
 	R -s -e "tinytest::build_install_test('pkg')"
 
+covr: doc
+	R -e 'covr::package_coverage("pkg")'
+
 manual: doc
 	R CMD Rd2pdf --force -o manual.pdf ./pkg
 
