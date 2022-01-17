@@ -3,14 +3,111 @@
 
 ```{r, include=FALSE}
 source("chunk_opts.R")
+library(validate)
 ```
 
 This Chapter is about importing and exporting rules from and to file, both in
 free-form text and in YAML. We also discuss some more advanced features like
 how to have one rule file include another file.
 
-- Importing from free-form text files was discussed in \@ref{sect:readfromfile}
-- Importing from simple YAML files was discussed in \@ref{sect:yamlfiles}
+
+## Reading rules from file {#sect:readfromfile}
+
+It is a very good idea to store and maintain rule sets outside of your R
+script. Validate supports two file formats: simple text files and `yaml` files.
+Here we only discuss simple text files, yaml files are treated in \@ref(sect:yamlfiles).
+
+To try this, copy the following rules into a new text file and store it in a
+file called `myrules.R`, in the current working directory of your R session.
+
+```{r, eval=FALSE}
+# basic range checks
+speed >= 0
+dist  >= 0
+
+# ratio check
+speed / dist <= 1.5
+```
+Note that you are allowed to annotate the rules as you would with 
+regular R code. Reading these rules can be done as follows.
+```{r}
+rules <- validator(.file="myrules.R")
+```
+
+## Metadata in text files: `YAML` {#sect:yamlfiles}
+
+[YAML](https://yaml.org) is a data format that aims to be easy to learn and
+human-readable. The name 'YAML' is a [recursive
+acronym](https://en.wikipedia.org/wiki/Recursive_acronym) that stands for
+
+> YAML Ain't Markup Language.
+
+Validate can read and write rule sets from and to YAML files. For example,
+paste the following code into a file called `myrules.yaml`.
+```
+rules:
+- expr: speed >= 0
+  name: 'speed'
+  label: 'speed positivity'
+  description: |
+    speed can not be negative
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+- expr: dist >= 0
+  name: 'dist'
+  label: 'distance positivity'
+  description: |
+    distance cannot be negative.
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+- expr: speed/dist <= 1.5
+  name: 'ratio'
+  label: 'ratio limit'
+  description: | 
+    The speed to distance ratio can
+    not exceed 1.5.
+  created: 2020-11-02 11:15:11
+  meta:
+    language: validate 0.9.3.36
+    severity: error
+
+```
+We can read this file using `validator(.file=)` as before.
+
+```{r}
+rules <- validator(.file="myrules.yaml")
+rules
+```
+Observe that the labels are printed between brackets.  There are a few things
+to note about these YAML files.
+
+1. `rules:` starts a list of rules. 
+2. Each new rule starts with a dash (`-`)
+3. Each element of a rule is denoted `name: <content>`. The only obligated
+   element is `expr`: the rule expression.
+4. Spaces matter. Each element of a rule must be preceded by a newline and two spaces.
+   Subelements (as in `meta`) are indented again.
+
+A full tutorial on YAML can be found at
+[W3Cschools.io](https://www.w3schools.io/file/yaml-introduction/). 
+
+
+To export a rule set to yaml, use the `export_yaml()` function.
+```{r}
+rules1 <- rules[c(1,3)]
+export_yaml(rules1, file="myrules2.yaml")
+```
+
+We will return extensively to reading rules from YAML or other text files
+in Chapter \@ref(sect:rulefiles).
+
+
+
+
 
 
 ## Setting options
