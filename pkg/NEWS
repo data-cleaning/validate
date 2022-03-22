@@ -1,3 +1,10 @@
+version 1.1.1
+- 'aggregate' with argument by="rule" now ensures that the rule-by-rule
+  output is in the same order as in the confrontation object (they
+  used to be grouped by dimension structure). This fixes an issue
+  where plots of validation objects would have the wrong placement
+  of y-axis labels. (Thanks to Jonas Klingwort for reporting). 
+
 version 1.1.0
 - Added support for SDMX codelists from SDMX REST APIs, see
   'sdmx_codelist', 'estat_codelist', 'global_codelist'.

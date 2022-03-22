@@ -726,7 +726,6 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
   ntot <- if ( by == 'rule') nrow else ncol
   L <- lapply(v, function(y){
     s <- if(is.null(dim(y))) 0 else aggr(y,na.rm=TRUE)
-    s <- s
     na <- if(is.null(dim(y))) 0 else aggr(is.na(y))
     N <- if (is.null(dim(y))) 0 else ntot(y)
     nfail = N - s - na
@@ -738,11 +737,19 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
       , rel.fail  = nfail/N
       , rel.NA = na/N
     )
+  
     keys <- x$._keys$keyset
     if (by=="record" && nrow(out)==nrow(keys)) cbind(keys,out) else out
   })
   if ( length(L) == 1 && drop ) L <- L[[1]]
   if ( by== 'rule' && !is.data.frame(L) ) L <- do.call(rbind,L)
+  if ( by == "rule" ){
+    # values are not errors, and such rules are not included by 'values'
+    err_names <- names(errors(x))
+    rulenames <- if(drop) rownames else names
+    ii <- match(rulenames(L), names(x)[!names(x) %in% err_names])
+    L <- L[ii,, drop=FALSE]
+  }
   L
 })
 

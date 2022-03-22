@@ -26,6 +26,12 @@ expect_equal(sort(cf),agg[2:1,])
 expect_equivalent(class(cf[1]),"validation")  
 expect_equal(length(cf[1]),1)
 
+# order of aggregated output
+cf <- check_that(women, height<0, mean(height) < 0, height > 0, mean(height)>0)
+expect_equal(rownames(aggregate(cf,by="rule")), names(cf))
+
+
+
 # aggregation when keys are present ----
 rules <- validator(turnover >= 0, other.rev>=0)
 data(SBS2000)
