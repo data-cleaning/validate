@@ -669,7 +669,7 @@ setMethod("plot","validation", function(x, y
                     , xlab = NULL
                     , ...)
 {
-  if(length(errors(x)>=1)){
+  if(length(errors(x))>=1){
     msgf("%d rules gave a runtime error on execution so those results are not plotted. See ?errors"
         , length(errors(x)))
   }
