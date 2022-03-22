@@ -671,8 +671,9 @@ setMethod("plot","validation", function(x, y
 {
   stopifnot(length(rulenames) == length(x))
   if(length(errors(x))>=1){
-    msgf("%d rules gave a runtime error on execution so those results are not plotted. See ?errors"
-        , length(errors(x)))
+    errs <- paste(names(errors(x)), sep=", ")
+    msgf("Rules %s not included in plot since they could not be executed. See ?errors"
+        , errs)
   }
   m <- aggregate(x, by="rule")
   rulenames <- rulenames[!( names(x) %in% names(errors(x)) )]
