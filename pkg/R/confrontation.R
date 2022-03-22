@@ -669,11 +669,13 @@ setMethod("plot","validation", function(x, y
                     , xlab = NULL
                     , ...)
 {
+  stopifnot(length(rulenames) == length(x))
   if(length(errors(x))>=1){
     msgf("%d rules gave a runtime error on execution so those results are not plotted. See ?errors"
         , length(errors(x)))
   }
   m <- aggregate(x, by="rule")
+  rulenames <- rulenames[!( names(x) %in% names(errors(x)) )]
   if (is.null(m)){
     msgf("Noting to plot")
     return(NULL)
