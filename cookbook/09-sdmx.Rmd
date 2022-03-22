@@ -204,8 +204,7 @@ Ideally, all SDMX providers would have implemented SDMX in a coordinated way so
 that a client looking for SDMX metadata to validate its data before sending
 could query the respective sources using one and the same API.  The latest
 version of the REST API is 2.1 which is described very well in the easy to use
-[SDMX API cheet
-sheet](https://raw.githubusercontent.com/sdmx-twg/sdmx-rest/master/v2_1/ws/rest/docs/rest_cheat_sheet.pdf).
+[SDMX API cheat sheet](https://github.com/sdmx-twg/sdmx-rest/raw/master/doc/rest_cheat_sheet.pdf)
 Inspecting the endpoints shows that not all providers implement all same
 resource values.  Depending on the provider an organization may decide which
 elements of the API are exposed.  For example, the API standard defines methods
