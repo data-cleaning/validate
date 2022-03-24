@@ -30,6 +30,20 @@ expect_equal(length(cf[1]),1)
 cf <- check_that(women, height<0, mean(height) < 0, height > 0, mean(height)>0)
 expect_equal(rownames(aggregate(cf,by="rule")), names(cf))
 
+# order of aggregated output, in presence of errors
+#
+r <- validator(height <0         # V1
+             , mean(height)<0    # V2 
+             , ape>0             # V3 (gives error)
+             , height>0          # V4
+             ,  mean(weight)>0   # V5
+             , mean(height)<0    # V6
+             , weight <= 0       # V7
+             , var(weight) <= 0) # V8
+v <- confront(women, r)
+expect_equal(rownames(aggregate(v,by="rule"))
+           , sprintf("V%d",1:8)[-3])
+
 
 
 # aggregation when keys are present ----

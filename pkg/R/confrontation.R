@@ -745,12 +745,11 @@ setMethod('aggregate',signature('validation'), function(x,by=c('rule','record'),
     if (by=="record" && nrow(out)==nrow(keys)) cbind(keys,out) else out
   })
   if ( length(L) == 1 && drop ) L <- L[[1]]
-  if ( by== 'rule' && !is.data.frame(L) ) L <- do.call(rbind,L)
-  if ( by == "rule" ){
+  if ( by == 'rule' && !is.data.frame(L) ){ 
+    L <- do.call(rbind,L)
     # values are not errors, and such rules are not included by 'values'
-    err_names <- names(errors(x))
-    rulenames <- if(drop) rownames else names
-    ii <- match(rulenames(L), names(x)[!names(x) %in% err_names])
+    # we also put rules in the same order as in the 'validator' object.
+    ii <- match(names(x)[!names(x) %in% names(errors(x))], rownames(L))
     L <- L[ii,, drop=FALSE]
   }
   L
