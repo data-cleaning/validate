@@ -65,7 +65,7 @@ expect_equal(nrow(Z), length(variables(v)))
 
 v <- validator(x>0,z>0)
 cf <- confront(data.frame(z=1), v)
-expect_message(plot(cf), pattern = "runtime")
+expect_message(plot(cf), pattern = "not included")
 
 
 
