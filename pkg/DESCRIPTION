@@ -22,7 +22,7 @@ Description: Declare data validation rules and data quality indicators;
         by an SDMX DSD file as well. See also Van der Loo
         and De Jonge (2018) <doi:10.1002/9781118897126>, Chapter 6
         and the JSS paper (2021) <doi:10.18637/jss.v097.i10>.
-Version: 1.1.1
+Version: 1.1.2
 Depends: R (>= 3.5.0), methods
 URL: https://github.com/data-cleaning/validate
 BugReports: https://github.com/data-cleaning/validate/issues
@@ -49,5 +49,5 @@ Collate:
     'syntax.R'
     'utils.R'
     'yaml.R'
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Encoding: UTF-8

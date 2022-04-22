@@ -49,7 +49,12 @@ msgf <- function(fmt, ...){
 #' @family select-data
 #' @export
 satisfying <- function(x, y, include_missing=FALSE, ...){
-  stopifnot(inherits(y,"validator") | inherits(y,"validation"), inherits(x,"data.frame"))
+  UseMethod("satisfying")
+}
+
+#' @export
+satisfying.data.frame <- function(x, y, include_missing=FALSE, ...){
+  stopifnot(inherits(y,"validator") | inherits(y,"validation"))
 
   if (inherits(y,"validator")) y <- confront(x,y,...)
 
@@ -64,10 +69,22 @@ satisfying <- function(x, y, include_missing=FALSE, ...){
   }
 }
 
+#' @export
+satisfying.default <- function(x,y,include_missing=FALSE, ...){
+  stop("Not implemented for ", class(x), call. = FALSE)
+}
+
+
+
 #' @rdname satisfying
 #' @export
 violating <- function(x, y, include_missing=FALSE, ...){
-  stopifnot(inherits(y,"validator") | inherits(y,"validation"), inherits(x,"data.frame"))
+  UseMethod("violating")
+}
+
+#' @export
+violating.data.frame <- function(x, y, include_missing=FALSE, ...){
+  stopifnot(inherits(y,"validator") | inherits(y,"validation"))
 
   if (inherits(y,"validator")) y <- confront(x,y,...)
 
@@ -83,16 +100,30 @@ violating <- function(x, y, include_missing=FALSE, ...){
   
 }
 
+violating.default <- function(x, y, include_missing=FALSE, ...){
+  stop("Not implemented for ", class(x), call. = TRUE)
+}
+
 #' @rdname satisfying
 #' @export
-lacking <- function(x, y, ...){
-  stopifnot(inherits(y,"validator") | inherits(y,"validation"), inherits(x,"data.frame"))
+lacking <- function(x,y, ...){
+  UseMethod("lacking")
+}
+
+#' @export
+lacking.data.frame <- function(x, y, ...){
+  stopifnot(inherits(y,"validator") | inherits(y,"validation"))
 
   if (inherits(y,"validator")) y <- confront(x,y,...)
 
   A <- values(y)
   if (!is.array(A)|| nrow(A)!=nrow(x) ){
     stop("Not all rules have record-wise output")
-  }
+  }  
   x[apply(A,1,anyNA),,drop=FALSE]
+}
+
+#' @export
+lacking.default <- function(x, y, ...){
+  stop("Not implemented for ", class(x), call. = TRUE)
 }
