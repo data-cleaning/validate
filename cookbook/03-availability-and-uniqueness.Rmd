@@ -46,7 +46,7 @@ statistical purpose than data in wide format, where each variable is stored in
 a separate column. The reason is that in long format relations between
 different variables are spread out across records, and those records are not
 necessarily ordered in any particular way prior to processing.  This makes
-interpretation of validation fails intrinsically harder for long-form data then
+interpretation of validation fails intrinsically harder for long-form data than
 for wide-form data.
 
 The `samplonomy` data set has a particularly nasty structure. It contains both
