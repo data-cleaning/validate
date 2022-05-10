@@ -164,7 +164,7 @@ block the variable `period` contains at least the values 2014--2019.
 
 The return value is a logical vector where the number of elements equals the
 number of rows in the dataset under scrutiny. It is `TRUE` for each block
-where all years are present, and `FALSE` for each block where one of the
+where all years are present, and `FALSE` for each block where one or more of the
 years is missing. In this case 29 records are labeled as FALSE. These
 can be found as follows.
 
