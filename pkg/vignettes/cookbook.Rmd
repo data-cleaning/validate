@@ -615,7 +615,7 @@ Trade (export less import). The period column therefore contains both quarterly
 and annual labels. Furthermore, there are time series for the whole of
 Samplonia (region Samplonia), for each of its two provinces (regions Agria and
 Induston) and for each of its districts within Agria (Wheaton and Greenham) and
-Induston (Smokeley, Mudwater, Newbay and Oakdale). 
+Induston (Smokely, Mudwater, Newbay and Oakdale). 
 
 Naturally, we expect that the key combinations are unique, that all time series
 are gapless and complete, that the Balance of trade equals Export less Import
@@ -787,7 +787,7 @@ keyset <- expand.grid(
    ,"Newbay"
    ,"Oakdale"
    ,"Samplonia"
-   ,"Smokeley"
+   ,"Smokely"
    ,"Wheaton"
   )
  ,period = c(years, sapply(years, paste0, quarters))
