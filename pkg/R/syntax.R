@@ -95,9 +95,9 @@
 #' \code{validator(a > c, b > c, a > d, b > d)}
 #' 
 #' @section File parsing:
-#' Please see the vignette on how to read rules from and write rules to file:
+#' Please see the cookbook on how to read rules from and write rules to file:
 #' 
-#' \code{vignette("rule_files",package="validate")}
+#' \code{vignette("cookbook",package="validate")}
 #' 
 #'   
 NULL

@@ -20,18 +20,16 @@
 #' There are several convenience functions that allow one to define rules from
 #' the commandline, through a (freeform or yaml) file and to investigate and
 #' maintain the rules themselves. Please have a look at the
-#' \href{../doc/introduction.html}{introductory vignette} for a more
-#' thorough introduction on validation rules and the
-#' \href{../doc/indicators.html}{indicators vignette} for an introducion on
-#' quality indicators. After you're a bit aqcuinted with the package, you
-#' will probably be interested in defining your rules separately in a text file.
-#' The vignette on \href{../doc/rule_files}{rule files} will get you
-#' started with that.
+#' \href{../doc/cookbook.html}{cookbook} for a comprehensive introduction.
 #'
 #' @references
 #' An overview of this package, its underlying ideas and many examples
 #' can be found in MPJ van der Loo and E. de Jonge (2018) \emph{Statistical
 #' data cleaning with applications in R} John Wiley & Sons.
+#' 
+#' Please use \code{citation("validate")} to get a citation for (scientific)
+#' publications.
+#'
 #' @docType package
 #' @name validate
 #' @useDynLib validate, .registration=TRUE
