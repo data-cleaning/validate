@@ -46,7 +46,7 @@ statistical purpose than data in wide format, where each variable is stored in
 a separate column. The reason is that in long format relations between
 different variables are spread out across records, and those records are not
 necessarily ordered in any particular way prior to processing.  This makes
-interpretation of validation fails intrinsically harder for long-form data then
+interpretation of validation fails intrinsically harder for long-form data than
 for wide-form data.
 
 The `samplonomy` data set has a particularly nasty structure. It contains both
@@ -164,7 +164,7 @@ block the variable `period` contains at least the values 2014--2019.
 
 The return value is a logical vector where the number of elements equals the
 number of rows in the dataset under scrutiny. It is `TRUE` for each block
-where all years are present, and `FALSE` for each block where one of the
+where all years are present, and `FALSE` for each block where one or more of the
 years is missing. In this case 29 records are labeled as FALSE. These
 can be found as follows.
 
