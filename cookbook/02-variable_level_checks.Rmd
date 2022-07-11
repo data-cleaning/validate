@@ -232,7 +232,7 @@ rules <- rules +
   validator(PR = in_range(incl.prob, min=0, max=1))
 ```
 By default, `in_range` includes the boundaries of the range, so the above rule
-is equivalent to `incl.prob >= 0` and `incl.prob <= 0`. 
+is equivalent to `incl.prob >= 0` and `incl.prob <= 1`. 
 
 ```{r}
 out <- confront(SBS2000, rules, lin.ineq.eps=0)
