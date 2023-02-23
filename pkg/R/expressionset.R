@@ -101,6 +101,7 @@ expressionset <- setRefClass("expressionset"
 #' @param obj An expressionset object (or an object inheriting from expressionset).
 #' @param dat a data.frame 
 #' 
+#' @export
 #' @rdname validate_extend
 #' @keywords internal
 .ini_expressionset_df <- function(obj, dat, .prefix="R"){
