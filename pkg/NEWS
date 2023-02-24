@@ -1,5 +1,10 @@
 version 1.1.2
 - 'violating', 'satisfying' and 'lacking' are now generic (useful for validatedb)
+- as.data.frame,confrontation-method now includes results of rules that yielded
+  a warning. (Thanks to Patrick Driessens for reporting)
+- as.data.frame,confrontation-method now returns a zero-row data frame when
+  confrontation object has no results or only errors. (Thanks to Patrick
+  Driessens for reporting)
 
 version 1.1.1
 - 'aggregate' with argument by="rule" now ensures that the rule-by-rule

@@ -841,13 +841,12 @@ setMethod('sort',signature('validation'),function(x, decreasing=FALSE, by=c('rul
 #' @export
 #' @family confrontation-methods
 setMethod("as.data.frame","confrontation", function(x,...){
-  ew <- has_error(x) | has_warning(x)
-  if (any(ew)){
-    warning(paste(
-      "Encountered warnings and/or erors in confrontation object: " 
-      ,"skipped at coercion"))
-    x <- x[!ew]
+  ierr <- has_error(x)
+  if (any(ierr)){
+    warnf("Found %d rules that threw an error. These are omitted from data frame.", sum(ierr))
+    x <- x[!ierr]
   }
+  
   v <- values(x, simplify=FALSE, drop=FALSE)
   expr <- sapply(x$._calls, call2text)
   nam  <- names(x$._calls)
@@ -874,8 +873,13 @@ setMethod("as.data.frame","confrontation", function(x,...){
       df
     }
   })
-
-  do.call(rbind, L)
+  out <- do.call(rbind, L)
+  if ( is.null(out) ){
+    out <- data.frame( name=character(0)
+                , value=logical(0)
+                , expression=character(0))
+  }
+  out
 })
 
 #getkey <- function(x){
