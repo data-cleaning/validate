@@ -12,8 +12,7 @@ The `validate` R-package makes it super-easy to check whether data lives up to e
 
 ```r
 > library(validate)
-> library(magrittr)
-> check_that(iris, Sepal.Width < 0.5*Sepal.Length) %>% summary()
+> check_that(iris, Sepal.Width < 0.5*Sepal.Length) |> summary()
   rule items passes fails nNA error warning                       expression
 1   V1   150     79    71   0 FALSE   FALSE Sepal.Width < 0.5 * Sepal.Length
 ```
@@ -21,6 +20,9 @@ The `validate` R-package makes it super-easy to check whether data lives up to e
 With `validate`, data validation rules are treated as first-class citizens.
 This means you can import, export, annotate, investigate and manipulate data
 validation rules in a meaninful way. 
+
+To get started: see our [data validation cookbook](https://data-cleaning.github.io/validate/).
+
 
 #### Citing
 
