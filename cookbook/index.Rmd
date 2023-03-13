@@ -80,9 +80,9 @@ data frames and vectors.
 
 To cite the `validate` package please use the following citation.
 
-> MPJ van der Loo and E de Jonge (2020). Data Validation Infrastructure for
-> R. _Journal of Statistical Software_, Accepted for publication. 
-> `https://arxiv.org/abs/1912.09759`
+> MPJ van der Loo and E de Jonge (2021). Data Validation Infrastructure for
+> R. _Journal of Statistical Software_, 97(10) [paper](https://www.jstatsoft.org/article/view/v097i10).
+
 
 To cite this cookbook, please use the following citation.
 

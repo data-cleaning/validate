@@ -211,6 +211,18 @@ rule <- validator(contains_exactly(
         )
 expect_equivalent(values(confront(dat, rule)), matrix(TRUE,nrow=8))
 
+dat1 <- dat
+dat2 <- dat[-1,]
+
+dat1$foo <- "A"
+dat2$foo <- "B"
+rule <- validator(contains_exactly(
+           expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4")), by=foo)
+        )
+expect_equivalent(values(confront(rbind(dat1,dat2), rule))
+                , matrix(c(rep(TRUE,8), rep(FALSE,7)), nrow=15))
+
+
 # cases using a reference keyset
 keyset  <- expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
 keyset1 <- keyset[-1,]

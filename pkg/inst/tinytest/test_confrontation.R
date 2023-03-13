@@ -232,4 +232,14 @@ expect_warning(as.data.frame(d))
 d <- confront(data.frame("A" = 1:5), validator())
 expect_silent(d$show())
 
+# as.data.rame with no records should result in a zero-row data.frame
+
+cf <- check_that(data.frame(y=10),x>0)
+expect_equal(suppressWarnings(as.data.frame(cf))
+   , data.frame( name=character(0), value=logical(0), expression=character(0)) )
+
+
+
+
+
 

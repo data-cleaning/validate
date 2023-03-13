@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>The Data Validation Cookbook</title>
   <meta name="description" content="The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
   <meta property="og:title" content="The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -30,8 +29,9 @@
   
   
 
-<link rel="next" href="sect-intro.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link rel="next" href="sect:intro.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -47,9 +47,9 @@
 
 
 
-
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -139,24 +139,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i>Contributing</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
-<li class="chapter" data-level="1.1" data-path="sect-intro.html"><a href="sect-intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
+<li class="chapter" data-level="1" data-path="sect:intro.html"><a href="sect:intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
+<li class="chapter" data-level="1.1" data-path="sect:intro.html"><a href="sect:intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
-<li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
-<li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect:missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
-<li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
-<li class="chapter" data-level="2.4" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#format-of-numeric-fields"><i class="fa fa-check"></i><b>2.4</b> Format of numeric fields</a></li>
-<li class="chapter" data-level="2.5" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#general-field-format"><i class="fa fa-check"></i><b>2.5</b> General field format</a></li>
-<li class="chapter" data-level="2.6" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#numeric-ranges"><i class="fa fa-check"></i><b>2.6</b> Numeric ranges</a></li>
-<li class="chapter" data-level="2.7" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
-<li class="chapter" data-level="2.8" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
+<li class="chapter" data-level="2" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
+<li class="chapter" data-level="2.1" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
+<li class="chapter" data-level="2.2" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#sect:missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
+<li class="chapter" data-level="2.3" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
+<li class="chapter" data-level="2.4" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#format-of-numeric-fields"><i class="fa fa-check"></i><b>2.4</b> Format of numeric fields</a></li>
+<li class="chapter" data-level="2.5" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#general-field-format"><i class="fa fa-check"></i><b>2.5</b> General field format</a></li>
+<li class="chapter" data-level="2.6" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#numeric-ranges"><i class="fa fa-check"></i><b>2.6</b> Numeric ranges</a></li>
+<li class="chapter" data-level="2.7" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
+<li class="chapter" data-level="2.8" data-path="sect:varlevelchecks.html"><a href="sect:varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
-<li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
-<li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect:uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
-<li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect:completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
-<li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
+<li class="chapter" data-level="3" data-path="sect:availableunique.html"><a href="sect:availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
+<li class="chapter" data-level="3.1" data-path="sect:availableunique.html"><a href="sect:availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
+<li class="chapter" data-level="3.2" data-path="sect:availableunique.html"><a href="sect:availableunique.html#sect:uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
+<li class="chapter" data-level="3.3" data-path="sect:availableunique.html"><a href="sect:availableunique.html#sect:completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
+<li class="chapter" data-level="3.4" data-path="sect:availableunique.html"><a href="sect:availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect:iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
@@ -164,46 +164,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
 <li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
-<li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect:groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
-<li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
-<li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
-<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
-<li class="chapter" data-level="" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
+<li class="chapter" data-level="5" data-path="sect:statisticalchecks.html"><a href="sect:statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
+<li class="chapter" data-level="5.1" data-path="sect:statisticalchecks.html"><a href="sect:statisticalchecks.html#sect:groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
+<li class="chapter" data-level="5.2" data-path="sect:statisticalchecks.html"><a href="sect:statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
+<li class="chapter" data-level="5.3" data-path="sect:statisticalchecks.html"><a href="sect:statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
+<li class="chapter" data-level="5.4" data-path="sect:statisticalchecks.html"><a href="sect:statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
+<li class="chapter" data-level="" data-path="sect:statisticalchecks.html"><a href="sect:statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
+<li class="chapter" data-level="5.5" data-path="sect:statisticalchecks.html"><a href="sect:statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
-<li class="chapter" data-level="6.1" data-path="sect-indicators.html"><a href="sect-indicators.html#a-first-example"><i class="fa fa-check"></i><b>6.1</b> A first example</a></li>
-<li class="chapter" data-level="6.2" data-path="sect-indicators.html"><a href="sect-indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
+<li class="chapter" data-level="6" data-path="sect:indicators.html"><a href="sect:indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
+<li class="chapter" data-level="6.1" data-path="sect:indicators.html"><a href="sect:indicators.html#a-first-example"><i class="fa fa-check"></i><b>6.1</b> A first example</a></li>
+<li class="chapter" data-level="6.2" data-path="sect:indicators.html"><a href="sect:indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
-<li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
-<li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
-<li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
-<li class="chapter" data-level="7.4" data-path="sect-work.html"><a href="sect-work.html#sect:syntax"><i class="fa fa-check"></i><b>7.4</b> Validation rule syntax</a></li>
-<li class="chapter" data-level="7.5" data-path="sect-work.html"><a href="sect-work.html#confrontation-objects"><i class="fa fa-check"></i><b>7.5</b> Confrontation objects</a></li>
-<li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect:options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
-<li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
+<li class="chapter" data-level="7" data-path="sect:work.html"><a href="sect:work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
+<li class="chapter" data-level="7.1" data-path="sect:work.html"><a href="sect:work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
+<li class="chapter" data-level="7.2" data-path="sect:work.html"><a href="sect:work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
+<li class="chapter" data-level="7.3" data-path="sect:work.html"><a href="sect:work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
+<li class="chapter" data-level="7.4" data-path="sect:work.html"><a href="sect:work.html#sect:syntax"><i class="fa fa-check"></i><b>7.4</b> Validation rule syntax</a></li>
+<li class="chapter" data-level="7.5" data-path="sect:work.html"><a href="sect:work.html#confrontation-objects"><i class="fa fa-check"></i><b>7.5</b> Confrontation objects</a></li>
+<li class="chapter" data-level="7.6" data-path="sect:work.html"><a href="sect:work.html#sect:options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
+<li class="chapter" data-level="7.7" data-path="sect:work.html"><a href="sect:work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
-<li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect:readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
-<li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect:yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
-<li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
-<li class="chapter" data-level="8.4" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
-<li class="chapter" data-level="8.5" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
+<li class="chapter" data-level="8" data-path="sect:rulefiles.html"><a href="sect:rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
+<li class="chapter" data-level="8.1" data-path="sect:rulefiles.html"><a href="sect:rulefiles.html#sect:readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
+<li class="chapter" data-level="8.2" data-path="sect:rulefiles.html"><a href="sect:rulefiles.html#sect:yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
+<li class="chapter" data-level="8.3" data-path="sect:rulefiles.html"><a href="sect:rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
+<li class="chapter" data-level="8.4" data-path="sect:rulefiles.html"><a href="sect:rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
+<li class="chapter" data-level="8.5" data-path="sect:rulefiles.html"><a href="sect:rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
-<li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
-<li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
-<li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
-<li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
-<li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
+<li class="chapter" data-level="9" data-path="sect:sdmxrules.html"><a href="sect:sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9.1" data-path="sect:sdmxrules.html"><a href="sect:sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
+<li class="chapter" data-level="9.2" data-path="sect:sdmxrules.html"><a href="sect:sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
+<li class="chapter" data-level="9.3" data-path="sect:sdmxrules.html"><a href="sect:sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
+<li class="chapter" data-level="9.4" data-path="sect:sdmxrules.html"><a href="sect:sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
+<li class="chapter" data-level="9.5" data-path="sect:sdmxrules.html"><a href="sect:sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
-<li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
-<li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
-<li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
+<li class="chapter" data-level="10" data-path="sect:comparing.html"><a href="sect:comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10.1" data-path="sect:comparing.html"><a href="sect:comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
+<li class="chapter" data-level="10.2" data-path="sect:comparing.html"><a href="sect:comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
+<li class="chapter" data-level="10.3" data-path="sect:comparing.html"><a href="sect:comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="bibliographical-notes.html"><a href="bibliographical-notes.html"><i class="fa fa-check"></i>Bibliographical notes</a></li>
 <li class="divider"></li>
@@ -228,73 +228,72 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="header">
 <h1 class="title">The Data Validation Cookbook</h1>
-<p class="author" style="margin: 0.5em 0 -0.5em 0;"><em>Mark P.J. van der Loo</em></p>
+<p class="author multi-author"><em>Mark P.J. van der Loo</em></p>
 <address class="author_afil">
 <a href="https://www.cbs.nl">Statistics Netherlands</a><br>
 <a class="author_email" href="mailto:#"><a href="mailto:mpj.vanderloo@cbs.nl" class="email">mpj.vanderloo@cbs.nl</a></a>
 </address>
-<p class="author" style="margin: 0.5em 0 -0.5em 0;"><em>Olav ten Bosch</em></p>
-<p class="date" style="margin-top: 1.5em;"><em>2022-01-17 | validate version 1.1.0</em></p>
+<p class="author multi-author"><em>Olav ten Bosch</em></p>
+<p class="date"><em>2023-03-13 | validate version 1.1.2.1</em></p>
 </div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
+<div id="preface" class="section level1 unnumbered hasAnchor">
+<h1>Preface<a href="index.html#preface" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>This book is about checking data with the
 <a href="https://cran.r-project.org/package=validate">validate</a> package for
 <a href="https://www.r-project.org">R</a>.</p>
 <p>This version of the book was rendered with <code>validate</code> version
-1.1.0. The latest release of <code>validate</code> can be installed
+1.1.2.1. The latest release of <code>validate</code> can be installed
 from <a href="https://cran.r-project.org">CRAN</a> as follows.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;validate&quot;</span>)</a></code></pre></div>
 <p>The purposes of this book include demonstrating the main tools and workflows of
 the <code>validate</code> package, giving examples of common data validation tasks, and
 showing how to analyze data validation results.</p>
-<p>The book is organized as follows. Chapter <a href="sect-intro.html#sect:intro">1</a> discusses the bare
+<p>The book is organized as follows. Chapter <a href="sect:intro.html#sect:intro">1</a> discusses the bare
 necessities to be able to follow the rest of the book. Chapters
-<a href="sect-varlevelchecks.html#sect:varlevelchecks">2</a> to <a href="sect-statisticalchecks.html#sect:statisticalchecks">5</a> form the ‘cookbook’
+<a href="sect:varlevelchecks.html#sect:varlevelchecks">2</a> to <a href="sect:statisticalchecks.html#sect:statisticalchecks">5</a> form the ‘cookbook’
 part of the book and discuss many different ways to check your data by example.
-Chapter <a href="sect-indicators.html#sect:indicators">6</a> is devoted to deriving plausibility measures
-with the <code>validate</code> package. Chapters <a href="sect-work.html#sect:work">7</a> and
-<a href="sect-rulefiles.html#sect:rulefiles">8</a> treat working with validate in-depth. Chapter
-<a href="sect-comparing.html#sect:comparing">10</a> discusses how to compare two or more versions of a
+Chapter <a href="sect:indicators.html#sect:indicators">6</a> is devoted to deriving plausibility measures
+with the <code>validate</code> package. Chapters <a href="sect:work.html#sect:work">7</a> and
+<a href="sect:rulefiles.html#sect:rulefiles">8</a> treat working with validate in-depth. Chapter
+<a href="sect:comparing.html#sect:comparing">10</a> discusses how to compare two or more versions of a
 dataset, possibly automated through the
 <a href="https://cran.r-project.org/package=lumberjack">lumberjack</a> package. The
 section with Biblographical Notes lists some references and points out some
 literature for further reading.</p>
-<div id="prerequisites" class="section level2 unnumbered">
-<h2>Prerequisites</h2>
+<div id="prerequisites" class="section level2 unnumbered hasAnchor">
+<h2>Prerequisites<a href="index.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Readers of this book are expected to have some knowledge of R. In particular,
 you should know how to import data into R and know a little about working with
 data frames and vectors.</p>
 </div>
-<div id="citing-this-work" class="section level2 unnumbered">
-<h2>Citing this work</h2>
+<div id="citing-this-work" class="section level2 unnumbered hasAnchor">
+<h2>Citing this work<a href="index.html#citing-this-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To cite the <code>validate</code> package please use the following citation.</p>
 <blockquote>
-<p>MPJ van der Loo and E de Jonge (2020). Data Validation Infrastructure for
-R. <em>Journal of Statistical Software</em>, Accepted for publication.
-<code>https://arxiv.org/abs/1912.09759</code></p>
+<p>MPJ van der Loo and E de Jonge (2021). Data Validation Infrastructure for
+R. <em>Journal of Statistical Software</em>, 97(10) <a href="https://www.jstatsoft.org/article/view/v097i10">paper</a>.</p>
 </blockquote>
 <p>To cite this cookbook, please use the following citation.</p>
 <blockquote>
-<p>MPJ van der Loo (2022) <em>The Data Validation Cookbook</em>
-version 1.1.0. <a href="http://data-cleaning.github.io/validate/">https://data-cleaning.github.io/validate</a></p>
+<p>MPJ van der Loo (2023) <em>The Data Validation Cookbook</em>
+version 1.1.2.1. <a href="http://data-cleaning.github.io/validate/">https://data-cleaning.github.io/validate</a></p>
 </blockquote>
 </div>
-<div id="acknowledgements" class="section level2 unnumbered">
-<h2>Acknowledgements</h2>
+<div id="acknowledgements" class="section level2 unnumbered hasAnchor">
+<h2>Acknowledgements<a href="index.html#acknowledgements" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This work was partially funded by European Grant Agreement 88287–NL-VALIDATION
 of the European Statistcal System.</p>
 </div>
-<div id="contributing" class="section level2 unnumbered">
-<h2>Contributing</h2>
+<div id="contributing" class="section level2 unnumbered hasAnchor">
+<h2>Contributing<a href="index.html#contributing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>If you find a mistake, or have some suggestions, please file an issue or a pull
 request on the github page of the package:
 <a href="https://github.com/data-cleaning/validate">https://github.com/data-cleaning/validate</a>.
 If you do not have or want a github account, you can contact the author via the
 e-mail address that is listed with the package.</p>
 </div>
-<div id="license" class="section level2 unnumbered">
-<h2>License</h2>
+<div id="license" class="section level2 unnumbered hasAnchor">
+<h2>License<a href="index.html#license" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution BY-NC 4.0 International License</a>.</p>
 
 </div>
@@ -305,11 +304,10 @@ e-mail address that is listed with the package.</p>
         </div>
       </div>
 
-<a href="sect-intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sect:intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -349,6 +347,10 @@ gitbook.start({
 "text": null
 },
 "download": ["validatecookbook.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

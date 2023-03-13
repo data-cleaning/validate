@@ -101,7 +101,7 @@ negatives caused machine rounding issues.
 
 
 Summarizing, the basic workflow in `validate` is to create a rule set, confront
-a data set with the rules in the rule set, and than analyze or use the results
+a data set with the rules in the rule set, and then analyze or use the results
 further. To understand which checks you can perform with `validate` you only
 need to remember the following.
 

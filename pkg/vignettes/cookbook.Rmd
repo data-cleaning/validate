@@ -65,9 +65,9 @@ data frames and vectors.
 
 To cite the `validate` package please use the following citation.
 
-> MPJ van der Loo and E de Jonge (2020). Data Validation Infrastructure for
-> R. _Journal of Statistical Software_, Accepted for publication. 
-> `https://arxiv.org/abs/1912.09759`
+> MPJ van der Loo and E de Jonge (2021). Data Validation Infrastructure for
+> R. _Journal of Statistical Software_, 97(10) [paper](https://www.jstatsoft.org/article/view/v097i10).
+
 
 To cite this cookbook, please use the following citation.
 
@@ -205,7 +205,7 @@ negatives caused machine rounding issues.
 
 
 Summarizing, the basic workflow in `validate` is to create a rule set, confront
-a data set with the rules in the rule set, and than analyze or use the results
+a data set with the rules in the rule set, and then analyze or use the results
 further. To understand which checks you can perform with `validate` you only
 need to remember the following.
 
@@ -454,7 +454,7 @@ rules <- rules +
   validator(PR = in_range(incl.prob, min=0, max=1))
 ```
 By default, `in_range` includes the boundaries of the range, so the above rule
-is equivalent to `incl.prob >= 0` and `incl.prob <= 0`. 
+is equivalent to `incl.prob >= 0` and `incl.prob <= 1`. 
 
 ```{r}
 out <- confront(SBS2000, rules, lin.ineq.eps=0)
@@ -606,7 +606,7 @@ statistical purpose than data in wide format, where each variable is stored in
 a separate column. The reason is that in long format relations between
 different variables are spread out across records, and those records are not
 necessarily ordered in any particular way prior to processing.  This makes
-interpretation of validation fails intrinsically harder for long-form data then
+interpretation of validation fails intrinsically harder for long-form data than
 for wide-form data.
 
 The `samplonomy` data set has a particularly nasty structure. It contains both
@@ -615,7 +615,7 @@ Trade (export less import). The period column therefore contains both quarterly
 and annual labels. Furthermore, there are time series for the whole of
 Samplonia (region Samplonia), for each of its two provinces (regions Agria and
 Induston) and for each of its districts within Agria (Wheaton and Greenham) and
-Induston (Smokeley, Mudwater, Newbay and Oakdale). 
+Induston (Smokely, Mudwater, Newbay and Oakdale). 
 
 Naturally, we expect that the key combinations are unique, that all time series
 are gapless and complete, that the Balance of trade equals Export less Import
@@ -724,7 +724,7 @@ block the variable `period` contains at least the values 2014--2019.
 
 The return value is a logical vector where the number of elements equals the
 number of rows in the dataset under scrutiny. It is `TRUE` for each block
-where all years are present, and `FALSE` for each block where one of the
+where all years are present, and `FALSE` for each block where one or more of the
 years is missing. In this case 29 records are labeled as FALSE. These
 can be found as follows.
 
@@ -787,7 +787,7 @@ keyset <- expand.grid(
    ,"Newbay"
    ,"Oakdale"
    ,"Samplonia"
-   ,"Smokeley"
+   ,"Smokely"
    ,"Wheaton"
   )
  ,period = c(years, sapply(years, paste0, quarters))
