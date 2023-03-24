@@ -166,7 +166,7 @@ plot(comparison)
 
 The [lumberjack](https://cran.r-project.org/package=lumberjack) package makes
 it easy to track changes in data in a user-defined way. The following example
-is slightly adapted from the [JSS paper](https://arxiv.org/abs/2005.04050).
+is slightly adapted from the [JSS paper](https://www.jstatsoft.org/article/view/v098i01).
 
 We create a script that reads data, performs a few data cleaning steps
 and then writes the output. The script is stored in `clean_supermarkets.R` and
@@ -300,7 +300,7 @@ The format and way in which logging data is exported is fixed by the logger. So
 seen so far. The good news is that the `lumberjack` package itself contains
 other loggers that may be of interest, and it is also possible to develop your
 own logger. So it is possible to develop loggers that export data to a
-database. See the [lumberjack paper](https://arxiv.org/abs/2005.04050) for a
+database. See the [lumberjack paper](https://www.jstatsoft.org/article/view/v098i01) for a
 short tutorial on how to write your own logger.
 
 

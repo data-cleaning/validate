@@ -2301,7 +2301,7 @@ Statistics](https://en.wikipedia.org/wiki/Official_statistics#:~:text=Official%2
 At the core it has a logical information model describing the key
 characteristics of statistical data and metadata, which can be applied to any
 statistical domain.  Various data formats have been defined based on this
-information model, such as SDMX-[CSV](https://tools.ietf.org/html/rfc4180),
+information model, such as SDMX-[CSV](https://www.rfc-editor.org/rfc/rfc4180),
 SDMX-[JSON](https://www.json.org/json-en.html)), and - by far the most widely
 known - SDMX-ML (data in [XML](https://www.w3.org/XML/)).  A key aspect of the
 SDMX standard is that one defines the metadata, including data structure,
@@ -2334,16 +2334,15 @@ widely used metada registries include the following.
 
 
 
-Organisations that at the time of writing (summer 2021) actively offer
-automated access to their data (not just metadata) via an SDMX API include
-the European Central Bank ([ECB](https://sdw-wsrest.ecb.europa.eu/help/)), 
+Organisations that at the time of writing (spring 2023) actively offer
+automated access to their data (not just metadata) via an SDMX API include (but
+not limited to) the European Central Bank
+([ECB](https://sdw-wsrest.ecb.europa.eu/help/)), 
 the [OECD](https://data.oecd.org/api/) (in
   [SDMX-JSON](https://data.oecd.org/api/sdmx-json-documentation/) or
   [SDMX-ML](https://data.oecd.org/api/sdmx-ml-documentation/) format),
-[Eurostat](https://ec.europa.eu/eurostat/web/sdmx-web-services/rest-sdmx-2.1),
+[Eurostat](https://ec.europa.eu/eurostat/web/sdmx-infospace),
 the International Labour Organisation [ILO (`https://www.ilo.org/sdmx/index.html`)],
-the UN Food and Agriculture Organization 
-([FAO](http://api.data.fao.org/1.0/esb-rest/sdmx/introduction.html)),
 the [Worldbank](https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries),
 the Bank for International Settlements 
 ([BIS](https://www.bis.org/statistics/sdmx_techspec.htm?accordion1=1&m=6%7C346%7C718)),
@@ -2542,7 +2541,7 @@ plot(comparison)
 
 The [lumberjack](https://cran.r-project.org/package=lumberjack) package makes
 it easy to track changes in data in a user-defined way. The following example
-is slightly adapted from the [JSS paper](https://arxiv.org/abs/2005.04050).
+is slightly adapted from the [JSS paper](https://www.jstatsoft.org/article/view/v098i01).
 
 We create a script that reads data, performs a few data cleaning steps
 and then writes the output. The script is stored in `clean_supermarkets.R` and
@@ -2676,7 +2675,7 @@ The format and way in which logging data is exported is fixed by the logger. So
 seen so far. The good news is that the `lumberjack` package itself contains
 other loggers that may be of interest, and it is also possible to develop your
 own logger. So it is possible to develop loggers that export data to a
-database. See the [lumberjack paper](https://arxiv.org/abs/2005.04050) for a
+database. See the [lumberjack paper](https://www.jstatsoft.org/article/view/v098i01) for a
 short tutorial on how to write your own logger.
 
 
@@ -2707,11 +2706,11 @@ source("chunk_opts.R")
 More background on the validate package can be found in the paper
 for the R Journal.
 
-> MPJ van der Loo and E de Jonge (2020). [Data Validation Infrastructure for R](https://arxiv.org/abs/1912.09759). _Journal of Statistical Software_ (Accepted).
+> MPJ van der Loo and E de Jonge (2020). [Data Validation Infrastructure for R](https://www.jstatsoft.org/article/view/v097i10). _Journal of Statistical Software_ 97(10)
 
 The theory of data validation is described in the following paper.
 
-> MPJ van der Loo, and E de Jonge (2020). [Data Validation Infrastructure for R](https://arxiv.org/abs/1912.09759). _In Wiley StatsRef: Statistics Reference Online (eds N. Balakrishnan, T. Colton, B. Everitt, W. Piegorsch, F. Ruggeri and J.L. Teugels)_. 
+> MPJ van der Loo, and E de Jonge (2020). [Data Validation](https://arxiv.org/abs/1912.09759). _In Wiley StatsRef: Statistics Reference Online (eds N. Balakrishnan, T. Colton, B. Everitt, W. Piegorsch, F. Ruggeri and J.L. Teugels)_. 
 
 Data validation is described in the wider context of data cleaning, in Chapter 6 of
 the following book.
@@ -2727,7 +2726,7 @@ complexity analyses and examples from practice.
 The `lumberjack` package discussed in Chapter \@ref(sect:comparing) is described in the following
 paper.
 
-> MPJ van der Loo (2020). [Monitoring Data in R with the lumberjack package](https://arxiv.org/abs/2005.04050 ). _Journal of Statistical Software_, Accepted for publication.
+> MPJ van der Loo (2020). [Monitoring Data in R with the lumberjack package](https://www.jstatsoft.org/article/view/v098i01). _Journal of Statistical Software_, 98(1)
 
 
 

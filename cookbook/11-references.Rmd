@@ -8,11 +8,11 @@ source("chunk_opts.R")
 More background on the validate package can be found in the paper
 for the R Journal.
 
-> MPJ van der Loo and E de Jonge (2020). [Data Validation Infrastructure for R](https://arxiv.org/abs/1912.09759). _Journal of Statistical Software_ (Accepted).
+> MPJ van der Loo and E de Jonge (2020). [Data Validation Infrastructure for R](https://www.jstatsoft.org/article/view/v097i10). _Journal of Statistical Software_ 97(10)
 
 The theory of data validation is described in the following paper.
 
-> MPJ van der Loo, and E de Jonge (2020). [Data Validation Infrastructure for R](https://arxiv.org/abs/1912.09759). _In Wiley StatsRef: Statistics Reference Online (eds N. Balakrishnan, T. Colton, B. Everitt, W. Piegorsch, F. Ruggeri and J.L. Teugels)_. 
+> MPJ van der Loo, and E de Jonge (2020). [Data Validation](https://arxiv.org/abs/1912.09759). _In Wiley StatsRef: Statistics Reference Online (eds N. Balakrishnan, T. Colton, B. Everitt, W. Piegorsch, F. Ruggeri and J.L. Teugels)_. 
 
 Data validation is described in the wider context of data cleaning, in Chapter 6 of
 the following book.
@@ -28,7 +28,7 @@ complexity analyses and examples from practice.
 The `lumberjack` package discussed in Chapter \@ref(sect:comparing) is described in the following
 paper.
 
-> MPJ van der Loo (2020). [Monitoring Data in R with the lumberjack package](https://arxiv.org/abs/2005.04050 ). _Journal of Statistical Software_, Accepted for publication.
+> MPJ van der Loo (2020). [Monitoring Data in R with the lumberjack package](https://www.jstatsoft.org/article/view/v098i01). _Journal of Statistical Software_, 98(1)
 
 
 

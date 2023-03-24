@@ -5,6 +5,9 @@ version 1.1.2
 - as.data.frame,confrontation-method now returns a zero-row data frame when
   confrontation object has no results or only errors. (Thanks to Patrick
   Driessens for reporting)
+- Cookbook updates: removed reference to FAO SDMX server as it apears to not
+  exist anymore. Updated references and links as journal papers are now
+  published.
 
 version 1.1.1
 - 'aggregate' with argument by="rule" now ensures that the rule-by-rule
