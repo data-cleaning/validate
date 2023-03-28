@@ -6,7 +6,7 @@ source("chunk_opts.R")
 
 
 > Data Validation is an activity verifying whether or not a combination of
-> values is a member of a set of acceptable combinations [(Di Zio et al , 2015)](https://ec.europa.eu/eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf).
+> values is a member of a set of acceptable combinations [(Di Zio et al , 2015)](https://cros-legacy.ec.europa.eu//eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf).
 
 The validate package is intended to make checking your data easy, maintainable, and reproducible.
 It does this by allowing you to

@@ -10,8 +10,7 @@ that assign True or False values to a data frame. In some cases it is
 convenient to have a continuous value that can then be used in further
 assessing the data.
 
-A practical example is the so-called [selective
-editing](https://ec.europa.eu/eurostat/cros/content/selective-editing-theme_en)
+A practical example is the so-called [selective editing](https://cros-legacy.ec.europa.eu//eurostat/cros/content/selective-editing-theme_en)
 approach to data cleaning. Here, each record in a data set is assigned a number
 that expresses the risk a record poses for inferring a faulty conclusion.
 Records are then ordered from high risk (records that both have suspicious

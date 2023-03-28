@@ -110,7 +110,7 @@ source("chunk_opts.R")
 
 
 > Data Validation is an activity verifying whether or not a combination of
-> values is a member of a set of acceptable combinations [(Di Zio et al , 2015)](https://ec.europa.eu/eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf).
+> values is a member of a set of acceptable combinations [(Di Zio et al , 2015)](https://cros-legacy.ec.europa.eu//eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf).
 
 The validate package is intended to make checking your data easy, maintainable, and reproducible.
 It does this by allowing you to
@@ -1528,8 +1528,7 @@ that assign True or False values to a data frame. In some cases it is
 convenient to have a continuous value that can then be used in further
 assessing the data.
 
-A practical example is the so-called [selective
-editing](https://ec.europa.eu/eurostat/cros/content/selective-editing-theme_en)
+A practical example is the so-called [selective editing](https://cros-legacy.ec.europa.eu//eurostat/cros/content/selective-editing-theme_en)
 approach to data cleaning. Here, each record in a data set is assigned a number
 that expresses the risk a record poses for inferring a faulty conclusion.
 Records are then ordered from high risk (records that both have suspicious
@@ -2721,7 +2720,7 @@ The following document describes data validation in the context of European
 Official Statistics. It includes issues such as lifecycle management,
 complexity analyses and examples from practice.
 
->  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://ec.europa.eu/eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
+>  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://cros-legacy.ec.europa.eu//eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
 
 The `lumberjack` package discussed in Chapter \@ref(sect:comparing) is described in the following
 paper.
