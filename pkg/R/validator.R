@@ -70,16 +70,6 @@ ini_validator <- function(obj, ..., .file, .data){
   if (missing(.file) && missing(.data) ){
     .ini_expressionset_cli(obj, ..., .prefix="V")
     obj$._options <- .PKGOPT
-    i <- validating(obj) | is_tran_assign(obj)
-    if ( !all(i) ){
-      invalid <- sapply(which(!i),function(k) deparse(expr(obj[[k]])))
-      wrn <- sprintf("\n[%03d] %s",which(!i), invalid)
-      warning(paste0(
-        "Invalid syntax detected, the following expressions have been ignored:"
-        , paste0(wrn,collapse="")
-        ), call.=FALSE)
-      obj$rules <- obj$rules[i]
-    } 
   } else if (!missing(.file)) {
     .ini_expressionset_yml(obj, file=.file, .prefix="V")
   } else if (!missing(.data)){
@@ -92,6 +82,17 @@ ini_validator <- function(obj, ..., .file, .data){
     }
     obj$._options <- .PKGOPT
   }
+  #check rule validity
+  i <- validating(obj) | is_tran_assign(obj)
+  if ( !all(i) ){
+    invalid <- sapply(which(!i),function(k) deparse(expr(obj[[k]])))
+    wrn <- sprintf("\n[%03d] %s",which(!i), invalid)
+    warning(paste0(
+      "Invalid syntax detected, the following expressions have been ignored:"
+      , paste0(wrn,collapse="")
+      ), call.=FALSE)
+    obj$rules <- obj$rules[i]
+  } 
   for ( r in seq_along(obj)){
     if ( is.null( meta(obj[[r]])$language ) ) { 
       meta(obj[[r]],"language") <- paste("validate",utils::packageVersion("validate"))

@@ -4,4 +4,5 @@ test := sapply(1:length(household_id), function(i){
   all(1:members[i] %in% persons$person_id[persons$household_id == hhid])
 })
 # rule must hold for all households
-all(test)
+all(test==TRUE)
+

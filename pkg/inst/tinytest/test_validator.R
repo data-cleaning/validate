@@ -68,3 +68,10 @@
   v <- validator(x + y > 0)
   F <- plot(v)
 
+
+## rules are checked when reading from file
+expect_warning(r <- validator(.file="txttests/rules.R"))
+expect_equal(length(r),1)
+
+
+
