@@ -213,7 +213,7 @@ note here:
 
 In sections three and four, values for other revenue are imputed and then forced to 
 be nonnegative. In section 5 a ratio model is used to impute missing staff numbers.
-In section 7 the output is written. 
+In section 6 the output is written. 
 
 The purpose of the `lbh_cells()` logger is to record the output of `cells()`
 after each step. To make sure this happens, run this file using `run_file()`
