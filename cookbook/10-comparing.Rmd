@@ -229,7 +229,7 @@ The output is written to a `csv` file which we can read.
 ```{r}
 logfile <- read.csv("spm_lbj_cells.csv")
 ```
-The logfile variable has quite a lot of columns, so here show just two rows.
+The logfile variable has quite a lot of columns, so here we show just two rows.
 ```{r}
 logfile[3:4,]
 ```
