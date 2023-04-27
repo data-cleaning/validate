@@ -143,7 +143,7 @@ inclusions must be specified in that format.
 ## Including other rule files
 
 In validate, rule files can include each other recursively. So file A can
-include file B, which may inclide file C. This is useful for example in surveys
+include file B, which may include file C. This is useful for example in surveys
 where the first part of the questionnaire goes to all respondents, and for the
 second part, the contents of the questionnaire (and hence its variables) depend
 on the respondent type. One could create a files with specific rules for the
