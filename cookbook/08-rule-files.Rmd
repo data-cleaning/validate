@@ -102,10 +102,6 @@ rules1 <- rules[c(1,3)]
 export_yaml(rules1, file="myrules2.yaml")
 ```
 
-We will return extensively to reading rules from YAML or other text files
-in Chapter \@ref(sect:rulefiles).
-
-
 
 
 
