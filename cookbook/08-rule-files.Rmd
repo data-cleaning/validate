@@ -146,7 +146,7 @@ In validate, rule files can include each other recursively. So file A can
 include file B, which may include file C. This is useful for example in surveys
 where the first part of the questionnaire goes to all respondents, and for the
 second part, the contents of the questionnaire (and hence its variables) depend
-on the respondent type. One could create a files with specific rules for the
+on the respondent type. One could create files with specific rules for the
 second part: one for each respondent group, and have each specific rule file
 include the general rules that must hold for every respondent.
 It can also be useful when different persons are responsible for different rule
