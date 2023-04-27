@@ -23,7 +23,7 @@ The following document describes data validation in the context of European
 Official Statistics. It includes issues such as lifecycle management,
 complexity analyses and examples from practice.
 
->  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://cros-legacy.ec.europa.eu//eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
+>  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://cros-legacy.ec.europa.eu/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
 
 The `lumberjack` package discussed in Chapter \@ref(sect:comparing) is described in the following
 paper.
