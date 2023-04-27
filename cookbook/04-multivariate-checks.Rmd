@@ -150,7 +150,7 @@ out <- confront(transactions, rule, ref=list(forbidden_keys=forbidden))
 ## Suppress columns for brevity
 summary(out)[1:7]
 ```
-Observer that we use `glob(forbidden_keys)` to tell `does_not_contain` that the
+Observe that we use `glob(forbidden_keys)` to tell `does_not_contain` that the
 key combinations in the `forbidden_keys` must be interpreted as globbing
 patterns.
 
