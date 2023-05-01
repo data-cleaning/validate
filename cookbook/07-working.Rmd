@@ -1,4 +1,4 @@
-# Working with validate {#sect:work}
+# Working with validate {#sect-work}
 
 
 ```{r, include=FALSE}
@@ -44,7 +44,7 @@ object as `v`.  To make an actual copy, you can select everything.
 w <- v[]
 ```
 It is also possible to concatenate two validator objects. For example when you
-read two rule sets from two files (See \@ref(sect:readfromfile)). This is done
+read two rule sets from two files (See \@ref(sect-readfromfile)). This is done
 by adding them together with `+`.
 ```{r}
 rules1 <- validator(speed>=0)
@@ -152,7 +152,7 @@ sufficient to have three character columns, named `rule`, `name` and
 
 
 
-## Validation rule syntax {#sect:syntax}
+## Validation rule syntax {#sect-syntax}
 
 Conceptually, any R statement that will evaluate to a `logical` is considered a
 validating statement. The validate package checks this when the user defines a
@@ -198,11 +198,11 @@ group aggregates.
 | `mean_by`           | groupwise mean                   |
 | `median_by`         | groupwise median                 |
 
-See also Section \@ref(sect:groupwise).
+See also Section \@ref(sect-groupwise).
 
 There are a number of functions that perform a particular validation task that
 would be hard to express with basic syntax.  These are treated extensively
-in Chapters \@ref(sect:varlevelchecks) to \@ref(sect:statisticalchecks), but
+in Chapters \@ref(sect-varlevelchecks) to \@ref(sect-statisticalchecks), but
 here is a quick overview.
 
 |function             | checks                                                         |
@@ -264,7 +264,7 @@ summary(cf[c(1,3)])
 ```
 
 
-## Confrontation options {#sect:options}
+## Confrontation options {#sect-options}
 By default, all errors and warnings are caught when validation rules are confronted with data. This can be switched off by setting the `raise` option to `"errors"` or `"all"`. The following 
 example contains a specification error: `hite` should be `height` and therefore the rule errors
 on the `women` data.frame because it does not contain a column `hite`. The error is caught

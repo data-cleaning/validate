@@ -1,4 +1,4 @@
-# Indicators {#sect:indicators}
+# Indicators {#sect-indicators}
 
 
 ```{r, include=FALSE}

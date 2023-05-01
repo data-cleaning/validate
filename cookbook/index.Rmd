@@ -56,14 +56,14 @@ The purposes of this book include demonstrating the main tools and workflows of
 the `validate` package, giving examples of common data validation tasks, and
 showing how to analyze data validation results.
 
-The book is organized as follows. Chapter \@ref(sect:intro) discusses the bare
+The book is organized as follows. Chapter \@ref(sect-intro) discusses the bare
 necessities to be able to follow the rest of the book. Chapters
-\@ref(sect:varlevelchecks) to \@ref(sect:statisticalchecks) form the 'cookbook'
+\@ref(sect-varlevelchecks) to \@ref(sect-statisticalchecks) form the 'cookbook'
 part of the book and discuss many different ways to check your data by example.
-Chapter \@ref(sect:indicators) is devoted to deriving plausibility measures
-with the `validate` package.  Chapters \@ref(sect:work) and
-\@ref(sect:rulefiles) treat working with validate in-depth. Chapter
-\@ref(sect:comparing) discusses how to compare two or more versions of a
+Chapter \@ref(sect-indicators) is devoted to deriving plausibility measures
+with the `validate` package.  Chapters \@ref(sect-work) and
+\@ref(sect-rulefiles) treat working with validate in-depth. Chapter
+\@ref(sect-comparing) discusses how to compare two or more versions of a
 dataset, possibly automated through the
 [lumberjack](https://cran.r-project.org/package=lumberjack) package.  The
 section with Biblographical Notes lists some references and points out some

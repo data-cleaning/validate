@@ -1,4 +1,4 @@
-# Variable checks {#sect:varlevelchecks}
+# Variable checks {#sect-varlevelchecks}
 
 ```{r, include=FALSE}
 source("chunk_opts.R")
@@ -47,7 +47,7 @@ We see that each rule checks a single item, namely one column of data. The
 first rule is violated (it is in fact a `factor` variable). The second rule
 is satisfied.
 
-## Missingness {#sect:missingness}
+## Missingness {#sect-missingness}
 
 Use R's standard `is.na()` to check missing items in individual variables. Negate
 it to check that values are available.
@@ -77,8 +77,8 @@ summary(out)
 ```
 
 
-- To check whether records or parts thereof are completed, see \@ref(sect:iscomplete).
-- To check whether records are available at all, see \@ref(sect:completeness).
+- To check whether records or parts thereof are completed, see \@ref(sect-iscomplete).
+- To check whether records are available at all, see \@ref(sect-completeness).
 
 
 ## Field length

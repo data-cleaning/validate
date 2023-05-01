@@ -1,4 +1,4 @@
-# Rules in text files {#sect:rulefiles}
+# Rules in text files {#sect-rulefiles}
 
 
 ```{r, include=FALSE}
@@ -11,11 +11,11 @@ free-form text and in YAML. We also discuss some more advanced features like
 how to have one rule file include another file.
 
 
-## Reading rules from file {#sect:readfromfile}
+## Reading rules from file {#sect-readfromfile}
 
 It is a very good idea to store and maintain rule sets outside of your R
 script. Validate supports two file formats: simple text files and `yaml` files.
-Here we only discuss simple text files, yaml files are treated in \@ref(sect:yamlfiles).
+Here we only discuss simple text files, yaml files are treated in \@ref(sect-yamlfiles).
 
 To try this, copy the following rules into a new text file and store it in a
 file called `myrules.R`, in the current working directory of your R session.
@@ -34,7 +34,7 @@ regular R code. Reading these rules can be done as follows.
 rules <- validator(.file="myrules.R")
 ```
 
-## Metadata in text files: `YAML` {#sect:yamlfiles}
+## Metadata in text files: `YAML` {#sect-yamlfiles}
 
 [YAML](https://yaml.org) is a data format that aims to be easy to learn and
 human-readable. The name 'YAML' is a [recursive

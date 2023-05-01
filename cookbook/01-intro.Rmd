@@ -1,4 +1,4 @@
-# Introduction to validate {#sect:intro}
+# Introduction to validate {#sect-intro}
 
 ```{r, include=FALSE}
 source("chunk_opts.R")
@@ -110,8 +110,8 @@ need to remember the following.
 
 
 You are now ready to start validating your data, and navigate Chapters
-\@ref(sect:availableunique)-\@ref(sect:statisticalchecks) to learn how to
-define specific types of checks. Chapter~\@ref(sect:work), discusses more
+\@ref(sect-availableunique)-\@ref(sect-statisticalchecks) to learn how to
+define specific types of checks. Chapter~\@ref(sect-work), discusses more
 details about working with `validate`.
 
 

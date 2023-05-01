@@ -1,4 +1,4 @@
-# Statistical checks {#sect:statisticalchecks}
+# Statistical checks {#sect-statisticalchecks}
 
  
 ```{r, include=FALSE}
@@ -35,7 +35,7 @@ head(samplonomy, 3)
 ```
 
 
-## Statistical and groupwise characteristics {#sect:groupwise}
+## Statistical and groupwise characteristics {#sect-groupwise}
 
 Any R expression that ultimately is an equality or inequality check is
 interpreted as a validation rule by validate. This means that any statistical

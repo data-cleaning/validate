@@ -1,4 +1,4 @@
-# Rules from SDMX {#sect:sdmxrules}
+# Rules from SDMX {#sect-sdmxrules}
 
 **Note** This functionality is available for `validate` versions `1.1.0` or higher.
 

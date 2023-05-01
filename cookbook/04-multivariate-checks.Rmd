@@ -19,7 +19,7 @@ head(SBS2000, 3)
 
 ```
 
-## Completeness of records {#sect:iscomplete}
+## Completeness of records {#sect-iscomplete}
 
 The functions `is_complete()` and `all_complete()` are convenience functions
 that test for missing values or combinations thereof in records.
@@ -43,8 +43,8 @@ complete.  The output is one logical value (`TRUE` or `FALSE`) for each record.
 The fourth rule tests whether _all_ values are present in the `id` column, and
 it results in a single `TRUE` or `FALSE`. 
 
-- To test for missing values in individual variables, see also \@ref(sect:missingness).
-- To check whether records are available at all, see \@ref(sect:completeness).
+- To test for missing values in individual variables, see also \@ref(sect-missingness).
+- To check whether records are available at all, see \@ref(sect-completeness).
 
 
 ## Balance equalities and inequalities 
@@ -77,7 +77,7 @@ out <- confront(SBS2000, rules, lin.ineq.eps=0, lin.eq.eps=0.01)
 summary(out)
 ```
 
-See \@ref(sect:options) for more information on setting and resetting options.
+See \@ref(sect-options) for more information on setting and resetting options.
 
 
 ## Conditional restrictions

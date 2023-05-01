@@ -1,4 +1,4 @@
-# Availability and uniqueness {#sect:availableunique}
+# Availability and uniqueness {#sect-availableunique}
 
 
 ```{r, include=FALSE}
@@ -10,8 +10,8 @@ and/or complete with respect to a set of keys, and whether they are unique.
 The checks described here are typically useful for data in 'long' format, where
 one column holds a value and all the other columns identify the value.
 
-- To test for missing values in individual variables, see also \@ref(sect:missingness).
-- To check whether records or parts thereof are completed, see \@ref(sect:iscomplete).
+- To test for missing values in individual variables, see also \@ref(sect-missingness).
+- To check whether records or parts thereof are completed, see \@ref(sect-iscomplete).
 
 **Data**
 
@@ -66,7 +66,7 @@ must add up to the annual values.
 
 
 
-## Uniqueness  {#sect:uniqueness}
+## Uniqueness  {#sect-uniqueness}
 
 The function `is_unique()` checks whether combinations of variables (usually
 key variables) uniquely identify a record. It accepts any positive number of
@@ -138,10 +138,10 @@ is_unique(df$x, df$y)
 
 
 
-## Availability of records {#sect:completeness}
+## Availability of records {#sect-completeness}
 
 This section is on testing for availability of whole records. Testing for individual
-missing values (`r NA`), is treated in \@ref(sect:missingness). 
+missing values (`r NA`), is treated in \@ref(sect-missingness). 
 
 
 We wish to ensure that for each region, and each variable, the periods 2014,

@@ -1,4 +1,4 @@
-# Comparing data sets {#sect:comparing}
+# Comparing data sets {#sect-comparing}
 
 
 ```{r, include=FALSE}

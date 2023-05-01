@@ -25,7 +25,7 @@ complexity analyses and examples from practice.
 
 >  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://cros-legacy.ec.europa.eu/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
 
-The `lumberjack` package discussed in Chapter \@ref(sect:comparing) is described in the following
+The `lumberjack` package discussed in Chapter \@ref(sect-comparing) is described in the following
 paper.
 
 > MPJ van der Loo (2020). [Monitoring Data in R with the lumberjack package](https://www.jstatsoft.org/article/view/v098i01). _Journal of Statistical Software_, 98(1)

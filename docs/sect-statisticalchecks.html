@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Statistical checks | The Data Validation Cookbook</title>
   <meta name="description" content="Chapter 5 Statistical checks | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Statistical checks | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -31,7 +30,8 @@
   
 <link rel="prev" href="multivariate-checks.html"/>
 <link rel="next" href="sect-indicators.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -47,9 +47,9 @@
 
 
 
-
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -144,7 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
 <li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
-<li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect:missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
+<li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect-missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
 <li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
 <li class="chapter" data-level="2.4" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#format-of-numeric-fields"><i class="fa fa-check"></i><b>2.4</b> Format of numeric fields</a></li>
 <li class="chapter" data-level="2.5" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#general-field-format"><i class="fa fa-check"></i><b>2.5</b> General field format</a></li>
@@ -154,18 +154,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
 <li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
-<li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect:uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
-<li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect:completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
+<li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
+<li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
 <li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
-<li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect:iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
+<li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect-iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-checks.html"><a href="multivariate-checks.html#balance-equalities-and-inequalities"><i class="fa fa-check"></i><b>4.2</b> Balance equalities and inequalities</a></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
 <li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
-<li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect:groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
+<li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect-groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
 <li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
 <li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
 <li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
@@ -181,14 +181,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
 <li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
 <li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
-<li class="chapter" data-level="7.4" data-path="sect-work.html"><a href="sect-work.html#sect:syntax"><i class="fa fa-check"></i><b>7.4</b> Validation rule syntax</a></li>
+<li class="chapter" data-level="7.4" data-path="sect-work.html"><a href="sect-work.html#sect-syntax"><i class="fa fa-check"></i><b>7.4</b> Validation rule syntax</a></li>
 <li class="chapter" data-level="7.5" data-path="sect-work.html"><a href="sect-work.html#confrontation-objects"><i class="fa fa-check"></i><b>7.5</b> Confrontation objects</a></li>
-<li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect:options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
+<li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect-options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
 <li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
-<li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect:readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
-<li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect:yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
+<li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
+<li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
 <li class="chapter" data-level="8.4" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.5" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
@@ -226,8 +226,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sect:statisticalchecks" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> Statistical checks</h1>
+<div id="sect-statisticalchecks" class="section level1 hasAnchor">
+<h1><span class="header-section-number">Chapter 5</span> Statistical checks<a href="sect-statisticalchecks.html#sect-statisticalchecks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Statistical checks involve group properties such as the means of columns. These
 characteristics can be checked for whole columns or grouped by one or more
 categorical variables. It is also possible to use group-wise computed
@@ -258,8 +258,8 @@ in every household (a group of persons) there is exactly one head of household.<
 ## 1  Agria    A   2014     gdp 600000
 ## 2  Agria    A   2014  import 210000
 ## 3  Agria    A   2014  export 222000</code></pre>
-<div id="sect:groupwise" class="section level2">
-<h2><span class="header-section-number">5.1</span> Statistical and groupwise characteristics</h2>
+<div id="sect-groupwise" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.1</span> Statistical and groupwise characteristics<a href="sect-statisticalchecks.html#sect-groupwise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Any R expression that ultimately is an equality or inequality check is
 interpreted as a validation rule by validate. This means that any statistical
 calculation can be input to a rule.</p>
@@ -303,8 +303,8 @@ equal to the length of the input.</p>
 ## 6  sc0    351</code></pre>
 <p>There are also some convenience functions, including <code>sum_by</code>, <code>mean_by</code>, <code>min_by</code>, and <code>max_by</code>.</p>
 </div>
-<div id="group-properties" class="section level2">
-<h2><span class="header-section-number">5.2</span> Group properties</h2>
+<div id="group-properties" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.2</span> Group properties<a href="sect-statisticalchecks.html#group-properties" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In this section, we group data by one or more categorical variables and
 check for each group whether a rule is satisfied. In particular we are
 going to check whether each household in a small dataset has a unique
@@ -366,8 +366,8 @@ in that group is indicated as wrong (<code>FALSE</code>).</p>
 <pre><code>## [1] region  freq    period  measure value  
 ## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 </div>
-<div id="code-hierarchies-and-aggregation" class="section level2">
-<h2><span class="header-section-number">5.3</span> Code hierarchies and aggregation</h2>
+<div id="code-hierarchies-and-aggregation" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.3</span> Code hierarchies and aggregation<a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Classifications and ontologies often have a hierarchical structure.
 A well-known example is the
 <a href="https://en.wikipedia.org/wiki/Statistical_Classification_of_Economic_Activities_in_the_European_Community">NACE</a> classification of economic activities. In the NACE classification,
@@ -525,8 +525,8 @@ rules separately.</p>
 <p>From this it appears that in 2015, the GDP for Agria is missing, and in
 2018Q3 there is no value for the export of Induston.</p>
 </div>
-<div id="general-aggregates-in-long-form-data" class="section level2">
-<h2><span class="header-section-number">5.4</span> General aggregates in long-form data</h2>
+<div id="general-aggregates-in-long-form-data" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.4</span> General aggregates in long-form data<a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Checking aggregations in long-form format is more involved than for
 data in wide format (as in Section <a href="multivariate-checks.html#balance-equalities-and-inequalities">4.2</a>).</p>
 <p>Here, we check in the <code>samplonomy</code> dataset that for each measure and each
@@ -583,8 +583,8 @@ is missing from the data set. This turns out indeed to be the case.</p>
 ## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 <p>Second, it can be seen that for Induston, there are two export values for
 <code>"2018Q2"</code> while the export value for <code>"2018Q3"</code> is missing.</p>
-<div id="notes" class="section level3 unnumbered">
-<h3>Notes</h3>
+<div id="notes" class="section level3 unnumbered hasAnchor">
+<h3>Notes<a href="sect-statisticalchecks.html#notes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Specifying (group-wise) aggregates is a fairly detailed job in the case of long
 data. There are a few things to keep in mind when using this function.</p>
 <ul>
@@ -607,8 +607,8 @@ argument. E.g. for integer data you may want to set <code>tol=0</code>.</li>
 </ul>
 </div>
 </div>
-<div id="aggregates-of-time-series-in-long-format" class="section level2">
-<h2><span class="header-section-number">5.5</span> Aggregates of time series in long format</h2>
+<div id="aggregates-of-time-series-in-long-format" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.5</span> Aggregates of time series in long format<a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We are going to check whether quarterly time series add up to the annual time
 series. This is more complicated because of two subtleties.</p>
 <p>First there is not one fixed aggregate key, like <code>"Samplonia"</code>. Rather, we
@@ -690,7 +690,6 @@ for <code>"2014Q1"</code> as well as the import value of Wheaton for <code>"2019
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -730,6 +729,10 @@ gitbook.start({
 "text": null
 },
 "download": ["validatecookbook.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
@@ -743,7 +746,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
