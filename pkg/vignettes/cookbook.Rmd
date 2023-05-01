@@ -201,7 +201,7 @@ head(df_out, 3)
 ```
 We see that in record `1`, rule `V1`, was satisfied (the result is `TRUE`), and
 that validate left a bit of slack when executing the rule, to avoid false
-negatives caused machine rounding issues.
+negatives caused by machine rounding issues.
 
 
 Summarizing, the basic workflow in `validate` is to create a rule set, confront
@@ -1074,7 +1074,7 @@ out <- confront(transactions, rule, ref=list(forbidden_keys=forbidden))
 ## Suppress columns for brevity
 summary(out)[1:7]
 ```
-Observer that we use `glob(forbidden_keys)` to tell `does_not_contain` that the
+Observe that we use `glob(forbidden_keys)` to tell `does_not_contain` that the
 key combinations in the `forbidden_keys` must be interpreted as globbing
 patterns.
 
@@ -1528,7 +1528,7 @@ that assign True or False values to a data frame. In some cases it is
 convenient to have a continuous value that can then be used in further
 assessing the data.
 
-A practical example is the so-called [selective editing](https://cros-legacy.ec.europa.eu//eurostat/cros/content/selective-editing-theme_en)
+A practical example is the so-called [selective editing](https://cros-legacy.ec.europa.eu/content/selective-editing-theme_en)
 approach to data cleaning. Here, each record in a data set is assigned a number
 that expresses the risk a record poses for inferring a faulty conclusion.
 Records are then ordered from high risk (records that both have suspicious
@@ -1621,7 +1621,7 @@ library(validate)
 
 In this section we dive deeper into the the central object types used in the
 package: the `validator` object type for storing lists of rules, and the
-`confrontatation` object type for storing the results of a validation.
+`confrontation` object type for storing the results of a validation.
 
 
 ## Manipulating rule sets
@@ -2044,10 +2044,6 @@ rules1 <- rules[c(1,3)]
 export_yaml(rules1, file="myrules2.yaml")
 ```
 
-We will return extensively to reading rules from YAML or other text files
-in Chapter \@ref(sect:rulefiles).
-
-
 
 
 
@@ -2089,10 +2085,10 @@ inclusions must be specified in that format.
 ## Including other rule files
 
 In validate, rule files can include each other recursively. So file A can
-include file B, which may inclide file C. This is useful for example in surveys
+include file B, which may include file C. This is useful for example in surveys
 where the first part of the questionnaire goes to all respondents, and for the
 second part, the contents of the questionnaire (and hence its variables) depend
-on the respondent type. One could create a files with specific rules for the
+on the respondent type. One could create files with specific rules for the
 second part: one for each respondent group, and have each specific rule file
 include the general rules that must hold for every respondent.
 It can also be useful when different persons are responsible for different rule
@@ -2587,7 +2583,7 @@ note here:
 
 In sections three and four, values for other revenue are imputed and then forced to 
 be nonnegative. In section 5 a ratio model is used to impute missing staff numbers.
-In section 7 the output is written. 
+In section 6 the output is written. 
 
 The purpose of the `lbh_cells()` logger is to record the output of `cells()`
 after each step. To make sure this happens, run this file using `run_file()`
@@ -2603,7 +2599,7 @@ The output is written to a `csv` file which we can read.
 ```{r}
 logfile <- read.csv("spm_lbj_cells.csv")
 ```
-The logfile variable has quite a lot of columns, so here show just two rows.
+The logfile variable has quite a lot of columns, so here we show just two rows.
 ```{r}
 logfile[3:4,]
 ```
@@ -2720,7 +2716,7 @@ The following document describes data validation in the context of European
 Official Statistics. It includes issues such as lifecycle management,
 complexity analyses and examples from practice.
 
->  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://cros-legacy.ec.europa.eu//eurostat/cros/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
+>  M. Zio, N. Fursova, T. Gelsema, S. Giessing, U Guarnera, J. Ptrauskiene, Q. L. Kalben, M. Scanu, K. ten Bosch, M. van der Loo, and K. Walsdorfe (2015) [Methodology for data validation](https://cros-legacy.ec.europa.eu/system/files/methodology_for_data_validation_v1.0_rev-2016-06_final.pdf). _Deliverable of the ESSNet on validation_.
 
 The `lumberjack` package discussed in Chapter \@ref(sect:comparing) is described in the following
 paper.
