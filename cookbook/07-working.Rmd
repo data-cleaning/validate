@@ -11,7 +11,7 @@ library(validate)
 
 In this section we dive deeper into the the central object types used in the
 package: the `validator` object type for storing lists of rules, and the
-`confrontatation` object type for storing the results of a validation.
+`confrontation` object type for storing the results of a validation.
 
 
 ## Manipulating rule sets

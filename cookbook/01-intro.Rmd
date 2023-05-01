@@ -97,7 +97,7 @@ head(df_out, 3)
 ```
 We see that in record `1`, rule `V1`, was satisfied (the result is `TRUE`), and
 that validate left a bit of slack when executing the rule, to avoid false
-negatives caused machine rounding issues.
+negatives caused by machine rounding issues.
 
 
 Summarizing, the basic workflow in `validate` is to create a rule set, confront
