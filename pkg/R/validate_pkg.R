@@ -1,5 +1,5 @@
 #' Data Validation Infrastructure
-#' 
+#'
 #' 
 #' Data often suffer from errors and missing values. A necessary step before data
 #' analysis is verifying and validating your data. Package \code{validate} is a
@@ -31,6 +31,7 @@
 #' publications.
 #'
 #' @docType package
+#' @aliases validate-package 
 #' @name validate
 #' @useDynLib validate, .registration=TRUE
 #' @aliases package-validate validate
