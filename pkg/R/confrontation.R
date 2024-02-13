@@ -109,7 +109,7 @@ setGeneric("confront",
 #'
 #' @references 
 #' Mark van der Loo and Olav ten Bosch (2017) 
-#' \href{https://goo.gl/hEGdbo}{Design of a generic machine-readable validation report structure}, 
+#' \href{https://markvanderloo.eu/files/share/loo2017design.pdf}{Design of a generic machine-readable validation report structure}, 
 #' version 1.0.0. 
 #' 
 #' @examples

@@ -361,7 +361,7 @@ setReplaceMethod("created",c("rule","POSIXct"),function(x,value){
 
 
 # handy for rule to yaml/json
-as.list.rule <- function(x, expr_as_text = TRUE, ...){
+rule_to_list <- function(x, expr_as_text = TRUE, ...){
   expr <- x@expr
   if (expr_as_text){
     expr <- deparse(expr, width.cutoff = 500L)

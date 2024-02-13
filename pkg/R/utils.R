@@ -100,6 +100,8 @@ violating.data.frame <- function(x, y, include_missing=FALSE, ...){
   
 }
 
+#' @rdname satisfying
+#' @export
 violating.default <- function(x, y, include_missing=FALSE, ...){
   stop("Not implemented for ", class(x), call. = TRUE)
 }

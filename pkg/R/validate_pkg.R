@@ -30,7 +30,6 @@
 #' Please use \code{citation("validate")} to get a citation for (scientific)
 #' publications.
 #'
-#' @docType package
 #' @aliases validate-package 
 #' @name validate
 #' @useDynLib validate, .registration=TRUE
@@ -41,4 +40,6 @@
 #' @import settings
 #' @import yaml
 #' @import grid
-NULL
+"_PACKAGE"
+
+

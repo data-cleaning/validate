@@ -321,8 +321,6 @@ extract_names <- function(L,prefix="V"){
 #' @rdname validate_extend
 #' @param expand_assignments Substitute assignments?
 #' @param expand_groups Expand groups?
-#' @param varlist: a character vector of variables to search through 
-#'    when groups are defined with regexps.
 #' @param vectorize Vectorize if-statements?
 #' @param replace_dollar Replace dollar with bracket index?
 #' @param dat Optionally, a \code{data.frame} containing the data to which the
@@ -791,16 +789,16 @@ setMethod("as_yaml","expressionset",function(x,...){
   if (!identical(x$._options,.PKGOPT)){ # export options when set.
     option_string <- paste0("---\n",yaml::as.yaml(list(options=x$options()),...),"---\n")
   }
-  rule_string <- yaml::as.yaml(rapply(as.list.expressionset(x), f=function(y) paste0("",y),how="replace"),...)
+  rule_string <- yaml::as.yaml(rapply(expressionset_to_list(x), f=function(y) paste0("",y),how="replace"),...)
   paste0(option_string,rule_string)
 })
 
 
 
 
-as.list.expressionset <- function(x, expr_as_text=TRUE, ...){
+expressionset_to_list <- function(x, expr_as_text=TRUE, ...){
   list(
-    rules = lapply(x$rules, as.list.rule, expr_as_text = expr_as_text, ...)
+    rules = lapply(x$rules, rule_to_list, expr_as_text = expr_as_text, ...)
   )
 }
 
