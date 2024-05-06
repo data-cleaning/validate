@@ -9,7 +9,7 @@ source("chunk_opts.R")
 library(validate)
 ```
 
-In this section we dive deeper into the the central object types used in the
+In this section we dive deeper into the central object types used in the
 package: the `validator` object type for storing lists of rules, and the
 `confrontation` object type for storing the results of a validation.
 

@@ -90,7 +90,7 @@ not be interpreted record by record.
 violating(cars, out[1:3])
 ```
 
-We can extract all individual resuls results using for example `as.data.frame`.
+We can extract all individual results using for example `as.data.frame`.
 ```{r}
 df_out <- as.data.frame(out)
 head(df_out, 3)

@@ -184,7 +184,7 @@ The most general way to check whether a field conforms to a pattern is to use a
 treatment of regular expressions is out of scope for this book, but we will
 give a few examples. A good introduction to regular expressions is given by
 
-> J. Friedl (2006) _Mastering regular expressions._ O'Reilley Media.
+> J. Friedl (2006) _Mastering regular expressions._ O'Reilly Media.
 
 
 In `validate` one can use `grepl` or `field_format`, with the argument `type="regex"`
@@ -207,7 +207,7 @@ Globbing patterns are easier to develop and easier to understand  than regular
 expressions, while regular expressions offer far more flexibility but are
 harder to read. Complex and long regular expressions may have subtle matching
 behaviour that is not immediately obvious to inexperienced users. It is
-therefore advisable to test regular expressions with a a small dataset
+therefore advisable to test regular expressions with a small dataset
 representing realistic cases that contains both matches and non-matches. As a
 rule of thumb we would advise to use globbing patterns unless those offer
 insufficient flexibility.
