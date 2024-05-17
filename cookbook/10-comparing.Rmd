@@ -44,7 +44,7 @@ The missing ones are decomposed into those that were already missing in the
 input data and those that are still missing. Similarly, the available values
 can be decomposed into those that were missing before and have been imputed.
 And those that already were available can be decomposed in those that are the
-same as before (unadapted) and those that ave been changed (adapted).
+same as before (unadapted) and those that have been changed (adapted).
 
 
 With the `validate` package, these numbers can be computed for two or more

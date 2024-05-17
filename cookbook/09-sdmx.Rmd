@@ -189,7 +189,7 @@ the [OECD](https://data.oecd.org/api/) (in
   [SDMX-ML](https://data.oecd.org/api/sdmx-ml-documentation/) format),
 [Eurostat](https://ec.europa.eu/eurostat/web/sdmx-infospace),
 the International Labour Organisation [ILO (`https://www.ilo.org/sdmx/index.html`)],
-the [Worldbank](https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries),
+the [World Bank](https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries),
 the Bank for International Settlements 
 ([BIS](https://www.bis.org/statistics/sdmx_techspec.htm?accordion1=1&m=6%7C346%7C718)),
 and the Italian Office of National Statistics (ISTAT).

@@ -71,7 +71,7 @@ must add up to the annual values.
 The function `is_unique()` checks whether combinations of variables (usually
 key variables) uniquely identify a record. It accepts any positive number of
 variable names and returns `FALSE` for each record that is duplicated with
-respect to the designated variariables.
+respect to the designated variables.
 
 
 Here, we test whether region, period, and measure uniquely identify a value in
@@ -99,7 +99,7 @@ df <- data.frame(x = c(1,1), y = c("A",NA))
 df
 ```
 How should we judge whether these two records are unique?  A tempting option is
-to say the the first record is unique, and to return `NA` for the second record
+to say the first record is unique, and to return `NA` for the second record
 since it contains a missing value: R has the habit of returning `NA` from
 calculations when an input value is `NA`. This choice is not invalid, but it
 would have consequences for determining whether the first record is unique as
@@ -107,7 +107,7 @@ well. After all, it is possible to fill in a value in the missing field such
 that the two records are duplicates. Therefore, if one would return `NA` for
 the second record, the correct thing to do is to also return `NA` for the first
 record. In R, the choice is made to treat `NA` as an actual value when checking
-for duplicates or uniqe records (see `?duplicated` from base R). To see this
+for duplicates or unique records (see `?duplicated` from base R). To see this
 inspect the following code and output.
 ```{r}
 df <- data.frame(x=rep(1,3), y = c("A", NA, NA))

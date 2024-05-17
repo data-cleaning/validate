@@ -66,7 +66,7 @@ with the `validate` package.  Chapters \@ref(sect-work) and
 \@ref(sect-comparing) discusses how to compare two or more versions of a
 dataset, possibly automated through the
 [lumberjack](https://cran.r-project.org/package=lumberjack) package.  The
-section with Biblographical Notes lists some references and points out some
+section with Bibliographical Notes lists some references and points out some
 literature for further reading.
 
 
@@ -93,15 +93,15 @@ To cite this cookbook, please use the following citation.
 ## Acknowledgements {-}
 
 This work was partially funded by European Grant Agreement 88287--NL-VALIDATION
-of the European Statistcal System.
+of the European Statistical System.
 
 
 ## Contributing {-}
 
 If you find a mistake, or have some suggestions, please file an issue or a pull
-request on the github page of the package:
+request on the GitHub page of the package:
 [https://github.com/data-cleaning/validate](https://github.com/data-cleaning/validate).
-If you do not have or want a github account, you can contact the author via the
+If you do not have or want a GitHub account, you can contact the author via the
 e-mail address that is listed with the package.
 
 
