@@ -68,6 +68,12 @@
   v <- validator(x + y > 0)
   F <- plot(v)
 
+## validator works with rule containing ---
+v <- validator(x %in% c("---"))
+export_yaml(v, file = "yamltests/tricky_rules.yaml")
+v_2 <- validator(.file = "yamltests/tricky_rules.yaml")
+expect_equal(length(validator), 1)
+file.remove("yamltests/tricky_rules.yaml")
 
 ## rules are checked when reading from file
 expect_warning(r <- validator(.file="txttests/rules.R"))

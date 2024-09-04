@@ -83,7 +83,7 @@ is_r <- function(string){
 
 # find yaml documents and parse them
 yaml_blocks <- function(lines){
-  S <- strsplit(x = paste0(lines,collapse="\n"), split="---[[:blank:]]*\\n?")[[1]]
+  S <- strsplit(x = paste0(lines,collapse="\n"), split="(^|\\n)---[[:blank:]]*\\n?")[[1]]
   S <- Filter(function(x) nchar(x)>0,S)
   lapply(S, function(s){ 
     if ( is_yaml(s)  && valid_yaml(s) ){ 
