@@ -149,7 +149,7 @@ global_codelist <- function(resource_id, agency_id = "SDMX", version="latest"){
 #' @export
 sdmx_endpoint <- function(registry=NULL){
   ENDPOINTS <- c(
-      "ESTAT"  = "https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest" 
+      "ESTAT"  = "https://webgate.ec.europa.eu/fusionregistry/sdmx/v2/" 
     , "GLOBAL" = "https://registry.sdmx.org/ws/public/sdmxapi/rest"
   )
 
