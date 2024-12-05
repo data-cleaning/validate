@@ -59,6 +59,7 @@ To cite the theory, please cite our [Wiley StatsRef](https://arxiv.org/abs/2012.
 
 #### Other Resources
 
+- [Tutorial material](https://github.com/markvanderloo/2024uRos) from the tutorial at _uRos2024_ (Greece)
 - [Tutorial material](https://github.com/data-cleaning/validate) from our tutorial at _useR!_2021
 - [The Data Validation Cookbook](https://data-cleaning.github.io/validate)
 - [Slides](http://www.slideshare.net/MarkVanDerLoo/data-validation-infrastructure-the-validate-package) of the [useR2016](http://www.useR2016.org) talk (Stanford University, June 28 2016).
