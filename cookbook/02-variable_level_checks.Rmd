@@ -201,6 +201,9 @@ as: the string starts (`"^"`) with `"sc"`, is followed by a number between 0
 and 9 (`"[0-9]"`) and then ends (`"$"`). The regular expression `"^RET\\{d}2"`
 indicates that a string must start (`"^"`) with `"RET"`, followed by two
 digits (`"\\d{2}"`), after which the string must end (`"$"`).
+For simpler, static, patterns `startsWith` and `endsWith` are also available. 
+Though less flexible than `grepl` and `field_format` using either of these functions
+can arguably lead to validator syntax that is easier to read and understand.
 
 
 Globbing patterns are easier to develop and easier to understand  than regular

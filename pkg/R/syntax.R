@@ -38,7 +38,7 @@
 #' 
 #' @section Text search:
 #' 
-#' \code{grepl} is a validating expression.
+#' \code{grepl}, \code{startsWith} and \code{endsWith} are validating expression.
 #' 
 #' @section Functional dependencies:
 #' 
