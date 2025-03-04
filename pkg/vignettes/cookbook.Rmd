@@ -118,7 +118,7 @@ It does this by allowing you to
 - test data against a reusable set of data validation rules:
 - investigate, summarise, and visualise data validation results;
 - import and export rule sets from and to various formats;
-- filter, select and otherwise manipulate data validation rules;
+- filter, select and otherwise manipulate data validation rules';
 - investigate, summarise, and visualise rule sets.
 
 For advanced rule manipulation there is the
@@ -317,7 +317,7 @@ rules <- validator(
 out <- confront(SBS2000, rules)
 summary(out)
 ```
-One advantage of `field_length` is that its argument is converted to
+One advantage of `check_field_length` is that its argument is converted to
 character (recall that `size` is a `factor` variable). The function
 `field_length` can be used to either test for exact field lengths or to
 check whether the number of characters is within a certain range.
@@ -420,7 +420,7 @@ summary(confront(SBS2000, rule))
 
 Here, the expression `"^sc[0-9]$"` is a regular expression that should be read
 as: the string starts (`"^"`) with `"sc"`, is followed by a number between 0
-and 9 (`"[0-9]"`) and then ends (`"$"`). The regular expression `"^RET\\d{2}"`
+and 9 (`"[0-9]"`) and then ends (`"$"`). The regular expression `"^RET\\{d}2"`
 indicates that a string must start (`"^"`) with `"RET"`, followed by two
 digits (`"\\d{2}"`), after which the string must end (`"$"`).
 
@@ -517,7 +517,7 @@ c(1, 3, NA) %vin% c(1,2)
 ```
 
 For longer code lists it is convenient to refer to an externally provided list.
-There are two ways of doing this: reading the list in the right-hand-side of `%in%`,
+There are two ways of doing this: reading the list in the right-hand-size of `%in%`,
 or passing a code list to `confront` as reference data.
 
 Suppose we have a file called `codelist.csv` with a column `code`. We can define

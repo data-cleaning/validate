@@ -372,7 +372,8 @@ linear_call <- function(x){
 
 validating_call <- function(cl){
   pure <- c("<", "<=", "==", "!=", ">=", ">", "%in%", "%vin%", "identical", "~" ,"%->%"
-          , "grepl" , "nzchar", "is_unique", "all_unique", "is_complete", "all_complete"
+          , "grepl" , "nzchar","startsWith","endsWith", "is_unique"
+          , "all_unique", "is_complete", "all_complete"
           , "exists_any", "exists_one", "is_linear_sequence","in_linear_sequence" 
           , "part_whole_relation","hierarchy"
           , "field_length", "number_format", "field_format"

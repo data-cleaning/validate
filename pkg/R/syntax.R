@@ -38,7 +38,8 @@
 #' 
 #' @section Text search:
 #' 
-#' \code{grepl} is a validating expression.
+#' \code{grepl}, \code{nzchar}, \code{startsWith}, and \code{endsWith} are validating 
+#' expressions.
 #' 
 #' @section Functional dependencies:
 #' 
