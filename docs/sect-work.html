@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Working with validate | The Data Validation Cookbook</title>
   <meta name="description" content="Chapter 7 Working with validate | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Working with validate | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
@@ -53,25 +53,27 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,15 +82,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -101,7 +103,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -115,6 +117,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -132,17 +138,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Data Validation Cookbook</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citing-this-work"><i class="fa fa-check"></i>Citing this work</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i>Contributing</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
+<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="sect-intro.html"><a href="sect-intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
+<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
 <li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect-missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
 <li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
@@ -152,32 +161,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.7" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
 <li class="chapter" data-level="2.8" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
+<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
 <li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
 <li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
 <li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect-iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-checks.html"><a href="multivariate-checks.html#balance-equalities-and-inequalities"><i class="fa fa-check"></i><b>4.2</b> Balance equalities and inequalities</a></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
 <li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
+<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect-groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
 <li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
 <li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
-<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
+<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a>
+<ul>
 <li class="chapter" data-level="" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
+<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="sect-indicators.html"><a href="sect-indicators.html#a-first-example"><i class="fa fa-check"></i><b>6.1</b> A first example</a></li>
 <li class="chapter" data-level="6.2" data-path="sect-indicators.html"><a href="sect-indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
+<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
 <li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
 <li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
@@ -186,21 +201,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect-options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
 <li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
+<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
 <li class="chapter" data-level="8.4" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.5" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
 <li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
 <li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
 <li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
 <li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a>
+<ul>
 <li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
 <li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
 <li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
@@ -226,28 +244,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sect-work" class="section level1 hasAnchor">
+<div id="sect-work" class="section level1 hasAnchor" number="7">
 <h1><span class="header-section-number">Chapter 7</span> Working with validate<a href="sect-work.html#sect-work" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>In this section we dive deeper into the the central object types used in the
+<p>In this section we dive deeper into the central object types used in the
 package: the <code>validator</code> object type for storing lists of rules, and the
 <code>confrontation</code> object type for storing the results of a validation.</p>
-<div id="manipulating-rule-sets" class="section level2 hasAnchor">
+<div id="manipulating-rule-sets" class="section level2 hasAnchor" number="7.1">
 <h2><span class="header-section-number">7.1</span> Manipulating rule sets<a href="sect-work.html#manipulating-rule-sets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Validate stores rulesets into something called a <code>validator</code> object. The
 <code>validator()</code> function creates such an object.</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, dist<span class="op">&gt;=</span><span class="dv">0</span>, speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb208-2" title="2">v</a></code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="sect-work.html#cb208-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">validator</span>(speed <span class="sc">&gt;=</span> <span class="dv">0</span>, dist<span class="sc">&gt;=</span><span class="dv">0</span>, speed<span class="sc">/</span>dist <span class="sc">&lt;=</span> <span class="fl">1.5</span>)</span>
+<span id="cb208-2"><a href="sect-work.html#cb208-2" tabindex="-1"></a>v</span></code></pre></div>
 <pre><code>## Object of class &#39;validator&#39; with 3 elements:
 ##  V1: speed &gt;= 0
 ##  V2: dist &gt;= 0
 ##  V3: speed/dist &lt;= 1.5</code></pre>
 <p>Validator objects behave a lot like lists. For example, you can select items
 to get a new <code>validator</code>. Here, we select the first and third element.</p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1">w &lt;-<span class="st"> </span>v[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="sect-work.html#cb210-1" tabindex="-1"></a>w <span class="ot">&lt;-</span> v[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span></code></pre></div>
 <p>Here <code>w</code> is a new validator object holding only the first and third rule from
 <code>v</code>. If not specified by the user, rules are given the default names <code>"V1"</code>,
 <code>"V2"</code>, and so on. Those names can also be used for selecting rules.</p>
-<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" title="1">w &lt;-<span class="st"> </span>v[<span class="kw">c</span>(<span class="st">&quot;V1&quot;</span>,<span class="st">&quot;V3&quot;</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="sect-work.html#cb211-1" tabindex="-1"></a>w <span class="ot">&lt;-</span> v[<span class="fu">c</span>(<span class="st">&quot;V1&quot;</span>,<span class="st">&quot;V3&quot;</span>)]</span></code></pre></div>
 <p>Validator objects are reference objects. This means that if you do</p>
 <pre><code>w &lt;- v</code></pre>
 <p>then <code>w</code> is not a copy of <code>v</code>. It is just another name for the same physical
@@ -256,14 +274,14 @@ object as <code>v</code>. To make an actual copy, you can select everything.</p>
 <p>It is also possible to concatenate two validator objects. For example when you
 read two rule sets from two files (See <a href="sect-rulefiles.html#sect-readfromfile">8.1</a>). This is done
 by adding them together with <code>+</code>.</p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1">rules1 &lt;-<span class="st"> </span><span class="kw">validator</span>(speed<span class="op">&gt;=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb214-2" title="2">rules2 &lt;-<span class="st"> </span><span class="kw">validator</span>(dist <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb214-3" title="3">all_rules &lt;-<span class="st"> </span>rules1 <span class="op">+</span><span class="st"> </span>rules2</a></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="sect-work.html#cb214-1" tabindex="-1"></a>rules1 <span class="ot">&lt;-</span> <span class="fu">validator</span>(speed<span class="sc">&gt;=</span><span class="dv">0</span>)</span>
+<span id="cb214-2"><a href="sect-work.html#cb214-2" tabindex="-1"></a>rules2 <span class="ot">&lt;-</span> <span class="fu">validator</span>(dist <span class="sc">&gt;=</span> <span class="dv">0</span>)</span>
+<span id="cb214-3"><a href="sect-work.html#cb214-3" tabindex="-1"></a>all_rules <span class="ot">&lt;-</span> rules1 <span class="sc">+</span> rules2</span></code></pre></div>
 <p>An empty validator object is created with <code>validator()</code>.</p>
 <p>If you select a single element of a validator object, an object of class ‘rule’
 is returned. This is the validating expression entered by the user, plus some
 (optional) metadata.</p>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" title="1">v[[<span class="dv">3</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="sect-work.html#cb215-1" tabindex="-1"></a>v[[<span class="dv">3</span>]]</span></code></pre></div>
 <pre><code>## 
 ## Object of class rule.
 ##  expr       : speed/dist &lt;= 1.5 
@@ -271,13 +289,13 @@ is returned. This is the validating expression entered by the user, plus some
 ##  label      :  
 ##  description:  
 ##  origin     : command-line 
-##  created    : 2023-05-01 11:10:39
+##  created    : 2025-04-25 14:31:10
 ##  meta       : language&lt;chr&gt;, severity&lt;chr&gt;</code></pre>
 <p>Users never need to manipulate rule objects, but it can be convenient to
 inspect them. As you see, the rules have some automatically created metadata.
 In the next section we demonstrate how to retrieve and set the metadata.</p>
 </div>
-<div id="rule-metadata" class="section level2 hasAnchor">
+<div id="rule-metadata" class="section level2 hasAnchor" number="7.2">
 <h2><span class="header-section-number">7.2</span> Rule metadata<a href="sect-work.html#rule-metadata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Validator objects behave a lot like lists. The only metadata in an R
 list are the <code>names</code> of its elements. You can get and set names of a list
@@ -293,24 +311,24 @@ for rule metadata.</p>
 </ul>
 <p>Names can be set on the command line, just like how you would do it for
 an R list.</p>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">positive_speed =</span> speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="dt">ratio =</span> speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb217-2" title="2">rules</a></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="sect-work.html#cb217-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="at">positive_speed =</span> speed <span class="sc">&gt;=</span> <span class="dv">0</span>, <span class="at">ratio =</span> speed<span class="sc">/</span>dist <span class="sc">&lt;=</span> <span class="fl">1.5</span>)</span>
+<span id="cb217-2"><a href="sect-work.html#cb217-2" tabindex="-1"></a>rules</span></code></pre></div>
 <pre><code>## Object of class &#39;validator&#39; with 2 elements:
 ##  positive_speed: speed &gt;= 0
 ##  ratio         : speed/dist &lt;= 1.5</code></pre>
 <p>Getting and setting names works the same as for lists.</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" title="1"><span class="kw">names</span>(rules)</a></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="sect-work.html#cb219-1" tabindex="-1"></a><span class="fu">names</span>(rules)</span></code></pre></div>
 <pre><code>## [1] &quot;positive_speed&quot; &quot;ratio&quot;</code></pre>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" title="1"><span class="kw">names</span>(rules)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;nonnegative_speed&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="sect-work.html#cb221-1" tabindex="-1"></a><span class="fu">names</span>(rules)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;nonnegative_speed&quot;</span></span></code></pre></div>
 <p>The functions <code>origin()</code>, <code>created()</code>, <code>label()</code>, and <code>description()</code> work in
 the same way. It is also possible to add generic key-value pairs as metadata.
 Getting and setting follows the usual recycling rules of R.</p>
-<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb222-1" title="1"><span class="co"># add &#39;foo&#39; to the first rule:</span></a>
-<a class="sourceLine" id="cb222-2" title="2"><span class="kw">meta</span>(rules[<span class="dv">1</span>],<span class="st">&quot;foo&quot;</span>) &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb222-3" title="3"><span class="co"># Add &#39;bar&#39; to all rules</span></a>
-<a class="sourceLine" id="cb222-4" title="4"><span class="kw">meta</span>(rules,<span class="st">&quot;bar&quot;</span>) &lt;-<span class="st"> &quot;baz&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="sect-work.html#cb222-1" tabindex="-1"></a><span class="co"># add &#39;foo&#39; to the first rule:</span></span>
+<span id="cb222-2"><a href="sect-work.html#cb222-2" tabindex="-1"></a><span class="fu">meta</span>(rules[<span class="dv">1</span>],<span class="st">&quot;foo&quot;</span>) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb222-3"><a href="sect-work.html#cb222-3" tabindex="-1"></a><span class="co"># Add &#39;bar&#39; to all rules</span></span>
+<span id="cb222-4"><a href="sect-work.html#cb222-4" tabindex="-1"></a><span class="fu">meta</span>(rules,<span class="st">&quot;bar&quot;</span>) <span class="ot">&lt;-</span> <span class="st">&quot;baz&quot;</span></span></code></pre></div>
 <p>Metadata can be made visible by selecting a single rule:</p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" title="1">v[[<span class="dv">1</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="sect-work.html#cb223-1" tabindex="-1"></a>v[[<span class="dv">1</span>]]</span></code></pre></div>
 <pre><code>## 
 ## Object of class rule.
 ##  expr       : speed &gt;= 0 
@@ -318,60 +336,60 @@ Getting and setting follows the usual recycling rules of R.</p>
 ##  label      :  
 ##  description:  
 ##  origin     : command-line 
-##  created    : 2023-05-01 11:10:39
+##  created    : 2025-04-25 14:31:10
 ##  meta       : language&lt;chr&gt;, severity&lt;chr&gt;</code></pre>
 <p>Or by extracting it to a <code>data.frame</code></p>
-<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" title="1"><span class="kw">meta</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="sect-work.html#cb225-1" tabindex="-1"></a><span class="fu">meta</span>(v)</span></code></pre></div>
 <pre><code>##   name label description       origin             created       language
-## 1   V1                   command-line 2023-05-01 11:10:39 validate 1.1.3
-## 2   V2                   command-line 2023-05-01 11:10:39 validate 1.1.3
-## 3   V3                   command-line 2023-05-01 11:10:39 validate 1.1.3
+## 1   V1                   command-line 2025-04-25 14:31:10 validate 1.1.5
+## 2   V2                   command-line 2025-04-25 14:31:10 validate 1.1.5
+## 3   V3                   command-line 2025-04-25 14:31:10 validate 1.1.5
 ##   severity
 ## 1    error
 ## 2    error
 ## 3    error</code></pre>
 <p>Some general information is obtained with <code>summary</code>,</p>
-<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" title="1"><span class="kw">summary</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="sect-work.html#cb227-1" tabindex="-1"></a><span class="fu">summary</span>(v)</span></code></pre></div>
 <pre><code>##   block nvar rules linear
 ## 1     1    2     3      2</code></pre>
 <p>Here, some properties per <em>block</em> of rules is given. Two rules occur in the same
 block if when they share a variable. In this case, all rules occur in the same
 block.</p>
 <p>The number of rules can be requested with <code>length</code></p>
-<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" title="1"><span class="kw">length</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="sect-work.html#cb229-1" tabindex="-1"></a><span class="fu">length</span>(v)</span></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>With <code>variables</code>, the variables occurring per rule, or over all the rules can be requested.</p>
-<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" title="1"><span class="kw">variables</span>(v)</a></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="sect-work.html#cb231-1" tabindex="-1"></a><span class="fu">variables</span>(v)</span></code></pre></div>
 <pre><code>## [1] &quot;speed&quot; &quot;dist&quot;</code></pre>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" title="1"><span class="kw">variables</span>(v,<span class="dt">as=</span><span class="st">&quot;matrix&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="sect-work.html#cb233-1" tabindex="-1"></a><span class="fu">variables</span>(v,<span class="at">as=</span><span class="st">&quot;matrix&quot;</span>)</span></code></pre></div>
 <pre><code>##     variable
 ## rule speed  dist
 ##   V1  TRUE FALSE
 ##   V2 FALSE  TRUE
 ##   V3  TRUE  TRUE</code></pre>
 </div>
-<div id="rules-in-data-frames" class="section level2 hasAnchor">
+<div id="rules-in-data-frames" class="section level2 hasAnchor" number="7.3">
 <h2><span class="header-section-number">7.3</span> Rules in data frames<a href="sect-work.html#rules-in-data-frames" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>You can read and write rules and their metadata from and to data frames. This
 is convenient, for example in cases where rules are retrieved from a central
 rule repository in a data base.</p>
 <p>Exporting rules and their metadata can be done with <code>as.data.frame</code>.</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(speed <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, dist <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, speed<span class="op">/</span>dist <span class="op">&lt;=</span><span class="st"> </span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb235-2" title="2">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(rules)</a></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="sect-work.html#cb235-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(speed <span class="sc">&gt;=</span> <span class="dv">0</span>, dist <span class="sc">&gt;=</span> <span class="dv">0</span>, speed<span class="sc">/</span>dist <span class="sc">&lt;=</span> <span class="fl">1.5</span>)</span>
+<span id="cb235-2"><a href="sect-work.html#cb235-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(rules)</span></code></pre></div>
 <p>Reading from a data frame is done through the <code>.data</code> argument.</p>
-<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">.data=</span>df)</a></code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="sect-work.html#cb236-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="at">.data=</span>df)</span></code></pre></div>
 <p>It is not necessary to define all possible metadata in the data frame. It is
 sufficient to have three character columns, named <code>rule</code>, <code>name</code> and
 <code>description</code> in any order.</p>
 </div>
-<div id="sect-syntax" class="section level2 hasAnchor">
+<div id="sect-syntax" class="section level2 hasAnchor" number="7.4">
 <h2><span class="header-section-number">7.4</span> Validation rule syntax<a href="sect-work.html#sect-syntax" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Conceptually, any R statement that will evaluate to a <code>logical</code> is considered a
 validating statement. The validate package checks this when the user defines a
 rule set, so for example calling <code>validator( mean(height) )</code> will result in a
 warning since just computing <code>mean(x)</code> does not validate anything.</p>
 <p>You will find a concise description of the syntax in the <code>syntax</code> help file.</p>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" title="1">?syntax</a></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="sect-work.html#cb237-1" tabindex="-1"></a>?syntax</span></code></pre></div>
 <p>In short, you can use</p>
 <ul>
 <li>Type checks: any function starting with <code>is.</code></li>
@@ -391,7 +409,7 @@ warning since just computing <code>mean(x)</code> does not validate anything.</p
 <p>A few helper functions are available to compute groupwise values on
 variables (vectors). They differ from functions like <code>aggregate</code> or <code>tapply</code>
 in that their result is always of the same length as the input.</p>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1"><span class="kw">sum_by</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">by =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>), <span class="dt">each=</span><span class="dv">5</span>) )</a></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="sect-work.html#cb238-1" tabindex="-1"></a><span class="fu">sum_by</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">by =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>), <span class="at">each=</span><span class="dv">5</span>) )</span></code></pre></div>
 <pre><code>##  [1] 15 15 15 15 15 40 40 40 40 40</code></pre>
 <p>This is useful for rules where you want to compare individual values with
 group aggregates.</p>
@@ -431,6 +449,10 @@ would be hard to express with basic syntax. These are treated extensively
 in Chapters <a href="sect-varlevelchecks.html#sect-varlevelchecks">2</a> to <a href="sect-statisticalchecks.html#sect-statisticalchecks">5</a>, but
 here is a quick overview.</p>
 <table>
+<colgroup>
+<col width="24%" />
+<col width="75%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>function</th>
@@ -513,7 +535,7 @@ here is a quick overview.</p>
 </tbody>
 </table>
 </div>
-<div id="confrontation-objects" class="section level2 hasAnchor">
+<div id="confrontation-objects" class="section level2 hasAnchor" number="7.5">
 <h2><span class="header-section-number">7.5</span> Confrontation objects<a href="sect-work.html#confrontation-objects" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The outcome of confronting a validator object with a data set is an object of
 class <code>confrontation</code>. There are several ways to extract information from a
@@ -527,36 +549,36 @@ class <code>confrontation</code>. There are several ways to extract information 
 <li><code>warnings</code>: Retrieve warning messages caught during the confrontation.</li>
 </ul>
 <p>By default aggregates are produced by rule.</p>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" title="1">v  &lt;-<span class="st"> </span><span class="kw">validator</span>(height<span class="op">&gt;</span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="dv">0</span>,height<span class="op">/</span>weight <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb240-2" title="2">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(women, rules)</a>
-<a class="sourceLine" id="cb240-3" title="3"><span class="kw">aggregate</span>(cf) </a></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="sect-work.html#cb240-1" tabindex="-1"></a>v  <span class="ot">&lt;-</span> <span class="fu">validator</span>(height<span class="sc">&gt;</span><span class="dv">0</span>, weight<span class="sc">&gt;</span><span class="dv">0</span>,height<span class="sc">/</span>weight <span class="sc">&lt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb240-2"><a href="sect-work.html#cb240-2" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">confront</span>(women, rules)</span>
+<span id="cb240-3"><a href="sect-work.html#cb240-3" tabindex="-1"></a><span class="fu">aggregate</span>(cf) </span></code></pre></div>
 <pre><code>## NULL</code></pre>
 <p>To aggregate by record, use <code>by='record'</code></p>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1"><span class="kw">head</span>(<span class="kw">aggregate</span>(cf,<span class="dt">by=</span><span class="st">&#39;record&#39;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="sect-work.html#cb242-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">aggregate</span>(cf,<span class="at">by=</span><span class="st">&#39;record&#39;</span>))</span></code></pre></div>
 <pre><code>## list()</code></pre>
 <p>Aggregated results can be automatically sorted, so records with the most violations or
 rules that are violated most sort higher.</p>
-<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" title="1"><span class="co"># rules with most violations sorting first:</span></a>
-<a class="sourceLine" id="cb244-2" title="2"><span class="kw">sort</span>(cf)</a></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="sect-work.html#cb244-1" tabindex="-1"></a><span class="co"># rules with most violations sorting first:</span></span>
+<span id="cb244-2"><a href="sect-work.html#cb244-2" tabindex="-1"></a><span class="fu">sort</span>(cf)</span></code></pre></div>
 <pre><code>## NULL</code></pre>
 <p>Confrontation objects can be subsetted with single bracket operators (like
 vectors), to obtain a sub-object pertaining only to the selected rules.</p>
 <pre><code>summary(cf[c(1,3)])</code></pre>
 </div>
-<div id="sect-options" class="section level2 hasAnchor">
+<div id="sect-options" class="section level2 hasAnchor" number="7.6">
 <h2><span class="header-section-number">7.6</span> Confrontation options<a href="sect-work.html#sect-options" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>By default, all errors and warnings are caught when validation rules are confronted with data. This can be switched off by setting the <code>raise</code> option to <code>"errors"</code> or <code>"all"</code>. The following
 example contains a specification error: <code>hite</code> should be <code>height</code> and therefore the rule errors
 on the <code>women</code> data.frame because it does not contain a column <code>hite</code>. The error is caught
 (not resulting in a R error) and shown in the summary,</p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" title="1">v &lt;-<span class="st"> </span><span class="kw">validator</span>(hite <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, weight<span class="op">&gt;</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb247-2" title="2"><span class="kw">summary</span>(<span class="kw">confront</span>(women, v))</a></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="sect-work.html#cb247-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">validator</span>(hite <span class="sc">&gt;</span> <span class="dv">0</span>, weight<span class="sc">&gt;</span><span class="dv">0</span>)</span>
+<span id="cb247-2"><a href="sect-work.html#cb247-2" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">confront</span>(women, v))</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning expression
 ## 1   V1     0      0     0   0  TRUE   FALSE   hite &gt; 0
 ## 2   V2    15     15     0   0 FALSE   FALSE weight &gt; 0</code></pre>
 <p>Setting <code>raise</code> to <code>all</code> results in a R error:</p>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" title="1"><span class="co"># this gives an error</span></a>
-<a class="sourceLine" id="cb249-2" title="2"><span class="kw">confront</span>(women, v, <span class="dt">raise=</span><span class="st">&#39;all&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="sect-work.html#cb249-1" tabindex="-1"></a><span class="co"># this gives an error</span></span>
+<span id="cb249-2"><a href="sect-work.html#cb249-2" tabindex="-1"></a><span class="fu">confront</span>(women, v, <span class="at">raise=</span><span class="st">&#39;all&#39;</span>)</span></code></pre></div>
 <pre><code>## Error in fun(...): object &#39;hite&#39; not found</code></pre>
 <p>Linear equalities form an important class of validation rules. To prevent
 equalities to be strictly tested, there is an option called <code>lin.eq.eps</code> (with
@@ -566,7 +588,7 @@ caused by machine rounding. If you want to check whether a sum-rule is
 satisfied to within one or two units of measurement, it is cleaner to define
 two inequalities for that.</p>
 </div>
-<div id="using-reference-data" class="section level2 hasAnchor">
+<div id="using-reference-data" class="section level2 hasAnchor" number="7.7">
 <h2><span class="header-section-number">7.7</span> Using reference data<a href="sect-work.html#using-reference-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For some checks it is convenient to compare the data under scrutiny with
 other data artifacts. Two common examples include:</p>
@@ -580,20 +602,20 @@ rule set.</li>
 to compare columns from two data frames row-by-row. The user
 has to make sure that the rows of the data set under scrutiny
 (<code>women</code>) matches row-wise with the reference data set (<code>women1</code>).</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" title="1">women1 &lt;-<span class="st"> </span>women</a>
-<a class="sourceLine" id="cb251-2" title="2">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(height <span class="op">==</span><span class="st"> </span>women_reference<span class="op">$</span>height)</a>
-<a class="sourceLine" id="cb251-3" title="3">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(women, rules, <span class="dt">ref =</span> <span class="kw">list</span>(<span class="dt">women_reference =</span> women1))</a>
-<a class="sourceLine" id="cb251-4" title="4"><span class="kw">summary</span>(cf)</a></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="sect-work.html#cb251-1" tabindex="-1"></a>women1 <span class="ot">&lt;-</span> women</span>
+<span id="cb251-2"><a href="sect-work.html#cb251-2" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(height <span class="sc">==</span> women_reference<span class="sc">$</span>height)</span>
+<span id="cb251-3"><a href="sect-work.html#cb251-3" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">confront</span>(women, rules, <span class="at">ref =</span> <span class="fu">list</span>(<span class="at">women_reference =</span> women1))</span>
+<span id="cb251-4"><a href="sect-work.html#cb251-4" tabindex="-1"></a><span class="fu">summary</span>(cf)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    15     15     0   0 FALSE   FALSE
 ##                              expression
 ## 1 height == women_reference[[&quot;height&quot;]]</code></pre>
 <p>Here is how to make a code list available.</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>( fruit <span class="op">%in%</span><span class="st"> </span>codelist )</a>
-<a class="sourceLine" id="cb253-2" title="2">fruits &lt;-<span class="st">  </span><span class="kw">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;orange&quot;</span>)</a>
-<a class="sourceLine" id="cb253-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">fruit =</span> <span class="kw">c</span>(<span class="st">&quot;apple&quot;</span>,<span class="st">&quot;broccoli&quot;</span>,<span class="st">&quot;orange&quot;</span>,<span class="st">&quot;banana&quot;</span>))</a>
-<a class="sourceLine" id="cb253-4" title="4">cf &lt;-<span class="st"> </span><span class="kw">confront</span>(dat, rules, <span class="dt">ref =</span> <span class="kw">list</span>(<span class="dt">codelist =</span> fruits))</a>
-<a class="sourceLine" id="cb253-5" title="5"><span class="kw">summary</span>(cf)</a></code></pre></div>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="sect-work.html#cb253-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>( fruit <span class="sc">%in%</span> codelist )</span>
+<span id="cb253-2"><a href="sect-work.html#cb253-2" tabindex="-1"></a>fruits <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb253-3"><a href="sect-work.html#cb253-3" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">fruit =</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>,<span class="st">&quot;broccoli&quot;</span>,<span class="st">&quot;orange&quot;</span>,<span class="st">&quot;banana&quot;</span>))</span>
+<span id="cb253-4"><a href="sect-work.html#cb253-4" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">confront</span>(dat, rules, <span class="at">ref =</span> <span class="fu">list</span>(<span class="at">codelist =</span> fruits))</span>
+<span id="cb253-5"><a href="sect-work.html#cb253-5" tabindex="-1"></a><span class="fu">summary</span>(cf)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning           expression
 ## 1   V1     4      3     1   0 FALSE   FALSE fruit %vin% codelist</code></pre>
 
@@ -619,42 +641,42 @@ has to make sure that the rows of the data set under scrutiny
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["validatecookbook.pdf"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["validatecookbook.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

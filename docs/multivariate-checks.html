@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Multivariate checks | The Data Validation Cookbook</title>
   <meta name="description" content="Chapter 4 Multivariate checks | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Multivariate checks | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
@@ -53,25 +53,27 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,15 +82,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -101,7 +103,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -115,6 +117,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -132,17 +138,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Data Validation Cookbook</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citing-this-work"><i class="fa fa-check"></i>Citing this work</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i>Contributing</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
+<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="sect-intro.html"><a href="sect-intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
+<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
 <li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect-missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
 <li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
@@ -152,32 +161,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.7" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
 <li class="chapter" data-level="2.8" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
+<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
 <li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
 <li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
 <li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect-iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-checks.html"><a href="multivariate-checks.html#balance-equalities-and-inequalities"><i class="fa fa-check"></i><b>4.2</b> Balance equalities and inequalities</a></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
 <li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
+<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect-groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
 <li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
 <li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
-<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
+<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a>
+<ul>
 <li class="chapter" data-level="" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
+<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="sect-indicators.html"><a href="sect-indicators.html#a-first-example"><i class="fa fa-check"></i><b>6.1</b> A first example</a></li>
 <li class="chapter" data-level="6.2" data-path="sect-indicators.html"><a href="sect-indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
+<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
 <li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
 <li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
@@ -186,21 +201,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect-options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
 <li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
+<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
 <li class="chapter" data-level="8.4" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.5" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
 <li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
 <li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
 <li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
 <li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a>
+<ul>
 <li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
 <li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
 <li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
@@ -226,14 +244,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="multivariate-checks" class="section level1 hasAnchor">
+<div id="multivariate-checks" class="section level1 hasAnchor" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Multivariate checks<a href="multivariate-checks.html#multivariate-checks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>In this Chapter we treat tests that involve relationships between variables.</p>
 <p><strong>Data</strong></p>
 <p>In this Chapter we will use the <code>SBS2000</code> dataset that comes with <code>validate</code>.</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb119-2" title="2"><span class="kw">data</span>(SBS2000)</a>
-<a class="sourceLine" id="cb119-3" title="3"><span class="kw">head</span>(SBS2000, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="multivariate-checks.html#cb119-1" tabindex="-1"></a><span class="fu">library</span>(validate)</span>
+<span id="cb119-2"><a href="multivariate-checks.html#cb119-2" tabindex="-1"></a><span class="fu">data</span>(SBS2000)</span>
+<span id="cb119-3"><a href="multivariate-checks.html#cb119-3" tabindex="-1"></a><span class="fu">head</span>(SBS2000, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##      id size incl.prob staff turnover other.rev total.rev staff.costs
 ## 1 RET01  sc0      0.02    75       NA        NA      1130          NA
 ## 2 RET02  sc3      0.14     9     1607        NA      1607         131
@@ -242,19 +260,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 1       18915  20045  NA
 ## 2        1544     63  NA
 ## 3        6493    426  NA</code></pre>
-<div id="sect-iscomplete" class="section level2 hasAnchor">
+<div id="sect-iscomplete" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> Completeness of records<a href="multivariate-checks.html#sect-iscomplete" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The functions <code>is_complete()</code> and <code>all_complete()</code> are convenience functions
 that test for missing values or combinations thereof in records.</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb121-2" title="2">          <span class="kw">is_complete</span>(id)</a>
-<a class="sourceLine" id="cb121-3" title="3">        , <span class="kw">is_complete</span>(id, turnover)</a>
-<a class="sourceLine" id="cb121-4" title="4">        , <span class="kw">is_complete</span>(id, turnover, profit )</a>
-<a class="sourceLine" id="cb121-5" title="5">        , <span class="kw">all_complete</span>(id)</a>
-<a class="sourceLine" id="cb121-6" title="6">)</a>
-<a class="sourceLine" id="cb121-7" title="7">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
-<a class="sourceLine" id="cb121-8" title="8"><span class="co"># suppress last column for brevity</span></a>
-<a class="sourceLine" id="cb121-9" title="9"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="multivariate-checks.html#cb121-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb121-2"><a href="multivariate-checks.html#cb121-2" tabindex="-1"></a>          <span class="fu">is_complete</span>(id)</span>
+<span id="cb121-3"><a href="multivariate-checks.html#cb121-3" tabindex="-1"></a>        , <span class="fu">is_complete</span>(id, turnover)</span>
+<span id="cb121-4"><a href="multivariate-checks.html#cb121-4" tabindex="-1"></a>        , <span class="fu">is_complete</span>(id, turnover, profit )</span>
+<span id="cb121-5"><a href="multivariate-checks.html#cb121-5" tabindex="-1"></a>        , <span class="fu">all_complete</span>(id)</span>
+<span id="cb121-6"><a href="multivariate-checks.html#cb121-6" tabindex="-1"></a>)</span>
+<span id="cb121-7"><a href="multivariate-checks.html#cb121-7" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rules)</span>
+<span id="cb121-8"><a href="multivariate-checks.html#cb121-8" tabindex="-1"></a><span class="co"># suppress last column for brevity</span></span>
+<span id="cb121-9"><a href="multivariate-checks.html#cb121-9" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     60     0   0 FALSE   FALSE
 ## 2   V2    60     56     4   0 FALSE   FALSE
@@ -271,18 +289,18 @@ it results in a single <code>TRUE</code> or <code>FALSE</code>.</p>
 <li>To check whether records are available at all, see <a href="sect-availableunique.html#sect-completeness">3.3</a>.</li>
 </ul>
 </div>
-<div id="balance-equalities-and-inequalities" class="section level2 hasAnchor">
+<div id="balance-equalities-and-inequalities" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Balance equalities and inequalities<a href="multivariate-checks.html#balance-equalities-and-inequalities" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Balance restrictions occur for example in economic microdata, where financial
 balances must be met.</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb123-2" title="2">    total.rev <span class="op">-</span><span class="st"> </span>profit <span class="op">==</span><span class="st"> </span>total.costs</a>
-<a class="sourceLine" id="cb123-3" title="3">  , turnover <span class="op">+</span><span class="st"> </span>other.rev <span class="op">==</span><span class="st"> </span>total.rev</a>
-<a class="sourceLine" id="cb123-4" title="4">  , profit <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.6</span><span class="op">*</span>total.rev</a>
-<a class="sourceLine" id="cb123-5" title="5">)</a>
-<a class="sourceLine" id="cb123-6" title="6"></a>
-<a class="sourceLine" id="cb123-7" title="7">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
-<a class="sourceLine" id="cb123-8" title="8"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="multivariate-checks.html#cb123-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb123-2"><a href="multivariate-checks.html#cb123-2" tabindex="-1"></a>    total.rev <span class="sc">-</span> profit <span class="sc">==</span> total.costs</span>
+<span id="cb123-3"><a href="multivariate-checks.html#cb123-3" tabindex="-1"></a>  , turnover <span class="sc">+</span> other.rev <span class="sc">==</span> total.rev</span>
+<span id="cb123-4"><a href="multivariate-checks.html#cb123-4" tabindex="-1"></a>  , profit <span class="sc">&lt;=</span> <span class="fl">0.6</span><span class="sc">*</span>total.rev</span>
+<span id="cb123-5"><a href="multivariate-checks.html#cb123-5" tabindex="-1"></a>)</span>
+<span id="cb123-6"><a href="multivariate-checks.html#cb123-6" tabindex="-1"></a></span>
+<span id="cb123-7"><a href="multivariate-checks.html#cb123-7" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rules)</span>
+<span id="cb123-8"><a href="multivariate-checks.html#cb123-8" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     39    14   7 FALSE   FALSE
 ## 2   V2    60     19     4  37 FALSE   FALSE
@@ -300,8 +318,8 @@ equals variable <span class="math inline">\(y\)</span>, <code>validate</code> wi
 default value of <span class="math inline">\(\epsilon\)</span> is <span class="math inline">\(10^{-8}\)</span>. The value of this tolerance can be
 controlled for linear equalities and inequalities using respectively
 <code>lin.eq.eps</code> and <code>lin.ineq.eps</code>.</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules, <span class="dt">lin.ineq.eps=</span><span class="dv">0</span>, <span class="dt">lin.eq.eps=</span><span class="fl">0.01</span>)</a>
-<a class="sourceLine" id="cb125-2" title="2"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="multivariate-checks.html#cb125-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rules, <span class="at">lin.ineq.eps=</span><span class="dv">0</span>, <span class="at">lin.eq.eps=</span><span class="fl">0.01</span>)</span>
+<span id="cb125-2"><a href="multivariate-checks.html#cb125-2" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     39    14   7 FALSE   FALSE
 ## 2   V2    60     19     4  37 FALSE   FALSE
@@ -312,14 +330,14 @@ controlled for linear equalities and inequalities using respectively
 ## 3                     profit &lt;= 0.6 * total.rev</code></pre>
 <p>See <a href="sect-work.html#sect-options">7.6</a> for more information on setting and resetting options.</p>
 </div>
-<div id="conditional-restrictions" class="section level2 hasAnchor">
+<div id="conditional-restrictions" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Conditional restrictions<a href="multivariate-checks.html#conditional-restrictions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Conditional restrictions are all about demanding certain value combinations.
 In the following example we check that a business with staff also has staff
 costs.</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="cf">if</span> (staff <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) staff.costs <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb127-2" title="2">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
-<a class="sourceLine" id="cb127-3" title="3"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="multivariate-checks.html#cb127-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="cf">if</span> (staff <span class="sc">&gt;=</span> <span class="dv">1</span>) staff.costs <span class="sc">&gt;=</span> <span class="dv">1</span>)</span>
+<span id="cb127-2"><a href="multivariate-checks.html#cb127-2" tabindex="-1"></a>out  <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rule)</span>
+<span id="cb127-3"><a href="multivariate-checks.html#cb127-3" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     50     0  10 FALSE   FALSE
 ##                                         expression
@@ -345,39 +363,39 @@ F &amp; F &amp; F\\
 \end{array}
 \]</span></p>
 </div>
-<div id="forbidden-value-combinations" class="section level2 hasAnchor">
+<div id="forbidden-value-combinations" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Forbidden value combinations<a href="multivariate-checks.html#forbidden-value-combinations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In some cases it is more convenient to have a list of forbidden (key) value
 combinations than specifying such combinations individually. The function
 <code>does_not_contain()</code> supports such situations.</p>
 <p>As an example, let’s first create some transaction data.</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1">transactions &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb129-2" title="2">   <span class="dt">sender   =</span> <span class="kw">c</span>(<span class="st">&quot;S21&quot;</span>, <span class="st">&quot;X34&quot;</span>, <span class="st">&quot;S45&quot;</span>,<span class="st">&quot;Z22&quot;</span>)</a>
-<a class="sourceLine" id="cb129-3" title="3"> , <span class="dt">receiver =</span> <span class="kw">c</span>(<span class="st">&quot;FG0&quot;</span>, <span class="st">&quot;FG2&quot;</span>, <span class="st">&quot;DF1&quot;</span>,<span class="st">&quot;KK2&quot;</span>)</a>
-<a class="sourceLine" id="cb129-4" title="4"> , <span class="dt">value    =</span> <span class="kw">sample</span>(<span class="dv">70</span><span class="op">:</span><span class="dv">100</span>,<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb129-5" title="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="multivariate-checks.html#cb129-1" tabindex="-1"></a>transactions <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb129-2"><a href="multivariate-checks.html#cb129-2" tabindex="-1"></a>   <span class="at">sender   =</span> <span class="fu">c</span>(<span class="st">&quot;S21&quot;</span>, <span class="st">&quot;X34&quot;</span>, <span class="st">&quot;S45&quot;</span>,<span class="st">&quot;Z22&quot;</span>)</span>
+<span id="cb129-3"><a href="multivariate-checks.html#cb129-3" tabindex="-1"></a> , <span class="at">receiver =</span> <span class="fu">c</span>(<span class="st">&quot;FG0&quot;</span>, <span class="st">&quot;FG2&quot;</span>, <span class="st">&quot;DF1&quot;</span>,<span class="st">&quot;KK2&quot;</span>)</span>
+<span id="cb129-4"><a href="multivariate-checks.html#cb129-4" tabindex="-1"></a> , <span class="at">value    =</span> <span class="fu">sample</span>(<span class="dv">70</span><span class="sc">:</span><span class="dv">100</span>,<span class="dv">4</span>)</span>
+<span id="cb129-5"><a href="multivariate-checks.html#cb129-5" tabindex="-1"></a>)</span></code></pre></div>
 <p>We assume that it is not possible for senders with codes starting with an <code>"S"</code>
 to send something to receivers starting with <code>FG</code>. A convenient way to encode
 such demands is to use
 <a href="https://en.wikipedia.org/wiki/Glob_(programming)">globbing patterns</a>.
 We create a data frame that lists forbidden combinations (here: one combination
 of two key patterns).</p>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1">forbidden &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">sender=</span><span class="st">&quot;S*&quot;</span>,<span class="dt">receiver =</span> <span class="st">&quot;FG*&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="multivariate-checks.html#cb130-1" tabindex="-1"></a>forbidden <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sender=</span><span class="st">&quot;S*&quot;</span>,<span class="at">receiver =</span> <span class="st">&quot;FG*&quot;</span>)</span></code></pre></div>
 <p>Note that the column names of this data frame correspond to the columns in the transactions
 data frame. We are now ready to check our transactions data frame.</p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">does_not_contain</span>(<span class="kw">glob</span>(forbidden_keys)))</a>
-<a class="sourceLine" id="cb131-2" title="2">out &lt;-<span class="st"> </span><span class="kw">confront</span>(transactions, rule, <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">forbidden_keys=</span>forbidden))</a>
-<a class="sourceLine" id="cb131-3" title="3"><span class="co">## Suppress columns for brevity</span></a>
-<a class="sourceLine" id="cb131-4" title="4"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="multivariate-checks.html#cb131-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="fu">does_not_contain</span>(<span class="fu">glob</span>(forbidden_keys)))</span>
+<span id="cb131-2"><a href="multivariate-checks.html#cb131-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(transactions, rule, <span class="at">ref=</span><span class="fu">list</span>(<span class="at">forbidden_keys=</span>forbidden))</span>
+<span id="cb131-3"><a href="multivariate-checks.html#cb131-3" tabindex="-1"></a><span class="do">## Suppress columns for brevity</span></span>
+<span id="cb131-4"><a href="multivariate-checks.html#cb131-4" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1     4      3     1   0 FALSE   FALSE</code></pre>
 <p>Observe that we use <code>glob(forbidden_keys)</code> to tell <code>does_not_contain</code> that the
 key combinations in the <code>forbidden_keys</code> must be interpreted as globbing
 patterns.</p>
 <p>The records containing forbidden keys can be selected as follows.</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="kw">violating</span>(transactions, out)</a></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="multivariate-checks.html#cb133-1" tabindex="-1"></a><span class="fu">violating</span>(transactions, out)</span></code></pre></div>
 <pre><code>##   sender receiver value
-## 1    S21      FG0    89</code></pre>
+## 1    S21      FG0    97</code></pre>
 <p>It is also possible to use regular expression patterns, by labeling the
 forbidden key set with <code>rx()</code>. If no labeling is used, the key sets are
 interpreted as string literals.</p>
@@ -404,42 +422,42 @@ interpreted as string literals.</p>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["validatecookbook.pdf"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["validatecookbook.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

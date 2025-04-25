@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 9 Rules from SDMX | The Data Validation Cookbook</title>
   <meta name="description" content="Chapter 9 Rules from SDMX | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 9 Rules from SDMX | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
@@ -53,25 +53,27 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,15 +82,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -101,7 +103,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -115,6 +117,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -132,17 +138,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Data Validation Cookbook</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citing-this-work"><i class="fa fa-check"></i>Citing this work</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i>Contributing</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
+<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="sect-intro.html"><a href="sect-intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
+<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
 <li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect-missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
 <li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
@@ -152,32 +161,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.7" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
 <li class="chapter" data-level="2.8" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
+<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
 <li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
 <li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
 <li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect-iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-checks.html"><a href="multivariate-checks.html#balance-equalities-and-inequalities"><i class="fa fa-check"></i><b>4.2</b> Balance equalities and inequalities</a></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
 <li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
+<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect-groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
 <li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
 <li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
-<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
+<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a>
+<ul>
 <li class="chapter" data-level="" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
+<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="sect-indicators.html"><a href="sect-indicators.html#a-first-example"><i class="fa fa-check"></i><b>6.1</b> A first example</a></li>
 <li class="chapter" data-level="6.2" data-path="sect-indicators.html"><a href="sect-indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
+<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
 <li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
 <li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
@@ -186,21 +201,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect-options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
 <li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
+<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
 <li class="chapter" data-level="8.4" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.5" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
 <li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
 <li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
 <li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
 <li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a>
+<ul>
 <li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
 <li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
 <li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
@@ -226,13 +244,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sect-sdmxrules" class="section level1 hasAnchor">
+<div id="sect-sdmxrules" class="section level1 hasAnchor" number="9">
 <h1><span class="header-section-number">Chapter 9</span> Rules from SDMX<a href="sect-sdmxrules.html#sect-sdmxrules" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><strong>Note</strong> This functionality is available for <code>validate</code> versions <code>1.1.0</code> or higher.</p>
 <p>In this Chapter we first demonstrate how to use SDMX with the <code>validate</code>
 package. In <a href="sect-sdmxrules.html#moresdmx">9.5</a> we provide a bit more general information on the
 SDMX landscape, registries, and their APIs.</p>
-<div id="sdmx-and-validate" class="section level2 hasAnchor">
+<div id="sdmx-and-validate" class="section level2 hasAnchor" number="9.1">
 <h2><span class="header-section-number">9.1</span> SDMX and <code>validate</code><a href="sect-sdmxrules.html#sdmx-and-validate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Statistical Data and Metadata eXchange, or SDMX is a standard for storing data
 and the description of its structure, meaning, and content. The standard is
@@ -252,6 +270,10 @@ specific code list for a specific variable in an SDMX registry. The second way
 is to derive a rule set from a DSD file that can be retrieved from a registry.</p>
 <p>Below we discuss the following functions.</p>
 <table>
+<colgroup>
+<col width="28%" />
+<col width="71%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>function</th>
@@ -282,7 +304,7 @@ is to derive a rule set from a DSD file that can be retrieved from a registry.</
 </tbody>
 </table>
 </div>
-<div id="sdmx-and-api-locations" class="section level2 hasAnchor">
+<div id="sdmx-and-api-locations" class="section level2 hasAnchor" number="9.2">
 <h2><span class="header-section-number">9.2</span> SDMX and API locations<a href="sect-sdmxrules.html#sdmx-and-api-locations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>SDMX metadata is typically exposed through a standardized REST API.
 To query an SDMX registry, one needs to supply at least the following
@@ -298,48 +320,48 @@ a type of statistic, like STS (short term statistics).</li>
 </ul>
 <p>Some API endpoints are stored with the package. The function <code>sdmx_endpoint()</code>
 returns endpoint URLs for several SDMX registries. Use</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1"><span class="kw">sdmx_endpoint</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="sect-sdmxrules.html#cb266-1" tabindex="-1"></a><span class="fu">sdmx_endpoint</span>()</span></code></pre></div>
 <p>to get a list of valid endpoints. As an example, to retrieve the endpoint for the global
 SDMX registry, use the following.</p>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1"><span class="kw">sdmx_endpoint</span>(<span class="dt">registry=</span><span class="st">&quot;global&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="sect-sdmxrules.html#cb267-1" tabindex="-1"></a><span class="fu">sdmx_endpoint</span>(<span class="at">registry=</span><span class="st">&quot;global&quot;</span>)</span></code></pre></div>
 <pre><code>##                                             GLOBAL 
 ## &quot;https://registry.sdmx.org/ws/public/sdmxapi/rest&quot;</code></pre>
 </div>
-<div id="code-lists-from-sdmx-registries" class="section level2 hasAnchor">
+<div id="code-lists-from-sdmx-registries" class="section level2 hasAnchor" number="9.3">
 <h2><span class="header-section-number">9.3</span> Code lists from SDMX registries<a href="sect-sdmxrules.html#code-lists-from-sdmx-registries" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Code lists can be retrieved on-the-fly from one of the online SDMX registries.
 In the following rule we retrieve the codelist of economic activities from the
 <a href="https://registry.sdmx.org/overview.html">global SDMX registry</a>.</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1">codelist &lt;-<span class="st"> </span><span class="kw">sdmx_codelist</span>(</a>
-<a class="sourceLine" id="cb269-2" title="2">  <span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;global&quot;</span>)</a>
-<a class="sourceLine" id="cb269-3" title="3">  , <span class="dt">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span></a>
-<a class="sourceLine" id="cb269-4" title="4">  , <span class="dt">resource_id =</span> <span class="st">&quot;CL_ACTIVITY&quot;</span>)</a>
-<a class="sourceLine" id="cb269-5" title="5"></a>
-<a class="sourceLine" id="cb269-6" title="6"><span class="kw">head</span>(codelist)</a>
-<a class="sourceLine" id="cb269-7" title="7">[<span class="dv">1</span>] <span class="st">&quot;_T&quot;</span>  <span class="st">&quot;_X&quot;</span>  <span class="st">&quot;_Z&quot;</span>  <span class="st">&quot;A&quot;</span>   <span class="st">&quot;A_B&quot;</span> <span class="st">&quot;A01&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="sect-sdmxrules.html#cb269-1" tabindex="-1"></a>codelist <span class="ot">&lt;-</span> <span class="fu">sdmx_codelist</span>(</span>
+<span id="cb269-2"><a href="sect-sdmxrules.html#cb269-2" tabindex="-1"></a>  <span class="at">endpoint =</span> <span class="fu">sdmx_endpoint</span>(<span class="st">&quot;global&quot;</span>)</span>
+<span id="cb269-3"><a href="sect-sdmxrules.html#cb269-3" tabindex="-1"></a>  , <span class="at">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span></span>
+<span id="cb269-4"><a href="sect-sdmxrules.html#cb269-4" tabindex="-1"></a>  , <span class="at">resource_id =</span> <span class="st">&quot;CL_ACTIVITY&quot;</span>)</span>
+<span id="cb269-5"><a href="sect-sdmxrules.html#cb269-5" tabindex="-1"></a></span>
+<span id="cb269-6"><a href="sect-sdmxrules.html#cb269-6" tabindex="-1"></a><span class="fu">head</span>(codelist)</span>
+<span id="cb269-7"><a href="sect-sdmxrules.html#cb269-7" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">&quot;_T&quot;</span>  <span class="st">&quot;_X&quot;</span>  <span class="st">&quot;_Z&quot;</span>  <span class="st">&quot;A&quot;</span>   <span class="st">&quot;A_B&quot;</span> <span class="st">&quot;A01&quot;</span></span></code></pre></div>
 <p>Equivalently, and as a convenience, you could use <code>global_codelist()</code> to avoid
 specifying the API endpoint explicitly. The output can be used in a rule.</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" title="1">Activity <span class="op">%in%</span><span class="st"> </span><span class="kw">global_codelist</span>(<span class="dt">agency_id=</span><span class="st">&quot;ESTAT&quot;</span>, <span class="dt">resource_id=</span><span class="st">&quot;CL_ACTIVITY&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="sect-sdmxrules.html#cb270-1" tabindex="-1"></a>Activity <span class="sc">%in%</span> <span class="fu">global_codelist</span>(<span class="at">agency_id=</span><span class="st">&quot;ESTAT&quot;</span>, <span class="at">resource_id=</span><span class="st">&quot;CL_ACTIVITY&quot;</span>)</span></code></pre></div>
 <p>Since downloading codelists can take some time, any function that accesses online
 SDMX registries will store the download in memory for the duration of the R session.</p>
 <p>There is also a <code>estat_codelist()</code> function for downloading codelists from
 the Eurostat SDMX registry.</p>
 </div>
-<div id="derive-rules-from-dsd" class="section level2 hasAnchor">
+<div id="derive-rules-from-dsd" class="section level2 hasAnchor" number="9.4">
 <h2><span class="header-section-number">9.4</span> Derive rules from DSD<a href="sect-sdmxrules.html#derive-rules-from-dsd" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The functions described in the previous subsection allow you to check
 variables against a particular SDMX code list. It is also possible to
 download a complete Data Structure Definition and generate all checks
 implied by the DSD.</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator_from_dsd</span>(<span class="dt">endpoint =</span> <span class="kw">sdmx_endpoint</span>(<span class="st">&quot;ESTAT&quot;</span>)</a>
-<a class="sourceLine" id="cb271-2" title="2">   , <span class="dt">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span>, <span class="dt">resource_id =</span> <span class="st">&quot;STSALL&quot;</span>, <span class="dt">version=</span><span class="st">&quot;latest&quot;</span>)</a>
-<a class="sourceLine" id="cb271-3" title="3"></a>
-<a class="sourceLine" id="cb271-4" title="4"><span class="kw">length</span>(rules)</a>
-<a class="sourceLine" id="cb271-5" title="5">[<span class="dv">1</span>] <span class="dv">13</span></a>
-<a class="sourceLine" id="cb271-6" title="6">rules[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb271-7" title="7">Object of class <span class="st">&#39;validator&#39;</span> with <span class="dv">1</span> elements<span class="op">:</span></a>
-<a class="sourceLine" id="cb271-8" title="8"><span class="st"> </span>CL_FREQ<span class="op">:</span><span class="st"> </span>FREQ <span class="op">%in%</span><span class="st"> </span><span class="kw">sdmx_codelist</span>(<span class="dt">endpoint =</span> <span class="st">&quot;https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest&quot;</span>, <span class="dt">agency_id =</span> <span class="st">&quot;SDMX&quot;</span>, <span class="dt">resource_id =</span> <span class="st">&quot;CL_FREQ&quot;</span>, <span class="dt">version =</span> <span class="st">&quot;2.0&quot;</span>)</a>
-<a class="sourceLine" id="cb271-9" title="9">Rules are evaluated using locally defined options</a></code></pre></div>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="sect-sdmxrules.html#cb271-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator_from_dsd</span>(<span class="at">endpoint =</span> <span class="fu">sdmx_endpoint</span>(<span class="st">&quot;ESTAT&quot;</span>)</span>
+<span id="cb271-2"><a href="sect-sdmxrules.html#cb271-2" tabindex="-1"></a>   , <span class="at">agency_id =</span> <span class="st">&quot;ESTAT&quot;</span>, <span class="at">resource_id =</span> <span class="st">&quot;STSALL&quot;</span>, <span class="at">version=</span><span class="st">&quot;latest&quot;</span>)</span>
+<span id="cb271-3"><a href="sect-sdmxrules.html#cb271-3" tabindex="-1"></a></span>
+<span id="cb271-4"><a href="sect-sdmxrules.html#cb271-4" tabindex="-1"></a><span class="fu">length</span>(rules)</span>
+<span id="cb271-5"><a href="sect-sdmxrules.html#cb271-5" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">13</span></span>
+<span id="cb271-6"><a href="sect-sdmxrules.html#cb271-6" tabindex="-1"></a>rules[<span class="dv">1</span>]</span>
+<span id="cb271-7"><a href="sect-sdmxrules.html#cb271-7" tabindex="-1"></a>Object of class <span class="st">&#39;validator&#39;</span> with <span class="dv">1</span> elements<span class="sc">:</span></span>
+<span id="cb271-8"><a href="sect-sdmxrules.html#cb271-8" tabindex="-1"></a> CL_FREQ<span class="sc">:</span> FREQ <span class="sc">%in%</span> <span class="fu">sdmx_codelist</span>(<span class="at">endpoint =</span> <span class="st">&quot;https://ec.europa.eu/tools/cspa_services_global/sdmxregistry/rest&quot;</span>, <span class="at">agency_id =</span> <span class="st">&quot;SDMX&quot;</span>, <span class="at">resource_id =</span> <span class="st">&quot;CL_FREQ&quot;</span>, <span class="at">version =</span> <span class="st">&quot;2.0&quot;</span>)</span>
+<span id="cb271-9"><a href="sect-sdmxrules.html#cb271-9" tabindex="-1"></a>Rules are evaluated using locally defined options</span></code></pre></div>
 <p>There are 13 rules in total. For brevity, we only show the first rule here.
 Observe that the first rule checks the variable <code>CL_FREQ</code> against a code list
 that is retrieved from the global SDMX registry. A demonstration of the fact
@@ -349,10 +371,10 @@ rule, <code>validate</code> will download the codelist from the global registry 
 compare each value in column <code>CL_FREQ</code> against the codelist.</p>
 <p>Note that the <code>validator_from_dsd</code> function adds relevant metadata such as a
 rule name, the origin of the rule and a short description. Try</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">rule[[<span class="dv">1</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="sect-sdmxrules.html#cb272-1" tabindex="-1"></a>rule[[<span class="dv">1</span>]]</span></code></pre></div>
 <p>to see all information.</p>
 </div>
-<div id="moresdmx" class="section level2 hasAnchor">
+<div id="moresdmx" class="section level2 hasAnchor" number="9.5">
 <h2><span class="header-section-number">9.5</span> More on <code>SDMX</code><a href="sect-sdmxrules.html#moresdmx" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The Statistical Data and Metadata eXchange (SDMX) standard
 is an ISO standard designed to facilitate the exchange or dissemination of
@@ -400,7 +422,7 @@ the <a href="https://data.oecd.org/api/">OECD</a> (in
 <a href="https://data.oecd.org/api/sdmx-ml-documentation/">SDMX-ML</a> format),
 <a href="https://ec.europa.eu/eurostat/web/sdmx-infospace">Eurostat</a>,
 the International Labour Organisation [ILO (<code>https://www.ilo.org/sdmx/index.html</code>)],
-the <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries">Worldbank</a>,
+the <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/1886701-sdmx-api-queries">World Bank</a>,
 the Bank for International Settlements
 (<a href="https://www.bis.org/statistics/sdmx_techspec.htm?accordion1=1&amp;m=6%7C346%7C718">BIS</a>),
 and the Italian Office of National Statistics (ISTAT).
@@ -447,42 +469,42 @@ specific API they try to access (e.g. from <code>validate</code>).</p>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["validatecookbook.pdf"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["validatecookbook.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

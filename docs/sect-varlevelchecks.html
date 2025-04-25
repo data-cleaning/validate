@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Variable checks | The Data Validation Cookbook</title>
   <meta name="description" content="Chapter 2 Variable checks | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Variable checks | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
@@ -53,25 +53,27 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,15 +82,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -101,7 +103,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -115,6 +117,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -132,17 +138,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Data Validation Cookbook</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citing-this-work"><i class="fa fa-check"></i>Citing this work</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i>Contributing</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
+<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="sect-intro.html"><a href="sect-intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
+<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
 <li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect-missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
 <li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
@@ -152,32 +161,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.7" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
 <li class="chapter" data-level="2.8" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
+<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
 <li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
 <li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
 <li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect-iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-checks.html"><a href="multivariate-checks.html#balance-equalities-and-inequalities"><i class="fa fa-check"></i><b>4.2</b> Balance equalities and inequalities</a></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
 <li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
+<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect-groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
 <li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
 <li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
-<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
+<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a>
+<ul>
 <li class="chapter" data-level="" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
+<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="sect-indicators.html"><a href="sect-indicators.html#a-first-example"><i class="fa fa-check"></i><b>6.1</b> A first example</a></li>
 <li class="chapter" data-level="6.2" data-path="sect-indicators.html"><a href="sect-indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
+<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
 <li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
 <li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
@@ -186,21 +201,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect-options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
 <li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
+<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
 <li class="chapter" data-level="8.4" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.5" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
 <li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
 <li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
 <li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
 <li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a>
+<ul>
 <li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
 <li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
 <li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
@@ -226,16 +244,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sect-varlevelchecks" class="section level1 hasAnchor">
+<div id="sect-varlevelchecks" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Variable checks<a href="sect-varlevelchecks.html#sect-varlevelchecks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Variable checks are checks that can be performed on a field-by-field basis. An
 example is checking that a variable called <code>Age</code> is nonnegative, or of integer
 type. Variable checks are among the simplest checks.</p>
 <p><strong>Data</strong></p>
 <p>In this section we will use the <code>SBS2000</code> dataset, that is included with <code>validate</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb13-2" title="2"><span class="kw">data</span>(SBS2000)</a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="kw">head</span>(SBS2000, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="sect-varlevelchecks.html#cb13-1" tabindex="-1"></a><span class="fu">library</span>(validate)</span>
+<span id="cb13-2"><a href="sect-varlevelchecks.html#cb13-2" tabindex="-1"></a><span class="fu">data</span>(SBS2000)</span>
+<span id="cb13-3"><a href="sect-varlevelchecks.html#cb13-3" tabindex="-1"></a><span class="fu">head</span>(SBS2000, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##      id size incl.prob staff turnover other.rev total.rev staff.costs
 ## 1 RET01  sc0      0.02    75       NA        NA      1130          NA
 ## 2 RET02  sc3      0.14     9     1607        NA      1607         131
@@ -245,22 +263,22 @@ type. Variable checks are among the simplest checks.</p>
 ## 2        1544     63  NA
 ## 3        6493    426  NA</code></pre>
 <p>See <code>?SBS2000</code> for a description.</p>
-<div id="variable-type" class="section level2 hasAnchor">
+<div id="variable-type" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Variable type<a href="sect-varlevelchecks.html#variable-type" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In <code>R</code>, one can test the type of a variable using built-in functions such as
 <code>is.numeric</code> or <code>is.character</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">is.character</span>(<span class="st">&quot;hihi&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="sect-varlevelchecks.html#cb15-1" tabindex="-1"></a><span class="fu">is.character</span>(<span class="st">&quot;hihi&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">is.character</span>(<span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="sect-varlevelchecks.html#cb17-1" tabindex="-1"></a><span class="fu">is.character</span>(<span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>In <code>validate</code>, any function starting with <code>is.</code> (‘is’ followed by a dot) is
 considered a validation function.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb19-2" title="2">    <span class="kw">is.character</span>(size)</a>
-<a class="sourceLine" id="cb19-3" title="3">  , <span class="kw">is.numeric</span>(turnover)</a>
-<a class="sourceLine" id="cb19-4" title="4">)</a>
-<a class="sourceLine" id="cb19-5" title="5">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
-<a class="sourceLine" id="cb19-6" title="6"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="sect-varlevelchecks.html#cb19-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb19-2"><a href="sect-varlevelchecks.html#cb19-2" tabindex="-1"></a>    <span class="fu">is.character</span>(size)</span>
+<span id="cb19-3"><a href="sect-varlevelchecks.html#cb19-3" tabindex="-1"></a>  , <span class="fu">is.numeric</span>(turnover)</span>
+<span id="cb19-4"><a href="sect-varlevelchecks.html#cb19-4" tabindex="-1"></a>)</span>
+<span id="cb19-5"><a href="sect-varlevelchecks.html#cb19-5" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rules)</span>
+<span id="cb19-6"><a href="sect-varlevelchecks.html#cb19-6" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning           expression
 ## 1   V1     1      0     1   0 FALSE   FALSE   is.character(size)
 ## 2   V2     1      1     0   0 FALSE   FALSE is.numeric(turnover)</code></pre>
@@ -268,17 +286,17 @@ considered a validation function.</p>
 first rule is violated (it is in fact a <code>factor</code> variable). The second rule
 is satisfied.</p>
 </div>
-<div id="sect-missingness" class="section level2 hasAnchor">
+<div id="sect-missingness" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Missingness<a href="sect-varlevelchecks.html#sect-missingness" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Use R’s standard <code>is.na()</code> to check missing items in individual variables. Negate
 it to check that values are available.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb21-2" title="2">   <span class="op">!</span><span class="kw">is.na</span>(turnover)</a>
-<a class="sourceLine" id="cb21-3" title="3"> , <span class="op">!</span><span class="kw">is.na</span>(other.rev)</a>
-<a class="sourceLine" id="cb21-4" title="4"> , <span class="op">!</span><span class="kw">is.na</span>(profit)</a>
-<a class="sourceLine" id="cb21-5" title="5">)</a>
-<a class="sourceLine" id="cb21-6" title="6">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
-<a class="sourceLine" id="cb21-7" title="7"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="sect-varlevelchecks.html#cb21-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb21-2"><a href="sect-varlevelchecks.html#cb21-2" tabindex="-1"></a>   <span class="sc">!</span><span class="fu">is.na</span>(turnover)</span>
+<span id="cb21-3"><a href="sect-varlevelchecks.html#cb21-3" tabindex="-1"></a> , <span class="sc">!</span><span class="fu">is.na</span>(other.rev)</span>
+<span id="cb21-4"><a href="sect-varlevelchecks.html#cb21-4" tabindex="-1"></a> , <span class="sc">!</span><span class="fu">is.na</span>(profit)</span>
+<span id="cb21-5"><a href="sect-varlevelchecks.html#cb21-5" tabindex="-1"></a>)</span>
+<span id="cb21-6"><a href="sect-varlevelchecks.html#cb21-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rule)</span>
+<span id="cb21-7"><a href="sect-varlevelchecks.html#cb21-7" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning        expression
 ## 1   V1    60     56     4   0 FALSE   FALSE  !is.na(turnover)
 ## 2   V2    60     24    36   0 FALSE   FALSE !is.na(other.rev)
@@ -288,11 +306,11 @@ while <code>other.rev</code> and <code>profit</code> are missing respectively in
 and 5 occasions.</p>
 <p>To demand that all items must be present or absent for a certain variable,
 use R’s quantifiers: <code>any()</code> or <code>all()</code>, possibly negated.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>( </a>
-<a class="sourceLine" id="cb23-2" title="2">    <span class="op">!</span><span class="kw">any</span>(<span class="kw">is.na</span>(incl.prob))</a>
-<a class="sourceLine" id="cb23-3" title="3">    , <span class="kw">all</span>(<span class="kw">is.na</span>(vat)) )</a>
-<a class="sourceLine" id="cb23-4" title="4">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
-<a class="sourceLine" id="cb23-5" title="5"><span class="kw">summary</span>(out) </a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="sect-varlevelchecks.html#cb23-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>( </span>
+<span id="cb23-2"><a href="sect-varlevelchecks.html#cb23-2" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">any</span>(<span class="fu">is.na</span>(incl.prob))</span>
+<span id="cb23-3"><a href="sect-varlevelchecks.html#cb23-3" tabindex="-1"></a>    , <span class="fu">all</span>(<span class="fu">is.na</span>(vat)) )</span>
+<span id="cb23-4"><a href="sect-varlevelchecks.html#cb23-4" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rules)</span>
+<span id="cb23-5"><a href="sect-varlevelchecks.html#cb23-5" tabindex="-1"></a><span class="fu">summary</span>(out) </span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning             expression
 ## 1   V1     1      1     0   0 FALSE   FALSE !any(is.na(incl.prob))
 ## 2   V2     1      0     1   0 FALSE   FALSE        all(is.na(vat))</code></pre>
@@ -301,17 +319,17 @@ use R’s quantifiers: <code>any()</code> or <code>all()</code>, possibly negate
 <li>To check whether records are available at all, see <a href="sect-availableunique.html#sect-completeness">3.3</a>.</li>
 </ul>
 </div>
-<div id="field-length" class="section level2 hasAnchor">
+<div id="field-length" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Field length<a href="sect-varlevelchecks.html#field-length" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The number of characters in text fields can be tested using either R’s standard
 <code>nchar()</code> function, or with the convenience function <code>field_length</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb25-2" title="2">   <span class="kw">nchar</span>(<span class="kw">as.character</span>(size)) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb25-3" title="3"> , <span class="kw">field_length</span>(id, <span class="dt">n=</span><span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb25-4" title="4"> , <span class="kw">field_length</span>(size, <span class="dt">min=</span><span class="dv">2</span>, <span class="dt">max=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb25-5" title="5">)</a>
-<a class="sourceLine" id="cb25-6" title="6">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules)</a>
-<a class="sourceLine" id="cb25-7" title="7"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="sect-varlevelchecks.html#cb25-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb25-2"><a href="sect-varlevelchecks.html#cb25-2" tabindex="-1"></a>   <span class="fu">nchar</span>(<span class="fu">as.character</span>(size)) <span class="sc">&gt;=</span> <span class="dv">2</span></span>
+<span id="cb25-3"><a href="sect-varlevelchecks.html#cb25-3" tabindex="-1"></a> , <span class="fu">field_length</span>(id, <span class="at">n=</span><span class="dv">5</span>)</span>
+<span id="cb25-4"><a href="sect-varlevelchecks.html#cb25-4" tabindex="-1"></a> , <span class="fu">field_length</span>(size, <span class="at">min=</span><span class="dv">2</span>, <span class="at">max=</span><span class="dv">3</span>)</span>
+<span id="cb25-5"><a href="sect-varlevelchecks.html#cb25-5" tabindex="-1"></a>)</span>
+<span id="cb25-6"><a href="sect-varlevelchecks.html#cb25-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rules)</span>
+<span id="cb25-7"><a href="sect-varlevelchecks.html#cb25-7" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     60     0   0 FALSE   FALSE
 ## 2   V2    60     60     0   0 FALSE   FALSE
@@ -329,16 +347,16 @@ points</a>. Use <code>type="width"</code> to
 measure the printed width (nr of columns) or <code>type="bytes"</code> to count the number
 of bytes.</p>
 </div>
-<div id="format-of-numeric-fields" class="section level2 hasAnchor">
+<div id="format-of-numeric-fields" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Format of numeric fields<a href="sect-varlevelchecks.html#format-of-numeric-fields" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For numbers that are stored in <code>character</code> type, there is a convenience
 function called <code>number_format()</code> that accepts a variable name
 and a format specification.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;2.54&quot;</span>,<span class="st">&quot;2.66&quot;</span>,<span class="st">&quot;8.142&quot;</span>,<span class="st">&quot;23.53&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="sect-varlevelchecks.html#cb27-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="st">&quot;2.54&quot;</span>,<span class="st">&quot;2.66&quot;</span>,<span class="st">&quot;8.142&quot;</span>,<span class="st">&quot;23.53&quot;</span>))</span></code></pre></div>
 <p>To check that the numbers are formatted with one figure before, and two figures
 after the decimal point, we perform the following check.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>( <span class="kw">number_format</span>(x, <span class="dt">format=</span><span class="st">&quot;d.dd&quot;</span>))</a>
-<a class="sourceLine" id="cb28-2" title="2"><span class="kw">values</span>(<span class="kw">confront</span>(dat, rule))</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="sect-varlevelchecks.html#cb28-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>( <span class="fu">number_format</span>(x, <span class="at">format=</span><span class="st">&quot;d.dd&quot;</span>))</span>
+<span id="cb28-2"><a href="sect-varlevelchecks.html#cb28-2" tabindex="-1"></a><span class="fu">values</span>(<span class="fu">confront</span>(dat, rule))</span></code></pre></div>
 <pre><code>##         V1
 ## [1,]  TRUE
 ## [2,]  TRUE
@@ -349,6 +367,11 @@ In this specification the <code>"d"</code> stands for a digit, any other charact
 the asterisk (<code>*</code>) stands for itself. The asterisk is interpreted as ‘zero or
 more digits’. Here are some examples of how to define number formats.</p>
 <table>
+<colgroup>
+<col width="16%" />
+<col width="38%" />
+<col width="45%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>format</th>
@@ -383,24 +406,24 @@ more digits’. Here are some examples of how to define number formats.</p>
 point.</p>
 <p>There are special arguments to check the number of decimal figures
 after the decimal separator.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;12.123&quot;</span>,<span class="st">&quot;123.12345&quot;</span>)</a>
-<a class="sourceLine" id="cb30-2" title="2"><span class="kw">number_format</span>(x, <span class="dt">min_dig=</span><span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="sect-varlevelchecks.html#cb30-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;12.123&quot;</span>,<span class="st">&quot;123.12345&quot;</span>)</span>
+<span id="cb30-2"><a href="sect-varlevelchecks.html#cb30-2" tabindex="-1"></a><span class="fu">number_format</span>(x, <span class="at">min_dig=</span><span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## [1] FALSE  TRUE</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">number_format</span>(x, <span class="dt">max_dig=</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="sect-varlevelchecks.html#cb32-1" tabindex="-1"></a><span class="fu">number_format</span>(x, <span class="at">max_dig=</span><span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1]  TRUE FALSE</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw">number_format</span>(x, <span class="dt">min_dig=</span><span class="dv">2</span>, <span class="dt">max_dig=</span><span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="sect-varlevelchecks.html#cb34-1" tabindex="-1"></a><span class="fu">number_format</span>(x, <span class="at">min_dig=</span><span class="dv">2</span>, <span class="at">max_dig=</span><span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## [1]  TRUE FALSE</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">number_format</span>(x, <span class="dt">min_dig=</span><span class="dv">2</span>, <span class="dt">max_dig=</span><span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="sect-varlevelchecks.html#cb36-1" tabindex="-1"></a><span class="fu">number_format</span>(x, <span class="at">min_dig=</span><span class="dv">2</span>, <span class="at">max_dig=</span><span class="dv">10</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE TRUE</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="co"># specify the decimal separator.</span></a>
-<a class="sourceLine" id="cb38-2" title="2"><span class="kw">number_format</span>(<span class="st">&quot;12,123&quot;</span>, <span class="dt">min_dig=</span><span class="dv">2</span>, <span class="dt">dec=</span><span class="st">&quot;,&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="sect-varlevelchecks.html#cb38-1" tabindex="-1"></a><span class="co"># specify the decimal separator.</span></span>
+<span id="cb38-2"><a href="sect-varlevelchecks.html#cb38-2" tabindex="-1"></a><span class="fu">number_format</span>(<span class="st">&quot;12,123&quot;</span>, <span class="at">min_dig=</span><span class="dv">2</span>, <span class="at">dec=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The arguments <code>min_dig</code>, <code>max_dig</code> and <code>dec</code> are ignored when <code>format</code> is
 specified.</p>
 <p>This function is convenient only for fairly simple number formats. Generic
 pattern matching in strings is discussed in the next section.</p>
 </div>
-<div id="general-field-format" class="section level2 hasAnchor">
+<div id="general-field-format" class="section level2 hasAnchor" number="2.5">
 <h2><span class="header-section-number">2.5</span> General field format<a href="sect-varlevelchecks.html#general-field-format" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A simple way to check for more general format is to use <a href="https://en.wikipedia.org/wiki/Glob_(programming)">globbing
 patterns</a>. In such patterns,
@@ -409,10 +432,10 @@ characters’ and the question mark (<code>?</code>) is interpreted as ‘any ch
 <p>For example, to check that the <code>id</code> variable in <code>SBS2000</code> starts with <code>"RET"</code>,
 and that the <code>size</code> variable has consists of <code>"sc"</code> followed by precisely one
 character, we can do the following.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">field_format</span>(id, <span class="st">&quot;RET*&quot;</span>)</a>
-<a class="sourceLine" id="cb40-2" title="2">                , <span class="kw">field_format</span>(size, <span class="st">&quot;sc?&quot;</span> ))</a>
-<a class="sourceLine" id="cb40-3" title="3">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
-<a class="sourceLine" id="cb40-4" title="4"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="sect-varlevelchecks.html#cb40-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="fu">field_format</span>(id, <span class="st">&quot;RET*&quot;</span>)</span>
+<span id="cb40-2"><a href="sect-varlevelchecks.html#cb40-2" tabindex="-1"></a>                , <span class="fu">field_format</span>(size, <span class="st">&quot;sc?&quot;</span> ))</span>
+<span id="cb40-3"><a href="sect-varlevelchecks.html#cb40-3" tabindex="-1"></a>out  <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rule)</span>
+<span id="cb40-4"><a href="sect-varlevelchecks.html#cb40-4" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning                expression
 ## 1   V1    60     60     0   0 FALSE   FALSE  field_format(id, &quot;RET*&quot;)
 ## 2   V2    60     60     0   0 FALSE   FALSE field_format(size, &quot;sc?&quot;)</code></pre>
@@ -424,13 +447,13 @@ string starting with <code>"sc"</code>, followed by a single character.</p>
 treatment of regular expressions is out of scope for this book, but we will
 give a few examples. A good introduction to regular expressions is given by</p>
 <blockquote>
-<p>J. Friedl (2006) <em>Mastering regular expressions.</em> O’Reilley Media.</p>
+<p>J. Friedl (2006) <em>Mastering regular expressions.</em> O’Reilly Media.</p>
 </blockquote>
 <p>In <code>validate</code> one can use <code>grepl</code> or <code>field_format</code>, with the argument <code>type="regex"</code></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb42-2" title="2">          <span class="kw">grepl</span>(<span class="st">&quot;^sc[0-9]$&quot;</span>, size)</a>
-<a class="sourceLine" id="cb42-3" title="3">        , <span class="kw">field_format</span>(id, <span class="st">&quot;^RET</span><span class="ch">\\</span><span class="st">d{2}$&quot;</span> , <span class="dt">type=</span><span class="st">&quot;regex&quot;</span>) )</a>
-<a class="sourceLine" id="cb42-4" title="4"><span class="kw">summary</span>(<span class="kw">confront</span>(SBS2000, rule))</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="sect-varlevelchecks.html#cb42-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb42-2"><a href="sect-varlevelchecks.html#cb42-2" tabindex="-1"></a>          <span class="fu">grepl</span>(<span class="st">&quot;^sc[0-9]$&quot;</span>, size)</span>
+<span id="cb42-3"><a href="sect-varlevelchecks.html#cb42-3" tabindex="-1"></a>        , <span class="fu">field_format</span>(id, <span class="st">&quot;^RET</span><span class="sc">\\</span><span class="st">d{2}$&quot;</span> , <span class="at">type=</span><span class="st">&quot;regex&quot;</span>) )</span>
+<span id="cb42-4"><a href="sect-varlevelchecks.html#cb42-4" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">confront</span>(SBS2000, rule))</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     60     0   0 FALSE   FALSE
 ## 2   V2    60     60     0   0 FALSE   FALSE
@@ -446,27 +469,27 @@ digits (<code>"\\d{2}"</code>), after which the string must end (<code>"$"</code
 expressions, while regular expressions offer far more flexibility but are
 harder to read. Complex and long regular expressions may have subtle matching
 behaviour that is not immediately obvious to inexperienced users. It is
-therefore advisable to test regular expressions with a a small dataset
+therefore advisable to test regular expressions with a small dataset
 representing realistic cases that contains both matches and non-matches. As a
 rule of thumb we would advise to use globbing patterns unless those offer
 insufficient flexibility.</p>
 </div>
-<div id="numeric-ranges" class="section level2 hasAnchor">
+<div id="numeric-ranges" class="section level2 hasAnchor" number="2.6">
 <h2><span class="header-section-number">2.6</span> Numeric ranges<a href="sect-varlevelchecks.html#numeric-ranges" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Numerical variables may have natural limits from below and/or
 above. For one-sided ranges, you can use the standard comparison operators.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="dt">TO =</span> turnover <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb44-2" title="2">                 , <span class="dt">TC =</span> total.costs <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="sect-varlevelchecks.html#cb44-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="at">TO =</span> turnover <span class="sc">&gt;=</span> <span class="dv">0</span></span>
+<span id="cb44-2"><a href="sect-varlevelchecks.html#cb44-2" tabindex="-1"></a>                 , <span class="at">TC =</span> total.costs <span class="sc">&gt;=</span> <span class="dv">0</span>)</span></code></pre></div>
 <p>If a variable is bounded both from above and below one can use two rules,
 or use the convenience function <code>in_range</code>.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">rules &lt;-<span class="st"> </span>rules <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb45-2" title="2"><span class="st">  </span><span class="kw">validator</span>(<span class="dt">PR =</span> <span class="kw">in_range</span>(incl.prob, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="sect-varlevelchecks.html#cb45-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> rules <span class="sc">+</span> </span>
+<span id="cb45-2"><a href="sect-varlevelchecks.html#cb45-2" tabindex="-1"></a>  <span class="fu">validator</span>(<span class="at">PR =</span> <span class="fu">in_range</span>(incl.prob, <span class="at">min=</span><span class="dv">0</span>, <span class="at">max=</span><span class="dv">1</span>))</span></code></pre></div>
 <p>By default, <code>in_range</code> includes the boundaries of the range, so the above rule
 is equivalent to <code>incl.prob &gt;= 0</code> and <code>incl.prob &lt;= 1</code>.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rules, <span class="dt">lin.ineq.eps=</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="sect-varlevelchecks.html#cb46-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rules, <span class="at">lin.ineq.eps=</span><span class="dv">0</span>)</span></code></pre></div>
 <p>Here we set <code>lin.ineq.eps=0</code> to keep <code>validate</code> from building in a
 margin for machine rounding errors.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="sect-varlevelchecks.html#cb47-1" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   TO    60     56     0   4 FALSE   FALSE
 ## 2   TC    60     55     0   5 FALSE   FALSE
@@ -484,63 +507,63 @@ natural minimal acceptable value that is usually dictated by the unit of
 measurement. For example, if we measure income in whole Euros, a better demand
 would be <code>income &gt;= 1</code>.</p>
 </div>
-<div id="ranges-for-times-and-periods" class="section level2 hasAnchor">
+<div id="ranges-for-times-and-periods" class="section level2 hasAnchor" number="2.7">
 <h2><span class="header-section-number">2.7</span> Ranges for times and periods<a href="sect-varlevelchecks.html#ranges-for-times-and-periods" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For objects of class <code>Date</code> and objects of class <code>POSIXct</code> one can use comparison
 operators and <code>in_range</code> in the same way as for numerical data. The <code>in_range</code> function
 has a convenience feature for period data that is coded in character data, as in
 <code>"2018Q1"</code> for quarterly data.</p>
 <p>We first generate some example data.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">period =<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">&quot;2018Q%d&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb49-2" title="2">period</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="sect-varlevelchecks.html#cb49-1" tabindex="-1"></a>period <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">&quot;2018Q%d&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb49-2"><a href="sect-varlevelchecks.html#cb49-2" tabindex="-1"></a>period</span></code></pre></div>
 <pre><code>## [1] &quot;2018Q1&quot; &quot;2018Q2&quot; &quot;2018Q3&quot; &quot;2018Q4&quot;</code></pre>
 <p>The <code>in_range</code> function is capable of recognizing certain date or period
 formats.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">in_range</span>(period, <span class="dt">min=</span><span class="st">&quot;2017Q2&quot;</span>, <span class="dt">max =</span> <span class="st">&quot;2018Q2&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="sect-varlevelchecks.html#cb51-1" tabindex="-1"></a><span class="fu">in_range</span>(period, <span class="at">min=</span><span class="st">&quot;2017Q2&quot;</span>, <span class="at">max =</span> <span class="st">&quot;2018Q2&quot;</span>)</span></code></pre></div>
 <pre><code>## [1]  TRUE  TRUE FALSE FALSE</code></pre>
 <p>It is possible to specify your own date-time format using <code>strftime</code> notation.
 See <code>?in_range</code> and <code>?strptime</code> for specifications.</p>
 </div>
-<div id="code-lists" class="section level2 hasAnchor">
+<div id="code-lists" class="section level2 hasAnchor" number="2.8">
 <h2><span class="header-section-number">2.8</span> Code lists<a href="sect-varlevelchecks.html#code-lists" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A code list is a set of values that a variable is allowed to assume. For small
 code lists, one can use the <code>%in%</code> operator.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(size <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sc0&quot;</span>,<span class="st">&quot;sc1&quot;</span>,<span class="st">&quot;sc2&quot;</span>,<span class="st">&quot;sc3&quot;</span>))</a>
-<a class="sourceLine" id="cb53-2" title="2">out  &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
-<a class="sourceLine" id="cb53-3" title="3"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="sect-varlevelchecks.html#cb53-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(size <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;sc0&quot;</span>,<span class="st">&quot;sc1&quot;</span>,<span class="st">&quot;sc2&quot;</span>,<span class="st">&quot;sc3&quot;</span>))</span>
+<span id="cb53-2"><a href="sect-varlevelchecks.html#cb53-2" tabindex="-1"></a>out  <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rule)</span>
+<span id="cb53-3"><a href="sect-varlevelchecks.html#cb53-3" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     60     0   0 FALSE   FALSE
 ##                                 expression
 ## 1 size %vin% c(&quot;sc0&quot;, &quot;sc1&quot;, &quot;sc2&quot;, &quot;sc3&quot;)</code></pre>
 <p>Notice that <code>validate</code> replaces <code>%in%</code> with <code>%vin%</code>. The reason is that <code>%vin%</code> has more consistent
 behavior in the case of missing data. In particular,</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="ot">NA</span>) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="sect-varlevelchecks.html#cb55-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="cn">NA</span>) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1]  TRUE FALSE FALSE</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="ot">NA</span>) <span class="op">%vin%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="sect-varlevelchecks.html#cb57-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="cn">NA</span>) <span class="sc">%vin%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1]  TRUE FALSE    NA</code></pre>
 <p>For longer code lists it is convenient to refer to an externally provided list.
 There are two ways of doing this: reading the list in the right-hand-size of <code>%in%</code>,
 or passing a code list to <code>confront</code> as reference data.</p>
 <p>Suppose we have a file called <code>codelist.csv</code> with a column <code>code</code>. We can define
 a rule as follows.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb59-2" title="2">  x <span class="op">%in%</span><span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;codelist.csv&quot;</span>)<span class="op">$</span>code</a>
-<a class="sourceLine" id="cb59-3" title="3">)</a>
-<a class="sourceLine" id="cb59-4" title="4"><span class="co">## Or, equivalently</span></a>
-<a class="sourceLine" id="cb59-5" title="5">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb59-6" title="6">  <span class="dt">valid_codes :=</span> <span class="kw">read.csv</span>(<span class="st">&quot;codelist.csv&quot;</span>)<span class="op">$</span>code</a>
-<a class="sourceLine" id="cb59-7" title="7">  , x <span class="op">%in%</span><span class="st"> </span>valid_codes</a>
-<a class="sourceLine" id="cb59-8" title="8">)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="sect-varlevelchecks.html#cb59-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb59-2"><a href="sect-varlevelchecks.html#cb59-2" tabindex="-1"></a>  x <span class="sc">%in%</span> <span class="fu">read.csv</span>(<span class="st">&quot;codelist.csv&quot;</span>)<span class="sc">$</span>code</span>
+<span id="cb59-3"><a href="sect-varlevelchecks.html#cb59-3" tabindex="-1"></a>)</span>
+<span id="cb59-4"><a href="sect-varlevelchecks.html#cb59-4" tabindex="-1"></a><span class="do">## Or, equivalently</span></span>
+<span id="cb59-5"><a href="sect-varlevelchecks.html#cb59-5" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb59-6"><a href="sect-varlevelchecks.html#cb59-6" tabindex="-1"></a>  <span class="at">valid_codes :=</span> <span class="fu">read.csv</span>(<span class="st">&quot;codelist.csv&quot;</span>)<span class="sc">$</span>code</span>
+<span id="cb59-7"><a href="sect-varlevelchecks.html#cb59-7" tabindex="-1"></a>  , x <span class="sc">%in%</span> valid_codes</span>
+<span id="cb59-8"><a href="sect-varlevelchecks.html#cb59-8" tabindex="-1"></a>)</span></code></pre></div>
 <p>The disadvantage is that the rule now depends on a path that may or may not be
 available at runtime.</p>
 <p>The second option is to assume that a variable, say <code>valid_codes</code> exists at
 runtime, and pass this with <code>confront</code>.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">codelist &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sc0&quot;</span>,<span class="st">&quot;sc1&quot;</span>,<span class="st">&quot;sc2&quot;</span>,<span class="st">&quot;sc3&quot;</span>)</a>
-<a class="sourceLine" id="cb60-2" title="2">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(size <span class="op">%in%</span><span class="st"> </span>valid_codes)</a>
-<a class="sourceLine" id="cb60-3" title="3"><span class="co"># pass the codelist</span></a>
-<a class="sourceLine" id="cb60-4" title="4">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule</a>
-<a class="sourceLine" id="cb60-5" title="5">              , <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">valid_codes=</span>codelist))</a>
-<a class="sourceLine" id="cb60-6" title="6"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="sect-varlevelchecks.html#cb60-1" tabindex="-1"></a>codelist <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sc0&quot;</span>,<span class="st">&quot;sc1&quot;</span>,<span class="st">&quot;sc2&quot;</span>,<span class="st">&quot;sc3&quot;</span>)</span>
+<span id="cb60-2"><a href="sect-varlevelchecks.html#cb60-2" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(size <span class="sc">%in%</span> valid_codes)</span>
+<span id="cb60-3"><a href="sect-varlevelchecks.html#cb60-3" tabindex="-1"></a><span class="co"># pass the codelist</span></span>
+<span id="cb60-4"><a href="sect-varlevelchecks.html#cb60-4" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rule</span>
+<span id="cb60-5"><a href="sect-varlevelchecks.html#cb60-5" tabindex="-1"></a>              , <span class="at">ref=</span><span class="fu">list</span>(<span class="at">valid_codes=</span>codelist))</span>
+<span id="cb60-6"><a href="sect-varlevelchecks.html#cb60-6" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning             expression
 ## 1   V1    60     60     0   0 FALSE   FALSE size %vin% valid_codes</code></pre>
 <p>This way, (very) large code lists can be used, but note that it does
@@ -569,42 +592,42 @@ and variables passed as reference data.</p>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["validatecookbook.pdf"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["validatecookbook.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

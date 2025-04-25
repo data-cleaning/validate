@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Statistical checks | The Data Validation Cookbook</title>
   <meta name="description" content="Chapter 5 Statistical checks | The Data Validation Cookbook" />
-  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Statistical checks | The Data Validation Cookbook" />
   <meta property="og:type" content="book" />
@@ -53,25 +53,27 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,15 +82,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -101,7 +103,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -115,6 +117,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -132,17 +138,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Data Validation Cookbook</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citing-this-work"><i class="fa fa-check"></i>Citing this work</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#contributing"><i class="fa fa-check"></i>Contributing</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a><ul>
+<li class="chapter" data-level="1" data-path="sect-intro.html"><a href="sect-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction to validate</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="sect-intro.html"><a href="sect-intro.html#a-quick-example"><i class="fa fa-check"></i><b>1.1</b> A quick example</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a><ul>
+<li class="chapter" data-level="2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html"><i class="fa fa-check"></i><b>2</b> Variable checks</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#variable-type"><i class="fa fa-check"></i><b>2.1</b> Variable type</a></li>
 <li class="chapter" data-level="2.2" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#sect-missingness"><i class="fa fa-check"></i><b>2.2</b> Missingness</a></li>
 <li class="chapter" data-level="2.3" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#field-length"><i class="fa fa-check"></i><b>2.3</b> Field length</a></li>
@@ -152,32 +161,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.7" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#ranges-for-times-and-periods"><i class="fa fa-check"></i><b>2.7</b> Ranges for times and periods</a></li>
 <li class="chapter" data-level="2.8" data-path="sect-varlevelchecks.html"><a href="sect-varlevelchecks.html#code-lists"><i class="fa fa-check"></i><b>2.8</b> Code lists</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a><ul>
+<li class="chapter" data-level="3" data-path="sect-availableunique.html"><a href="sect-availableunique.html"><i class="fa fa-check"></i><b>3</b> Availability and uniqueness</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="sect-availableunique.html"><a href="sect-availableunique.html#long-data"><i class="fa fa-check"></i><b>3.1</b> Long data</a></li>
 <li class="chapter" data-level="3.2" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-uniqueness"><i class="fa fa-check"></i><b>3.2</b> Uniqueness</a></li>
 <li class="chapter" data-level="3.3" data-path="sect-availableunique.html"><a href="sect-availableunique.html#sect-completeness"><i class="fa fa-check"></i><b>3.3</b> Availability of records</a></li>
 <li class="chapter" data-level="3.4" data-path="sect-availableunique.html"><a href="sect-availableunique.html#gaps-in-time-series"><i class="fa fa-check"></i><b>3.4</b> Gaps in (time) series</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a><ul>
+<li class="chapter" data-level="4" data-path="multivariate-checks.html"><a href="multivariate-checks.html"><i class="fa fa-check"></i><b>4</b> Multivariate checks</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="multivariate-checks.html"><a href="multivariate-checks.html#sect-iscomplete"><i class="fa fa-check"></i><b>4.1</b> Completeness of records</a></li>
 <li class="chapter" data-level="4.2" data-path="multivariate-checks.html"><a href="multivariate-checks.html#balance-equalities-and-inequalities"><i class="fa fa-check"></i><b>4.2</b> Balance equalities and inequalities</a></li>
 <li class="chapter" data-level="4.3" data-path="multivariate-checks.html"><a href="multivariate-checks.html#conditional-restrictions"><i class="fa fa-check"></i><b>4.3</b> Conditional restrictions</a></li>
 <li class="chapter" data-level="4.4" data-path="multivariate-checks.html"><a href="multivariate-checks.html#forbidden-value-combinations"><i class="fa fa-check"></i><b>4.4</b> Forbidden value combinations</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a><ul>
+<li class="chapter" data-level="5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html"><i class="fa fa-check"></i><b>5</b> Statistical checks</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#sect-groupwise"><i class="fa fa-check"></i><b>5.1</b> Statistical and groupwise characteristics</a></li>
 <li class="chapter" data-level="5.2" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#group-properties"><i class="fa fa-check"></i><b>5.2</b> Group properties</a></li>
 <li class="chapter" data-level="5.3" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation"><i class="fa fa-check"></i><b>5.3</b> Code hierarchies and aggregation</a></li>
-<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a><ul>
+<li class="chapter" data-level="5.4" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data"><i class="fa fa-check"></i><b>5.4</b> General aggregates in long-form data</a>
+<ul>
 <li class="chapter" data-level="" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#notes"><i class="fa fa-check"></i>Notes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="sect-statisticalchecks.html"><a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format"><i class="fa fa-check"></i><b>5.5</b> Aggregates of time series in long format</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a><ul>
+<li class="chapter" data-level="6" data-path="sect-indicators.html"><a href="sect-indicators.html"><i class="fa fa-check"></i><b>6</b> Indicators</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="sect-indicators.html"><a href="sect-indicators.html#a-first-example"><i class="fa fa-check"></i><b>6.1</b> A first example</a></li>
 <li class="chapter" data-level="6.2" data-path="sect-indicators.html"><a href="sect-indicators.html#getting-indicator-values"><i class="fa fa-check"></i><b>6.2</b> Getting indicator values</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a><ul>
+<li class="chapter" data-level="7" data-path="sect-work.html"><a href="sect-work.html"><i class="fa fa-check"></i><b>7</b> Working with validate</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="sect-work.html"><a href="sect-work.html#manipulating-rule-sets"><i class="fa fa-check"></i><b>7.1</b> Manipulating rule sets</a></li>
 <li class="chapter" data-level="7.2" data-path="sect-work.html"><a href="sect-work.html#rule-metadata"><i class="fa fa-check"></i><b>7.2</b> Rule metadata</a></li>
 <li class="chapter" data-level="7.3" data-path="sect-work.html"><a href="sect-work.html#rules-in-data-frames"><i class="fa fa-check"></i><b>7.3</b> Rules in data frames</a></li>
@@ -186,21 +201,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.6" data-path="sect-work.html"><a href="sect-work.html#sect-options"><i class="fa fa-check"></i><b>7.6</b> Confrontation options</a></li>
 <li class="chapter" data-level="7.7" data-path="sect-work.html"><a href="sect-work.html#using-reference-data"><i class="fa fa-check"></i><b>7.7</b> Using reference data</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a><ul>
+<li class="chapter" data-level="8" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html"><i class="fa fa-check"></i><b>8</b> Rules in text files</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-readfromfile"><i class="fa fa-check"></i><b>8.1</b> Reading rules from file</a></li>
 <li class="chapter" data-level="8.2" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#sect-yamlfiles"><i class="fa fa-check"></i><b>8.2</b> Metadata in text files: <code>YAML</code></a></li>
 <li class="chapter" data-level="8.3" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#setting-options"><i class="fa fa-check"></i><b>8.3</b> Setting options</a></li>
 <li class="chapter" data-level="8.4" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#including-other-rule-files"><i class="fa fa-check"></i><b>8.4</b> Including other rule files</a></li>
 <li class="chapter" data-level="8.5" data-path="sect-rulefiles.html"><a href="sect-rulefiles.html#exporting-validator-objects"><i class="fa fa-check"></i><b>8.5</b> Exporting validator objects</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a><ul>
+<li class="chapter" data-level="9" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html"><i class="fa fa-check"></i><b>9</b> Rules from SDMX</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-validate"><i class="fa fa-check"></i><b>9.1</b> SDMX and <code>validate</code></a></li>
 <li class="chapter" data-level="9.2" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#sdmx-and-api-locations"><i class="fa fa-check"></i><b>9.2</b> SDMX and API locations</a></li>
 <li class="chapter" data-level="9.3" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#code-lists-from-sdmx-registries"><i class="fa fa-check"></i><b>9.3</b> Code lists from SDMX registries</a></li>
 <li class="chapter" data-level="9.4" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#derive-rules-from-dsd"><i class="fa fa-check"></i><b>9.4</b> Derive rules from DSD</a></li>
 <li class="chapter" data-level="9.5" data-path="sect-sdmxrules.html"><a href="sect-sdmxrules.html#moresdmx"><i class="fa fa-check"></i><b>9.5</b> More on <code>SDMX</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a><ul>
+<li class="chapter" data-level="10" data-path="sect-comparing.html"><a href="sect-comparing.html"><i class="fa fa-check"></i><b>10</b> Comparing data sets</a>
+<ul>
 <li class="chapter" data-level="10.1" data-path="sect-comparing.html"><a href="sect-comparing.html#cell-counts"><i class="fa fa-check"></i><b>10.1</b> Cell counts</a></li>
 <li class="chapter" data-level="10.2" data-path="sect-comparing.html"><a href="sect-comparing.html#comparing-rule-violations"><i class="fa fa-check"></i><b>10.2</b> Comparing rule violations</a></li>
 <li class="chapter" data-level="10.3" data-path="sect-comparing.html"><a href="sect-comparing.html#validate-and-lumberjack"><i class="fa fa-check"></i><b>10.3</b> <code>validate</code> and <code>lumberjack</code></a></li>
@@ -226,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sect-statisticalchecks" class="section level1 hasAnchor">
+<div id="sect-statisticalchecks" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Statistical checks<a href="sect-statisticalchecks.html#sect-statisticalchecks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Statistical checks involve group properties such as the means of columns. These
 characteristics can be checked for whole columns or grouped by one or more
@@ -239,9 +257,9 @@ totals. It is also possible to check properties of groups, for example whether
 in every household (a group of persons) there is exactly one head of household.</p>
 <p><strong>Data</strong></p>
 <p>In this Chapter we will use the <code>SBS2000</code> dataset that comes with <code>validate</code>.</p>
-<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" title="1"><span class="kw">library</span>(validate)</a>
-<a class="sourceLine" id="cb135-2" title="2"><span class="kw">data</span>(SBS2000)</a>
-<a class="sourceLine" id="cb135-3" title="3"><span class="kw">head</span>(SBS2000, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="sect-statisticalchecks.html#cb135-1" tabindex="-1"></a><span class="fu">library</span>(validate)</span>
+<span id="cb135-2"><a href="sect-statisticalchecks.html#cb135-2" tabindex="-1"></a><span class="fu">data</span>(SBS2000)</span>
+<span id="cb135-3"><a href="sect-statisticalchecks.html#cb135-3" tabindex="-1"></a><span class="fu">head</span>(SBS2000, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##      id size incl.prob staff turnover other.rev total.rev staff.costs
 ## 1 RET01  sc0      0.02    75       NA        NA      1130          NA
 ## 2 RET02  sc3      0.14     9     1607        NA      1607         131
@@ -252,26 +270,26 @@ in every household (a group of persons) there is exactly one head of household.<
 ## 3        6493    426  NA</code></pre>
 <p>We shall also use the <code>samplonomy</code> dataset that also comes with <code>validate</code>. See also
 <a href="sect-availableunique.html#long-data">3.1</a>.</p>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1"><span class="kw">data</span>(samplonomy)</a>
-<a class="sourceLine" id="cb137-2" title="2"><span class="kw">head</span>(samplonomy, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="sect-statisticalchecks.html#cb137-1" tabindex="-1"></a><span class="fu">data</span>(samplonomy)</span>
+<span id="cb137-2"><a href="sect-statisticalchecks.html#cb137-2" tabindex="-1"></a><span class="fu">head</span>(samplonomy, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##   region freq period measure  value
 ## 1  Agria    A   2014     gdp 600000
 ## 2  Agria    A   2014  import 210000
 ## 3  Agria    A   2014  export 222000</code></pre>
-<div id="sect-groupwise" class="section level2 hasAnchor">
+<div id="sect-groupwise" class="section level2 hasAnchor" number="5.1">
 <h2><span class="header-section-number">5.1</span> Statistical and groupwise characteristics<a href="sect-statisticalchecks.html#sect-groupwise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Any R expression that ultimately is an equality or inequality check is
 interpreted as a validation rule by validate. This means that any statistical
 calculation can be input to a rule.</p>
 <p>Here we check the mean profit and correlation coefficient between profit and
 turnover.</p>
-<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb139-2" title="2">    <span class="kw">mean</span>(profit, <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb139-3" title="3">  , <span class="kw">cor</span>(turnover, staff, <span class="dt">use=</span><span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb139-4" title="4">)</a>
-<a class="sourceLine" id="cb139-5" title="5">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
-<a class="sourceLine" id="cb139-6" title="6"><span class="co"># suppress some columns for brevity</span></a>
-<a class="sourceLine" id="cb139-7" title="7"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="sect-statisticalchecks.html#cb139-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb139-2"><a href="sect-statisticalchecks.html#cb139-2" tabindex="-1"></a>    <span class="fu">mean</span>(profit, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">&gt;=</span> <span class="dv">1</span></span>
+<span id="cb139-3"><a href="sect-statisticalchecks.html#cb139-3" tabindex="-1"></a>  , <span class="fu">cor</span>(turnover, staff, <span class="at">use=</span><span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb139-4"><a href="sect-statisticalchecks.html#cb139-4" tabindex="-1"></a>)</span>
+<span id="cb139-5"><a href="sect-statisticalchecks.html#cb139-5" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rule)</span>
+<span id="cb139-6"><a href="sect-statisticalchecks.html#cb139-6" tabindex="-1"></a><span class="co"># suppress some columns for brevity</span></span>
+<span id="cb139-7"><a href="sect-statisticalchecks.html#cb139-7" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1     1      1     0   0 FALSE   FALSE
 ## 2   V2     1      1     0   0 FALSE   FALSE</code></pre>
@@ -279,12 +297,12 @@ turnover.</p>
 comparing values with group aggregates possible.</p>
 <p>For example, here we check whether each turnover is less than ten times
 the group-wise median.</p>
-<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb141-2" title="2">  turnover <span class="op">&lt;=</span><span class="st"> </span><span class="dv">10</span><span class="op">*</span><span class="kw">do_by</span>(turnover, <span class="dt">by=</span>size, <span class="dt">fun=</span>median, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb141-3" title="3">)</a>
-<a class="sourceLine" id="cb141-4" title="4">out &lt;-<span class="st"> </span><span class="kw">confront</span>(SBS2000, rule)</a>
-<a class="sourceLine" id="cb141-5" title="5"><span class="co"># suppress some columns for brevity</span></a>
-<a class="sourceLine" id="cb141-6" title="6"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="sect-statisticalchecks.html#cb141-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb141-2"><a href="sect-statisticalchecks.html#cb141-2" tabindex="-1"></a>  turnover <span class="sc">&lt;=</span> <span class="dv">10</span><span class="sc">*</span><span class="fu">do_by</span>(turnover, <span class="at">by=</span>size, <span class="at">fun=</span>median, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb141-3"><a href="sect-statisticalchecks.html#cb141-3" tabindex="-1"></a>)</span>
+<span id="cb141-4"><a href="sect-statisticalchecks.html#cb141-4" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(SBS2000, rule)</span>
+<span id="cb141-5"><a href="sect-statisticalchecks.html#cb141-5" tabindex="-1"></a><span class="co"># suppress some columns for brevity</span></span>
+<span id="cb141-6"><a href="sect-statisticalchecks.html#cb141-6" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1    60     53     3   4 FALSE   FALSE</code></pre>
 <p>Here, in the right-hand side of the rule the group-wise median of turnover is
@@ -292,8 +310,8 @@ computed. The function <code>do_by</code> is very similar to functions such as <
 in base R. The difference is that <code>do_by</code> works on vectors only (not on data
 frames) and always repeats the values of <code>fun</code> so that the length of the output is
 equal to the length of the input.</p>
-<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb143-1" title="1">medians &lt;-<span class="st"> </span><span class="kw">with</span>(SBS2000, <span class="kw">do_by</span>(turnover, <span class="dt">by=</span>size, <span class="dt">fun=</span>median, <span class="dt">na.rm=</span><span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb143-2" title="2"><span class="kw">head</span>(<span class="kw">data.frame</span>(<span class="dt">size =</span> SBS2000<span class="op">$</span>size, <span class="dt">median=</span>medians))</a></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="sect-statisticalchecks.html#cb143-1" tabindex="-1"></a>medians <span class="ot">&lt;-</span> <span class="fu">with</span>(SBS2000, <span class="fu">do_by</span>(turnover, <span class="at">by=</span>size, <span class="at">fun=</span>median, <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb143-2"><a href="sect-statisticalchecks.html#cb143-2" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">data.frame</span>(<span class="at">size =</span> SBS2000<span class="sc">$</span>size, <span class="at">median=</span>medians))</span></code></pre></div>
 <pre><code>##   size median
 ## 1  sc0    351
 ## 2  sc3   2891
@@ -303,7 +321,7 @@ equal to the length of the input.</p>
 ## 6  sc0    351</code></pre>
 <p>There are also some convenience functions, including <code>sum_by</code>, <code>mean_by</code>, <code>min_by</code>, and <code>max_by</code>.</p>
 </div>
-<div id="group-properties" class="section level2 hasAnchor">
+<div id="group-properties" class="section level2 hasAnchor" number="5.2">
 <h2><span class="header-section-number">5.2</span> Group properties<a href="sect-statisticalchecks.html#group-properties" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In this section, we group data by one or more categorical variables and
 check for each group whether a rule is satisfied. In particular we are
@@ -311,12 +329,12 @@ going to check whether each household in a small dataset has a unique
 ‘head of household’.</p>
 <p>We first create some data with household id (<code>hhid</code>) a person id (<code>person</code>) and
 that person’s role in the household (<code>hhrole</code>).</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1">d &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb145-2" title="2">   <span class="dt">hhid   =</span> <span class="kw">c</span>(<span class="dv">1</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">2</span>,  <span class="dv">3</span> )</a>
-<a class="sourceLine" id="cb145-3" title="3"> , <span class="dt">person =</span> <span class="kw">c</span>(<span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">3</span>,  <span class="dv">4</span>,  <span class="dv">5</span>,  <span class="dv">6</span>,  <span class="dv">7</span> )</a>
-<a class="sourceLine" id="cb145-4" title="4"> , <span class="dt">hhrole =</span> <span class="kw">c</span>(<span class="st">&quot;h&quot;</span>,<span class="st">&quot;h&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;h&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;m&quot;</span>)</a>
-<a class="sourceLine" id="cb145-5" title="5">)</a>
-<a class="sourceLine" id="cb145-6" title="6">d</a></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="sect-statisticalchecks.html#cb145-1" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb145-2"><a href="sect-statisticalchecks.html#cb145-2" tabindex="-1"></a>   <span class="at">hhid   =</span> <span class="fu">c</span>(<span class="dv">1</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">2</span>,  <span class="dv">3</span> )</span>
+<span id="cb145-3"><a href="sect-statisticalchecks.html#cb145-3" tabindex="-1"></a> , <span class="at">person =</span> <span class="fu">c</span>(<span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">3</span>,  <span class="dv">4</span>,  <span class="dv">5</span>,  <span class="dv">6</span>,  <span class="dv">7</span> )</span>
+<span id="cb145-4"><a href="sect-statisticalchecks.html#cb145-4" tabindex="-1"></a> , <span class="at">hhrole =</span> <span class="fu">c</span>(<span class="st">&quot;h&quot;</span>,<span class="st">&quot;h&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;h&quot;</span>,<span class="st">&quot;m&quot;</span>,<span class="st">&quot;m&quot;</span>)</span>
+<span id="cb145-5"><a href="sect-statisticalchecks.html#cb145-5" tabindex="-1"></a>)</span>
+<span id="cb145-6"><a href="sect-statisticalchecks.html#cb145-6" tabindex="-1"></a>d</span></code></pre></div>
 <pre><code>##   hhid person hhrole
 ## 1    1      1      h
 ## 2    1      2      h
@@ -327,16 +345,16 @@ that person’s role in the household (<code>hhrole</code>).</p>
 ## 7    3      7      m</code></pre>
 <p>With <code>exists_one()</code> we can check that there is exactly one person
 with the role <code>"h"</code> (head) in each household, by grouping on household id.</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">exists_one</span>(hhrole <span class="op">==</span><span class="st"> &quot;h&quot;</span>, <span class="dt">by=</span>hhid))</a>
-<a class="sourceLine" id="cb147-2" title="2">out &lt;-<span class="st"> </span><span class="kw">confront</span>(d, rule)</a>
-<a class="sourceLine" id="cb147-3" title="3"><span class="co"># suppress some columns for brevity</span></a>
-<a class="sourceLine" id="cb147-4" title="4"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="sect-statisticalchecks.html#cb147-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="fu">exists_one</span>(hhrole <span class="sc">==</span> <span class="st">&quot;h&quot;</span>, <span class="at">by=</span>hhid))</span>
+<span id="cb147-2"><a href="sect-statisticalchecks.html#cb147-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(d, rule)</span>
+<span id="cb147-3"><a href="sect-statisticalchecks.html#cb147-3" tabindex="-1"></a><span class="co"># suppress some columns for brevity</span></span>
+<span id="cb147-4"><a href="sect-statisticalchecks.html#cb147-4" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1     7      3     4   0 FALSE   FALSE
 ##                             expression
 ## 1 exists_one(hhrole == &quot;h&quot;, by = hhid)</code></pre>
 <p>We can inspect the results by selecting the violating record groups.</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1"><span class="kw">violating</span>(d, out)</a></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="sect-statisticalchecks.html#cb149-1" tabindex="-1"></a><span class="fu">violating</span>(d, out)</span></code></pre></div>
 <pre><code>##   hhid person hhrole
 ## 1    1      1      h
 ## 2    1      2      h
@@ -346,27 +364,27 @@ with the role <code>"h"</code> (head) in each household, by grouping on househol
 of household.</p>
 <p>To test whether <em>at least one</em> head of household exists, one can use
 <code>exists_any</code>:</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1"><span class="kw">violating</span>(d, <span class="kw">validator</span>(<span class="kw">exists_any</span>(hhrole<span class="op">==</span><span class="st">&quot;h&quot;</span>,<span class="dt">by=</span>hhid) ))</a></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="sect-statisticalchecks.html#cb151-1" tabindex="-1"></a><span class="fu">violating</span>(d, <span class="fu">validator</span>(<span class="fu">exists_any</span>(hhrole<span class="sc">==</span><span class="st">&quot;h&quot;</span>,<span class="at">by=</span>hhid) ))</span></code></pre></div>
 <pre><code>##   hhid person hhrole
 ## 7    3      7      m</code></pre>
 <p>In the following example we check whether there is exactly one region called Samplonia
 for each period and each measure in the <code>samplonomy</code> dataset.</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">exists_one</span>(region<span class="op">==</span><span class="st">&quot;Samplonia&quot;</span>, <span class="dt">by=</span><span class="kw">list</span>(period, measure)))</a></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="sect-statisticalchecks.html#cb153-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="fu">exists_one</span>(region<span class="sc">==</span><span class="st">&quot;Samplonia&quot;</span>, <span class="at">by=</span><span class="fu">list</span>(period, measure)))</span></code></pre></div>
 <p>The first argument of <code>exists_one()</code> is a rule that has to be checked in every group
 indicated by the <code>by</code> argument. The output is a logical vector with an element for
 each record in the dataset under scrutiny. If a group of data fails the test, each record
 in that group is indicated as wrong (<code>FALSE</code>).</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule)</a>
-<a class="sourceLine" id="cb154-2" title="2"><span class="co"># suppress some columns for brevity</span></a>
-<a class="sourceLine" id="cb154-3" title="3"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="sect-statisticalchecks.html#cb154-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(samplonomy, rule)</span>
+<span id="cb154-2"><a href="sect-statisticalchecks.html#cb154-2" tabindex="-1"></a><span class="co"># suppress some columns for brevity</span></span>
+<span id="cb154-3"><a href="sect-statisticalchecks.html#cb154-3" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199   1199     0   0 FALSE   FALSE</code></pre>
 <p>Here, there are no groups that violate this assumption.</p>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb156-1" title="1"><span class="kw">violating</span>(samplonomy, out)</a></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="sect-statisticalchecks.html#cb156-1" tabindex="-1"></a><span class="fu">violating</span>(samplonomy, out)</span></code></pre></div>
 <pre><code>## [1] region  freq    period  measure value  
 ## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 </div>
-<div id="code-hierarchies-and-aggregation" class="section level2 hasAnchor">
+<div id="code-hierarchies-and-aggregation" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> Code hierarchies and aggregation<a href="sect-statisticalchecks.html#code-hierarchies-and-aggregation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Classifications and ontologies often have a hierarchical structure.
 A well-known example is the
@@ -380,8 +398,8 @@ statistics of subclasses add up to their parent classes. This is what the
 function ‘hierarchy’ does in ‘validate’.</p>
 <p>The <code>validate</code> package comes with a version of the NACE classification
 (Revision 2, 2008) so we will use that as an example.</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1"><span class="kw">data</span>(nace_rev2)</a>
-<a class="sourceLine" id="cb158-2" title="2"><span class="kw">head</span>(nace_rev2[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="sect-statisticalchecks.html#cb158-1" tabindex="-1"></a><span class="fu">data</span>(nace_rev2)</span>
+<span id="cb158-2"><a href="sect-statisticalchecks.html#cb158-2" tabindex="-1"></a><span class="fu">head</span>(nace_rev2[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span></code></pre></div>
 <pre><code>##    Order Level  Code Parent
 ## 1 398481     1     A       
 ## 2 398482     2    01      A
@@ -392,11 +410,11 @@ function ‘hierarchy’ does in ‘validate’.</p>
 <p>The second and third column contain the necessary information: they list the
 parent for each NACE code (where each parent is also a NACE code). To demonstrate
 how <code>hierarchy()</code> works, we first create some example data.</p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" title="1">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb160-2" title="2">        <span class="dt">nace   =</span> <span class="kw">c</span>(<span class="st">&quot;01&quot;</span>,<span class="st">&quot;01.1&quot;</span>,<span class="st">&quot;01.11&quot;</span>,<span class="st">&quot;01.12&quot;</span>, <span class="st">&quot;01.2&quot;</span>)</a>
-<a class="sourceLine" id="cb160-3" title="3">      , <span class="dt">volume =</span> <span class="kw">c</span>(<span class="dv">100</span> ,<span class="dv">70</span>    , <span class="dv">30</span>    ,<span class="dv">40</span>     , <span class="dv">25</span>    )</a>
-<a class="sourceLine" id="cb160-4" title="4">     )</a>
-<a class="sourceLine" id="cb160-5" title="5">dat</a></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="sect-statisticalchecks.html#cb160-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb160-2"><a href="sect-statisticalchecks.html#cb160-2" tabindex="-1"></a>        <span class="at">nace   =</span> <span class="fu">c</span>(<span class="st">&quot;01&quot;</span>,<span class="st">&quot;01.1&quot;</span>,<span class="st">&quot;01.11&quot;</span>,<span class="st">&quot;01.12&quot;</span>, <span class="st">&quot;01.2&quot;</span>)</span>
+<span id="cb160-3"><a href="sect-statisticalchecks.html#cb160-3" tabindex="-1"></a>      , <span class="at">volume =</span> <span class="fu">c</span>(<span class="dv">100</span> ,<span class="dv">70</span>    , <span class="dv">30</span>    ,<span class="dv">40</span>     , <span class="dv">25</span>    )</span>
+<span id="cb160-4"><a href="sect-statisticalchecks.html#cb160-4" tabindex="-1"></a>     )</span>
+<span id="cb160-5"><a href="sect-statisticalchecks.html#cb160-5" tabindex="-1"></a>dat</span></code></pre></div>
 <pre><code>##    nace volume
 ## 1    01    100
 ## 2  01.1     70
@@ -409,8 +427,8 @@ add up to the volume for <code>"01"</code> (<span class="math inline">\(70+25\no
 checks all these relations.</p>
 <p>Before using <code>hierarchy</code> in the setting of a <code>validator</code> object, we can examine
 it directly.</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" title="1">dat<span class="op">$</span>check &lt;-<span class="st"> </span><span class="kw">hierarchy</span>(dat<span class="op">$</span>volume, dat<span class="op">$</span>nace, nace_rev2[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>])</a>
-<a class="sourceLine" id="cb162-2" title="2">dat</a></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="sect-statisticalchecks.html#cb162-1" tabindex="-1"></a>dat<span class="sc">$</span>check <span class="ot">&lt;-</span> <span class="fu">hierarchy</span>(dat<span class="sc">$</span>volume, dat<span class="sc">$</span>nace, nace_rev2[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>])</span>
+<span id="cb162-2"><a href="sect-statisticalchecks.html#cb162-2" tabindex="-1"></a>dat</span></code></pre></div>
 <pre><code>##    nace volume check
 ## 1    01    100 FALSE
 ## 2  01.1     70 FALSE
@@ -434,13 +452,13 @@ The <code>hierarchy()</code> function</p>
 <p><strong>A more complicated example</strong></p>
 <p>Samplonia is divided in two districts, each of which is divided into several
 provinces. Let us define the hierarchical code list.</p>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1">samplonia &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb164-2" title="2">    <span class="dt">region   =</span> <span class="kw">c</span>(<span class="st">&quot;Agria&quot;</span>, <span class="st">&quot;Induston&quot;</span></a>
-<a class="sourceLine" id="cb164-3" title="3">               , <span class="st">&quot;Wheaton&quot;</span>, <span class="st">&quot;Greenham&quot;</span></a>
-<a class="sourceLine" id="cb164-4" title="4">               , <span class="st">&quot;Smokely&quot;</span>, <span class="st">&quot;Mudwater&quot;</span>, <span class="st">&quot;Newbay&quot;</span>, <span class="st">&quot;Crowdon&quot;</span>)</a>
-<a class="sourceLine" id="cb164-5" title="5">  , <span class="dt">parent =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;Samplonia&quot;</span>,<span class="dv">2</span>), <span class="kw">rep</span>(<span class="st">&quot;Agria&quot;</span>,<span class="dv">2</span>), <span class="kw">rep</span>(<span class="st">&quot;Induston&quot;</span>,<span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb164-6" title="6">) </a>
-<a class="sourceLine" id="cb164-7" title="7">samplonia</a></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="sect-statisticalchecks.html#cb164-1" tabindex="-1"></a>samplonia <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb164-2"><a href="sect-statisticalchecks.html#cb164-2" tabindex="-1"></a>    <span class="at">region   =</span> <span class="fu">c</span>(<span class="st">&quot;Agria&quot;</span>, <span class="st">&quot;Induston&quot;</span></span>
+<span id="cb164-3"><a href="sect-statisticalchecks.html#cb164-3" tabindex="-1"></a>               , <span class="st">&quot;Wheaton&quot;</span>, <span class="st">&quot;Greenham&quot;</span></span>
+<span id="cb164-4"><a href="sect-statisticalchecks.html#cb164-4" tabindex="-1"></a>               , <span class="st">&quot;Smokely&quot;</span>, <span class="st">&quot;Mudwater&quot;</span>, <span class="st">&quot;Newbay&quot;</span>, <span class="st">&quot;Crowdon&quot;</span>)</span>
+<span id="cb164-5"><a href="sect-statisticalchecks.html#cb164-5" tabindex="-1"></a>  , <span class="at">parent =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Samplonia&quot;</span>,<span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Agria&quot;</span>,<span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Induston&quot;</span>,<span class="dv">4</span>))</span>
+<span id="cb164-6"><a href="sect-statisticalchecks.html#cb164-6" tabindex="-1"></a>) </span>
+<span id="cb164-7"><a href="sect-statisticalchecks.html#cb164-7" tabindex="-1"></a>samplonia</span></code></pre></div>
 <pre><code>##     region    parent
 ## 1    Agria Samplonia
 ## 2 Induston Samplonia
@@ -451,8 +469,8 @@ provinces. Let us define the hierarchical code list.</p>
 ## 7   Newbay  Induston
 ## 8  Crowdon  Induston</code></pre>
 <p>Recall the structure of the <code>samplonomy</code> dataset.</p>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" title="1"><span class="kw">data</span>(samplonomy)</a>
-<a class="sourceLine" id="cb166-2" title="2"><span class="kw">head</span>(samplonomy)</a></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="sect-statisticalchecks.html#cb166-1" tabindex="-1"></a><span class="fu">data</span>(samplonomy)</span>
+<span id="cb166-2"><a href="sect-statisticalchecks.html#cb166-2" tabindex="-1"></a><span class="fu">head</span>(samplonomy)</span></code></pre></div>
 <pre><code>##   region freq period measure  value
 ## 1  Agria    A   2014     gdp 600000
 ## 2  Agria    A   2014  import 210000
@@ -462,52 +480,52 @@ provinces. Let us define the hierarchical code list.</p>
 ## 6  Agria    Q 2014Q1  import  21000</code></pre>
 <p>We will check whether regions sum to their parent regions, for each period
 and for each measure.</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" title="1">rule &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb168-2" title="2">  <span class="kw">hierarchy</span>(value, region, <span class="dt">hierarchy=</span>ref<span class="op">$</span>codelist, <span class="dt">by=</span><span class="kw">list</span>(period, measure))</a>
-<a class="sourceLine" id="cb168-3" title="3">)</a>
-<a class="sourceLine" id="cb168-4" title="4">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rule, <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">codelist=</span>samplonia))</a>
-<a class="sourceLine" id="cb168-5" title="5"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="sect-statisticalchecks.html#cb168-1" tabindex="-1"></a>rule <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb168-2"><a href="sect-statisticalchecks.html#cb168-2" tabindex="-1"></a>  <span class="fu">hierarchy</span>(value, region, <span class="at">hierarchy=</span>ref<span class="sc">$</span>codelist, <span class="at">by=</span><span class="fu">list</span>(period, measure))</span>
+<span id="cb168-3"><a href="sect-statisticalchecks.html#cb168-3" tabindex="-1"></a>)</span>
+<span id="cb168-4"><a href="sect-statisticalchecks.html#cb168-4" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(samplonomy, rule, <span class="at">ref=</span><span class="fu">list</span>(<span class="at">codelist=</span>samplonia))</span>
+<span id="cb168-5"><a href="sect-statisticalchecks.html#cb168-5" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199    237   954   8 FALSE    TRUE
 ##                                                                            expression
 ## 1 hierarchy(value, region, hierarchy = ref[[&quot;codelist&quot;]], by = list(period, measure))</code></pre>
 <p>We see that some aggregates add up correctly, and some don’t. There is also
 a warning which we should investigate.</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1"><span class="kw">warnings</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="sect-statisticalchecks.html#cb170-1" tabindex="-1"></a><span class="fu">warnings</span>(out)</span></code></pre></div>
 <pre><code>## $V1
 ## [1] &quot;Parent &#39;Induston&#39; occurs more than once (2 times) in group (2018Q2, export)&quot;</code></pre>
 <p>If one of the groups contains a parent more than once it is not possible
 to check whether child values add up to the aggregate. For this reason
 the duplicated parent and all it’s children are marked <code>FALSE</code>. Indeed we
 find a duplicated record.</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" title="1"><span class="kw">subset</span>(samplonomy, region  <span class="op">==</span><span class="st"> &quot;Induston&quot;</span> <span class="op">&amp;</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb172-2" title="2"><span class="st">                   </span>period  <span class="op">==</span><span class="st"> &quot;2018Q2&quot;</span>   <span class="op">&amp;</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb172-3" title="3"><span class="st">                   </span>measure <span class="op">==</span><span class="st"> &quot;export&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="sect-statisticalchecks.html#cb172-1" tabindex="-1"></a><span class="fu">subset</span>(samplonomy, region  <span class="sc">==</span> <span class="st">&quot;Induston&quot;</span> <span class="sc">&amp;</span> </span>
+<span id="cb172-2"><a href="sect-statisticalchecks.html#cb172-2" tabindex="-1"></a>                   period  <span class="sc">==</span> <span class="st">&quot;2018Q2&quot;</span>   <span class="sc">&amp;</span> </span>
+<span id="cb172-3"><a href="sect-statisticalchecks.html#cb172-3" tabindex="-1"></a>                   measure <span class="sc">==</span> <span class="st">&quot;export&quot;</span>)</span></code></pre></div>
 <pre><code>##       region freq period measure  value
 ## 870 Induston    Q 2018Q2  export 165900
 ## 871 Induston    Q 2018Q2  export 170000</code></pre>
 <p>Just to see if we can remove the warning, let us remove the duplicate
 and re-run the check.</p>
-<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" title="1">i &lt;-<span class="st"> </span><span class="op">!</span><span class="kw">duplicated</span>(samplonomy[<span class="kw">c</span>(<span class="st">&quot;region&quot;</span>,<span class="st">&quot;period&quot;</span>,<span class="st">&quot;measure&quot;</span>)])</a>
-<a class="sourceLine" id="cb174-2" title="2">samplonomy2 &lt;-<span class="st"> </span>samplonomy[i, ]</a>
-<a class="sourceLine" id="cb174-3" title="3"></a>
-<a class="sourceLine" id="cb174-4" title="4">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy2, rule, <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">codelist=</span>samplonia))</a>
-<a class="sourceLine" id="cb174-5" title="5"><span class="co"># suppress some columns for brevity</span></a>
-<a class="sourceLine" id="cb174-6" title="6"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="sect-statisticalchecks.html#cb174-1" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">duplicated</span>(samplonomy[<span class="fu">c</span>(<span class="st">&quot;region&quot;</span>,<span class="st">&quot;period&quot;</span>,<span class="st">&quot;measure&quot;</span>)])</span>
+<span id="cb174-2"><a href="sect-statisticalchecks.html#cb174-2" tabindex="-1"></a>samplonomy2 <span class="ot">&lt;-</span> samplonomy[i, ]</span>
+<span id="cb174-3"><a href="sect-statisticalchecks.html#cb174-3" tabindex="-1"></a></span>
+<span id="cb174-4"><a href="sect-statisticalchecks.html#cb174-4" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(samplonomy2, rule, <span class="at">ref=</span><span class="fu">list</span>(<span class="at">codelist=</span>samplonia))</span>
+<span id="cb174-5"><a href="sect-statisticalchecks.html#cb174-5" tabindex="-1"></a><span class="co"># suppress some columns for brevity</span></span>
+<span id="cb174-6"><a href="sect-statisticalchecks.html#cb174-6" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1198    238   952   8 FALSE   FALSE</code></pre>
 <p>The <code>hierarchy()</code> function marks every record <code>FALSE</code> that is involved
 in any check. This may make it hard to figure out which check it failed.
 One can get more detailed information, by checking different parts
 of the hierarchy in separate rules.</p>
-<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb176-2" title="2">   <span class="dt">level0 =</span> <span class="kw">hierarchy</span>(value, region, ref<span class="op">$</span>level0, <span class="dt">by=</span><span class="kw">list</span>(period, measure))</a>
-<a class="sourceLine" id="cb176-3" title="3"> , <span class="dt">level1 =</span> <span class="kw">hierarchy</span>(value, region, ref<span class="op">$</span>level1, <span class="dt">by=</span><span class="kw">list</span>(period, measure))</a>
-<a class="sourceLine" id="cb176-4" title="4">)</a>
-<a class="sourceLine" id="cb176-5" title="5">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy2, rules</a>
-<a class="sourceLine" id="cb176-6" title="6">        , <span class="dt">ref=</span><span class="kw">list</span>(<span class="dt">level0=</span>samplonia[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,], <span class="dt">level1=</span>samplonia[<span class="dv">3</span><span class="op">:</span><span class="dv">8</span>,])</a>
-<a class="sourceLine" id="cb176-7" title="7">       )</a>
-<a class="sourceLine" id="cb176-8" title="8"><span class="kw">summary</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="sect-statisticalchecks.html#cb176-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb176-2"><a href="sect-statisticalchecks.html#cb176-2" tabindex="-1"></a>   <span class="at">level0 =</span> <span class="fu">hierarchy</span>(value, region, ref<span class="sc">$</span>level0, <span class="at">by=</span><span class="fu">list</span>(period, measure))</span>
+<span id="cb176-3"><a href="sect-statisticalchecks.html#cb176-3" tabindex="-1"></a> , <span class="at">level1 =</span> <span class="fu">hierarchy</span>(value, region, ref<span class="sc">$</span>level1, <span class="at">by=</span><span class="fu">list</span>(period, measure))</span>
+<span id="cb176-4"><a href="sect-statisticalchecks.html#cb176-4" tabindex="-1"></a>)</span>
+<span id="cb176-5"><a href="sect-statisticalchecks.html#cb176-5" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(samplonomy2, rules</span>
+<span id="cb176-6"><a href="sect-statisticalchecks.html#cb176-6" tabindex="-1"></a>        , <span class="at">ref=</span><span class="fu">list</span>(<span class="at">level0=</span>samplonia[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,], <span class="at">level1=</span>samplonia[<span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>,])</span>
+<span id="cb176-7"><a href="sect-statisticalchecks.html#cb176-7" tabindex="-1"></a>       )</span>
+<span id="cb176-8"><a href="sect-statisticalchecks.html#cb176-8" tabindex="-1"></a><span class="fu">summary</span>(out)</span></code></pre></div>
 <pre><code>##     name items passes fails nNA error warning
 ## 1 level0  1198   1194     4   0 FALSE   FALSE
 ## 2 level1  1198    240   950   8 FALSE   FALSE
@@ -516,7 +534,7 @@ of the hierarchy in separate rules.</p>
 ## 2 hierarchy(value, region, ref[[&quot;level1&quot;]], by = list(period, measure))</code></pre>
 <p>We can now select records involved in violating the highest level
 rules separately.</p>
-<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" title="1"><span class="kw">violating</span>(samplonomy2, out[<span class="st">&quot;level0&quot;</span>]) </a></code></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="sect-statisticalchecks.html#cb178-1" tabindex="-1"></a><span class="fu">violating</span>(samplonomy2, out[<span class="st">&quot;level0&quot;</span>]) </span></code></pre></div>
 <pre><code>##        region freq period measure   value
 ## 260  Induston    A   2015     gdp 1358000
 ## 340 Samplonia    A   2015     gdp 1940000
@@ -525,20 +543,20 @@ rules separately.</p>
 <p>From this it appears that in 2015, the GDP for Agria is missing, and in
 2018Q3 there is no value for the export of Induston.</p>
 </div>
-<div id="general-aggregates-in-long-form-data" class="section level2 hasAnchor">
+<div id="general-aggregates-in-long-form-data" class="section level2 hasAnchor" number="5.4">
 <h2><span class="header-section-number">5.4</span> General aggregates in long-form data<a href="sect-statisticalchecks.html#general-aggregates-in-long-form-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Checking aggregations in long-form format is more involved than for
 data in wide format (as in Section <a href="multivariate-checks.html#balance-equalities-and-inequalities">4.2</a>).</p>
 <p>Here, we check in the <code>samplonomy</code> dataset that for each measure and each
 period, the subregional data adds up to the regional data.</p>
-<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(</a>
-<a class="sourceLine" id="cb180-2" title="2">  <span class="kw">part_whole_relation</span>(value</a>
-<a class="sourceLine" id="cb180-3" title="3">    , <span class="dt">labels=</span>region</a>
-<a class="sourceLine" id="cb180-4" title="4">    , <span class="dt">whole=</span><span class="st">&quot;Samplonia&quot;</span></a>
-<a class="sourceLine" id="cb180-5" title="5">    , <span class="dt">part =</span><span class="kw">c</span>(<span class="st">&quot;Agria&quot;</span>,<span class="st">&quot;Induston&quot;</span>)</a>
-<a class="sourceLine" id="cb180-6" title="6">    , <span class="dt">by=</span><span class="kw">list</span>(measure, period)</a>
-<a class="sourceLine" id="cb180-7" title="7">  )</a>
-<a class="sourceLine" id="cb180-8" title="8">)</a></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="sect-statisticalchecks.html#cb180-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb180-2"><a href="sect-statisticalchecks.html#cb180-2" tabindex="-1"></a>  <span class="fu">part_whole_relation</span>(value</span>
+<span id="cb180-3"><a href="sect-statisticalchecks.html#cb180-3" tabindex="-1"></a>    , <span class="at">labels=</span>region</span>
+<span id="cb180-4"><a href="sect-statisticalchecks.html#cb180-4" tabindex="-1"></a>    , <span class="at">whole=</span><span class="st">&quot;Samplonia&quot;</span></span>
+<span id="cb180-5"><a href="sect-statisticalchecks.html#cb180-5" tabindex="-1"></a>    , <span class="at">part =</span><span class="fu">c</span>(<span class="st">&quot;Agria&quot;</span>,<span class="st">&quot;Induston&quot;</span>)</span>
+<span id="cb180-6"><a href="sect-statisticalchecks.html#cb180-6" tabindex="-1"></a>    , <span class="at">by=</span><span class="fu">list</span>(measure, period)</span>
+<span id="cb180-7"><a href="sect-statisticalchecks.html#cb180-7" tabindex="-1"></a>  )</span>
+<span id="cb180-8"><a href="sect-statisticalchecks.html#cb180-8" tabindex="-1"></a>)</span></code></pre></div>
 <p>The first argument of <code>part_whole_relation()</code> is the name of the variable
 containing the values. Here, the column <code>value</code> from the samplonomy dataset.
 The argument <code>labels</code> indicates the variable that labels parts and wholes.
@@ -555,14 +573,14 @@ latter indicates that the aggregate could not be computed because one of the
 values is missing, or the computed aggregate could not be compared with the
 aggregate in the data because it is missing (either the whole record may be
 missing, or the value may be <code>NA</code>).</p>
-<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" title="1">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rules)</a>
-<a class="sourceLine" id="cb181-2" title="2"><span class="co"># suppress some columns for brevity</span></a>
-<a class="sourceLine" id="cb181-3" title="3"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="sect-statisticalchecks.html#cb181-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(samplonomy, rules)</span>
+<span id="cb181-2"><a href="sect-statisticalchecks.html#cb181-2" tabindex="-1"></a><span class="co"># suppress some columns for brevity</span></span>
+<span id="cb181-3"><a href="sect-statisticalchecks.html#cb181-3" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199   1191     8   0 FALSE   FALSE</code></pre>
 <p>We can extract the truth values and then inspect the blocks with erroneous values
 using standard R functionality.</p>
-<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" title="1"><span class="kw">violating</span>(samplonomy, out)</a></code></pre></div>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="sect-statisticalchecks.html#cb183-1" tabindex="-1"></a><span class="fu">violating</span>(samplonomy, out)</span></code></pre></div>
 <pre><code>##        region freq period measure   value
 ## 260  Induston    A   2015     gdp 1358000
 ## 340 Samplonia    A   2015     gdp 1940000
@@ -578,7 +596,7 @@ by <code>measure=="gdp"</code> and <code>period=="2015"</code>, also in the bloc
 <code>measure=="export"</code> and <code>period==2018Q2</code> or <code>period=="2018Q3"</code>.</p>
 <p>First, it seems that the 2015 GDP of Agria
 is missing from the data set. This turns out indeed to be the case.</p>
-<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" title="1"><span class="kw">subset</span>(samplonomy, region<span class="op">==</span><span class="st">&quot;Agria&quot;</span> <span class="op">&amp;</span><span class="st"> </span>period <span class="op">==</span><span class="st"> &quot;2015&quot;</span> <span class="op">&amp;</span><span class="st"> </span>measure <span class="op">==</span><span class="st"> &quot;gdp&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="sect-statisticalchecks.html#cb185-1" tabindex="-1"></a><span class="fu">subset</span>(samplonomy, region<span class="sc">==</span><span class="st">&quot;Agria&quot;</span> <span class="sc">&amp;</span> period <span class="sc">==</span> <span class="st">&quot;2015&quot;</span> <span class="sc">&amp;</span> measure <span class="sc">==</span> <span class="st">&quot;gdp&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] region  freq    period  measure value  
 ## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 <p>Second, it can be seen that for Induston, there are two export values for
@@ -607,7 +625,7 @@ argument. E.g. for integer data you may want to set <code>tol=0</code>.</li>
 </ul>
 </div>
 </div>
-<div id="aggregates-of-time-series-in-long-format" class="section level2 hasAnchor">
+<div id="aggregates-of-time-series-in-long-format" class="section level2 hasAnchor" number="5.5">
 <h2><span class="header-section-number">5.5</span> Aggregates of time series in long format<a href="sect-statisticalchecks.html#aggregates-of-time-series-in-long-format" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We are going to check whether quarterly time series add up to the annual time
 series. This is more complicated because of two subtleties.</p>
@@ -621,7 +639,7 @@ the <code>\\d{4}</code> indicates ‘four times a digit’ and <code>$</code> in
 measure. However, a value-combination of measure and region does not single out
 a single value for <code>year</code>. For example, for the Induston export we have the following
 annual data.</p>
-<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" title="1"><span class="kw">subset</span>(samplonomy, region<span class="op">==</span><span class="st">&quot;Induston&quot;</span> <span class="op">&amp;</span><span class="st"> </span>freq <span class="op">==</span><span class="st"> &quot;A&quot;</span> <span class="op">&amp;</span><span class="st"> </span>measure<span class="op">==</span><span class="st">&quot;export&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="sect-statisticalchecks.html#cb187-1" tabindex="-1"></a><span class="fu">subset</span>(samplonomy, region<span class="sc">==</span><span class="st">&quot;Induston&quot;</span> <span class="sc">&amp;</span> freq <span class="sc">==</span> <span class="st">&quot;A&quot;</span> <span class="sc">&amp;</span> measure<span class="sc">==</span><span class="st">&quot;export&quot;</span>)</span></code></pre></div>
 <pre><code>##        region freq period measure  value
 ## 63   Induston    A   2014  export 518000
 ## 262  Induston    A   2015  export 525000
@@ -632,25 +650,25 @@ annual data.</p>
 <p>So in fact, we need to do the check <em>by year</em> as well as by measure and region.
 Fortunately, in this case it is easy to derive a variable that indicates the year
 by selecting the first four characters from <code>period</code>.</p>
-<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" title="1">rules &lt;-<span class="st"> </span><span class="kw">validator</span>(<span class="kw">part_whole_relation</span>(value</a>
-<a class="sourceLine" id="cb189-2" title="2">  , <span class="dt">labels =</span> period</a>
-<a class="sourceLine" id="cb189-3" title="3">  , <span class="dt">whole  =</span> <span class="kw">rx</span>(<span class="st">&quot;^</span><span class="ch">\\</span><span class="st">d{4}$&quot;</span>)</a>
-<a class="sourceLine" id="cb189-4" title="4">  , <span class="dt">by =</span> <span class="kw">list</span>(region, <span class="kw">substr</span>(period,<span class="dv">1</span>,<span class="dv">4</span>), measure) </a>
-<a class="sourceLine" id="cb189-5" title="5">  ))</a>
-<a class="sourceLine" id="cb189-6" title="6">out &lt;-<span class="st"> </span><span class="kw">confront</span>(samplonomy, rules)</a></code></pre></div>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="sect-statisticalchecks.html#cb189-1" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(<span class="fu">part_whole_relation</span>(value</span>
+<span id="cb189-2"><a href="sect-statisticalchecks.html#cb189-2" tabindex="-1"></a>  , <span class="at">labels =</span> period</span>
+<span id="cb189-3"><a href="sect-statisticalchecks.html#cb189-3" tabindex="-1"></a>  , <span class="at">whole  =</span> <span class="fu">rx</span>(<span class="st">&quot;^</span><span class="sc">\\</span><span class="st">d{4}$&quot;</span>)</span>
+<span id="cb189-4"><a href="sect-statisticalchecks.html#cb189-4" tabindex="-1"></a>  , <span class="at">by =</span> <span class="fu">list</span>(region, <span class="fu">substr</span>(period,<span class="dv">1</span>,<span class="dv">4</span>), measure) </span>
+<span id="cb189-5"><a href="sect-statisticalchecks.html#cb189-5" tabindex="-1"></a>  ))</span>
+<span id="cb189-6"><a href="sect-statisticalchecks.html#cb189-6" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">confront</span>(samplonomy, rules)</span></code></pre></div>
 <p>We use <code>rx("^\\d{4}")</code> to tell <code>part_whole_relation</code> that this string must be
 interpreted as a regular expression. Here, we do not indicate <code>part</code> labels
 explicitly: by default any record not matching <code>whole</code> will be treated as a
 detail that must be used to compute the total.</p>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" title="1"><span class="kw">errors</span>(out)</a></code></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="sect-statisticalchecks.html#cb190-1" tabindex="-1"></a><span class="fu">errors</span>(out)</span></code></pre></div>
 <pre><code>## named list()</code></pre>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" title="1"><span class="co"># suppress some columns for brevity</span></a>
-<a class="sourceLine" id="cb192-2" title="2"><span class="kw">summary</span>(out)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="sect-statisticalchecks.html#cb192-1" tabindex="-1"></a><span class="co"># suppress some columns for brevity</span></span>
+<span id="cb192-2"><a href="sect-statisticalchecks.html#cb192-2" tabindex="-1"></a><span class="fu">summary</span>(out)[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span></code></pre></div>
 <pre><code>##   name items passes fails nNA error warning
 ## 1   V1  1199   1180     9  10 FALSE   FALSE</code></pre>
 <p>We now get 9 fails and 10 missing values. We can filter out records that
 have <code>NA</code> (lacking) results.</p>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" title="1"><span class="kw">lacking</span>(samplonomy, out)</a></code></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="sect-statisticalchecks.html#cb194-1" tabindex="-1"></a><span class="fu">lacking</span>(samplonomy, out)</span></code></pre></div>
 <pre><code>##       region freq period measure value
 ## 24   Crowdon    A   2014 balance  1600
 ## 28   Crowdon    Q 2014Q1 balance    NA
@@ -666,7 +684,7 @@ have <code>NA</code> (lacking) results.</p>
 the sum over quarterly series. The balance value of Crowdon is missing
 for <code>"2014Q1"</code> as well as the import value of Wheaton for <code>"2019Q2"</code>.</p>
 <p>Similarly, we can inspect the failing blocks</p>
-<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" title="1"><span class="kw">violating</span>(samplonomy, out)</a></code></pre></div>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="sect-statisticalchecks.html#cb196-1" tabindex="-1"></a><span class="fu">violating</span>(samplonomy, out)</span></code></pre></div>
 <pre><code>##       region freq period measure  value
 ## 204    Agria    Q 2015Q1     gdp  58200
 ## 208    Agria    Q 2015Q2     gdp 116400
@@ -700,42 +718,42 @@ for <code>"2014Q1"</code> as well as the import value of Wheaton for <code>"2019
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["validatecookbook.pdf"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["validatecookbook.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>
