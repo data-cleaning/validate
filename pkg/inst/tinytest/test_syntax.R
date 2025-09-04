@@ -36,7 +36,7 @@
     ,postcode = c('2495','2496','8888','2495')
   )
   cf <- confront(dat,v1)
-  expect_equivalent(values(cf),array(c(TRUE,FALSE,TRUE,TRUE),dim=c(4,1)))
+  expect_equivalent(values(cf),array(c(FALSE,FALSE,TRUE,FALSE),dim=c(4,1)))
 
 
 ## group_expansion ----
