@@ -167,6 +167,7 @@ NULL
   condition  <- do.call(paste, c(mget(Lvars, parent.frame()), sep="|"))
   consequent <- do.call(paste0, c(mget(Rvars, parent.frame()), sep="|"))
   cf <- .Call("R_fdcheck", condition, consequent)
+
   cf == seq_along(cf)
 }
 

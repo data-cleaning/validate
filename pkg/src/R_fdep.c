@@ -25,7 +25,7 @@
 /* 
  * Check functional dependencies x -> y
  *
- * The FD x -> y is two be interpreted as if two
+ * The FD x -> y is to be interpreted as if two
  * elements of x have the same value, they shall have the
  * same value for y. In the comments below we refer to 'x' 
  * as the condition and to 'y' as the consequent.
@@ -35,7 +35,7 @@
  * 
  * If all pairs in (x,y) obey x->y then the output is seq_along(x).
  * suppose that for some i < j we have x[i] == x[j] but y[i] != y[j].
- * The j'th value of the output is then equal to i. 
+ * The i'th and j'th value of the output is then equal to 0. 
  *
  */
 
@@ -79,11 +79,14 @@ SEXP R_fdcheck(SEXP x, SEXP y){
         a = SuperFastHash((const char *) &a, 4); 
         goto rehash;
       }
-      if (H[j] == b && strcmp( CHAR(STRING_ELT(y,E[j])), CHAR(STRING_ELT(y,i)) ) == 0 ){ 
+      if (INTEGER(out)[E[j]] == 0){
+        (*I) = 0;
+      } else if (H[j] == b && strcmp( CHAR(STRING_ELT(y,E[j])), CHAR(STRING_ELT(y,i)) ) == 0 ){ 
         // conseqent also similar, all good.
         (*I) = i + 1;
       } else { // consequent different, store conflicting index.
-       (*I) = E[j] + 1;
+       (*I) = 0;
+       INTEGER(out)[E[j]] = 0;
       }
     }
   }
