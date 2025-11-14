@@ -183,7 +183,7 @@ widely used metada registries include the following.
 Organisations that at the time of writing (spring 2023) actively offer
 automated access to their data (not just metadata) via an SDMX API include (but
 not limited to) the European Central Bank
-([ECB](https://sdw-wsrest.ecb.europa.eu/help/)), 
+([ECB](https://data.ecb.europa.eu/help/api/overview)), 
 the [OECD](https://data.oecd.org/api/) (in
   [SDMX-JSON](https://data.oecd.org/api/sdmx-json-documentation/) or
   [SDMX-ML](https://data.oecd.org/api/sdmx-ml-documentation/) format),

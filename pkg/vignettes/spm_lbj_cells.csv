@@ -1,9 +1,9 @@
 "step","time","expression","cells","available","still_available","unadapted","adapted","imputed","missing","still_missing","removed"
-0,2025-06-26 20:23:24.786454,"",300,252,252,252,0,0,48,48,0
-1,2025-06-26 20:23:24.786454,"start_log(spm, logger=lbj_cells())",300,252,252,252,0,0,48,48,0
-2,2025-06-26 20:23:24.795276,"start_log(spm, logger=lbj_rules(rules))",300,252,252,252,0,0,48,48,0
-3,2025-06-26 20:23:24.832342,"spm <- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))",300,288,252,252,0,36,12,12,0
-4,2025-06-26 20:23:24.855397,"spm <- transform(spm, other.rev = abs(other.rev))",300,288,288,287,1,0,12,12,0
-5,2025-06-26 20:23:24.871526,"Rhat <- with(spm, mean(staff,na.rm=TRUE)/mean(turnover,na.rm=TRUE))",300,288,288,288,0,0,12,12,0
-6,2025-06-26 20:23:24.884353,"spm <- transform(spm, staff = ifelse(is.na(staff), Rhat * turnover, staff))",300,293,288,288,0,5,7,7,0
-7,2025-06-26 20:23:24.897556,"write.csv(spm, ""supermarkets_treated.csv"", row.names = FALSE)",300,293,293,293,0,0,7,7,0
+0,2025-11-14 13:08:47.506261,"",300,252,252,252,0,0,48,48,0
+1,2025-11-14 13:08:47.506261,"start_log(spm, logger=lbj_cells())",300,252,252,252,0,0,48,48,0
+2,2025-11-14 13:08:47.513932,"start_log(spm, logger=lbj_rules(rules))",300,252,252,252,0,0,48,48,0
+3,2025-11-14 13:08:47.55305,"spm <- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))",300,288,252,252,0,36,12,12,0
+4,2025-11-14 13:08:47.575849,"spm <- transform(spm, other.rev = abs(other.rev))",300,288,288,287,1,0,12,12,0
+5,2025-11-14 13:08:47.591376,"Rhat <- with(spm, mean(staff,na.rm=TRUE)/mean(turnover,na.rm=TRUE))",300,288,288,288,0,0,12,12,0
+6,2025-11-14 13:08:47.603444,"spm <- transform(spm, staff = ifelse(is.na(staff), Rhat * turnover, staff))",300,293,288,288,0,5,7,7,0
+7,2025-11-14 13:08:47.615628,"write.csv(spm, ""supermarkets_treated.csv"", row.names = FALSE)",300,293,293,293,0,0,7,7,0

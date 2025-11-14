@@ -48,7 +48,7 @@ setGeneric('compare', def = function(x,...) standardGeneric('compare'))
 #' can be inspected by \code{\link{confront}}ing them with a rule set.
 #' The status changes in rule violations can be partitioned as shown in the 
 #' following figure.
-#' \if{html}{\figure{rulesplit.png}{options: width=80\% alt="cellwise splitting"}}
+#' \if{html}{\figure{rulesplit.png}{options: width=400 alt="cellwise splitting"}}
 #' \if{latex}{\figure{rulesplit.pdf}{options: width=13cm}}
 #' This function computes the partition for two or more
 #' datasets, comparing the current set to the first (default) or to the 
@@ -488,7 +488,7 @@ setClass('cellComparison',contains='comparison')
 #' When comparing the contents of two data sets, the total number of cells
 #' in the current data set can be partitioned as in the following figure.
 #'
-#' \if{html}{\figure{cellsplit.png}{options: width=80\% alt="rulewise splitting"}}
+#' \if{html}{\figure{cellsplit.png}{options: width=400 alt="rulewise splitting"}}
 #' \if{latex}{\figure{cellsplit.pdf}{options: width=13cm}}
 #'
 #' This function computes the partition for two or more

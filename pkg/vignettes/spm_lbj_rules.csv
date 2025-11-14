@@ -1,8 +1,8 @@
 "step","time","expression","validations","verifiable","unverifiable","still_unverifiable","new_unverifiable","satisfied","still_satisfied","new_satisfied","violated","still_violated","new_violated"
-0,2025-06-26 20:23:24.799539,"",240,157,83,83,0,152,152,0,5,5,0
-1,2025-06-26 20:23:24.799539,"start_log(spm, logger=lbj_rules(rules))",240,157,83,83,0,152,152,0,5,5,0
-2,2025-06-26 20:23:24.84349,"spm <- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))",240,225,15,15,0,218,152,66,7,5,2
-3,2025-06-26 20:23:24.855877,"spm <- transform(spm, other.rev = abs(other.rev))",240,225,15,15,0,220,218,2,5,5,0
-4,2025-06-26 20:23:24.87204,"Rhat <- with(spm, mean(staff,na.rm=TRUE)/mean(turnover,na.rm=TRUE))",240,225,15,15,0,220,220,0,5,5,0
-5,2025-06-26 20:23:24.88485,"spm <- transform(spm, staff = ifelse(is.na(staff), Rhat * turnover, staff))",240,230,10,10,0,225,220,5,5,5,0
-6,2025-06-26 20:23:24.898052,"write.csv(spm, ""supermarkets_treated.csv"", row.names = FALSE)",240,230,10,10,0,225,225,0,5,5,0
+0,2025-11-14 13:08:47.514527,"",240,157,83,83,0,152,152,0,5,5,0
+1,2025-11-14 13:08:47.514527,"start_log(spm, logger=lbj_rules(rules))",240,157,83,83,0,152,152,0,5,5,0
+2,2025-11-14 13:08:47.564167,"spm <- transform(spm, other.rev = ifelse(is.na(other.rev),0,other.rev))",240,225,15,15,0,218,152,66,7,5,2
+3,2025-11-14 13:08:47.576317,"spm <- transform(spm, other.rev = abs(other.rev))",240,225,15,15,0,220,218,2,5,5,0
+4,2025-11-14 13:08:47.591879,"Rhat <- with(spm, mean(staff,na.rm=TRUE)/mean(turnover,na.rm=TRUE))",240,225,15,15,0,220,220,0,5,5,0
+5,2025-11-14 13:08:47.603924,"spm <- transform(spm, staff = ifelse(is.na(staff), Rhat * turnover, staff))",240,230,10,10,0,225,220,5,5,5,0
+6,2025-11-14 13:08:47.616092,"write.csv(spm, ""supermarkets_treated.csv"", row.names = FALSE)",240,230,10,10,0,225,225,0,5,5,0

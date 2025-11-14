@@ -3,6 +3,9 @@ version 1.1.6
 - Fix: rules in YAML that included a literal "---" would not be parsed
   correctly (thanks to Paul Horikx for the fix)
 - updated the Eurostat SDMX REST API endpoint
+- updated the ECB SDMX REST API endpoint
+- Fixes in documentation per request of CRAN (Thanks to Kurt Hornik
+  for pointing this out).
 
 
 version 1.1.5

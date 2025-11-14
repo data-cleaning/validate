@@ -104,9 +104,6 @@ NULL
 #' @family datasets
 #' @seealso \code{\link{hierarchy}}
 #' @docType data
-#' @references
-#' This codelist was downloaded on 2020-10-21 from 
-#' \href{https://ec.europa.eu/eurostat/ramon/nomenclatures/index.cfm?TargetUrl=LST_CLS_DLD&StrNom=NACE_REV2&StrLanguageCode=EN&StrLayoutCode=HIERARCHIC#}{Eurostat}
 #'
 #'
 #' @format A csv file, one NACE code per row.
