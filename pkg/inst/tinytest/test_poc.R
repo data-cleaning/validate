@@ -147,7 +147,7 @@
   dat <- read.csv("pocdata/Rule_15.csv")
   expect_equivalent(
     values(confront(dat,v))
-   ,   matrix(c(TRUE,TRUE,TRUE,FALSE,TRUE),nrow=5)
+   ,   matrix(c(TRUE,TRUE,FALSE,FALSE,TRUE),nrow=5)
    )
 
 
