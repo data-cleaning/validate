@@ -2,6 +2,7 @@ version 1.1.7
 - updated the ECB SDMX REST API endpoint
 - Fix in test that wrote to illegal place (thanks to Kurt Hornik for
   pointing this out)
+- Fixed outdated link to OECD SDMX api docs.
 
 version 1.1.6
 - Added nzchar(), startsWith(), endsWith() as pure validating function
