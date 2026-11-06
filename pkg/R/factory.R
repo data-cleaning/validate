@@ -1,6 +1,9 @@
 # factory function. Evaluate expressions, catch errors and warnings silently (per option).
 factory <- function(fun,opts){
-  
+  if ( !opts("raise") %in% c("none","errors","all") ){
+    msg <- sprintf("Invalid value %s for 'raise'. Valid values are 'none' (default), 'errors' or 'all'",opts("raise"))
+    stop(msg)
+  } 
   switch(opts('raise')
     , 'none' = function(...) { # both errors and warnings are caught
       warn <- err <- NULL
