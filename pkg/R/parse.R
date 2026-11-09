@@ -81,12 +81,6 @@ setMethod('voptions','ANY',function(x=NULL,...){
   do.call(.PKGOPT,c(x,list(...)))
 })
 
-#' @rdname voptions
-#' @export 
-validate_options <- function(...){ 
-  .Deprecated(new="voptions")
-    voptions(...)
-}
 
 #' @rdname voptions
 #' @export
