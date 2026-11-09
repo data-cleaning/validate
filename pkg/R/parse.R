@@ -47,7 +47,7 @@ NULL
 #' \itemize{
 #'  \item{\code{na.value} (\code{NA},\code{TRUE},\code{FALSE}; \code{NA}) Value
 #'  to return when a validating statement results in \code{NA}.}
-#'  \item{\code{raise} (\code{"none"},\code{"error"},\code{"all"};
+#'  \item{\code{raise} (\code{"none"},\code{"errors"},\code{"all"};
 #'  \code{"none"}) Control if the \code{\link{confront}} methods catch or raise
 #'  exceptions.
 #'  The 'all' setting is useful when debugging validation scripts.}
