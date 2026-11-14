@@ -893,14 +893,20 @@ setMethod("as.data.frame","confrontation", function(x,...){
 #' @param ... ignored
 #' @param na.rm [\code{logical}] If \code{TRUE}, \code{NA} values
 #'    are removed before the result is computed.
+#' @param fail_on_error [\code{logical}] If \code{TRUE},
+#'    rules that result in an error fail the check.
 #' @family validation-methods
 #' @export
 #'
 #' @examples
 #' val <- check_that(women, height>60, weight>0)
 #' all(val)
-setMethod("all","validation",function(x,...,na.rm=FALSE){
+setMethod("all","validation",function(x,..., fail_on_error = FALSE, na.rm=FALSE){
   res <- values(x, simplify=FALSE, drop=FALSE)
+  if (isTRUE(fail_on_error)) {
+    e <- lapply(errors(x), is.null)
+    res <- c(res, e)
+  }
   if (length(res) == 0) return(TRUE)
   all(sapply(res, all, na.rm=na.rm), na.rm=na.rm)
 })
@@ -911,6 +917,8 @@ setMethod("all","validation",function(x,...,na.rm=FALSE){
 #' @param ... ignored
 #' @param na.rm [\code{logical}] If \code{TRUE}, \code{NA} values
 #'    are removed before the result is computed.
+#' @param fail_on_error [\code{logical}] If \code{TRUE},
+#'    rules that result in an error fail the check.
 #'
 #' @family validation-methods
 #' @export
@@ -918,8 +926,12 @@ setMethod("all","validation",function(x,...,na.rm=FALSE){
 #' @examples
 #' val <- check_that(women, height>60, weight>0)
 #' any(val)
-setMethod("any","validation",function(x,...,na.rm=FALSE){
+setMethod("any","validation",function(x,..., fail_on_error = FALSE, na.rm=FALSE){
   res <- values(x, simplify=FALSE, drop=FALSE)
+  if (isTRUE(fail_on_error)) {
+    e <- lapply(errors(x), is.null)
+    res <- c(res, e)
+  }
   if (length(res) == 0) return(FALSE)
   any(sapply(res, any, na.rm=na.rm), na.rm=na.rm)
 })
